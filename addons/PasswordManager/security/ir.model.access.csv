@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_password_manager,access_password_manager,model_password_manager,,1,1,1,1
+access_password_services,access_password_services,model_password_services,,1,1,1,1
+access_password_popup,access_password_popup,model_password_popup,,1,1,1,1

@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_equipment_assignment_form" model="ir.ui.view">
+        <field name="name">view.equipment.assignment.form</field>
+        <field name="model">equipment.assignment</field>
+        <field name="arch" type="xml">
+            <form string="Equipment Assignments">
+                <sheet>
+                    <!-- Sección de Información del colaborador -->
+                    <div class="oe_title mt-3 mb-3">
+                        <h3 class="text-muted">Collaborator information</h3>
+                    </div>
+                    <group>
+                        <!-- <field name="folio" invisible="1"/> -->
+                        <field name="name"/>
+                        <field name="department_id"/>
+                        <field name="location_id"/>
+                        <field name="equipment_id"/>
+                        <field name="assignment_state"/>
+                    </group>
+
+                    <!-- Sección de Datos generales del préstamo -->
+                    <div class="oe_title mt-3 mb-3">
+                        <h3 class="text-muted">General information about loans</h3>
+                    </div>
+                    <group>
+                        <field name="delivery_date"/>
+                        <field name="return_date"/>
+                        <field name="days_since_delivery" readonly="1"/>
+                    </group>
+
+                    <!-- Pestañas -->
+                    <group>
+                        <field name="delivery_manager"/>
+                    </group>
+
+
+                    <!-- Observaciones -->
+                    <div class="oe_title mt-3 mb-3">
+                        <h3 class="text-muted">Observations</h3>
+                    </div>
+                    <field name="observation" placeholder="Please enter any relevant observations..." nolabel="1"/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+
+    <record id="view_equipment_assignment_tree" model="ir.ui.view">
+        <field name="name">view.equipment.assignment.tree</field>
+        <field name="model">equipment.assignment</field>
+        <field name="arch" type="xml">
+            <tree string="Equipment Assignments">
+                <field name="name" />
+                <field name="department_id" />
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_equipment_assignment_kanban" model="ir.ui.view">
+        <field name="name">view.equipment.assignment.kanban</field>
+        <field name="model">equipment.assignment</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="assignment_state">
+                <field name="assignment_state"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_global_click">
+                            <div>
+                                <span class="mt-2 mb-2">
+                                    <t t-if="record.assignment_state.raw_value == 'assigned'">
+                                        <field name="name"/>
+                                    </t>
+                                    <t t-else="">
+                                        <field name="equipment_id"/>
+                                    </t>
+                                </span>
+                            </div>
+
+                            <div>
+                                <span t-attf-class="badge bg-info text-white mt-2 mb-2">
+                                    <field name="department_id" />
+                                </span>
+                            </div>
+                            <div>
+                                <small>
+                                    <span>
+                                        <field name="assignment_state"/>
+                                    </span>
+                                </small>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+
+        </field>
+    </record>
+
+
+
+    <record id="action_equipment_assignment" model="ir.actions.act_window">
+        <field name="name">Equipment Assignment</field>
+        <field name="res_model">equipment.assignment</field>
+        <field name="view_mode">kanban,tree,form</field>
+    </record>
+
+
+    <menuitem id="menu_equipment_assignment_root" name="Equipment Assignment" action="action_equipment_assignment" sequence="10" />
+
+    <!-- <menuitem id="menu_equipment_assignment_options_a" name="Equipment" parent="menu_equipment_assignment_root" sequence="0" /> -->
+
+</odoo>

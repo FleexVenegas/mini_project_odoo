@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Definir la acción correctamente -->
+    <record id="action_price_checker" model="ir.actions.act_url">
+        <field name="name">Verificador de precios</field>
+        <field name="url">/price-checker</field>
+        <field name="target">new</field>
+    </record>
+    
+    <!-- El menú que referencia la acción -->
+    <menuitem 
+        id="menu_price_checker" 
+        name="Verificador de precios" 
+        parent="sale.sale_menu_root" 
+        sequence="50" 
+        action="action_price_checker" 
+    />
+</odoo>

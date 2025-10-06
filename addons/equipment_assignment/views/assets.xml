@@ -1,0 +1,7 @@
+<odoo>
+    <template id="equipment_assignment_assets" inherit_id="web.assets_backend" name="equipment_assignment assets">
+        <xpath expr="." position="inside">
+            <link rel="stylesheet" type="text/css" href="/addons/equipment_assignment/static/src/css/equipment_assignment.css"/>
+        </xpath>
+    </template>
+</odoo>

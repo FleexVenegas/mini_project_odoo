@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <data>
+
+        <record id="view_product_size_form" model="ir.ui.view">
+            <field name="name">view.product.size.form</field>
+            <field name="model">product.size</field>
+            <field name="arch" type="xml">
+                <form string="">
+                    <sheet>
+                        <group>
+                            <field name="name" />
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_product_size_tree" model="ir.ui.view">
+            <field name="name">view.product.size.tree</field>
+            <field name="model">product.size</field>
+            <field name="arch" type="xml">
+                <tree string="Tamaños">
+                    <field name="name" />
+                </tree>
+            </field>
+        </record>
+
+        <!-- Acción para menú (opcional) -->
+        <record id="action_product_size" model="ir.actions.act_window">
+            <field name="name">Tamaños</field>
+            <!-- <field name="type">ir.actions.act_window</field> -->
+            <field name="res_model">product.size</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                Tamaños
+                </p>
+                <p>Click 'Nuevo' para añadir nuevos elementos</p>
+            </field>
+        </record>
+
+        <menuitem id="menu_product_size_root" name="Tamaños" parent="stock.menu_stock_inventory_control" action="action_product_size" sequence="50" />
+
+    </data>
+
+
+</odoo>

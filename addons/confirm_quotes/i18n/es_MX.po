@@ -1,0 +1,195 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* confirm_quotes
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 17.0-20250123\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-10-06 19:28+0000\n"
+"PO-Revision-Date: 2025-10-06 19:28+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: confirm_quotes
+#. odoo-python
+#: code:addons/confirm_quotes/models/confirm_quotes_models.py:0
+#, python-format
+msgid ""
+"\n"
+"Details:"
+msgstr ""
+"\n"
+"Detalles:"
+
+#. module: confirm_quotes
+#. odoo-python
+#: code:addons/confirm_quotes/models/confirm_quotes_models.py:0
+#, python-format
+msgid ""
+"\n"
+"First %d errors of %d:"
+msgstr ""
+"\n"
+"Primeros %d errores de %d:"
+
+#. module: confirm_quotes
+#. odoo-python
+#: code:addons/confirm_quotes/models/confirm_quotes_models.py:0
+#, python-format
+msgid "%s: Cannot confirm - current state is '%s' (must be 'Quotation')"
+msgstr "%s: No se puede confirmar - estado actual es '%s' (debe ser 'Cotización')"
+
+#. module: confirm_quotes
+#. odoo-python
+#: code:addons/confirm_quotes/models/confirm_quotes_models.py:0
+#, python-format
+msgid "%s: Error - %s"
+msgstr "%s: Error - %s"
+
+#. module: confirm_quotes
+#. odoo-python
+#: code:addons/confirm_quotes/models/confirm_quotes_models.py:0
+#, python-format
+msgid "... and %d more"
+msgstr "... y %d más"
+
+#. module: confirm_quotes
+#. odoo-python
+#: code:addons/confirm_quotes/models/confirm_quotes_models.py:0
+#, python-format
+msgid "Cancelled"
+msgstr "Cancelada"
+
+#. module: confirm_quotes
+#: model_terms:ir.ui.view,arch_db:confirm_quotes.view_sale_order_tree_mass_confirmation
+msgid "Confirm Selected"
+msgstr "Confirmar seleccionadas"
+
+#. module: confirm_quotes
+#. odoo-python
+#: code:addons/confirm_quotes/models/confirm_quotes_models.py:0
+#, python-format
+msgid "Done"
+msgstr "Hecho"
+
+#. module: confirm_quotes
+#. odoo-python
+#: code:addons/confirm_quotes/models/confirm_quotes_models.py:0
+#, python-format
+msgid "Error confirming quotation %s: %s"
+msgstr "Error confirmando cotización %s: %s"
+
+#. module: confirm_quotes
+#: model:ir.model,name:confirm_quotes.model_sale_order
+msgid "Extend Sale Order to confirm multiple quotations"
+msgstr "Extender Orden de Venta para confirmar múltiples cotizaciones"
+
+#. module: confirm_quotes
+#. odoo-python
+#: code:addons/confirm_quotes/models/confirm_quotes_models.py:0
+#, python-format
+msgid "Mass Quotation Confirmation"
+msgstr "Confirmación Masiva de Cotizaciones"
+
+#. module: confirm_quotes
+#. odoo-python
+#: code:addons/confirm_quotes/models/confirm_quotes_models.py:0
+#, python-format
+msgid "No quotations selected."
+msgstr "No hay cotizaciones seleccionadas."
+
+#. module: confirm_quotes
+#. odoo-python
+#: code:addons/confirm_quotes/models/confirm_quotes_models.py:0
+#, python-format
+msgid "Quotation"
+msgstr "Cotización"
+
+#. module: confirm_quotes
+#. odoo-python
+#: code:addons/confirm_quotes/models/confirm_quotes_models.py:0
+#, python-format
+msgid "Quotation %s confirmed successfully"
+msgstr "Cotización %s confirmada exitosamente"
+
+#. module: confirm_quotes
+#. odoo-python
+#: code:addons/confirm_quotes/models/confirm_quotes_models.py:0
+#, python-format
+msgid "Quotation Sent"
+msgstr "Cotización Enviada"
+
+#. module: confirm_quotes
+#. odoo-python
+#: code:addons/confirm_quotes/models/confirm_quotes_models.py:0
+#, python-format
+msgid "Sales Order"
+msgstr "Orden de Venta"
+
+#. module: confirm_quotes
+#. odoo-python
+#: code:addons/confirm_quotes/models/confirm_quotes_models.py:0
+#, python-format
+msgid "You don't have permission to confirm quotations."
+msgstr "No tienes permiso para confirmar cotizaciones."
+
+#. module: confirm_quotes
+#. odoo-python
+#: code:addons/confirm_quotes/models/confirm_quotes_models.py:0
+#, python-format
+msgid "✅ %d quotations confirmed"
+msgstr "✅ %d cotizaciones confirmadas"
+
+#. module: confirm_quotes
+#. odoo-python
+#: code:addons/confirm_quotes/models/confirm_quotes_models.py:0
+#, python-format
+msgid "✅ %d quotations confirmed successfully"
+msgstr "✅ %d cotizaciones confirmadas exitosamente"
+
+#. module: confirm_quotes
+#. odoo-python
+#: code:addons/confirm_quotes/models/confirm_quotes_models.py:0
+#, python-format
+msgid "✅ 1 quotation confirmed"
+msgstr "✅ 1 cotización confirmada"
+
+#. module: confirm_quotes
+#. odoo-python
+#: code:addons/confirm_quotes/models/confirm_quotes_models.py:0
+#, python-format
+msgid "✅ 1 quotation confirmed successfully"
+msgstr "✅ 1 cotización confirmada exitosamente"
+
+#. module: confirm_quotes
+#. odoo-python
+#: code:addons/confirm_quotes/models/confirm_quotes_models.py:0
+#, python-format
+msgid "🔄 Please reload the page to see updated status"
+msgstr "🔄 Por favor recarga la página para ver el estado actualizado"
+
+#. module: confirm_quotes
+#. odoo-python
+#: code:addons/confirm_quotes/models/confirm_quotes_models.py:0
+#, python-format
+msgid "🔵 %d quotations failed"
+msgstr "🔵 %d cotizaciones fallidas"
+
+#. module: confirm_quotes
+#. odoo-python
+#: code:addons/confirm_quotes/models/confirm_quotes_models.py:0
+#, python-format
+msgid "🔵 1 quotation failed"
+msgstr "🔵 1 cotización fallida"
+
+#. module: confirm_quotes
+#. odoo-python
+#: code:addons/confirm_quotes/models/confirm_quotes_models.py:0
+#, python-format
+msgid "🔵 No quotations were confirmed"
+msgstr "🔵 No se confirmaron cotizaciones"

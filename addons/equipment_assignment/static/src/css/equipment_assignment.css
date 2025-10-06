@@ -1,0 +1,18 @@
+.oe_kanban_global_click {
+  background-color: #f0f8ff;
+  border-radius: 6px;
+  padding: 10px;
+  box-shadow: 2px 2px 5px #aaa;
+}
+
+.kanban-record.assigned {
+  border-left: 5px solid #007bff; /* Azul para Assigned */
+}
+
+.kanban-record.in_use {
+  border-left: 5px solid #28a745; /* Verde para In Use */
+}
+
+.kanban-record.returned {
+  border-left: 5px solid #dc3545; /* Rojo para Returned */
+}

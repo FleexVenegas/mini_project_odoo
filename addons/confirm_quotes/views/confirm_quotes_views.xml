@@ -1,0 +1,23 @@
+<odoo>
+    <data>
+        <record id="view_sale_order_tree_mass_confirmation" model="ir.ui.view">
+            <field name="name">sale.order.tree.mass.confirmation</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_quotation_tree_with_onboarding"/>
+            <field name="arch" type="xml">
+                <tree position="attributes">
+                    <attribute name="multi_edit">1</attribute>
+                </tree>
+                <tree position="inside">
+                    <header>
+                        <button 
+                        name="action_confirm_multiple" 
+                        type="object" 
+                        string="Confirm Selected" 
+                        class="btn-secondary" icon="fa-check-circle"/>
+                    </header>
+                </tree>
+            </field>
+        </record>
+    </data>
+</odoo>

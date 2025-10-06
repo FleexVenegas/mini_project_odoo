@@ -1,0 +1,50 @@
+<odoo>
+    <!-- FORM view -->
+    <record id="view_equipment_classification_form" model="ir.ui.view">
+        <field name="name">equipment.classification.form</field>
+        <field name="model">equipment.classification</field>
+        <field name="arch" type="xml">
+            <form string="Equipment Classification">
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="description"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- TREE view -->
+    <record id="view_equipment_classification_tree" model="ir.ui.view">
+        <field name="name">equipment.classification.tree</field>
+        <field name="model">equipment.classification</field>
+        <field name="arch" type="xml">
+            <tree string="Equipment Classification">
+                <field name="name"/>
+                <field name="description"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- ACTION -->
+    <record id="action_equipment_classification" model="ir.actions.act_window">
+        <field name="name">Equipment Classification</field>
+        <field name="res_model">equipment.classification</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                <img src="/equipment_assignment/static/src/img/help.svg" width="64" height="64"/>
+                Equipment Classification
+            </p>
+            <p>Click 'New' to add new elements</p>
+        </field>
+    </record>
+
+    <!-- MENU (Hijo de Equipment Assignment) -->
+    <menuitem id="menu_equipment_classification_root"
+              name="Equipment Classification"
+              parent="menu_equipment_assignment_root"
+              action="action_equipment_classification"
+              sequence="0"/>
+</odoo>

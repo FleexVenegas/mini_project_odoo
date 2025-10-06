@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="equipment_classification_cpu" model="equipment.classification">
+        <field name="code">desktop</field>
+        <field name="name">Desktop</field>
+        <field name="description">Desktop computers</field>
+    </record>
+
+    <record id="equipment_classification_laptop" model="equipment.classification">
+        <field name="code">laptop</field>
+        <field name="name">Laptop</field>
+        <field name="description">Laptops assigned to personnel</field>
+    </record>
+
+    <record id="equipment_classification_cellphone" model="equipment.classification">
+        <field name="code">cellphone</field>
+        <field name="name">Cellphone</field>
+        <field name="description">Institutional mobile phones</field>
+    </record>
+
+    <record id="equipment_classification_tablet" model="equipment.classification">
+        <field name="code">tablet</field>
+        <field name="name">Tablet</field>
+        <field name="description">Tablets for administrative or field use</field>
+    </record>
+
+    <record id="equipment_classification_printer_paper" model="equipment.classification">
+        <field name="code">paper_printer</field>
+        <field name="name">Paper Printer</field>
+        <field name="description">Standard paper printers</field>
+    </record>
+
+    <record id="equipment_classification_printer_thermal" model="equipment.classification">
+        <field name="code">thermal_printer</field>
+        <field name="name">Thermal Printer</field>
+        <field name="description">Thermal printers for tickets, labels, etc.</field>
+    </record>
+</odoo>

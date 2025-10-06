@@ -1,0 +1,369 @@
+/**
+ * Price Checker Styles
+ */
+
+
+/* Ocultar header y footer de Odoo */
+header,
+.o_header,
+footer,
+.o_footer {
+    display: none !important;
+}
+
+/* Reset básico para el contenedor principal */
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background: #fefefe;
+    color: #1f2937;
+    margin: 0;
+    padding: 0;
+}
+
+/* ========================================
+   CONTENEDOR PRINCIPAL
+======================================== */
+
+.o_pricechecker {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 40px 20px;
+    background: #fefefe;
+    font-family: 'Inter', sans-serif;
+}
+
+
+/* ========================================
+   FORMULARIO DE BÚSQUEDA
+======================================== */
+
+.search-container {
+    width: 100%;
+    max-width: 600px;
+    margin-bottom: 60px;
+}
+
+.search-form {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    background: #ffffff;
+    padding: 8px;
+    border-radius: 12px;
+    border: 1px solid #e1e5e9;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    transition: all 0.2s ease;
+
+    &:hover {
+        border-color: #cbd5e1;
+    }
+
+    &:focus-within {
+        border-color: #3b82f6;
+        box-shadow: 0 2px 8px rgba(59, 130, 246, 0.1);
+    }
+}
+
+.search-input {
+    flex: 1;
+    padding: 12px 16px;
+    border: none;
+    font-size: 16px;
+    font-family: 'Inter', sans-serif;
+    outline: none;
+    background: transparent;
+    color: #2c3e50;
+
+    &::placeholder {
+        color: #64748b;
+    }
+
+    &:focus {
+        outline: none;
+    }
+}
+
+.search-btn {
+    padding: 12px 24px;
+    background: #1f2937;
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    min-width: 100px;
+
+    &:hover {
+        background: #374151;
+        transform: translateY(-1px);
+    }
+
+    &:active {
+        transform: translateY(0);
+    }
+
+    &:disabled {
+        opacity: 0.7;
+        cursor: not-allowed;
+        transform: none;
+    }
+}
+
+/* ========================================
+   CONTENEDOR DE RESULTADOS
+======================================== */
+
+.results-container {
+    width: 100%;
+    max-width: 900px;
+}
+
+.product-name {
+    font-size: 50px;
+    font-weight: 600;
+    color: #1f2937;
+    text-align: center;
+    margin-bottom: 8px;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+}
+
+.product-info {
+    text-align: center;
+    color: #64748b;
+    font-size: 22px;
+    margin-bottom: 40px;
+    font-weight: 400;
+
+    span {
+        font-weight: 500;
+        color: #374151;
+    }
+}
+
+/* ========================================
+   GRID Y TARJETAS DE PRECIOS
+======================================== */
+
+.prices-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+.price-card {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 32px 24px;
+    text-align: center;
+    border: 1px solid #e1e5e9;
+    transition: all 0.2s ease;
+    position: relative;
+
+    &:hover {
+        border-color: #cbd5e1;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+        transform: translateY(-2px);
+    }
+
+    &.zero-price {
+        background: #f8fafc;
+        border-color: #e2e8f0;
+
+        &:hover {
+            transform: none;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+        }
+    }
+}
+
+.price-name {
+    font-size: 1.5rem;
+    font-weight: 500;
+    color: #64748b;
+    margin-bottom: 16px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.price-value {
+    font-size: 2.5rem;
+    font-weight: 600;
+    margin: 8px 0;
+    line-height: 1;
+}
+
+/* Colores por tipo de precio */
+.price-high .price-value {
+    color: #7c3aed;
+}
+
+.price-medium .price-value {
+    color: #059669;
+}
+
+
+.price-low .price-value {
+    color: #0891b2;
+}
+
+.without_price {
+    font-size: 1.25rem;
+    font-weight: 500;
+}
+
+.price-zero .price-value {
+    color: #94a3b8;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.price-label {
+    font-size: 16px;
+    color: #94a3b8;
+    font-weight: 400;
+    margin-top: 8px;
+}
+
+/* ========================================
+   MENSAJES Y ESTADOS
+======================================== */
+
+.message {
+    text-align: center;
+    padding: 40px;
+    color: #64748b;
+    font-size: 16px;
+    font-weight: 400;
+}
+
+.error-message {
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    border-radius: 8px;
+    padding: 24px;
+    color: #dc2626;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.welcome-message {
+    text-align: center;
+    color: #1f2937;
+    font-size: 24px;
+    font-weight: 500;
+    margin-top: 20px;
+    line-height: 1.4;
+}
+
+.validation-message {
+    color: #dc2626;
+    font-size: 14px;
+    margin-top: 8px;
+    text-align: center;
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ========================================
+   RESPONSIVE DESIGN
+======================================== */
+
+@media (max-width: 768px) {
+    .o_pricechecker {
+        padding: 20px 16px;
+    }
+
+    .search-container {
+        margin-bottom: 40px;
+    }
+
+    .search-form {
+        gap: 8px;
+    }
+
+    .search-input {
+        font-size: 16px;
+        padding: 10px 12px;
+    }
+
+    .search-btn {
+        padding: 10px 16px;
+        font-size: 13px;
+        min-width: 80px;
+    }
+
+    .product-name {
+        font-size: 35px;
+        margin-bottom: 12px;
+    }
+
+    .product-info {
+        font-size: 20px;
+        margin-bottom: 30px;
+    }
+
+    .price-value {
+        font-size: 24px;
+    }
+
+    .prices-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .price-card {
+        padding: 24px 20px;
+    }
+
+    .welcome-message {
+        font-size: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .o_pricechecker {
+        padding: 16px 12px;
+    }
+
+    .search-form {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .search-input {
+        width: 100%;
+    }
+
+    .search-btn {
+        width: 100%;
+    }
+
+    .product-name {
+        font-size: 20px;
+    }
+
+    .price-value {
+        font-size: 22px;
+    }
+}

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <menuitem 
+        id="menu_custom_crm_root" 
+        name="My custom CRM" 
+        sequence="10"
+    />
+
+    <menuitem 
+        id="menu_custom_crm_visit_categ" 
+        name="Operaciones" 
+        parent="menu_custom_crm_root"
+        sequence="0"
+    />
+
+    <menuitem 
+        id="menu_custom_crm_visit"
+        name="Visitas"
+        parent="menu_custom_crm_visit_categ"
+        sequence="0"
+        action="action_custom_crm_visit_view"
+    />
+
+</odoo>

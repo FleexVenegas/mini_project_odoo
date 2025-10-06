@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_equipment_form" model="ir.ui.view">
+        <field name="name">view.equipment.form</field>
+        <field name="model">equipment.equipment</field>
+        <field name="arch" type="xml">
+            <form string="Equipment">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="folio"/>
+                            <field name="name"/>
+                            <field name="equipment_type"/>
+                            <field name="equipment_code" invisible="1"/>
+                            <field name="status_equipment"/>
+                            <field name="assignment_state"/>
+                        </group>
+                        <group>
+                            <field name="company_id"/>
+                            <field name="serial_number"/>
+                            <field name="brand"/>
+                            <field name="model"/>
+                            <field name="operating_system"/>
+                            <field name="unlock_password"/>
+                        </group>
+                        <group string="Technical specifications" invisible="equipment_code not in ['laptop', 'desktop', 'cellphone', 'tablet']">
+                            <field name="operating_system"/>
+                            <field name="processor"/>
+                            <field name="ram"/>
+                            <field name="storage"/>
+                            <field name="antivirus_key" invisible="equipment_code not in ['laptop', 'desktop']"/>
+                        </group>
+                        <group>
+                            <field name="has_charger"/>
+                            <field name="charger_status" invisible="not has_charger"/>
+                        </group>
+                        <group string="IMEI" invisible="equipment_code not in ['cellphone', 'tablet']">
+                            <field name="imei1"/>
+                            <field name="imei2"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+
+    <record id="view_equipment_tree" model="ir.ui.view">
+        <field name="name">view.equipment.tree</field>
+        <field name="model">equipment.equipment</field>
+        <field name="arch" type="xml">
+            <tree string="Equipment List">
+                <field name="folio"/>
+                <field name="name"/>
+                <field name="equipment_type"/>
+                <field name="company_id"/>
+                <field name="serial_number"/>
+                <field name="brand"/>
+                <field name="model"/>
+                <field name="operating_system"/>
+                <field name="unlock_password"/>
+                <field name="status_equipment"/>
+                <field name="equipment_code"/>
+                <field name="processor"/>
+                <field name="ram"/>
+                <field name="storage"/>
+                <field name="antivirus_key"/>
+                <field name="imei1"/>
+                <field name="imei2"/>
+                <field name="has_charger"/>
+                <field name="charger_status"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_equipment_equipment" model="ir.actions.act_window">
+        <field name="name">Equipment</field>
+        <field name="res_model">equipment.equipment</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- MENU (Hijo de Equipment Assignment) -->
+    <menuitem id="menu_equipment_equipment_root" name="Equipment" parent="menu_equipment_assignment_root" action="action_equipment_equipment" sequence="0"/>
+
+</odoo>

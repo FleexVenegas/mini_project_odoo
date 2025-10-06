@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Assets para Price Checker -->
+    <template id="price_checker_assets" name="Price Checker Assets" inherit_id="website.layout">
+        <xpath expr="//head" position="inside">
+            <!-- CSS del Price Checker -->
+            <link rel="stylesheet" type="text/scss" href="/price_checker/static/src/scss/price_checker.scss"/>
+        </xpath>
+    </template>
+
+    <!-- JavaScript Assets -->
+    <template id="price_checker_js_assets" name="Price Checker JS Assets" inherit_id="website.layout">
+        <xpath expr="//body" position="inside">
+            <!-- JavaScript del Price Checker -->
+            <script type="text/javascript" src="/price_checker/static/src/js/price_checker.js"/>
+        </xpath>
+    </template>
+</odoo>

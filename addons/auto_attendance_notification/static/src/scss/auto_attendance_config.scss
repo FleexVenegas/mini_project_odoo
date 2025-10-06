@@ -1,0 +1,22 @@
+.oe_kanban_custom_card {
+        transition: all .3s ease-in-out;
+        border-radius: 5px;
+
+     &:hover{
+            box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);
+        }
+
+    .oe_kanban_custom_title {
+        font-size: 2rem;
+        color: #000;
+        font-weight: bold;
+    }
+
+    .oe_kanban_custom_details{
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        color: gray;
+       
+    }
+}

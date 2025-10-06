@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_auto_attendance_config_form" model="ir.ui.view">
+        <field name="name">view_auto.attendance.config.form</field>
+        <field name="model">auto.attendance.config</field>
+        <field name="arch" type="xml">
+            <form string="Attendance Setting">
+                <sheet>
+                    <group>
+                        <field name="name" />
+                        <field name="department_id" />
+                        <field name="employee_id" />
+                        <field name="email" />
+                        <field name="enabled" />
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+
+    <record id="view_auto_attendance_config_tree" model="ir.ui.view">
+        <field name="name">view.auto.attendance.config.tree</field>
+        <field name="model">auto.attendance.config</field>
+        <field name="arch" type="xml">
+            <tree string="Attendance Setting">
+                <field name="name" />
+                <field name="department_id" />
+                <field name="employee_id" />
+                <field name="enabled" />
+                <button name="action_generate_excel" string="Send assistance" type="object" class="btn-primary" icon="fa-download"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_auto_attendance_config_kanban" model="ir.ui.view">
+        <field name="name">view.auto.attendance.config.kanban</field>
+        <field name="model">auto.attendance.config</field>
+        <field name="arch" type="xml">
+            <kanban>
+                <field name="name"/>
+                <field name="department_id" />
+                <field name="employee_id" />
+                <field name="enabled" />
+
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_global_click oe_kanban_custom_card">
+                            <div class="oe_kanban_title oe_kanban_custom_title">
+                                <field name="name" />
+                            </div>
+                            <div class="oe_kanban_details oe_kanban_custom_details">
+                                <div>Department: <t t-esc="record.department_id.value"/>
+                                </div>
+                                <div>Send to: <t t-esc="record.employee_id.value"/>
+                                </div>
+                                <div>Auto-send: <field name="enabled" widget="boolean"/>
+                                </div>
+                            </div>
+                            <!-- Botón personalizado -->
+                            <div style="margin-top: 10px;">
+                                <button type="object" name="action_generate_excel" class="btn btn-primary btn-sm" string="Generate Excel"/>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+
+    <record id="action_auto_attendance_config_view" model="ir.actions.act_window">
+        <field name="name">Attendance Setting</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">auto.attendance.config</field>
+        <field name="view_mode">kanban,tree,form</field>
+    </record>
+
+    <menuitem id="menu_auto_attendance_config_root" parent="hr_attendance.menu_hr_attendance_root" name="Send attendance" sequence="10"/>
+    <menuitem id="manu_auto_attendance_config_attendance" name="Attendance Setting" parent="menu_auto_attendance_config_root" action="action_auto_attendance_config_view" sequence="1"/>
+
+</odoo>

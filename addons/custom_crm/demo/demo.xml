@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data >
+        <!-- <record id="visit0" model="custom_crm.visit">
+            <field name="name">Visita importada</field>
+            <field name="customer">Cliente importado</field>
+            <field name="date">2025-06-13</field>
+            <field name="type">P</field>
+            <field name="done">1</field>
+        </record> -->
+    </data>
+</odoo>

@@ -1,0 +1,43 @@
+version: "3.1"
+services:
+  web:
+    image: odoo:17.0
+    container_name: odoo
+    depends_on:
+      - db
+    ports:
+      - "8069:8069"
+    volumes:
+      - odoo-web-data:/var/lib/odoo
+      - ./config:/etc/odoo
+      - ./addons:/mnt/extra-addons
+    environment:
+      - POSTGRES_PASSWORD=odoo
+    env_file:
+      - .env
+    networks:
+      - my_custom_network # 🔹 Agregado para conectar web a la misma red que db
+
+  db:
+    image: postgres:15
+    container_name: odoo_db
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_PASSWORD=odoo
+      - POSTGRES_USER=odoo
+    ports:
+      - "5432:5432" # 🔹 Agregado para exponer PostgreSQL
+
+    # volumes:
+    #   - odoo-db-data:/var/lib/postgresql/data
+    networks:
+      - my_custom_network
+
+networks:
+  my_custom_network:
+    external: true
+    name: my_custom_network
+
+volumes:
+  odoo-web-data:
+  odoo-db-data:

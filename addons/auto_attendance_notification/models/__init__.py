@@ -1,0 +1,1 @@
+from . import auto_attendance_config_model
