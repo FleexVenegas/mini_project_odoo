@@ -112,6 +112,6 @@ class ConfirmQuotes(models.Model):
                 "title": _("Mass Quotation Confirmation"),
                 "message": message,
                 "type": message_type,
-                "sticky": error_count > 0, 
+                "sticky": error_count > 0,
             },
         }
