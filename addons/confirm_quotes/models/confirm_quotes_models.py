@@ -15,7 +15,6 @@ class ConfirmQuotes(models.Model):
         if not self:
             raise UserError(_("No quotations selected."))
 
-        # Check permissions - allow both sales manager and sales user
         if not (
             self.env.user.has_group("sales_team.group_sale_salesman")
             or self.env.user.has_group("sales_team.group_sale_manager")
@@ -28,7 +27,6 @@ class ConfirmQuotes(models.Model):
 
         for order in self:
             try:
-                # Only confirm if in draft state
                 if order.state == "draft":
                     order.action_confirm()
                     confirmed_count += 1
@@ -74,11 +72,9 @@ class ConfirmQuotes(models.Model):
             message_type = "warning"
 
         else:
-            # All failed
             main_message = _("🔵 No quotations were confirmed")
             message_type = "info"
 
-        # Add error summary if exists
         if error_count > 0:
             if error_count == 1:
                 error_summary = _("🔵 1 quotation failed")
@@ -87,21 +83,18 @@ class ConfirmQuotes(models.Model):
         else:
             error_summary = ""
 
-        # Add reload hint if there were successes
         reload_hint = (
             _("🔄 Please reload the page to see updated status")
             if confirmed_count >= 1
             else ""
         )
 
-        # Build final message
         message_lines = [main_message]
         if error_summary:
             message_lines.append(error_summary)
         if reload_hint:
             message_lines.append(reload_hint)
 
-        # Add error details (maximum 3 to avoid saturation)
         if errors and error_count <= 3:
             message_lines.append(_("\nDetails:"))
             message_lines.extend(errors[:3])
@@ -119,6 +112,6 @@ class ConfirmQuotes(models.Model):
                 "title": _("Mass Quotation Confirmation"),
                 "message": message,
                 "type": message_type,
-                "sticky": error_count > 0,  # Sticky only if there are errors
+                "sticky": error_count > 0, 
             },
         }
