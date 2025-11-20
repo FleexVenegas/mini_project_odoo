@@ -1,2 +1,2 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_confirm_quotes_sale_order,access_confirm_quotes_sale_order,model_sale_order,,1,1,0,0
+access_price_checker,access_price_checker,model_price_checker,,1,1,1,1
