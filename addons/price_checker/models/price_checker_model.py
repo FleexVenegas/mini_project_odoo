@@ -93,21 +93,19 @@ class PriceChecker(models.Model):
         # Obtener diferentes precios según las listas de precios
         prices = {}
 
-        # Lista de precios que queremos mostrar (puedes personalizar estos nombres)
-        price_lists = [
-            ("High Runner", "High Runner"),
-            ("LISTA MEDIO MAYOREO OBREGON", "Medio mayoreo"),
-            ("LISTA MAYOREO CONTADO OBREGON", "Mayoreo"),
-        ]
+        # Buscar todas las listas de precios habilitadas para el checador
+        pricelists = (
+            self.env["product.pricelist"]
+            .sudo()
+            .search([("use_in_price_checker", "=", True)])
+        )
 
-        for pricelist_name, display_name in price_lists:
-            pricelist = (
-                self.env["product.pricelist"]
-                .sudo()
-                .search([("name", "=", pricelist_name)], limit=1)
-            )
+        for pricelist in pricelists:
             if pricelist:
                 try:
+                    # Usar alias si está definido, si no usar el nombre de la lista
+                    display_name = pricelist.price_checker_alias or pricelist.name
+
                     # Obtener precio base del producto
                     base_price = product.lst_price
 
@@ -138,12 +136,6 @@ class PriceChecker(models.Model):
                     _logger.error(f"Error obteniendo precio de '{display_name}': {e}")
                     # Si hay error obteniendo el precio, poner en cero
                     prices[display_name] = 0.0
-            else:
-                # Si no existe la lista de precios, poner precio en cero
-                prices[display_name] = 0.0
-                _logger.info(
-                    f"Lista de precios '{pricelist_name}' no encontrada - precio: $0.00"
-                )
 
         # Si no hay listas de precios específicas, usar precio de lista con IVA
         if not prices:

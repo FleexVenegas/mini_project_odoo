@@ -12,6 +12,7 @@
         "views/assets.xml",
         'views/menu.xml',
         "views/qweb/price_checker_form_view.xml",
+        'views/price_list_views.xml',
     ],
     "assets": {
         "web.assets_frontend": [

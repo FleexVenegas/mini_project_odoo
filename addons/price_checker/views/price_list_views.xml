@@ -1,0 +1,18 @@
+<odoo>
+    <record id="view_pricelist_inherit_custom_checkbox" model="ir.ui.view">
+        <field name="name">product.pricelist.custom.checkbox</field>
+        <field name="model">product.pricelist</field>
+        <field name="inherit_id" ref="product.product_pricelist_view"/>
+        <field name="arch" type="xml">
+
+            <!-- Insertamos el campo dentro del group principal de Configuration -->
+            <xpath expr="//page[@name='pricelist_config']/group" position="inside">
+                <group name="pricelist_check" string="Checador de precios">
+                    <field name="use_in_price_checker"/>
+                    <field name="price_checker_alias" invisible="not use_in_price_checker"/>
+                </group>
+            </xpath>
+
+        </field>
+    </record>
+</odoo>
