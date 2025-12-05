@@ -10,7 +10,7 @@ class PriceChecker(models.Model):
     _description = "Price Checker"
 
     def find_product_price(self, sku=None, barcode=None, name=None):
-        """Buscar un producto por SKU, código de barras o nombre y devolver precios"""
+        """Buscar un producto por SKU, código de barras"""
 
         # Obtener el término de búsqueda
         search_term = sku or barcode or name
@@ -18,11 +18,11 @@ class PriceChecker(models.Model):
             _logger.info("No se proporcionó término de búsqueda")
             return None
 
-        _logger.info(f"=== INICIANDO BÚSQUEDA ===")
-        _logger.info(
-            f"Término de búsqueda: '{search_term}' (tipo: {type(search_term)})"
-        )
-        _logger.info(f"Parámetros - SKU: {sku}, Barcode: {barcode}, Name: {name}")
+        # _logger.info(f"=== INICIANDO BÚSQUEDA ===")
+        # _logger.info(
+        #     f"Término de búsqueda: '{search_term}' (tipo: {type(search_term)})"
+        # )
+        # _logger.info(f"Parámetros - SKU: {sku}, Barcode: {barcode}, Name: {name}")
 
         # Verificar que el modelo product.product existe y tiene datos
         Product = self.env["product.product"].sudo()
@@ -36,7 +36,7 @@ class PriceChecker(models.Model):
         product = False
 
         # 1. Buscar por SKU exacto
-        _logger.info(f"1. Buscando por SKU exacto: '{search_term}'")
+        # _logger.info(f"1. Buscando por SKU exacto: '{search_term}'")
         try:
             domain = [("default_code", "=", search_term)]
             product = Product.search(domain, limit=1)
@@ -65,27 +65,24 @@ class PriceChecker(models.Model):
                 _logger.error(f"   Error en búsqueda por código de barras: {e}")
 
         # 3. Buscar por nombre (parcial)
-        if not product:
-            _logger.info(f"3. Buscando por nombre parcial: '{search_term}'")
-            try:
-                domain = [("name", "ilike", search_term)]
-                products = Product.search(domain, limit=3)
-                _logger.info(
-                    f"   Resultado Name: {len(products)} productos encontrados"
-                )
-                if products:
-                    product = products[0]
-                    _logger.info(
-                        f"   ✓ Producto encontrado por nombre: {product.name} (ID: {product.id})"
-                    )
-                    # Log otros productos encontrados
-                    for i, p in enumerate(products[1:3], 1):
-                        _logger.info(f"   - Alternativa {i}: {p.name}")
-            except Exception as e:
-                _logger.error(f"   Error en búsqueda por nombre: {e}")
-
-        _logger.info(f"=== RESULTADO FINAL ===")
-        _logger.info(f"Producto encontrado: {product.name if product else 'NINGUNO'}")
+        # if not product:
+        #     _logger.info(f"3. Buscando por nombre parcial: '{search_term}'")
+        #     try:
+        #         domain = [("name", "ilike", search_term)]
+        #         products = Product.search(domain, limit=3)
+        #         _logger.info(
+        #             f"   Resultado Name: {len(products)} productos encontrados"
+        #         )
+        #         if products:
+        #             product = products[0]
+        #             _logger.info(
+        #                 f"   ✓ Producto encontrado por nombre: {product.name} (ID: {product.id})"
+        #             )
+        #             # Log otros productos encontrados
+        #             for i, p in enumerate(products[1:3], 1):
+        #                 _logger.info(f"   - Alternativa {i}: {p.name}")
+        #     except Exception as e:
+        #         _logger.error(f"   Error en búsqueda por nombre: {e}")
 
         if not product:
             return None
@@ -121,13 +118,27 @@ class PriceChecker(models.Model):
                     ):  # Tolerancia para decimales
                         # Aplicar IVA del 16% (multiplicar por 1.16)
                         price_with_tax = pricelist_price * 1.16
-                        prices[display_name] = price_with_tax
+
+                        # Crear estructura con precio y etiqueta condicional
+                        prices[display_name] = {
+                            "value": price_with_tax,
+                            "label": (
+                                pricelist.text_conditional_label
+                                if pricelist.enable_conditional_label
+                                else None
+                            ),
+                        }
+
                         _logger.info(
-                            f"Precio obtenido de '{display_name}': ${price_with_tax:.2f} (sin IVA: ${pricelist_price:.2f}, base: ${base_price:.2f})"
+                            f"Estructura generada para '{display_name}': {prices[display_name]}"
+                        )
+
+                        _logger.info(
+                            f"Precio obtenido max100 de '{display_name}': ${price_with_tax:.2f} (sin IVA: ${pricelist_price:.2f}, base: ${base_price:.2f})"
                         )
                     else:
                         # El precio no cambió, no hay regla específica para este producto
-                        prices[display_name] = 0.0
+                        prices[display_name] = {"value": 0.0, "label": None}
                         _logger.info(
                             f"Sin regla específica en '{display_name}' - precio: $0.00 (base: ${base_price:.2f})"
                         )
@@ -135,12 +146,17 @@ class PriceChecker(models.Model):
                 except Exception as e:
                     _logger.error(f"Error obteniendo precio de '{display_name}': {e}")
                     # Si hay error obteniendo el precio, poner en cero
-                    prices[display_name] = 0.0
-
-        # Si no hay listas de precios específicas, usar precio de lista con IVA
+                    prices[display_name] = {
+                        "value": 0.0,
+                        "label": None,
+                    }  # Si no hay listas de precios específicas, usar precio de lista con IVA
         if not prices:
             price_with_tax = product.lst_price * 1.16
-            prices["Precio de lista"] = price_with_tax
+            prices["Precio de lista"] = {"value": price_with_tax, "label": None}
+
+        image = product.image_1920
+        if isinstance(image, bytes):
+            image = image.decode()  # convertir bytes a string base64
 
         return {
             "id": product.id,
@@ -148,4 +164,5 @@ class PriceChecker(models.Model):
             "sku": product.default_code,
             "barcode": product.barcode,
             "prices": prices,
+            "image_1920": image,
         }

@@ -26,6 +26,8 @@ class PriceCheckerController(http.Controller):
             product_data = price_checker_model.find_product_price(name=query)
 
             if product_data:
+                _logger.info(f"Datos del producto encontrados: {product_data}")
+                _logger.info(f"Precios: {product_data.get('prices', {})}")
                 context.update(
                     {
                         "product": product_data,

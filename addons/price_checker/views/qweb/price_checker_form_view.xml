@@ -27,32 +27,50 @@
                             </t>
                         </div>
 
-                        <!-- Precios en tarjetas elegantes -->
-                        <div class="prices-grid">
-                            <t t-foreach="prices.items()" t-as="price_item">
-                                <t t-set="price_name" t-value="price_item[0]"/>
-                                <t t-set="price_value" t-value="price_item[1]"/>
-                                <t t-set="price_class" t-value="'price-high' if price_name == 'High Runner' else ('price-medium' if price_name == 'Medio mayoreo' else 'price-low')"/>
+                        <div class="product-details">
 
-                                <div t-att-class="'price-card ' + (price_class if price_value > 0 else 'zero-price')">
-                                    <div class="price-name">
-                                        <t t-if="price_name == 'High Runner'">High Runner</t>
-                                        <t t-elif="price_name == 'Medio mayoreo'">Medio mayoreo</t>
-                                        <t t-elif="price_name == 'Mayoreo'">Mayoreo</t>
-                                        <t t-else="" t-esc="price_name"/>
+                            <div class="product-image-container">
+                                <t t-if="product.get('image_1920')">
+                                    <img t-att-src="'data:image/png;base64,' + product['image_1920']" class="product-image"/>
+                                </t>
+                                <t t-else="">
+                                    <img t-att-src="'/price_checker/static/src/img/generic_1.png'" class="product-image product-image-generic"/>
+                                </t>
+                            </div>
+                            <!-- Precios en tarjetas elegantes -->
+                            <div class="prices-grid">
+                                <t t-foreach="prices.items()" t-as="price_item">
+                                    <t t-set="price_name" t-value="price_item[0]"/>
+                                    <t t-set="price_data" t-value="price_item[1]"/>
+                                    <!-- Manejar tanto diccionarios como valores simples -->
+                                    <t t-set="price_value" t-value="price_data['value'] if isinstance(price_data, dict) else price_data"/>
+                                    <t t-set="conditional_label" t-value="price_data.get('label', '') if isinstance(price_data, dict) else ''"/>
+
+                                    <div t-att-class="'price-card ' + ('zero-price' if price_value == 0 else '')">
+                                        <div class="price-name">
+                                            <t t-esc="price_name"/>
+                                        </div>
+
+                                        <div t-att-class="'price-value' + (' without_price' if price_value == 0 else '')">
+                                            <t t-if="price_value == 0">Consulte disponibilidad</t>
+                                            <t t-else="">
+                                                $                                                <t t-esc="'{:,.2f}'.format(price_value)"/>
+                                            </t>
+                                        </div>
+                                        <div class="price-label">
+                                            <t t-if="price_value == 0">Precio no disponible</t>
+                                            <t t-else="">Precio con IVA incluido</t>
+                                        </div>
+
+                                        <!-- Etiqueta condicional si está habilitada -->
+                                        <div t-if="conditional_label" class="conditional-label">
+                                            💡                                            <t t-esc="conditional_label"/>
+                                        </div>
                                     </div>
-                                    <div t-att-class="'price-value ' + price_class + (' without_price' if price_value == 0 else '')">
-                                        <t t-if="price_value == 0">Consulte disponibilidad</t>
-                                        <t t-else="">$                                            <t t-esc="'{:,.2f}'.format(price_value)"/>
-                                        </t>
-                                    </div>
-                                    <div class="price-label">
-                                        <t t-if="price_value == 0">Precio no disponible</t>
-                                        <t t-else="">Precio con IVA incluido</t>
-                                    </div>
-                                </div>
-                            </t>
+                                </t>
+                            </div>
                         </div>
+
                     </t>
 
                     <t t-if="error_message">

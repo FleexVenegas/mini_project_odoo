@@ -124,7 +124,7 @@ body {
 
 .results-container {
     width: 100%;
-    max-width: 900px;
+    max-width: 1200px;
 }
 
 .product-name {
@@ -154,10 +154,49 @@ body {
    GRID Y TARJETAS DE PRECIOS
 ======================================== */
 
-.prices-grid {
+
+.product-details {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 20px;
+    grid-template-columns: 500px 1fr;
+    grid-template-rows: 1fr;
+    grid-column-gap: 40px;
+    grid-row-gap: 0px;
+}
+
+.product-image-container {
+    grid-area: 1 / 1 / 2 / 2;
+    width: 100%;
+    height: 380px;
+    border-radius: 12px;
+    overflow: hidden;
+    // box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    background: #ffffff;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+}
+
+.product-image {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    border-radius: 20px;
+}
+
+.product-image-generic{
+    object-fit: cover;
+}
+
+.prices-grid {
+
+    grid-area: 1 / 2 / 2 / 3;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 30px;
+    // display: grid;
+    // grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    // gap: 20px;
 }
 
 .price-card {
@@ -168,6 +207,8 @@ body {
     border: 1px solid #e1e5e9;
     transition: all 0.2s ease;
     position: relative;
+    min-width: 280px;
+    width: 300px;
 
     &:hover {
         border-color: #cbd5e1;
@@ -195,6 +236,23 @@ body {
     letter-spacing: 0.5px;
 }
 
+.conditional-label {
+    display: inline-block;
+    background: #e3f2fd;
+    border: 1px solid #bbdefb;
+    border-radius: 8px;
+    padding: 5px 8px;
+    font-size: 14px;
+    color: #1565c0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 5px;
+    text-transform: uppercase;
+
+}
+
 .price-value {
     font-size: 2.5rem;
     font-weight: 600;
@@ -202,19 +260,69 @@ body {
     line-height: 1;
 }
 
-/* Colores por tipo de precio */
-.price-high .price-value {
+/* Array de colores vibrantes para las listas de precios */
+.price-card:nth-child(1) .price-value {
     color: #7c3aed;
 }
 
-.price-medium .price-value {
+/* Púrpura */
+.price-card:nth-child(2) .price-value {
     color: #059669;
 }
 
-
-.price-low .price-value {
+/* Verde esmeralda */
+.price-card:nth-child(3) .price-value {
     color: #0891b2;
 }
+
+/* Cyan */
+.price-card:nth-child(4) .price-value {
+    color: #26dc38;
+}
+
+/* Rojo */
+.price-card:nth-child(5) .price-value {
+    color: #0ceaaf;
+}
+
+/* Naranja */
+.price-card:nth-child(6) .price-value {
+    color: #2563eb;
+}
+
+/* Azul */
+.price-card:nth-child(7) .price-value {
+    color: #c026d3;
+}
+
+/* Fucsia */
+.price-card:nth-child(8) .price-value {
+    color: #0d9488;
+}
+
+/* Teal */
+.price-card:nth-child(9) .price-value {
+    color: #ca8a04;
+}
+
+/* Amarillo dorado */
+.price-card:nth-child(10) .price-value {
+    color: #e11d48;
+}
+
+/* Rosa */
+
+/* Colores adicionales para más de 10 listas (se repiten con variaciones) */
+.price-card:nth-child(n+11):nth-child(odd) .price-value {
+    color: #6366f1;
+}
+
+/* Índigo */
+.price-card:nth-child(n+11):nth-child(even) .price-value {
+    color: #14b8a6;
+}
+
+/* Teal claro */
 
 .without_price {
     font-size: 1.25rem;

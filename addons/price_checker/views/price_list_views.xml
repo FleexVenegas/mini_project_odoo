@@ -10,6 +10,8 @@
                 <group name="pricelist_check" string="Checador de precios">
                     <field name="use_in_price_checker"/>
                     <field name="price_checker_alias" invisible="not use_in_price_checker"/>
+                    <field name="enable_conditional_label"/>
+                    <field name="text_conditional_label" invisible="not enable_conditional_label"/>
                 </group>
             </xpath>
 

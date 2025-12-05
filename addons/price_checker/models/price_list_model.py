@@ -12,3 +12,13 @@ class PriceListModel(models.Model):
         string="Alias para Checador",
         help="Nombre corto que se mostrará en el checador de precios. Si está vacío, se usará el nombre de la lista.",
     )
+
+    enable_conditional_label = fields.Boolean(
+        string="Habilitar etiqueta condicional",
+        help="Si está activado, se mostrará una etiqueta en el checador de precios.",
+    )
+
+    text_conditional_label = fields.Char(
+        string="Texto de la etiqueta condicional",
+        help="Texto que se mostrará en la etiqueta condicional.",
+    )
