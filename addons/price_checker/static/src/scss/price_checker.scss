@@ -161,6 +161,19 @@ body {
     grid-template-rows: 1fr;
     grid-column-gap: 40px;
     grid-row-gap: 0px;
+
+    // @media (max-width: 768px) {
+    //     display: flex;
+    //     flex-direction: column;
+
+    // }
+
+    @media (max-width: 900px) {
+
+        display: flex;
+        flex-direction: column;
+
+    }
 }
 
 .product-image-container {
@@ -183,7 +196,7 @@ body {
     border-radius: 20px;
 }
 
-.product-image-generic{
+.product-image-generic {
     object-fit: cover;
 }
 
@@ -442,6 +455,7 @@ body {
 
     .price-card {
         padding: 24px 20px;
+        width: 100%;
     }
 
     .welcome-message {

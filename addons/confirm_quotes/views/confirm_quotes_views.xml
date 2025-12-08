@@ -10,7 +10,7 @@
                 </tree>
                 <tree position="inside">
                     <header>
-                        <button name="action_confirm_multiple" type="object" string="Confirm Selected" class="btn-secondary" icon="fa-check-circle"/>
+                        <button name="action_confirm_multiple" type="object" string="Confirm Selected" class="btn-secondary" icon="fa-check-circle" groups="confirm_quotes.group_confirm_quotes_user"/>
                     </header>
                 </tree>
             </field>

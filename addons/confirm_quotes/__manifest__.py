@@ -26,6 +26,7 @@
         "base",
     ],
     "data": [
+        "security/groups.xml",
         # View to add button in quotations list
         "security/ir.model.access.csv",
         "views/confirm_quotes_views.xml",

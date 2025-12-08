@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Grupo para controlar quién puede ver el botón de confirmación masiva -->
+        <record id="group_confirm_quotes_user" model="res.groups">
+            <field name="name">Confirm Quotes User</field>
+            <field name="comment">Usuarios que pueden confirmar múltiples cotizaciones desde la vista de lista</field>
+        </record>
+    </data>
+</odoo>
