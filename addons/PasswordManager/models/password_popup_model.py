@@ -5,4 +5,6 @@ class PasswordPopup(models.TransientModel):
     _name = "password.popup"
     _description = "Popup to show password"
 
-    password_plain = fields.Char(string="Password")
+    service_name = fields.Char(string="Service", readonly=True)
+    username = fields.Char(string="Username/Email", readonly=True)
+    password_plain = fields.Char(string="Password", readonly=True)

@@ -3,12 +3,22 @@
         <field name="name">view.config.settings.password.manager</field>
         <field name="model">res.config.settings</field>
         <field name="inherit_id" ref="base.res_config_settings_view_form"/>
-        <!-- <field name="inherit_id" ref="base.res_config_settings_view_form"/> -->
         <field name="arch" type="xml">
             <xpath expr="//block[@name='performance']" position="after">
                 <block title="Password Manager" name="password_manager_block">
-                    <setting id="encryption_key_setting" help="Key used to encrypt and decrypt stored passwords.">
-                        <field name="encryption_key" password="True"/>
+                    <setting id="encryption_key_setting" help="Key used to encrypt and decrypt stored passwords. Must be a 44-character base64-encoded key.">
+                        <label for="encryption_key" string="Encryption Key"/>
+                        <div class="text-muted">
+                            WARNING: Changing this key will make all existing passwords unreadable!
+                        </div>
+                        <div class="row mt8">
+                            <div class="col-8">
+                                <field name="encryption_key" password="True" placeholder="44-character base64 key"/>
+                            </div>
+                            <div class="col-4">
+                                <button name="action_generate_encryption_key" string="Generate New Key" type="object" class="btn-secondary"/>
+                            </div>
+                        </div>
                     </setting>
                 </block>
             </xpath>
