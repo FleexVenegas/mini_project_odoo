@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Vista de formulario para etiquetas de lista de precios por almacén -->
+    <record id="view_pricelist_warehouse_label_form" model="ir.ui.view">
+        <field name="name">pricelist.warehouse.label.form</field>
+        <field name="model">pricelist.warehouse.label</field>
+        <field name="arch" type="xml">
+            <form string="Etiqueta de Lista de Precios por Almacén">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="warehouse_id" options="{'no_create': True}"/>
+                            <field name="pricelist_id" options="{'no_create': True}"/>
+                        </group>
+                        <group>
+                            <field name="enable_label"/>
+                            <field name="label_text" invisible="not enable_label" required="enable_label"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Vista de árbol para etiquetas -->
+    <record id="view_pricelist_warehouse_label_tree" model="ir.ui.view">
+        <field name="name">pricelist.warehouse.label.tree</field>
+        <field name="model">pricelist.warehouse.label</field>
+        <field name="arch" type="xml">
+            <tree string="Etiquetas por Almacén y Lista de Precios">
+                <field name="warehouse_id"/>
+                <field name="pricelist_id"/>
+                <field name="enable_label"/>
+                <field name="label_text"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Vista de búsqueda para filtrar -->
+    <record id="view_pricelist_warehouse_label_search" model="ir.ui.view">
+        <field name="name">pricelist.warehouse.label.search</field>
+        <field name="model">pricelist.warehouse.label</field>
+        <field name="arch" type="xml">
+            <search string="Buscar Etiquetas">
+                <field name="warehouse_id"/>
+                <field name="pricelist_id"/>
+                <filter string="Etiquetas Activas" name="active_labels" domain="[('enable_label', '=', True)]"/>
+                <filter string="Etiquetas Inactivas" name="inactive_labels" domain="[('enable_label', '=', False)]"/>
+                <group expand="0" string="Agrupar por">
+                    <filter string="Almacén" name="group_warehouse" context="{'group_by': 'warehouse_id'}"/>
+                    <filter string="Lista de Precios" name="group_pricelist" context="{'group_by': 'pricelist_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Acción para abrir las etiquetas -->
+    <record id="action_pricelist_warehouse_label" model="ir.actions.act_window">
+        <field name="name">Etiquetas por Almacén</field>
+        <field name="res_model">pricelist.warehouse.label</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{'search_default_active_labels': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Crear una nueva etiqueta personalizada
+            </p>
+            <p>
+                Configure etiquetas específicas para cada combinación de almacén y lista de precios.
+                Estas etiquetas se mostrarán en el checador de precios cuando corresponda.
+            </p>
+        </field>
+    </record>
+
+    <!-- Menú para gestionar etiquetas -->
+    <menuitem id="menu_pricelist_warehouse_label" name="Etiquetas por Almacén" parent="sale.sale_menu_root" sequence="51" action="action_pricelist_warehouse_label" />
+</odoo>

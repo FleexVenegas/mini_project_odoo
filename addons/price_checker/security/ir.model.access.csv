@@ -1,2 +1,3 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_price_checker,access_price_checker,model_price_checker,,1,1,1,1
+access_pricelist_warehouse_label,access_pricelist_warehouse_label,model_pricelist_warehouse_label,base.group_user,1,1,1,1

@@ -5,6 +5,7 @@
         <xpath expr="//head" position="inside">
             <!-- CSS del Price Checker -->
             <link rel="stylesheet" type="text/scss" href="/price_checker/static/src/scss/price_checker.scss"/>
+            <link rel="stylesheet" type="text/scss" href="/price_checker/static/src/scss/branch_selector.scss"/>
         </xpath>
     </template>
 
@@ -13,8 +14,9 @@
         <xpath expr="//body" position="inside">
             <!-- JavaScript del Price Checker -->
             <script type="text/javascript" src="/price_checker/static/src/js/price_checker.js"/>
+            <script type="text/javascript" src="/price_checker/static/src/js/branch_selector.js"/>
         </xpath>
     </template>
 
-    
+
 </odoo>

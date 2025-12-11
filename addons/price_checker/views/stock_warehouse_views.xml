@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <record id="view_stock_warehouse_adjunt" model="ir.ui.view">
+        <field name="name">view.stock.warehouse.adjust</field>
+        <field name="model">stock.warehouse</field>
+        <field name="inherit_id" ref="stock.view_warehouse"/>
+        <field name="arch" type="xml">
+
+            <!-- Insertar después de la pestaña "Información técnica" -->
+            <xpath expr="//page[@name='technical_info']" position="after">
+                <page string="Price Checker" name="price_checker">
+                    <group>
+                        <field name="price_checker_pricelist_id"/>
+                    </group>
+                </page>
+            </xpath>
+
+        </field>
+
+    </record>
+</odoo>
