@@ -1,0 +1,101 @@
+/* Estilos para Purchase Requirements Preview */
+
+/* Layout principal */
+.o_purchase_preview_form {
+    .o_pr_layout {
+        width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        display: flex !important;
+        flex-wrap: wrap !important;
+        gap: 20px !important;
+    }
+
+    .o_pr_left,
+    .o_pr_right {
+        flex: 1 !important;
+        min-width: 400px !important;
+        margin-bottom: 0 !important;
+        padding: 0 10px !important;
+    }
+
+    .o_pr_left {
+        max-width: 60% !important;
+    }
+
+    .o_pr_right {
+        max-width: 40% !important;
+        flex-grow: 1 !important;
+    }
+
+    /* Forzar que el chatter siempre esté abajo */
+    // .oe_chatter_position_bottom_ {
+    //     width: 100% !important;
+    //     max-width: 100% !important;
+    //     clear: both !important;
+    //     display: block !important;
+    //     margin-top: 30px !important;
+    //     flex-basis: 100% !important;
+    // }
+}
+
+/* Panel de preview */
+.o_pr_preview_panel {
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    background: #ffffff;
+    height: 700px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+    padding: 20px;
+}
+
+/* Contenedor del iframe */
+.o_pr_preview_container {
+    width: 100% !important;
+    height: 100% !important;
+    min-height: 700px !important;
+    display: block !important;
+    position: relative;
+
+    p {
+        text-align: center;
+        padding: 20px;
+        color: #6c757d;
+        font-size: 14px;
+        margin: 0;
+        font-style: italic;
+    }
+}
+
+/* Iframe */
+.o_pr_preview_container iframe {
+    border: none !important;
+    width: 100% !important;
+    height: 700px !important;
+    min-height: 700px !important;
+    display: block !important;
+}
+
+/* Responsive: en pantallas pequeñas, apilar verticalmente */
+@media (max-width: 1200px) {
+    .o_purchase_preview_form {
+
+        .o_pr_left,
+        .o_pr_right {
+            max-width: 100% !important;
+            min-width: 100% !important;
+        }
+    }
+}
+
+/* Ajustes para el group padre */
+.o_purchase_preview_form {
+    .o_group {
+        margin-bottom: 0 !important;
+    }
+
+    sheet {
+        padding-bottom: 20px !important;
+    }
+}

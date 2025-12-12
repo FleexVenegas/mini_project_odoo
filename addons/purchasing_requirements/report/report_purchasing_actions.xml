@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_report_purchasing_requirements" model="ir.actions.report">
+        <field name="name">Purchasing Requirement</field>
+        <field name="model">purchasing.requirements</field>
+        <field name="report_type">qweb-pdf</field>
+
+        <!-- Conexión al template QWeb -->
+        <field name="report_name">purchasing_requirements.report_purchasing_requirements_template</field>
+
+        <!-- Nombre del archivo cuando lo descargues -->
+        <field name="print_report_name">'Requisicion - %s' % (object.name)</field>
+
+    </record>
+</odoo>
