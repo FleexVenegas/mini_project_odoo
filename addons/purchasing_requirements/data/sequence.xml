@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Secuencia para folios de requisiciones de compra -->
+        <record id="seq_purchasing_requirements" model="ir.sequence">
+            <field name="name">Requisición de Compra</field>
+            <field name="code">purchasing.requirements</field>
+            <field name="prefix">RC</field>
+            <field name="padding">4</field>
+            <field name="number_next">1</field>
+            <field name="number_increment">1</field>
+            <field name="implementation">standard</field>
+            <field name="company_id" eval="False"/>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Module Category -->
+        <record id="module_category_anonymous_mailbox" model="ir.module.category">
+            <field name="name">Anonymous Mailbox</field>
+            <field name="description">Anonymous mailbox management</field>
+            <field name="sequence">50</field>
+        </record>
+
+        <!-- Group: User (read only) -->
+        <record id="group_anonymous_mailbox_user" model="res.groups">
+            <field name="name">User</field>
+            <field name="category_id" ref="module_category_anonymous_mailbox"/>
+            <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+            <field name="comment">Users can view anonymous mailbox messages</field>
+        </record>
+
+        <!-- Group: Manager (read and write) -->
+        <record id="group_anonymous_mailbox_manager" model="res.groups">
+            <field name="name">Manager</field>
+            <field name="category_id" ref="module_category_anonymous_mailbox"/>
+            <field name="implied_ids" eval="[(4, ref('group_anonymous_mailbox_user'))]"/>
+            <field name="comment">Managers can view, edit and delete anonymous mailbox messages</field>
+        </record>
+
+        <!-- Group: Administrator (full access) -->
+        <record id="group_anonymous_mailbox_admin" model="res.groups">
+            <field name="name">Administrator</field>
+            <field name="category_id" ref="module_category_anonymous_mailbox"/>
+            <field name="implied_ids" eval="[(4, ref('group_anonymous_mailbox_manager'))]"/>
+            <field name="users" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
+            <field name="comment">Administrators have full access to the anonymous mailbox</field>
+        </record>
+    </data>
+</odoo>

@@ -8,181 +8,181 @@
 
                         <!-- Estilos CSS simple para impresión -->
                         <style>
-/* ========================================= BASE ========================================== */
-.pr-report {
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-    color: #1a1a1a;
-    font-size: 13px;
-    line-height: 1.55;
-}
+                            /* ========================================= BASE ========================================== */
+                            .pr-report {
+                                font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+                                color: #1a1a1a;
+                                font-size: 13px;
+                                line-height: 1.55;
+                            }
 
-/* ========================================= HEADER ========================================== */
-.pr-header {
-    padding-bottom: 22px;
-    margin-bottom: 34px;
-    border-bottom: 1px solid #ddd;
-}
+                            /* ========================================= HEADER ========================================== */
+                            .pr-header {
+                                padding-bottom: 22px;
+                                margin-bottom: 34px;
+                                border-bottom: 1px solid #ddd;
+                            }
 
-.pr-header h1 {
-    margin: 0;
-    font-size: 22px;
-    font-weight: 400; /* 300 se pierde en PDF */
-    color: #111;
-    letter-spacing: 0.3px;
-}
+                            .pr-header h1 {
+                                margin: 0;
+                                font-size: 22px;
+                                font-weight: 400; /* 300 se pierde en PDF */
+                                color: #111;
+                                letter-spacing: 0.3px;
+                            }
 
-.pr-number {
-    margin-top: 6px;
-    font-size: 12px;
-    color: #555;
-}
+                            .pr-number {
+                                margin-top: 6px;
+                                font-size: 1.1rem;
+                                color: #555;
+                            }
 
-/* ========================================= SECCIONES ========================================== */
-.pr-section {
-    margin-bottom: 36px;
-}
+                            /* ========================================= SECCIONES ========================================== */
+                            .pr-section {
+                                margin-bottom: 36px;
+                            }
 
-.pr-section-title {
-    font-size: 14px;
-    font-weight: 400;
-    color: #222;
-    padding-bottom: 4px;
-    border-bottom: 1px solid #ddd;
-    margin-bottom: 14px;
-    letter-spacing: 0.2px;
-}
+                            .pr-section-title {
+                                font-size: 14px;
+                                font-weight: 400;
+                                color: #222;
+                                padding-bottom: 4px;
+                                border-bottom: 1px solid #ddd;
+                                margin-bottom: 14px;
+                                letter-spacing: 0.2px;
+                            }
 
-/* =========================================
-   TABLA INFORMACIÓN ========================================== */
-.pr-info-table {
-    width: 100%;
-    border-collapse: collapse;
-    table-layout: fixed;
-}
+                            /* =========================================
+                            TABLA INFORMACIÓN ========================================== */
+                            .pr-info-table {
+                                width: 100%;
+                                border-collapse: collapse;
+                                table-layout: fixed;
+                            }
 
-.pr-info-table td {
-    padding: 6px 4px;
-    vertical-align: top;
-    border-bottom: 1px solid #f2f2f2; /* se imprime bien */
-}
+                            .pr-info-table td {
+                                padding: 6px 4px;
+                                vertical-align: top;
+                                border-bottom: 1px solid #f2f2f2; /* se imprime bien */
+                            }
 
-.pr-info-table .label {
-    width: 35%;
-    font-weight: 500;
-    color: #444;
-}
+                            .pr-info-table .label {
+                                width: 35%;
+                                font-weight: 500;
+                                color: #444;
+                            }
 
-.pr-info-table .value {
-    width: 65%;
-    font-weight: 400;
-    color: #222;
-}
+                            .pr-info-table .value {
+                                width: 65%;
+                                font-weight: 400;
+                                color: #222;
+                            }
 
-/* =========================================
-   TABLA PRODUCTOS ========================================== */
-.pr-product-table {
-    width: 100%;
-    border-collapse: collapse;
-    table-layout: fixed;
-    font-size: 13px;
-    margin-top: 10px;
-}
+                            /* =========================================
+                            TABLA PRODUCTOS ========================================== */
+                            .pr-product-table {
+                                width: 100%;
+                                border-collapse: collapse;
+                                table-layout: fixed;
+                                font-size: 13px;
+                                margin-top: 10px;
+                            }
 
-.pr-product-table th {
-    padding: 8px 4px;
-    font-size: 11px;
-    font-weight: 500;
-    color: #333;
-    letter-spacing: 0.5px;
-    text-transform: uppercase;
-    border-bottom: 1px solid #ccc;
-}
+                            .pr-product-table th {
+                                padding: 8px 4px;
+                                font-size: 11px;
+                                font-weight: 500;
+                                color: #333;
+                                letter-spacing: 0.5px;
+                                text-transform: uppercase;
+                                border-bottom: 1px solid #ccc;
+                            }
 
-.pr-product-table td {
-    padding: 8px 4px;
-    font-weight: 400;
-    border-bottom: 1px solid #e6e6e6;
-}
+                            .pr-product-table td {
+                                padding: 8px 4px;
+                                font-weight: 400;
+                                border-bottom: 1px solid #e6e6e6;
+                            }
 
-/* Columnas */
-.pr-product-table th:nth-child(1),
-.pr-product-table td:nth-child(1) {
-    width: 35%;
-}
+                            /* Columnas */
+                            .pr-product-table th:nth-child(1),
+                            .pr-product-table td:nth-child(1) {
+                                width: 35%;
+                            }
 
-.pr-product-table th:nth-child(2),
-.pr-product-table td:nth-child(2) {
-    width: 20%;
-    text-align: right;
-}
+                            .pr-product-table th:nth-child(2),
+                            .pr-product-table td:nth-child(2) {
+                                width: 20%;
+                                text-align: right;
+                            }
 
-.pr-product-table th:nth-child(3),
-.pr-product-table td:nth-child(3) {
-    width: 15%;
-    text-align: center;
-}
+                            .pr-product-table th:nth-child(3),
+                            .pr-product-table td:nth-child(3) {
+                                width: 15%;
+                                text-align: center;
+                            }
 
-.pr-product-table th:nth-child(4),
-.pr-product-table td:nth-child(4) {
-    width: 25%;
-    text-align: right;
-}
+                            .pr-product-table th:nth-child(4),
+                            .pr-product-table td:nth-child(4) {
+                                width: 25%;
+                                text-align: right;
+                            }
 
-/* ========================================= FOOTER ========================================== */
-.pr-footer {
-    margin-top: 50px;
-    padding-top: 12px;
-    border-top: 1px solid #ddd;
-    font-size: 11px;
-    color: #777;
-    text-align: center;
-}
+                            /* ========================================= FOOTER ========================================== */
+                            .pr-footer {
+                                margin-top: 50px;
+                                padding-top: 12px;
+                                border-top: 1px solid #ddd;
+                                font-size: 11px;
+                                color: #777;
+                                text-align: center;
+                            }
 
-/* =========================================
-   PRINT MODE - PDF FIXES ========================================== */
-@media print {
+                            /* =========================================
+                            PRINT MODE - PDF FIXES ========================================== */
+                            @media print {
 
-      /* Bordes externos más suaves */
-    .pr-product-table,
-    .pr-product-table tr,
-    .pr-product-table th,
-    .pr-product-table td {
-        border-color: #e0e0e0 !important; /* Gris muy suave */
-    }
+                                /* Bordes externos más suaves */
+                                .pr-product-table,
+                                .pr-product-table tr,
+                                .pr-product-table th,
+                                .pr-product-table td {
+                                    border-color: #e0e0e0 !important; /* Gris muy suave */
+                                }
 
-    /* Columnas fijas para PDF */
-    .pr-product-table, 
-    .pr-info-table {
-        table-layout: fixed !important;
-    }
+                                /* Columnas fijas para PDF */
+                                .pr-product-table, 
+                                .pr-info-table {
+                                    table-layout: fixed !important;
+                                }
 
-    .pr-product-table th,
-    .pr-info-table td {
-        padding: 8px 4px !important;
-    }
+                                .pr-product-table th,
+                                .pr-info-table td {
+                                    padding: 8px 4px !important;
+                                }
 
-    /* Forzar bordes en PDF */
-    .pr-product-table th,
-    .pr-section-title,
-    .pr-header {
-        border-color: #aaa !important;
-    }
+                                /* Forzar bordes en PDF */
+                                .pr-product-table th,
+                                .pr-section-title,
+                                .pr-header {
+                                    border-color: #aaa !important;
+                                }
 
-    .pr-product-table td {
-        border-color: #ccc !important;
-    }
+                                .pr-product-table td {
+                                    border-color: #ccc !important;
+                                }
 
-    /* Evitar que wkhtmltopdf borre colores suaves */
-    .pr-info-table td,
-    .pr-info-table .label {
-        border-bottom: 1px solid #ddd !important;
-    }
+                                /* Evitar que wkhtmltopdf borre colores suaves */
+                                .pr-info-table td,
+                                .pr-info-table .label {
+                                    border-bottom: 1px solid #ddd !important;
+                                }
 
-    /* Asegurar impresión de mayúsculas */
-    .pr-product-table th {
-        text-transform: uppercase !important;
-    }
-}
+                                /* Asegurar impresión de mayúsculas */
+                                .pr-product-table th {
+                                    text-transform: uppercase !important;
+                                }
+                            }
                         </style>
 
 
@@ -190,36 +190,39 @@
 
                             <!-- Header -->
                             <div class="pr-header">
-                                <h1>REQUISICIÓN DE COMPRA</h1>
-                                <div class="pr-number">
-                                    Folio: <t t-esc="doc.name"/>
+                                <h1>PURCHASE REQUISITION</h1>
+                                <div>
+                                    Reference: 
+                                    <div class="pr-number">
+                                        <t t-esc="doc.name"/>
+                                    </div>
                                 </div>
                             </div>
 
-                            <!-- Información General -->
+                            <!-- General Information -->
                             <div class="pr-section">
-                                <div class="pr-section-title">Información General</div>
+                                <div class="pr-section-title">General Information</div>
                                 <table class="pr-info-table">
                                     <tr>
-                                        <td class="label">Solicitado por:</td>
+                                        <td class="label">Requested By:</td>
                                         <td class="value">
                                             <t t-esc="doc.requested_by.name or '-'"/>
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td class="label">Departamento:</td>
+                                        <td class="label">Department:</td>
                                         <td class="value">
                                             <t t-esc="doc.department_id.name or '-'"/>
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td class="label">Fecha de Requisición:</td>
+                                        <td class="label">Requisition Date:</td>
                                         <td class="value">
                                             <t t-esc="doc.requirement_date or '-'"/>
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td class="label">Fecha de Generación:</td>
+                                        <td class="label">Generation Date:</td>
                                         <td class="value">
                                             <t t-esc="context_timestamp(datetime.datetime.now()).strftime('%d/%m/%Y %H:%M')"/>
                                         </td>
@@ -227,16 +230,16 @@
                                 </table>
                             </div>
 
-                            <!-- Información del Producto -->
+                            <!-- Product Information -->
                             <div class="pr-section">
-                                <div class="pr-section-title">Detalle de Productos</div>
+                                <div class="pr-section-title">Product Details</div>
                                 <table class="pr-product-table">
                                     <thead>
                                         <tr>
-                                            <th style="width: 40%;">Producto</th>
-                                            <th style="width: 15%; text-align: center;">Cantidad</th>
-                                            <th style="width: 15%; text-align: center;">Unidad</th>
-                                            <th style="width: 15%; text-align: right;">Costo Unit.</th>
+                                            <th style="width: 40%;">Product</th>
+                                            <th style="width: 15%; text-align: center;">Quantity</th>
+                                            <th style="width: 15%; text-align: center;">Unit</th>
+                                            <th style="width: 15%; text-align: right;">Unit Cost</th>
                                             <th style="width: 15%; text-align: right;">Subtotal</th>
                                         </tr>
                                     </thead>
@@ -274,7 +277,7 @@
 
                             <!-- Footer -->
                             <div class="pr-footer">
-                                <p>Este documento fue generado automáticamente por el sistema</p>
+                                <p>This document was automatically generated by the system</p>
                             </div>
 
                         </div>

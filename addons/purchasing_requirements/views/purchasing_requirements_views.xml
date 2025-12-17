@@ -1,8 +1,8 @@
 <odoo>
 
-    <!-- Acción primero (evita ParseError) -->
+    <!-- Action first (avoid ParseError) -->
     <record id="action_purchasing_requirements" model="ir.actions.act_window">
-        <field name="name">PurchasingRequirements</field>
+        <field name="name">Purchase Requisitions</field>
         <field name="res_model">purchasing.requirements</field>
         <field name="view_mode">tree,form</field>
     </record>
@@ -15,8 +15,8 @@
             <form js_class="purchasing_preview_form" class="o_purchase_preview_form">
 
                 <header>
-                    <button name="action_preview_report" type="object" class="btn-primary" string="Previsualizar PDF (HTML)"/>
-                    <button name="action_preview_report_pdf" type="object" class="btn-secondary" string="Abrir PDF"/>
+                    <button name="action_preview_report" type="object" class="btn-primary" string="HTML Preview"/>
+                    <button name="action_preview_report_pdf" type="object" class="btn-secondary" string="Download PDF"/>
                 </header>
 
                 <sheet>
@@ -25,16 +25,16 @@
                         <!-- COLUMNA IZQUIERDA: Formulario -->
                         <div class="o_pr_left">
                             <group>
-                                <separator string="Información de la Requisición"/>
-                                <field name="name"/>
+                                <separator string="Requisition Information"/>
+                                <field name="name" readonly="1"/>
                                 <field name="requested_by"/>
                                 <field name="department_id"/>
                                 <field name="requirement_date"/>
                             </group>
 
-                            <!-- Tabla de Productos -->
+                            <!-- Product Table -->
                             <notebook>
-                                <page string="Productos Solicitados">
+                                <page string="Requested Products">
                                     <field name="line_ids">
                                         <tree editable="bottom">
                                             <field name="product_name"/>
@@ -45,11 +45,8 @@
                                         </tree>
                                     </field>
 
-                                    <group class="oe_subtotal_footer oe_right">
-                                        <div class="oe_subtotal_footer_separator oe_inline">
-                                            <label for="total_cost" string="Total Estimado"/>
-                                            <field name="total_cost" nolabel="1" class="oe_subtotal_footer_separator"/>
-                                        </div>
+                                    <group class="oe_subtotal_footer oe_right" colspan="2">
+                                        <field name="total_cost" widget="monetary" options="{'currency_field': false}" class="oe_subtotal_footer_separator"/>
                                     </group>
                                 </page>
                             </notebook>
@@ -61,27 +58,17 @@
                             </div>
                         </div>
 
-                        <!-- COLUMNA DERECHA: Preview del PDF -->
+                        <!-- RIGHT COLUMN: PDF Preview -->
                         <div class="o_pr_right">
                             <div class="o_pr_preview_panel">
                                 <div name="preview_iframe_container" class="o_pr_preview_container">
-                                    <p>Generando vista previa...</p>
+                                    <p>Generating preview...</p>
                                 </div>
                             </div>
                         </div>
-
                     </div>
                 </sheet>
-
-                <!-- <div class="oe_chatter oe_chatter_position_bottom_">
-                    <field name="message_follower_ids"/>
-                    <field name="activity_ids"/>
-                    <field name="message_ids"/>
-                </div> -->
-
             </form>
-
-
         </field>
     </record>
 
@@ -100,10 +87,10 @@
         </field>
     </record>
 
-    <!-- Menú raíz -->
-    <menuitem id="purchasing_requirements_menu_root" name="Purchasing Requirements"/>
+    <!-- Root Menu -->
+    <menuitem id="purchasing_requirements_menu_root" name="Purchase Requisitions"/>
 
-    <!-- Submenú -->
-    <menuitem id="purchasing_requirements_menu_modelo" name="Registros" parent="purchasing_requirements_menu_root" action="action_purchasing_requirements" />
+    <!-- Submenu -->
+    <menuitem id="purchasing_requirements_menu_modelo" name="Requisitions" parent="purchasing_requirements_menu_root" action="action_purchasing_requirements" />
 
 </odoo>

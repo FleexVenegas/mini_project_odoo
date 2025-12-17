@@ -3,41 +3,55 @@ from odoo import models, fields, api
 
 class PurchasingRequirements(models.Model):
     _name = "purchasing.requirements"
-    _description = "Modelo generado automáticamente"
+    _description = "Purchase Requisition"
     _inherit = ["mail.thread", "mail.activity.mixin"]
+    _rec_name = "name"
 
-    name = fields.Char(string="Name", required=True, help="Name of the record")
+    name = fields.Char(
+        string="Reference",
+        required=True,
+        copy=False,
+        readonly=True,
+        default="New",
+        tracking=False,
+    )
+    
     requested_by = fields.Many2one(
         "res.users",
         string="Requested By",
         required=True,
-        help="User who requested the purchasing requirement",
+        help="User who requested the purchase requisition",
+        tracking=True,
     )
     department_id = fields.Many2one(
         "hr.department",
         string="Department",
-        help="Department associated with the purchasing requirement",
+        help="Department associated with the purchase requisition",
+        tracking=True,
     )
     requirement_date = fields.Datetime(
-        string="Requirement Date",
+        string="Requisition Date",
         default=fields.Datetime.now,
-        help="Date when the purchasing requirement was created",
+        help="Date when the purchase requisition was created",
+        tracking=True,
     )
 
-    # --- Relación One2many para múltiples productos ---
+    # --- One2many relation for multiple products ---
     line_ids = fields.One2many(
         "purchasing.requirements.line",
         "requirement_id",
-        string="Productos",
-        help="Lista de productos solicitados en esta requisición",
+        string="Products",
+        help="List of products requested in this requisition",
+        tracking=False,
     )
 
-    # --- Campos calculados para totales ---
+    # --- Computed fields for totals ---
     total_cost = fields.Float(
-        string="Costo Total",
+        string="Estimated Total",
         compute="_compute_total_cost",
         store=True,
-        help="Suma total de todos los productos",
+        help="Total sum of all products",
+        tracking=False,
     )
 
     # --- Campos antiguos (mantener para compatibilidad o migración) ---
@@ -66,6 +80,25 @@ class PurchasingRequirements(models.Model):
     def _compute_total_cost(self):
         for rec in self:
             rec.total_cost = sum(rec.line_ids.mapped("subtotal"))
+
+    @api.model_create_multi
+    def create(self, vals_list):
+        """Genera el folio consecutivo al crear el registro"""
+        for vals in vals_list:
+            if vals.get("name", "Nuevo") == "Nuevo":
+                # Genera el folio consecutivo usando secuencia
+                vals["name"] = (
+                    self.env["ir.sequence"].next_by_code("purchasing.requirements")
+                    or "RC0001"
+                )
+        return super(PurchasingRequirements, self).create(vals_list)
+
+    def write(self, vals):
+        """Sobrescribe write para disparar actualización del preview al guardar"""
+        result = super(PurchasingRequirements, self).write(vals)
+        # El tracking de Odoo ya se encarga de notificar cambios
+        # El frontend escuchará los cambios a través del modelo
+        return result
 
     # --- Nuevo campo calculado que devuelve la URL del reporte HTML/PDF ---
     report_url = fields.Char(

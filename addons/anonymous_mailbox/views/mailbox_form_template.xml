@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Formulario del Buzón Anónimo -->
+        <template id="mailbox_form_template" name="Anonymous Mailbox Form">
+            <t t-call="website.layout">
+                <div id="wrap" class="oe_structure">
+                    <div class="container py-5">
+                        <div class="row justify-content-center">
+                            <div class="col-lg-8 col-xl-7">
+                                <!-- Encabezado -->
+                                <div class="text-center mb-5">
+                                    <h1 class="display-5 fw-light mb-3" style="color: #2c3e50;">Buzón Anónimo</h1>
+                                    <p class="text-muted fs-6">Comparte tus sugerencias, quejas o inquietudes de forma anónima y segura</p>
+                                </div>
+
+                                <!-- Formulario -->
+                                <div class="card border-0 shadow-sm" style="border-radius: 12px;">
+                                    <div class="card-body p-4 p-md-5">
+                                        <form action="/mailbox/submit" method="post" enctype="multipart/form-data">
+
+                                            <!-- Asunto -->
+                                            <div class="mb-4">
+                                                <label for="subject" class="form-label fw-semibold" style="color: #34495e;">
+                                                    Asunto <span class="text-danger">*</span>
+                                                </label>
+                                                <input type="text" class="form-control form-control-lg" id="subject" name="subject" placeholder="Título breve del mensaje" required="required" style="border-radius: 8px; border: 1.5px solid #e0e0e0;"/>
+                                            </div>
+
+                                            <!-- Tipo -->
+                                            <div class="mb-4">
+                                                <label for="type" class="form-label fw-semibold" style="color: #34495e;">Tipo de Mensaje <span class="text-danger">*</span>
+                                                </label>
+                                                <select class="form-select form-select-lg" id="type" name="type" style="border-radius: 8px; border: 1.5px solid #e0e0e0;" required="required">
+                                                    <option value="">-- Selecciona una opción --</option>
+                                                    <option value="suggestion">Sugerencia</option>
+                                                    <option value="complaint">Queja</option>
+                                                    <option value="inquiry">Consulta</option>
+                                                    <option value="other">Otro</option>
+                                                </select>
+                                            </div>
+
+                                            <!-- Prioridad -->
+                                            <div class="mb-4">
+                                                <label for="priority" class="form-label fw-semibold" style="color: #34495e;">Prioridad</label>
+                                                <select class="form-select form-select-lg" id="priority" name="priority" style="border-radius: 8px; border: 1.5px solid #e0e0e0;">
+                                                    <option value="low">Baja</option>
+                                                    <option value="medium">Media</option>
+                                                    <option value="high">Alta</option>
+                                                    <option value="urgent">Urgente</option>
+                                                </select>
+                                            </div>
+
+                                            <!-- Descripción -->
+                                            <div class="mb-4">
+                                                <label for="description" class="form-label fw-semibold" style="color: #34495e;">Descripción
+                                                    <span class="text-danger">*</span>
+                                                </label>
+                                                <textarea class="form-control" id="description" name="description" rows="6" placeholder="Describe tu mensaje con el mayor detalle posible..." style="border-radius: 8px; border: 1.5px solid #e0e0e0;" required="required"></textarea>
+                                            </div>
+
+                                            <!-- Contacto Opcional -->
+                                            <div class="mb-4">
+                                                <label for="contact" class="form-label fw-semibold" style="color: #34495e;">
+                                                    Información de Contacto <small class="text-muted">(opcional)</small>
+                                                </label>
+                                                <textarea class="form-control" id="contact" name="contact" rows="2" placeholder="Email, teléfono u otro medio de contacto si deseas recibir respuesta" style="border-radius: 8px; border: 1.5px solid #e0e0e0;"></textarea>
+                                                <small class="form-text text-muted">
+                                                    <i class="fa fa-lock me-1"></i>Esta información es completamente opcional y confidencial
+                                                </small>
+                                            </div>
+
+                                            <!-- Archivos Adjuntos -->
+                                            <div class="mb-4">
+                                                <label for="attachments" class="form-label fw-semibold" style="color: #34495e;">
+                                                    Archivos Adjuntos <small class="text-muted">(opcional, máximo 3)</small>
+                                                </label>
+                                                <input type="file" class="form-control" id="attachments" name="attachments" multiple="multiple" accept="image/*,.pdf,.doc,.docx" style="border-radius: 8px; border: 1.5px solid #e0e0e0;"/>
+                                                <small class="form-text text-muted">Formatos: Imágenes, PDF, Word</small>
+                                            </div>
+
+                                            <!-- Botón de Envío -->
+                                            <div class="d-grid gap-2 mt-5">
+                                                <button type="submit" class="btn btn-lg py-3" style="background-color: #3498db; color: white; border-radius: 8px; font-weight: 500; border: none;">
+                                                    <i class="fa fa-paper-plane me-2"></i>Enviar Mensaje
+                                                </button>
+                                            </div>
+
+                                            <p class="text-center text-muted mt-4 mb-0" style="font-size: 0.9rem;">
+                                                <i class="fa fa-shield-alt me-1"></i>Tu mensaje será enviado de forma anónima y segura
+                                            </p>
+                                        </form>
+                                    </div>
+                                </div>
+
+                                <!-- Información Adicional
+                                <div class="mt-4 text-center">
+                                    <small class="text-muted">Los mensajes enviados son revisados por el equipo administrativo</small>
+                                </div> -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </template>
+
+        <!-- Plantilla de Éxito -->
+        <template id="mailbox_success_template" name="Mailbox Success">
+            <t t-call="website.layout">
+                <div id="wrap" class="oe_structure">
+                    <div class="container py-5">
+                        <div class="row justify-content-center">
+                            <div class="col-lg-6 col-xl-5">
+                                <div class="card border-0 shadow-sm text-center" style="border-radius: 12px;">
+                                    <div class="card-body p-5">
+                                        <div class="mb-4">
+                                            <div class="rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px; background-color: #d4edda;">
+                                                <i class="fa fa-check fa-3x" style="color: #28a745;"></i>
+                                            </div>
+                                        </div>
+                                        <h2 class="mb-3" style="color: #2c3e50;">¡Mensaje Enviado!</h2>
+                                        <p class="text-muted mb-4">Tu mensaje ha sido recibido correctamente.</p>
+
+                                        <div class="alert alert-light border" role="alert" style="border-radius: 8px;">
+                                            <small class="text-muted d-block mb-1">Número de Referencia:</small>
+                                            <strong class="fs-5" style="color: #3498db;">
+                                                <t t-esc="reference"/>
+                                            </strong>
+                                        </div>
+
+                                        <p class="text-muted small mt-4">Guarda este número para futuras consultas</p>
+
+                                        <a href="/mailbox" class="btn btn-outline-primary mt-3" style="border-radius: 8px;">
+                                            Enviar otro mensaje
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </template>
+
+        <!-- Plantilla de Error -->
+        <template id="mailbox_error_template" name="Mailbox Error">
+            <t t-call="website.layout">
+                <div id="wrap" class="oe_structure">
+                    <div class="container py-5">
+                        <div class="row justify-content-center">
+                            <div class="col-lg-6 col-xl-5">
+                                <div class="card border-0 shadow-sm text-center" style="border-radius: 12px;">
+                                    <div class="card-body p-5">
+                                        <div class="mb-4">
+                                            <div class="rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px; background-color: #f8d7da;">
+                                                <i class="fa fa-exclamation-triangle fa-3x" style="color: #dc3545;"></i>
+                                            </div>
+                                        </div>
+                                        <h2 class="mb-3" style="color: #2c3e50;">Error al Enviar</h2>
+                                        <p class="text-muted mb-4">Ocurrió un error al procesar tu mensaje.</p>
+
+                                        <div class="alert alert-danger" role="alert" style="border-radius: 8px;">
+                                            <t t-esc="error"/>
+                                        </div>
+
+                                        <a href="/mailbox" class="btn btn-primary mt-3" style="border-radius: 8px;">
+                                            <i class="fa fa-arrow-left me-2"></i>Intentar de nuevo
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </template>
+    </data>
+</odoo>

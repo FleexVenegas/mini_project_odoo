@@ -1,0 +1,70 @@
+<odoo>
+
+    <!-- Action -->
+    <record id="action_anonymous_mailbox" model="ir.actions.act_window">
+        <field name="name">Anonymous Mailbox</field>
+        <field name="res_model">anonymous.mailbox</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+
+    <!-- Vista Form -->
+    <record id="view_anonymous_mailbox_form" model="ir.ui.view">
+        <field name="name">anonymous_mailbox.form</field>
+        <field name="model">anonymous.mailbox</field>
+        <field name="arch" type="xml">
+            <form>
+                <!-- <header>
+                    <field name="stage" widget="statusbar_duration" options="{'clickable': '1', 'fold_field': 'fold'}"/>
+                </header> -->
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name" readonly="1"/>
+                            <field name="subject" placeholder="Problems with the schedule"/>
+                            <field name="type"/>
+                        </group>
+                        <group>
+                            <field name="contact" placeholder="Optional contact information - email, phone, etc."/>
+                            <field name="priority" widget="priority"/>
+                            <field name="created_at"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Description">
+                            <field name="description"/>
+                        </page>
+                        <page string="Internal Notes">
+                            <field name="internal_notes"/>
+                        </page>
+                        <page string="Attachment">
+                            <field name="attachment_ids" widget="many2many_binary"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Vista Tree -->
+    <record id="view_anonymous_mailbox_tree" model="ir.ui.view">
+        <field name="name">anonymous_mailbox.tree</field>
+        <field name="model">anonymous.mailbox</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="subject"/>
+                <field name="type"/>
+                <field name="priority" widget="priority"/>
+                <field name="created_at"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Root Menu -->
+    <menuitem id="anonymous_mailbox_menu_root" name="Anonymous Mailbox" groups="group_anonymous_mailbox_user" sequence="10"/>
+
+    <!-- Submenu -->
+    <menuitem id="anonymous_mailbox_menu_modelo" name="Messages" parent="anonymous_mailbox_menu_root" action="action_anonymous_mailbox" sequence="10"/>
+
+</odoo>

@@ -11,6 +11,7 @@
     ],
     "data": [
         "security/ir.model.access.csv",
+        "data/sequence.xml",
         "views/purchasing_requirements_views.xml",
         "report/report_purchasing_templates.xml",
         "report/report_purchasing_actions.xml",

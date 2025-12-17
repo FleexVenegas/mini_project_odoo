@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_anonymous_mailbox_user,access_anonymous_mailbox_user,model_anonymous_mailbox,group_anonymous_mailbox_user,1,0,0,0
+access_anonymous_mailbox_manager,access_anonymous_mailbox_manager,model_anonymous_mailbox,group_anonymous_mailbox_manager,1,1,1,0
+access_anonymous_mailbox_admin,access_anonymous_mailbox_admin,model_anonymous_mailbox,group_anonymous_mailbox_admin,1,1,1,1
+access_ir_attachment_user,access_ir_attachment_user,base.model_ir_attachment,group_anonymous_mailbox_user,1,0,0,0
+access_ir_attachment_manager,access_ir_attachment_manager,base.model_ir_attachment,group_anonymous_mailbox_manager,1,1,1,0
+

@@ -3,46 +3,47 @@ from odoo import models, fields, api
 
 class PurchasingRequirementsLine(models.Model):
     _name = "purchasing.requirements.line"
-    _description = "Líneas de Productos para Requisición de Compra"
+    _description = "Product Line"
+    _rec_name = "product_name"
 
     requirement_id = fields.Many2one(
         "purchasing.requirements",
-        string="Requisición",
+        string="Requisition",
         required=True,
         ondelete="cascade",
-        help="Requisición de compra asociada",
+        help="Associated purchase requisition",
     )
 
     product_name = fields.Char(
-        string="Producto",
+        string="Product",
         required=True,
-        help="Nombre del producto a comprar",
+        help="Name of the product to purchase",
     )
 
     quantity = fields.Float(
-        string="Cantidad",
+        string="Quantity",
         required=True,
         default=1.0,
-        help="Cantidad del producto a comprar",
+        help="Quantity of the product to purchase",
     )
 
     uom_id = fields.Many2one(
         "uom.uom",
-        string="Unidad de Medida",
+        string="Unit of Measure",
         required=True,
-        help="Unidad de medida para la cantidad del producto",
+        help="Unit of measure for the product quantity",
     )
 
     cost = fields.Float(
-        string="Costo Unitario",
-        help="Costo estimado unitario del producto",
+        string="Unit Cost",
+        help="Estimated unit cost of the product",
     )
 
     subtotal = fields.Float(
         string="Subtotal",
         compute="_compute_subtotal",
         store=True,
-        help="Cantidad x Costo Unitario",
+        help="Quantity x Unit Cost",
     )
 
     @api.depends("quantity", "cost")
