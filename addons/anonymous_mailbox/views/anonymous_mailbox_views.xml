@@ -7,10 +7,17 @@
         <field name="view_mode">tree,form</field>
     </record>
 
+    <!-- URL Action -->
+    <record id="action_open_mailbox_form" model="ir.actions.act_url">
+        <field name="name">Public Form</field>
+        <field name="url">/mailbox</field>
+        <field name="target">new</field>
+    </record>
+
 
     <!-- Vista Form -->
-    <record id="view_anonymous_mailbox_form" model="ir.ui.view">
-        <field name="name">anonymous_mailbox.form</field>
+    <record id="view_anonymous_mailbox_form_new" model="ir.ui.view">
+        <field name="name">anonymous_mailbox.form.new</field>
         <field name="model">anonymous.mailbox</field>
         <field name="arch" type="xml">
             <form>
@@ -64,7 +71,10 @@
     <!-- Root Menu -->
     <menuitem id="anonymous_mailbox_menu_root" name="Anonymous Mailbox" groups="group_anonymous_mailbox_user" sequence="10"/>
 
-    <!-- Submenu -->
+    <!-- Submenu - Messages List -->
     <menuitem id="anonymous_mailbox_menu_modelo" name="Messages" parent="anonymous_mailbox_menu_root" action="action_anonymous_mailbox" sequence="10"/>
+
+    <!-- Public Menu (visible for all users) -->
+    <menuitem id="anonymous_mailbox_public_menu" name="My Anonymous Mailbox" sequence="11" action="action_open_mailbox_form"/>
 
 </odoo>

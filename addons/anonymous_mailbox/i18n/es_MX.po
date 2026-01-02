@@ -401,3 +401,8 @@ msgstr "Los usuarios pueden ver mensajes del buzón anónimo"
 #: model_terms:ir.ui.view,arch_db:anonymous_mailbox.mailbox_success_template
 msgid "Your message has been successfully received."
 msgstr "Tu mensaje ha sido recibido correctamente."
+
+#. module: anonymous_mailbox
+#: model:ir.ui.menu,name:anonymous_mailbox.anonymous_mailbox_public_menu
+msgid "My Anonymous Mailbox"
+msgstr "Mi Buzón Anónimo"

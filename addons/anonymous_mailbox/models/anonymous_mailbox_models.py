@@ -9,6 +9,7 @@ class AnonymousMailbox(models.Model):
     _name = "anonymous.mailbox"
     _description = "Anonymous Mailbox"
     _rec_name = "name"
+    _inherit = ["mail.thread", "mail.activity.mixin"]
 
     name = fields.Char(
         string="Reference",
