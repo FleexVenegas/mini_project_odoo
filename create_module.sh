@@ -57,8 +57,9 @@ cat <<EOF > $MODULE_PATH/__manifest__.py
 {
     'name': '$MODULE_NAME',
     'version': '1.0',
-    'author': 'Tu Empresa',
+    'author': 'Ing. Diego Venegas', 
     'category': 'Custom',
+    "license": "LGPL-3",
     'summary': 'Módulo generado automáticamente',
     'depends': ['base'],
     'data': [

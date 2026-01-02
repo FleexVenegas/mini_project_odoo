@@ -1,0 +1,10 @@
+<odoo>
+    <menuitem 
+        id="help_desk_report_menu_modelo" 
+        name="Ticket time analysis"    
+        parent="helpdesk.helpdesk_ticket_report_menu_main" 
+        action="action_help_desk_report_wizard" 
+        sequence="20" 
+    />
+
+</odoo>

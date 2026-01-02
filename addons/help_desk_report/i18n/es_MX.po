@@ -1,0 +1,84 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* help_desk_report
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 17.0+e\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-01-02 18:52+0000\n"
+"PO-Revision-Date: 2026-01-02 18:52+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: es\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#. module: help_desk_report
+#: model_terms:ir.ui.view,arch_db:help_desk_report.view_help_desk_report_wizard_form
+msgid "Cancel"
+msgstr "Cancelar"
+
+#. module: help_desk_report
+#: model:ir.model.fields,field_description:help_desk_report.field_help_desk_report_wizard__create_uid
+msgid "Created by"
+msgstr "Creado por"
+
+#. module: help_desk_report
+#: model:ir.model.fields,field_description:help_desk_report.field_help_desk_report_wizard__create_date
+msgid "Created on"
+msgstr "Creado el"
+
+#. module: help_desk_report
+#: model:ir.model.fields,field_description:help_desk_report.field_help_desk_report_wizard__display_name
+msgid "Display Name"
+msgstr "Nombre a mostrar"
+
+#. module: help_desk_report
+#: model_terms:ir.ui.view,arch_db:help_desk_report.view_help_desk_report_wizard_form
+msgid "Download"
+msgstr "Descargar"
+
+#. module: help_desk_report
+#: model:ir.model.fields,field_description:help_desk_report.field_help_desk_report_wizard__file_data
+msgid "File"
+msgstr "Archivo"
+
+#. module: help_desk_report
+#: model:ir.model.fields,field_description:help_desk_report.field_help_desk_report_wizard__file_name
+msgid "File Name"
+msgstr "Nombre del archivo"
+
+#. module: help_desk_report
+#: model:ir.model,name:help_desk_report.model_help_desk_report_wizard
+msgid "Help Desk Report Wizard"
+msgstr "Asistente de reporte de Help Desk"
+
+#. module: help_desk_report
+#: model:ir.model.fields,field_description:help_desk_report.field_help_desk_report_wizard__id
+msgid "ID"
+msgstr "ID"
+
+#. module: help_desk_report
+#: model:ir.model.fields,field_description:help_desk_report.field_help_desk_report_wizard__write_uid
+msgid "Last Updated by"
+msgstr "Última actualización por"
+
+#. module: help_desk_report
+#: model:ir.model.fields,field_description:help_desk_report.field_help_desk_report_wizard__write_date
+msgid "Last Updated on"
+msgstr "Última actualización el"
+
+#. module: help_desk_report
+#: model:ir.actions.act_window,name:help_desk_report.action_help_desk_report_wizard
+#: model:ir.ui.menu,name:help_desk_report.help_desk_report_menu_modelo
+#: model_terms:ir.ui.view,arch_db:help_desk_report.view_help_desk_report_wizard_form
+msgid "Ticket time analysis"
+msgstr "Análisis de tiempo de tickets"
+
+#. module: help_desk_report
+#: model:ir.model.fields,field_description:help_desk_report.field_help_desk_report_wizard__user_id
+msgid "User"
+msgstr "Usuario"
