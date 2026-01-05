@@ -6,13 +6,7 @@
         <field name="url">/price-checker</field>
         <field name="target">new</field>
     </record>
-    
+
     <!-- El menú que referencia la acción -->
-    <menuitem 
-        id="menu_price_checker" 
-        name="Verificador de precios" 
-        parent="sale.sale_menu_root" 
-        sequence="50" 
-        action="action_price_checker" 
-    />
+    <menuitem id="menu_price_checker" name="Verificador de precios" parent="sale.sale_menu_root" sequence="50" action="action_price_checker" />
 </odoo>

@@ -10,6 +10,8 @@ class HelpDeskReportWizard(models.TransientModel):
     _description = "Help Desk Report Wizard"
 
     user_id = fields.Many2one("res.users", string="User", required=True)
+    date_from = fields.Datetime(string="Date From")
+    date_to = fields.Datetime(string="Date To")
 
     file_data = fields.Binary(string="File", readonly=True)
     file_name = fields.Char(string="File Name")
@@ -30,10 +32,12 @@ class HelpDeskReportWizard(models.TransientModel):
             FROM helpdesk_ticket t
             JOIN res_users u ON u.id = t.create_uid
             JOIN res_partner p ON p.id = u.partner_id
-            WHERE t.user_id = %s
+            WHERE t.user_id = %s 
+            AND t.create_date >= %s
+            AND t.create_date <= %s
         """
 
-        self.env.cr.execute(query, (self.user_id.id,))
+        self.env.cr.execute(query, (self.user_id.id, self.date_from, self.date_to))
         rows = self.env.cr.fetchall()
         columns = [desc[0] for desc in self.env.cr.description]
 
