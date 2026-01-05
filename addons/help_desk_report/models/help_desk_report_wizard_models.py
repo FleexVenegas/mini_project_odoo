@@ -10,8 +10,8 @@ class HelpDeskReportWizard(models.TransientModel):
     _description = "Help Desk Report Wizard"
 
     user_id = fields.Many2one("res.users", string="User", required=True)
-    date_from = fields.Datetime(string="Date From")
-    date_to = fields.Datetime(string="Date To")
+    date_from = fields.Datetime(string="Date From", required=True)
+    date_to = fields.Datetime(string="Date To", required=True)
 
     file_data = fields.Binary(string="File", readonly=True)
     file_name = fields.Char(string="File Name")
