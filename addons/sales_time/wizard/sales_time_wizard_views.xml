@@ -1,0 +1,27 @@
+<odoo>
+    <data>
+        <!-- Vista Form del Wizard -->
+        <record id="view_sales_time_wizard_form" model="ir.ui.view">
+            <field name="name">sales.time.wizard.form</field>
+            <field name="model">sales.time.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Sales Time Report">
+                    <group>
+                        <group>
+                            <field name="order_ids" widget="many2many_tags" readonly="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Report" invisible="not report_html">
+                            <field name="report_html" nolabel="1"/>
+                        </page>
+                    </notebook>
+                    <footer>
+                        <button name="action_generate_report" string="Generate Report" type="object" class="btn-primary"/>
+                        <button string="Cancel" class="btn-secondary" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,18 @@
+<odoo>
+    <!-- Vista Tree -->
+    <record id="view_sales_time_tree" model="ir.ui.view">
+        <field name="name">sales.time.tree</field>
+        <field name="model">sale.order</field>
+        <field name="priority">21</field>
+        <field name="inherit_id" ref="sale.view_quotation_tree_with_onboarding"/>
+        <field name="arch" type="xml">
+            <tree position="attributes">
+                <attribute name="multi_edit">1</attribute>
+            </tree>
+            <xpath expr="//tree/header" position="inside">
+                <button name="action_show_time_report" type="object" string="Show Time Report" class="btn-secondary" icon="fa-clock-o" />
+            </xpath>
+        </field>
+    </record>
+
+</odoo>
