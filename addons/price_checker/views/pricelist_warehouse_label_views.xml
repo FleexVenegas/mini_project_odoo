@@ -72,5 +72,5 @@
     </record>
 
     <!-- Menú para gestionar etiquetas -->
-    <menuitem id="menu_pricelist_warehouse_label" name="Etiquetas por Almacén" parent="sale.sale_menu_root" sequence="51" action="action_pricelist_warehouse_label" />
+    <menuitem id="menu_pricelist_warehouse_label" name="Etiquetas por almacén" parent="stock.menu_warehouse_config" sequence="51" action="action_pricelist_warehouse_label" />
 </odoo>
