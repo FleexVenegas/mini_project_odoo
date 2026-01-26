@@ -1,46 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data>
+        <!-- Form view -->
         <record id="product_type_view_form" model="ir.ui.view">
-            <field name="name">product.type.view.form</field>
+            <field name="name">product.type.form</field>
             <field name="model">product.type</field>
             <field name="arch" type="xml">
-                <form string="">
+                <form string="Product Type">
                     <sheet>
                         <group>
-                            <field name="name" />
-                            <field name="code" />
+                            <field name="name" placeholder="E.g.: Eau de Parfum"/>
+                            <field name="code" placeholder="E.g.: EDP"/>
                         </group>
                     </sheet>
                 </form>
             </field>
         </record>
 
+        <!-- List view -->
         <record id="product_type_view_tree" model="ir.ui.view">
-            <field name="name">product.type.view.tree</field>
+            <field name="name">product.type.tree</field>
             <field name="model">product.type</field>
             <field name="arch" type="xml">
-                <tree string="Clasificación">
-                    <field name="name" />
-                    <field name="code" />
+                <tree string="Product Types">
+                    <field name="name"/>
+                    <field name="code"/>
                 </tree>
             </field>
         </record>
 
+        <!-- Action -->
         <record id="action_product_type" model="ir.actions.act_window">
-            <field name="name">Tipos</field>
+            <field name="name">Product Types</field>
             <field name="res_model">product.type</field>
             <field name="view_mode">tree,form</field>
             <field name="help" type="html">
                 <p class="oe_view_nocontent_create">
-                Clasificación
+                    Click "Create" to add a new type
                 </p>
-                <p>Click 'Nuevo' para añadir nuevos elementos</p>
+                <p>
+                    Types are used to classify products (e.g.: Eau de Parfum, Eau de Toilette).
+                </p>
             </field>
         </record>
 
-        <menuitem id="product_type_menu_root" name="Tipo" action="action_product_type" parent="stock.menu_stock_inventory_control" sequence="10" />
-
-
+        <!-- Menu -->
+        <menuitem id="product_type_menu_root" name="Types" parent="stock.menu_stock_inventory_control" action="action_product_type" sequence="49" />
     </data>
 </odoo>

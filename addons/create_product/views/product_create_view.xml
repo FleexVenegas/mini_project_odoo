@@ -1,51 +1,49 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data>
+        <!-- Wizard form view -->
         <record id="view_create_product_form" model="ir.ui.view">
-            <field name="name">view.create.product.form</field>
+            <field name="name">product.creation.wizard.form</field>
             <field name="model">product.creation.wizard</field>
             <field name="arch" type="xml">
-                <form string="Producto">
+                <form string="Create Product">
                     <sheet>
                         <group>
-                            <group>
-                                <field name="name" />
-                                <field name="designer" />
-                                <field name="default_code" />
-                                <field name="barcode" />
-                                <field name="gender" />
-                                <field name="country_id" />
+                            <group string="Basic Information">
+                                <field name="name" placeholder="Product name..."/>
+                                <field name="designer" placeholder="Designer or brand..."/>
+                                <field name="default_code" readonly="1"/>
+                                <field name="barcode" placeholder="Barcode..."/>
                             </group>
-                            <group>
-                                <!-- <field name="unspsc" /> -->
-                                <field name="classification" />
-                                <field name="ml" />
-                                <field name="category_product" />
-                                <field name="uomId" widget="radio"/>
-                                <field name="description_product" />
+                            <group string="Classification">
+                                <field name="gender"/>
+                                <field name="classification"/>
+                                <field name="ml"/>
+                                <field name="category_product"/>
+                                <field name="country_id" options="{'no_create': True, 'no_open': True}"/>
+                                <field name="uom_id" options="{'no_create': True, 'no_open': True}"/>
                             </group>
-                            <footer>
-                                <button name="action_create_product" type="object" string="Crear producto" class="btn-primary"/>
-                                <button string="Cancelar" special="cancel" class="btn-secondary"/>
-                            </footer>
+                            <field name="description_product" nolabel="1" placeholder="Product description..." widget="text"/>
                         </group>
                     </sheet>
+                    <footer>
+                        <button name="action_create_product" type="object" string="Create Product" class="btn-primary"/>
+                        <button string="Cancel" special="cancel" class="btn-secondary"/>
+                    </footer>
                 </form>
             </field>
         </record>
 
-
+        <!-- Action to open the wizard -->
         <record id="action_create_product_view" model="ir.actions.act_window">
-            <field name="name">Crear Producto</field>
+            <field name="name">Create Product</field>
             <field name="type">ir.actions.act_window</field>
             <field name="res_model">product.creation.wizard</field>
             <field name="view_mode">form</field>
             <field name="target">new</field>
         </record>
 
-        <menuitem id="menu_create_product_root" 
-        name="Crear Producto" 
-        parent="stock.menu_stock_inventory_control" action="action_create_product_view" sequence="0" />
-        <!-- <menuitem id="menu_create_product_menu" name="Producto" parent="menu_create_product_root" action="action_create_product_view" sequence="0" /> -->
+        <!-- Main menu -->
+        <menuitem id="menu_create_product_root" name="Create Product" parent="stock.menu_stock_inventory_control" action="action_create_product_view" sequence="1" />
     </data>
 </odoo>

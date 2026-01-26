@@ -1,4 +1,4 @@
-id,name,model_id/id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_product_creation_wizard,product.creation.wizard,product.creation.wizard,1,1,1,1,1
-access_product_size,product.size,product.size,1,1,1,1,1
-access_product_type,product.type,product.type,1,1,1,1,1
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_product_creation_wizard,access.product.creation.wizard,model_product_creation_wizard,base.group_user,1,1,1,1
+access_product_size,access.product.size,model_product_size,base.group_user,1,1,1,1
+access_product_type,access.product.type,model_product_type,base.group_user,1,1,1,1

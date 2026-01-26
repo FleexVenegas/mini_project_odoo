@@ -1,40 +1,41 @@
-from odoo import models, api, fields  # type: ignore
-from odoo.exceptions import UserError  # type: ignore
+from odoo import models, api, fields
 
 
 class ProductType(models.Model):
     _name = "product.type"
-    _description = "Tipo del producto"
+    _description = "Product Type"
+    _order = "name"
 
     name = fields.Char(
-        string="Tipo de perfume",
+        string="Perfume Type",
         required=True,
-        help="Nombre completo del tipo de perfume. Ejemplo: Eau de Parfum, Eau de Toilette, etc.",
+        help="Full name of the perfume type. Example: Eau de Parfum, Eau de Toilette, etc.",
     )
 
     code = fields.Char(
-        string="Código o abreviatura",
+        string="Code or Abbreviation",
         required=True,
-        help="Abreviatura del tipo de perfume. Ejemplo: EDP para Eau de Parfum, EDT para Eau de Toilette.",
+        help="Abbreviation of the perfume type. Example: EDP for Eau de Parfum, EDT for Eau de Toilette.",
     )
 
     _sql_constraints = [
-        ("unique_code", "UNIQUE(code)", "Este código ya existe."),
+        ("unique_code", "UNIQUE(code)", "This code already exists."),
+        ("unique_name", "UNIQUE(name)", "This name already exists."),
     ]
 
     @api.model
     def create(self, vals):
-        if "name" in vals and isinstance(vals["name"], str):
-            vals["name"] = vals["name"].upper()
-
-        if "code" in vals and isinstance(vals["code"], str):
-            vals["code"] = vals["code"].upper()
+        """Normalizes name and code to uppercase when creating"""
+        if "name" in vals and vals["name"]:
+            vals["name"] = vals["name"].strip().upper()
+        if "code" in vals and vals["code"]:
+            vals["code"] = vals["code"].strip().upper()
         return super().create(vals)
 
     def write(self, vals):
-        if "name" in vals and isinstance(vals["name"], str):
-            vals["name"] = vals["name"].upper()
-
-        if "code" in vals and isinstance(vals["code"], str):
-            vals["code"] = vals["code"].upper()
+        """Normalizes name and code to uppercase when updating"""
+        if "name" in vals and vals["name"]:
+            vals["name"] = vals["name"].strip().upper()
+        if "code" in vals and vals["code"]:
+            vals["code"] = vals["code"].strip().upper()
         return super().write(vals)

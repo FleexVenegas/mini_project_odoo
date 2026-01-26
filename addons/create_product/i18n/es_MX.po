@@ -1,0 +1,211 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* create_product
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 17.0-20250123\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-01-26 19:12+0000\n"
+"PO-Revision-Date: 2026-01-26 19:12+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: create_product
+#. odoo-python
+#: code:addons/create_product/models/product_model.py:0
+#, python-format
+msgid "A product with SKU '%s' already exists. Please verify."
+msgstr "Ya existe un producto con el SKU '%s'. Por favor verifique."
+
+#. module: create_product
+#. odoo-python
+#: code:addons/create_product/models/product_model.py:0
+#, python-format
+msgid "A product with barcode '%s' already exists. Please verify."
+msgstr "Ya existe un producto con el código de barras '%s'. Por favor verifique."
+
+#. module: create_product
+#: model:ir.model.fields,help:create_product.field_product_type__code
+msgid ""
+"Abbreviation of the perfume type. Example: EDP for Eau de Parfum, EDT for "
+"Eau de Toilette."
+msgstr "Abreviatura del tipo de perfume. Ejemplo: EDP para Eau de Parfum, EDT para Eau de Toilette."
+
+#. module: create_product
+#: model:ir.model.fields,field_description:create_product.field_product_creation_wizard__barcode
+msgid "Barcode"
+msgstr "Código de barras"
+
+#. module: create_product
+#: model_terms:ir.ui.view,arch_db:create_product.view_create_product_form
+msgid "Barcode..."
+msgstr "Código de barras..."
+
+#. module: create_product
+#: model_terms:ir.ui.view,arch_db:create_product.view_create_product_form
+msgid "Basic Information"
+msgstr "Información básica"
+
+#. module: create_product
+#: model_terms:ir.ui.view,arch_db:create_product.view_create_product_form
+msgid "Cancel"
+msgstr "Cancelar"
+
+#. module: create_product
+#: model_terms:ir.ui.view,arch_db:create_product.view_create_product_form
+msgid "Classification"
+msgstr "Clasificación"
+
+#. module: create_product
+#: model_terms:ir.actions.act_window,help:create_product.action_product_size
+msgid "Click \"Create\" to add a new size"
+msgstr "Haga clic en \"Crear\" para agregar un nuevo tamaño"
+
+#. module: create_product
+#: model_terms:ir.actions.act_window,help:create_product.action_product_type
+msgid "Click \"Create\" to add a new type"
+msgstr "Haga clic en \"Crear\" para agregar un nuevo tipo"
+
+#. module: create_product
+#: model:ir.model.fields,field_description:create_product.field_product_type__code
+msgid "Code or Abbreviation"
+msgstr "Código o abreviatura"
+
+#. module: create_product
+#: model:ir.model.fields,field_description:create_product.field_product_creation_wizard__country_id
+msgid "Country of Origin"
+msgstr "País de origen"
+
+#. module: create_product
+#: model:ir.model.fields,help:create_product.field_product_creation_wizard__country_id
+msgid "Country where the product was designed or produced"
+msgstr "País donde el producto fue diseñado o fabricado"
+
+#. module: create_product
+#: model:ir.actions.act_window,name:create_product.action_create_product_view
+#: model:ir.ui.menu,name:create_product.menu_create_product_root
+#: model_terms:ir.ui.view,arch_db:create_product.view_create_product_form
+msgid "Create Product"
+msgstr "Crear producto"
+
+#. module: create_product
+#: model:ir.model.fields,field_description:create_product.field_product_creation_wizard__create_uid
+#: model:ir.model.fields,field_description:create_product.field_product_size__create_uid
+#: model:ir.model.fields,field_description:create_product.field_product_type__create_uid
+msgid "Created by"
+msgstr "Creado por"
+
+#. module: create_product
+#: model:ir.model.fields,field_description:create_product.field_product_creation_wizard__create_date
+#: model:ir.model.fields,field_description:create_product.field_product_size__create_date
+#: model:ir.model.fields,field_description:create_product.field_product_type__create_date
+msgid "Created on"
+msgstr "Creado el"
+
+#. module: create_product
+#: model:ir.model.fields,help:create_product.field_product_creation_wizard__uom_id
+msgid "Default unit of measure for all operations"
+msgstr "Unidad de medida predeterminada para todas las operaciones"
+
+#. module: create_product
+#: model:ir.model.fields,field_description:create_product.field_product_creation_wizard__description_product
+msgid "Description"
+msgstr "Descripción"
+
+#. module: create_product
+#: model:ir.model.fields,field_description:create_product.field_product_creation_wizard__designer
+msgid "Designer"
+msgstr "Diseñador"
+
+#. module: create_product
+#: model_terms:ir.ui.view,arch_db:create_product.view_create_product_form
+msgid "Designer or brand..."
+msgstr "Diseñador o marca..."
+
+#. module: create_product
+#: model:ir.model.fields,help:create_product.field_product_creation_wizard__description_product
+msgid "Detailed product description"
+msgstr "Descripción detallada del producto"
+
+#. module: create_product
+#: model:ir.model.fields,field_description:create_product.field_product_creation_wizard__display_name
+#: model:ir.model.fields,field_description:create_product.field_product_size__display_name
+#: model:ir.model.fields,field_description:create_product.field_product_type__display_name
+msgid "Display Name"
+msgstr "Nombre a mostrar"
+
+#. module: create_product
+#: model_terms:ir.ui.view,arch_db:create_product.view_product_size_form
+msgid "E.g.: 100ML, 50ML..."
+msgstr "Ej.: 100ML, 50ML..."
+
+#. module: create_product
+#: model_terms:ir.ui.view,arch_db:create_product.product_type_view_form
+msgid "E.g.: EDP"
+msgstr "Ej.: EDP"
+
+#. module: create_product
+#: model_terms:ir.ui.view,arch_db:create_product.product_type_view_form
+msgid "E.g.: Eau de Parfum"
+msgstr "Ej.: Eau de Parfum"
+
+#. module: create_product
+#: model:ir.model.fields,help:create_product.field_product_creation_wizard__barcode
+msgid "EAN/ISBN/UPC code or similar"
+msgstr "Código EAN/ISBN/UPC o similar"
+
+#. module: create_product
+#: model:ir.model.fields,help:create_product.field_product_type__name
+msgid ""
+"Full name of the perfume type. Example: Eau de Parfum, Eau de Toilette, etc."
+msgstr "Nombre completo del tipo de perfume. Ejemplo: Eau de Parfum, Eau de Toilette, etc."
+
+#. module: create_product
+#: model:ir.model.fields,help:create_product.field_product_creation_wizard__name
+msgid "Full product name"
+msgstr "Nombre completo del producto"
+
+#. module: create_product
+#: model:ir.model.fields,field_description:create_product.field_product_creation_wizard__gender
+msgid "Gender"
+msgstr "Género"
+
+#. module: create_product
+#: model:ir.model.fields,help:create_product.field_product_creation_wizard__category_product
+msgid "General category to which this product belongs"
+msgstr "Categoría general a la que pertenece este producto"
+
+#. module: create_product
+#: model:ir.model.fields.selection,name:create_product.selection__product_creation_wizard__gender__niño
+msgid "Kids"
+msgstr "Niños"
+
+#. module: create_product
+#: model:ir.model.fields.selection,name:create_product.selection__product_creation_wizard__gender__caballero
+msgid "Men"
+msgstr "Hombre"
+
+#. module: create_product
+#: model:ir.model.fields.selection,name:create_product.selection__product_creation_wizard__gender__set_caballero
+msgid "Men Set"
+msgstr "Set para hombre"
+
+#. module: create_product
+#: model:ir.model.fields.selection,name:create_product.selection__product_creation_wizard__gender__unisex
+msgid "Unisex"
+msgstr "Unisex"
+
+#. module: create_product
+#: model:ir.model.fields.selection,name:create_product.selection__product_creation_wizard__gender__dama
+msgid "Women"
+msgstr "Mujer"
+
+#. module: create_product
+#: model:ir.model.fields.selection,name:create_product.selection__product_creation_wizard__gender__set_dama
+msgid "Women Set"
+msgstr "Set para mujer"

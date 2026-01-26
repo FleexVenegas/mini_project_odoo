@@ -1,25 +1,30 @@
-from odoo import models, api, fields  # type: ignore
+from odoo import models, api, fields
 
 
 class ProductSize(models.Model):
     _name = "product.size"
-    _description = "Tamaño del producto"
+    _description = "Product Size"
+    _order = "name"
 
-    name = fields.Char(string="Tamaño", required=True)
+    name = fields.Char(
+        string="Size",
+        required=True,
+        help="Product size presentation (e.g.: 100ML, 50ML)",
+    )
 
     _sql_constraints = [
-        ("unique_name", "UNIQUE(name)", "Este tamaño ya existe."),
+        ("unique_name", "UNIQUE(name)", "This size already exists."),
     ]
 
     @api.model
     def create(self, vals):
-        if "name" in vals and isinstance(vals["name"], str):
-            vals["name"] = vals["name"].upper()
-
+        """Normalizes the name to uppercase when creating"""
+        if "name" in vals and vals["name"]:
+            vals["name"] = vals["name"].strip().upper()
         return super().create(vals)
 
     def write(self, vals):
-        if "name" in vals and isinstance(vals["name"], str):
-            vals["name"] = vals["name"].upper()
-
+        """Normalizes the name to uppercase when updating"""
+        if "name" in vals and vals["name"]:
+            vals["name"] = vals["name"].strip().upper()
         return super().write(vals)

@@ -57,7 +57,7 @@
     const warehouseName = button.getAttribute("data-warehouse-name");
 
     if (!warehouseId) {
-    //   console.error("No se pudo obtener el warehouse_id");
+      //   console.error("No se pudo obtener el warehouse_id");
       return;
     }
 
