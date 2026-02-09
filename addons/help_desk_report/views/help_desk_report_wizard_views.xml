@@ -8,6 +8,8 @@
                 <group>
                     <field name="user_id"/>
                     <!-- <field name="file_data"/> -->
+                    <field name="date_from"/>
+                    <field name="date_to"/>
                     <field name="file_name"/>
                 </group>
 

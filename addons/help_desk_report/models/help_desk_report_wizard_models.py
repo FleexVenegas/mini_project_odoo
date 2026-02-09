@@ -32,7 +32,7 @@ class HelpDeskReportWizard(models.TransientModel):
             FROM helpdesk_ticket t
             JOIN res_users u ON u.id = t.create_uid
             JOIN res_partner p ON p.id = u.partner_id
-            WHERE t.user_id = %s 
+            WHERE t.user_id = %s
             AND t.create_date >= %s
             AND t.create_date <= %s
         """
