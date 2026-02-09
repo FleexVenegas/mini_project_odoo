@@ -28,7 +28,8 @@ class HelpDeskReportWizard(models.TransientModel):
                 to_char(t.close_date,  'DD/MM/YYYY HH24:MI:SS') AS close_date,
                 p.name AS created_by,
                 ROUND(EXTRACT(EPOCH FROM (t.close_date - t.create_date)) / 3600, 2) AS elapsed_hours,
-                ROUND(EXTRACT(EPOCH FROM (t.close_date - t.create_date)) / 86400, 2) AS elapsed_days
+                ROUND(EXTRACT(EPOCH FROM (t.close_date - t.create_date)) / 86400, 2) AS elapsed_days,
+                t.priority
             FROM helpdesk_ticket t
             JOIN res_users u ON u.id = t.create_uid
             JOIN res_partner p ON p.id = u.partner_id
