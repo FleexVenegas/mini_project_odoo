@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    
+    <template id="responsiva_template" name="Responsiva de Activo Fijo">
+        <t t-set="doc" t-value="docs[0]"/>
+
+        <t t-call="web.external_layout">
+            <div class="page">
+                <h2>Responsiva de Activo Fijo</h2>
+                <p><strong>Activo:</strong> <t t-esc="doc.activo_id.name"/></p>
+                <p><strong>Responsable:</strong> <t t-esc="doc.responsable_id.name"/></p>
+                <p><strong>Fecha de Asignación:</strong> <t t-esc="doc.fecha_asignacion"/></p>
+                <p><strong>Observaciones:</strong> <t t-esc="doc.observaciones or 'Ninguna'"/></p>
+                
+
+            </div>
+        </t>
+    </template>
+
+    <record id="act_report_responsiva_pdf" model="ir.actions.report">
+        <field name="name">Responsiva de Activo Fijo</field>
+        <field name="model">activo.fijo.responsiva</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">activos_fijos_management.responsiva_template</field>
+        <field name="print_report_name">'Responsiva_' + object.activo_id.name</field>
+    </record>
+
+</odoo>

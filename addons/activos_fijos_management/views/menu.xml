@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_activos_fijos_root" name="Activos Fijos" sequence="10"
+    web_icon="activos_fijos_management,static/description/icon.png"/>
+
+    <menuitem id="menu_activo_categoria" name="Categorías" parent="menu_activos_fijos_root" sequence="10"/>
+    <menuitem id="menu_activo_fijo_categoria_action" name="Categorías" parent="menu_activo_categoria" action="action_activo_fijo_categoria" sequence="1"/>
+
+    <menuitem id="menu_activo_fijo" name="Activos" parent="menu_activos_fijos_root" sequence="20"/>
+    <menuitem id="menu_activo_fijo_action" name="Activos" parent="menu_activo_fijo" action="action_activo_fijo" sequence="1"/>
+
+    <menuitem id="menu_activo_responsiva" name="Responsivas" parent="menu_activos_fijos_root" sequence="30"/>
+    <menuitem id="menu_activo_fijo_responsiva_action" name="Responsivas" parent="menu_activo_responsiva" action="action_activo_fijo_responsiva" sequence="1"/>
+
+    <menuitem id="menu_activo_traslado" name="Traslados" parent="menu_activos_fijos_root" sequence="40"/>
+    <menuitem id="menu_activo_fijo_traslado_action" name="Traslados" parent="menu_activo_traslado" action="action_activo_fijo_traslado" sequence="1"/>
+</odoo>

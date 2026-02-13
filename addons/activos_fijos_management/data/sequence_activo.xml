@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Secuencia para Transporte -->
+    <record id="seq_activo_transporte" model="ir.sequence">
+        <field name="name">Secuencia Activo Transporte</field>
+        <field name="code">activo.fijo.tr</field>
+        <field name="prefix">TR</field>
+        <field name="padding">4</field>
+        <field name="implementation">standard</field>
+    </record>
+
+    <!-- Secuencia para Maquinaria y Equipo -->
+    <record id="seq_activo_maquinaria" model="ir.sequence">
+        <field name="name">Secuencia Activo Maquinaria y Equipo</field>
+        <field name="code">activo.fijo.me</field>
+        <field name="prefix">ME</field>
+        <field name="padding">3</field>
+        <field name="implementation">standard</field>
+    </record>
+
+    <!-- Secuencia para Equipo de Vigilancia -->
+    <record id="seq_activo_vigilancia" model="ir.sequence">
+        <field name="name">Secuencia Activo Equipo de Vigilancia</field>
+        <field name="code">activo.fijo.eq</field>
+        <field name="prefix">EQ</field>
+        <field name="padding">3</field>
+        <field name="implementation">standard</field>
+    </record>
+
+    <!-- Secuencia para Equipo de Oficina -->
+    <record id="seq_activo_oficina" model="ir.sequence">
+        <field name="name">Secuencia Activo Equipo de Oficina</field>
+        <field name="code">activo.fijo.eo</field>
+        <field name="prefix">EO</field>
+        <field name="padding">3</field>
+        <field name="implementation">standard</field>
+    </record>
+
+    <!-- Secuencia para Mobiliario de Tienda -->
+    <record id="seq_activo_tienda" model="ir.sequence">
+        <field name="name">Secuencia Activo Mobiliario de Tienda</field>
+        <field name="code">activo.fijo.et</field>
+        <field name="prefix">ET</field>
+        <field name="padding">3</field>
+        <field name="implementation">standard</field>
+    </record>
+</odoo>
+

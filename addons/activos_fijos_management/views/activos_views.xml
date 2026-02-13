@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_activo_fijo_tree" model="ir.ui.view">
+        <field name="name">activo.fijo.tree</field>
+        <field name="model">activo.fijo</field>
+        <field name="arch" type="xml">
+            <tree string="Activos Fijos" editable="bottom">
+                <field name="id"/>
+                <field name="image_1920" widget="image" options="{'size': [50, 50]}"/>
+                <field name="display_name" placeholder="Ej: Laptop HP 2022"/>
+                <field name="categoria_id"/>
+                <field name="responsable_id"/>
+                <field name="ubicacion"/>
+                <field name="almacen_id"/>
+                <field name="estado"/>
+                <field name="costo"/>
+                <field name="fecha_adquisicion"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_activo_fijo_form" model="ir.ui.view">
+        <field name="name">activo.fijo.form</field>
+        <field name="model">activo.fijo</field>
+        <field name="arch" type="xml">
+            <form string="Activo Fijo">
+                <sheet>
+                    <group>
+                        <field name="name" readonly="1"/>
+                        <field name="image_1920" widget="image" options="{'size': [50, 50]}"/>
+
+                        <field name="display_name" placeholder="Ej: Laptop HP 2022"/>
+                        <field name="categoria_id" required="1"/>
+                        <field name="descripcion"/>
+                        <field name="estado"/>
+                        <field name="fecha_adquisicion"/>
+                        <field name="costo"/>
+                        <field name="cuenta_contable_id"/>
+                    </group>
+                    <group>
+                        <field name="responsable_id"/>
+                        <field name="ubicacion"/>
+                        <field name="almacen_id" options="{'no_create': True}"/>
+                    </group>
+                    <group>
+                        <field name="foto" widget="image" class="oe_avatar" options="{'size': [128, 128]}"/>
+                        <field name="factura_pdf" filename="factura_filename" widget="binary" options="{'accept': 'application/pdf'}"/>
+                        <field name="factura_filename" invisible="1"/>
+                    </group>
+                    <notebook>
+                        <page string="Responsivas">
+                            <field name="responsiva_ids">
+                                <tree editable="false" create="false">
+                                    <field name="fecha_asignacion"/>
+                                    <field name="responsable_id"/>
+                                    <field name="estado"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_activo_fijo" model="ir.actions.act_window">
+        <field name="name">Activos Fijos</field>
+        <field name="res_model">activo.fijo</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Registra y administra los activos fijos de la empresa.
+            </p>
+        </field>
+    </record>
+</odoo>

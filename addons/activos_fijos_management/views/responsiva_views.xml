@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_activo_fijo_responsiva_tree" model="ir.ui.view">
+        <field name="name">activo.fijo.responsiva.tree</field>
+        <field name="model">activo.fijo.responsiva</field>
+        <field name="arch" type="xml">
+            <tree string="Responsivas de Activos">
+                <field name="activo_image" widget="image"/>
+                <field name="activo_id"/>
+                <field name="responsable_id"/>
+                <field name="fecha_asignacion"/>
+                <field name="estado"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_activo_fijo_responsiva_form" model="ir.ui.view">
+        <field name="name">activo.fijo.responsiva.form</field>
+        <field name="model">activo.fijo.responsiva</field>
+        <field name="arch" type="xml">
+            <form string="Responsiva de Activo">
+                <sheet>
+                    <group>
+                        <field name="activo_id" required="1"/>
+                        <field name="activo_image" widget="image"/>
+                        <field name="responsable_id" required="1"/>
+                        <field name="fecha_asignacion" required="1"/>
+                        <field name="estado"/>
+                        <field name="observaciones"/>
+                    </group>
+                    <group>
+                        <field name="responsiva_pdf" filename="pdf_filename" widget="binary" options="{'accept': 'application/pdf'}"/>
+                        <field name="pdf_filename" invisible="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_activo_fijo_responsiva" model="ir.actions.act_window">
+        <field name="name">Responsivas de Activos</field>
+        <field name="res_model">activo.fijo.responsiva</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+</odoo>

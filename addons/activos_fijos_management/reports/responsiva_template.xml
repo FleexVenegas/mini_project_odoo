@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <template id="responsiva_template">
+  <t t-call="web.basic_layout">
+    <t t-set="title">Responsiva de Activo Fijo - <t t-esc="docs.activo_id.name"/></t>
+    <div class="page">
+      <h2>Responsiva de Activo Fijo</h2>
+      <table class="table table-sm" style="width:100%; margin-bottom: 20px;">
+        <tbody>
+          <tr>
+            <th>Folio:</th>
+            <td><t t-esc="docs.activo_id.name"/></td>
+            <th>Fecha de Asignación:</th>
+            <td><t t-esc="docs.fecha_asignacion"/></td>
+          </tr>
+          <tr>
+            <th>Activo:</th>
+            <td colspan="3"><t t-esc="docs.activo_id.descripcion or '-'"/></td>
+          </tr>
+          <tr>
+            <th>Categoría:</th>
+            <td><t t-esc="docs.activo_id.categoria_id.name"/></td>
+            <th>Estado:</th>
+            <td><t t-esc="docs.activo_id.estado"/></td>
+          </tr>
+          <tr>
+            <th>Responsable:</th>
+            <td><t t-esc="docs.responsable_id.name"/></td>
+            <th>Ubicación:</th>
+            <td><t t-esc="docs.activo_id.ubicacion or '-'"/></td>
+          </tr>
+          <tr>
+            <th>Costo:</th>
+            <td>$<t t-esc="docs.activo_id.costo or 0.0"/></td>
+            <th>Cuenta Contable:</th>
+            <td><t t-esc="docs.activo_id.cuenta_contable_id.name or '-'"/></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div style="margin-top: 30px;">
+        <strong>Observaciones:</strong>
+        <p><t t-esc="docs.observaciones or 'Ninguna'"/></p>
+      </div>
+
+      <div style="margin-top: 60px;">
+        <table style="width: 100%; border-top: 1px solid #000; padding-top: 10px;">
+          <tr>
+            <td style="width: 50%; text-align: center;">
+              <p>__________________________</p>
+              <p>Firma del Responsable</p>
+            </td>
+            <td style="width: 50%; text-align: center;">
+              <p>__________________________</p>
+              <p>Firma de quien entrega</p>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </t>
+</template>
+</odoo>

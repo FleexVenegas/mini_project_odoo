@@ -45,15 +45,19 @@ class LlaveroPassword(models.Model):
 
     def _get_fernet_key(self):
         """Obtiene la clave de encriptación desde los parámetros del sistema."""
-        param = self.env["ir.config_parameter"].sudo().get_param("encryption.secret_key")
-        
+        param = (
+            self.env["ir.config_parameter"].sudo().get_param("encryption.secret_key")
+        )
+
         if not param:
-            raise ValidationError(_(
-                "No se encontró la clave de encriptación en los parámetros del sistema.\n"
-                "Por favor, configura el parámetro 'encryption.secret_key' en:\n"
-                "Configuración → Técnico → Parámetros → Parámetros del sistema"
-            ))
-        
+            raise ValidationError(
+                _(
+                    "No se encontró la clave de encriptación en los parámetros del sistema.\n"
+                    "Por favor, configura el parámetro 'encryption.secret_key' en:\n"
+                    "Configuración → Técnico → Parámetros → Parámetros del sistema"
+                )
+            )
+
         if isinstance(param, str):
             return param.encode("utf-8")
         return param
@@ -91,21 +95,29 @@ class LlaveroPassword(models.Model):
     def create(self, vals_list):
         """Forzar que el usuario actual sea el propietario, excepto administradores."""
         for vals in vals_list:
-            if 'user_id' not in vals or not self.env.user.has_group('base.group_system'):
-                vals['user_id'] = self.env.user.id
+            if "user_id" not in vals or not self.env.user.has_group(
+                "base.group_system"
+            ):
+                vals["user_id"] = self.env.user.id
         return super().create(vals_list)
 
     def write(self, vals):
         """Prevenir cambio de propietario por usuarios no administradores."""
-        if 'user_id' in vals and not self.env.user.has_group('base.group_system'):
-            raise ValidationError(_("No puedes cambiar el propietario de una contraseña."))
+        if "user_id" in vals and not self.env.user.has_group("base.group_system"):
+            raise ValidationError(
+                _("No puedes cambiar el propietario de una contraseña.")
+            )
         return super().write(vals)
 
-    @api.constrains('user_id')
+    @api.constrains("user_id")
     def _check_user_id(self):
         """Validar que un usuario no pueda crear contraseñas para otros."""
         for rec in self:
-            if rec.user_id != self.env.user and not self.env.user.has_group('base.group_system'):
-                raise ValidationError(_(
-                    'No tienes permiso para crear o modificar contraseñas de otros usuarios.'
-                ))
+            if rec.user_id != self.env.user and not self.env.user.has_group(
+                "base.group_system"
+            ):
+                raise ValidationError(
+                    _(
+                        "No tienes permiso para crear o modificar contraseñas de otros usuarios."
+                    )
+                )

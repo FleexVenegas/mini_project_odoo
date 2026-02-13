@@ -1,0 +1,6 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_activo_fijo_all,access_activo_fijo_all,activos_fijos_management.model_activo_fijo,,1,1,1,1
+access_activo_fijo_categoria_all,access_activo_fijo_categoria_all,activos_fijos_management.model_activo_fijo_categoria,,1,1,1,1
+access_activo_fijo_responsiva_all,access_activo_fijo_responsiva_all,activos_fijos_management.model_activo_fijo_responsiva,,1,1,1,1
+access_activo_fijo_traslado_all,access_activo_fijo_traslado_all,activos_fijos_management.model_activo_fijo_traslado,,1,1,1,1
+access_account_account_all,access_account_account_all,account.model_account_account,,1,1,1,1

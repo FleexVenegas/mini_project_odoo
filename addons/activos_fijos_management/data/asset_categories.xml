@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="categoria_transporte" model="activo.fijo.categoria">
+        <field name="name">Transporte</field>
+        <field name="codigo_prefijo">TR</field>
+        <field name="descripcion">Vehículos, motocicletas y unidades móviles.</field>
+    </record>
+
+    <record id="categoria_maquinaria" model="activo.fijo.categoria">
+        <field name="name">Maquinaria y Equipo</field>
+        <field name="codigo_prefijo">ME</field>
+        <field name="descripcion">Máquinas industriales, herramientas grandes, etc.</field>
+    </record>
+
+    <record id="categoria_vigilancia" model="activo.fijo.categoria">
+        <field name="name">Equipo de Vigilancia</field>
+        <field name="codigo_prefijo">EQ</field>
+        <field name="descripcion">Cámaras, sensores, alarmas, etc.</field>
+    </record>
+
+    <record id="categoria_oficina" model="activo.fijo.categoria">
+        <field name="name">Equipo de Oficina</field>
+        <field name="codigo_prefijo">EO</field>
+        <field name="descripcion">Computadoras, impresoras, escritorios, etc.</field>
+    </record>
+
+    <record id="categoria_tienda" model="activo.fijo.categoria">
+        <field name="name">Mobiliario de Tienda</field>
+        <field name="codigo_prefijo">ET</field>
+        <field name="descripcion">Muebles, vitrinas, estanterías de tienda.</field>
+    </record>
+
+</odoo>

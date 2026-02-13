@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_activo_fijo_traslado_tree" model="ir.ui.view">
+        <field name="name">activo.fijo.traslado.tree</field>
+        <field name="model">activo.fijo.traslado</field>
+        <field name="arch" type="xml">
+            <tree string="Traslados de Activos">
+                <field name="activo_id"/>
+                <field name="fecha"/>
+                <field name="origen_responsable_id"/>
+                <field name="destino_responsable_id"/>
+                <field name="origen_almacen_id" options="{'no_create': True}"/>
+                <field name="destino_almacen_id" options="{'no_create': True}"/>
+                <field name="motivo"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_activo_fijo_traslado_form" model="ir.ui.view">
+        <field name="name">activo.fijo.traslado.form</field>
+        <field name="model">activo.fijo.traslado</field>
+        <field name="arch" type="xml">
+            <form string="Traslado de Activo">
+                <sheet>
+                    <group>
+                        <field name="activo_id" required="1"/>
+                        <field name="fecha" required="1"/>
+                        <field name="origen_responsable_id"/>
+                        <field name="destino_responsable_id"/>
+                    </group>
+                    <group>
+                        <field name="origen_ubicacion"/>
+                        <field name="destino_ubicacion"/>
+                    </group>
+                    <group>
+                        <field name="origen_almacen_id" options="{'no_create': True}"/>
+                        <field name="destino_almacen_id" options="{'no_create': True}"/>
+                    </group>
+                    <group>
+                        <field name="motivo" required="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    
+    <record id="action_activo_fijo_traslado" model="ir.actions.act_window">
+        <field name="name">Traslados de Activos</field>
+        <field name="res_model">activo.fijo.traslado</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+</odoo>
