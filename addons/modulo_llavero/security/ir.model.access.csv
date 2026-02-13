@@ -1,0 +1,8 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_llavero_password_user,llavero.password user,model_llavero_password,modulo_llavero.group_llavero_user,1,1,1,0
+access_llavero_password_manager,llavero.password manager,model_llavero_password,modulo_llavero.group_llavero_manager,1,1,1,1
+access_llavero_password_admin,llavero.password admin,model_llavero_password,base.group_system,1,1,1,1
+access_llavero_password_wizard_user,llavero.password.wizard user,model_llavero_password_wizard,modulo_llavero.group_llavero_user,1,0,0,0
+access_key_category_user,key.category user,model_key_category,modulo_llavero.group_llavero_user,1,0,0,0
+access_key_category_manager,key.category manager,model_key_category,modulo_llavero.group_llavero_manager,1,1,1,1
+access_key_category_admin,key.category admin,model_key_category,base.group_system,1,1,1,1

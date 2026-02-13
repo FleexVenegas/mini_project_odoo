@@ -1,0 +1,66 @@
+<odoo>
+    <data noupdate="1">
+        <!-- Categorías predeterminadas para el llavero -->
+
+        <record id="category_correo_institucional" model="key.category">
+            <field name="name">Correo Institucional</field>
+            <field name="description">Correos electrónicos corporativos de la empresa</field>
+        </record>
+
+        <record id="category_gmail" model="key.category">
+            <field name="name">Gmail</field>
+            <field name="description">Cuentas de Gmail corporativas</field>
+        </record>
+
+        <record id="category_outlook" model="key.category">
+            <field name="name">Outlook</field>
+            <field name="description">Cuentas de Outlook o Microsoft 365</field>
+        </record>
+
+        <record id="category_odoo" model="key.category">
+            <field name="name">Odoo</field>
+            <field name="description">Accesos al sistema Odoo</field>
+        </record>
+
+        <record id="category_aspel" model="key.category">
+            <field name="name">ASPEL</field>
+            <field name="description">Sistemas ASPEL (SAE, NOI, BANCO, etc.)</field>
+        </record>
+
+        <record id="category_sat" model="key.category">
+            <field name="name">SAT</field>
+            <field name="description">Accesos al portal del SAT (efirma, CIEC, etc.)</field>
+        </record>
+
+        <record id="category_banco" model="key.category">
+            <field name="name">Banca Empresarial</field>
+            <field name="description">Accesos a portales bancarios corporativos</field>
+        </record>
+
+        <record id="category_erp" model="key.category">
+            <field name="name">ERP/CRM</field>
+            <field name="description">Sistemas de gestión empresarial</field>
+        </record>
+
+        <record id="category_plataformas_digitales" model="key.category">
+            <field name="name">Plataformas Digitales</field>
+            <field name="description">E-commerce, redes sociales empresariales, marketplaces</field>
+        </record>
+
+        <record id="category_servidores" model="key.category">
+            <field name="name">Servidores/Hosting</field>
+            <field name="description">Accesos a servidores, hosting, VPS, cloud</field>
+        </record>
+
+        <record id="category_vpn_remoto" model="key.category">
+            <field name="name">VPN/Acceso Remoto</field>
+            <field name="description">VPN, escritorio remoto, TeamViewer</field>
+        </record>
+
+        <record id="category_otros" model="key.category">
+            <field name="name">Otros</field>
+            <field name="description">Otras cuentas institucionales</field>
+        </record>
+
+    </data>
+</odoo>

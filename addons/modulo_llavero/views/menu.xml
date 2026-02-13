@@ -1,0 +1,21 @@
+<odoo>
+    <!-- Menú principal -->
+    <menuitem id="menu_llavero_root" name="Llavero"
+        sequence="10"
+        web_icon="modulo_llavero,static/description/icon.png"/>
+
+    <!-- Submenú de contraseñas -->
+    <menuitem id="menu_llavero_password"
+        name="Mis Contraseñas"
+        parent="menu_llavero_root"
+        action="action_llavero_password"
+        sequence="10"/>
+
+    <menuitem id="menu_llavero_category"
+        name="Categorias"
+        parent="menu_llavero_root"
+        action="access_key_category"
+        sequence="20"/>
+
+
+</odoo>
