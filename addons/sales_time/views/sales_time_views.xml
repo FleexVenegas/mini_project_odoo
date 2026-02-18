@@ -10,7 +10,20 @@
                 <attribute name="multi_edit">1</attribute>
             </tree>
             <xpath expr="//tree/header" position="inside">
-                <button name="action_show_time_report" type="object" string="Show Time Report" class="btn-secondary" icon="fa-clock-o" />
+                <button name="action_show_time_report" type="object" string="📊 Reporte de Tiempos" class="btn-primary" icon="fa-hourglass-half" />
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Vista Form - Añadir botón en formulario -->
+    <record id="view_sales_time_form" model="ir.ui.view">
+        <field name="name">sales.time.form</field>
+        <field name="model">sale.order</field>
+        <field name="priority">21</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header/button[@name='action_quotation_send']" position="after">
+                <button name="action_show_time_report" type="object" string="Reporte de Tiempos" class="btn-secondary" icon="fa-hourglass-half"/>
             </xpath>
         </field>
     </record>

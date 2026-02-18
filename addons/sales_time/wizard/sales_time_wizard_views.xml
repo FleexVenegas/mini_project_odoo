@@ -5,20 +5,20 @@
             <field name="name">sales.time.wizard.form</field>
             <field name="model">sales.time.wizard</field>
             <field name="arch" type="xml">
-                <form string="Sales Time Report">
+                <form string="Reporte de Tiempos de Entrega">
                     <group>
                         <group>
-                            <field name="order_ids" widget="many2many_tags" readonly="1"/>
+                            <field name="order_ids" widget="many2many_tags" readonly="1" string="Órdenes Seleccionadas"/>
                         </group>
                     </group>
                     <notebook>
-                        <page string="Report" invisible="not report_html">
-                            <field name="report_html" nolabel="1"/>
+                        <page string="Reporte" invisible="not report_html">
+                            <field name="report_html" nolabel="1" widget="html"/>
                         </page>
                     </notebook>
                     <footer>
-                        <button name="action_generate_report" string="Generate Report" type="object" class="btn-primary"/>
-                        <button string="Cancel" class="btn-secondary" special="cancel"/>
+                        <button name="action_generate_report" string="🔄 Generar Reporte" type="object" class="btn-primary" icon="fa-refresh"/>
+                        <button string="Cerrar" class="btn-secondary" special="cancel"/>
                     </footer>
                 </form>
             </field>

@@ -16,13 +16,17 @@ class SalesTime(models.Model):
         # Obtener los IDs de los registros seleccionados
         active_ids = self.env.context.get("active_ids", [])
 
+        # Si no hay IDs activos, usar el ID actual
+        if not active_ids:
+            active_ids = [self.id]
+
         # Crear el wizard con las órdenes seleccionadas
         wizard = self.env["sales.time.wizard"].create(
             {"order_ids": [(6, 0, active_ids)]}
         )
 
         return {
-            "name": "Sales Time Report",
+            "name": "📊 Reporte de Tiempos de Entrega",
             "type": "ir.actions.act_window",
             "res_model": "sales.time.wizard",
             "view_mode": "form",

@@ -5,17 +5,54 @@
         <field name="model">activo.fijo</field>
         <field name="arch" type="xml">
             <tree string="Activos Fijos" editable="bottom">
-                <field name="id"/>
-                <field name="image_1920" widget="image" options="{'size': [50, 50]}"/>
+                <!-- <field name="id"/> -->
                 <field name="display_name" placeholder="Ej: Laptop HP 2022"/>
                 <field name="categoria_id"/>
                 <field name="responsable_id"/>
-                <field name="ubicacion"/>
                 <field name="almacen_id"/>
                 <field name="estado"/>
                 <field name="costo"/>
                 <field name="fecha_adquisicion"/>
             </tree>
+        </field>
+    </record>
+
+    <record id="view_activo_fijo_kanban" model="ir.ui.view">
+        <field name="name">activo.fijo.kanban</field>
+        <field name="model">activo.fijo</field>
+        <field name="arch" type="xml">
+            <kanban class="o_custom_activo_fijo_kanban">
+                <field name="id"/>
+                <field name="display_name"/>
+                <field name="estado"/>
+                <field name="categoria_id"/>
+                <field name="responsable_id"/>
+                <field name="fecha_adquisicion"/>
+                <field name="image_1920"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_global_click" t-att-data-id="record.id.raw_value">
+                            <div class="o_kanban_image">
+                                <img t-att-src="kanban_image('activo.fijo', 'image_1920', record.id.raw_value)" alt="Activo"/>
+                            </div>
+                            <div class="oe_kanban_details">
+                                <strong class="o_kanban_record_title">
+                                    <field name="display_name"/>
+                                </strong>
+                                <div class="o_kanban_tags_section">
+                                    <field name="categoria_id"/>
+                                </div>
+                                <ul>
+                                    <li>Responsable: <field name="responsable_id"/>
+                                    </li>
+                                    <li>Estado: <field name="estado" widget="badge" decoration-success="estado == 'disponible'" decoration-warning="estado == 'en_uso'" decoration-danger="estado == 'mantenimiento'"/>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
         </field>
     </record>
 
@@ -25,48 +62,79 @@
         <field name="arch" type="xml">
             <form string="Activo Fijo">
                 <sheet>
-                    <group>
-                        <field name="name" readonly="1"/>
-                        <field name="image_1920" widget="image" options="{'size': [50, 50]}"/>
+                    <!-- Header con imagen y campos principales -->
+                    <field name="image_1920" widget="image" class="oe_avatar" options="{'preview_image': 'image_1920'}"/>
+                    <div class="oe_title">
+                        <label for="name" string="Folio"/>
+                        <h1>
+                            <field name="name" readonly="1" class="oe_inline"/>
+                        </h1>
+                        <label for="display_name" string="Nombre del Activo"/>
+                        <h2>
+                            <field name="display_name" required="1"/>
+                        </h2>
+                        <label for="uuid" string="ID del Activo"/>
+                        <h2>
+                            <field name="uuid" readonly="1" class="oe_inline" required="1"/>
+                        </h2>
+                    </div>
 
-                        <field name="display_name" placeholder="Ej: Laptop HP 2022"/>
-                        <field name="categoria_id" required="1"/>
-                        <field name="descripcion"/>
-                        <field name="estado"/>
-                        <field name="fecha_adquisicion"/>
-                        <field name="costo"/>
-                        <field name="cuenta_contable_id"/>
-                    </group>
                     <group>
-                        <field name="responsable_id"/>
-                        <field name="ubicacion"/>
-                        <field name="almacen_id" options="{'no_create': True}"/>
+                        <group string="Información General">
+                            <field name="categoria_id" required="1"/>
+                            <field name="estado" widget="badge" decoration-success="estado == 'disponible'" decoration-info="estado == 'en_uso'" decoration-warning="estado == 'mantenimiento'" decoration-danger="estado == 'baja'"/>
+                            <field name="responsable_id"/>
+                            <field name="almacen_id" options="{'no_create': True}"/>
+                        </group>
+
+                        <group string="Información Financiera">
+                            <field name="fecha_adquisicion"/>
+                            <field name="costo" widget="monetary"/>
+                            <field name="cuenta_contable_id"/>
+                        </group>
                     </group>
+
                     <group>
-                        <field name="foto" widget="image" class="oe_avatar" options="{'size': [128, 128]}"/>
-                        <field name="factura_pdf" filename="factura_filename" widget="binary" options="{'accept': 'application/pdf'}"/>
-                        <field name="factura_filename" invisible="1"/>
+                        <field name="descripcion" placeholder="Descripción detallada del activo..."/>
                     </group>
+
                     <notebook>
-                        <page string="Responsivas">
+                        <page string="Responsivas" name="responsivas">
                             <field name="responsiva_ids">
-                                <tree editable="false" create="false">
+                                <tree editable="bottom">
                                     <field name="fecha_asignacion"/>
                                     <field name="responsable_id"/>
-                                    <field name="estado"/>
+                                    <field name="estado" decoration-success="estado == 'activa'" decoration-muted="estado == 'devuelto'"/>
                                 </tree>
                             </field>
                         </page>
+
+                        <page string="Documentos" name="documentos">
+                            <group>
+                                <group string="Factura">
+                                    <field name="factura_pdf" filename="factura_filename" widget="binary" options="{'accepted_file_extensions': '.pdf'}"/>
+                                    <field name="factura_filename" invisible="1"/>
+                                </group>
+                            </group>
+                        </page>
                     </notebook>
                 </sheet>
+
+                <!-- Chatter (si lo tienes configurado) -->
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="message_ids"/>
+                </div>
             </form>
         </field>
     </record>
 
+
+
     <record id="action_activo_fijo" model="ir.actions.act_window">
         <field name="name">Activos Fijos</field>
         <field name="res_model">activo.fijo</field>
-        <field name="view_mode">tree,form</field>
+        <field name="view_mode">kanban,tree,form</field>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">
                 Registra y administra los activos fijos de la empresa.
