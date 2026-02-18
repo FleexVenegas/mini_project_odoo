@@ -17,7 +17,8 @@
                         </page>
                     </notebook>
                     <footer>
-                        <button name="action_generate_report" string="🔄 Generar Reporte" type="object" class="btn-primary" icon="fa-refresh"/>
+                        <button name="action_generate_report" string="Generar Reporte" type="object" class="btn-primary" icon="fa-hourglass-half"/>
+                        <button name="action_export_excel" string="Exportar a Excel" type="object" class="btn-success" icon="fa-download"/>
                         <button string="Cerrar" class="btn-secondary" special="cancel"/>
                     </footer>
                 </form>

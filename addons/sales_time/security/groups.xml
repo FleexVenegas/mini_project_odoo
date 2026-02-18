@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Grupo para controlar quién puede ver el reporte de tiempos -->
+        <record id="group_sales_time_user" model="res.groups">
+            <field name="name">Sales Time Report User</field>
+            <field name="comment">Usuarios que pueden ver y generar reportes de tiempos de ventas</field>
+        </record>
+    </data>
+</odoo>

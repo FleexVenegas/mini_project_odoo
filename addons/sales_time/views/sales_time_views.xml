@@ -10,7 +10,7 @@
                 <attribute name="multi_edit">1</attribute>
             </tree>
             <xpath expr="//tree/header" position="inside">
-                <button name="action_show_time_report" type="object" string="📊 Reporte de Tiempos" class="btn-primary" icon="fa-hourglass-half" />
+                <button name="action_show_time_report" type="object" string="Reporte de Tiempos" class="btn-secondary" icon="fa-hourglass-half" groups="sales_time.group_sales_time_user"/>
             </xpath>
         </field>
     </record>
@@ -23,7 +23,7 @@
         <field name="inherit_id" ref="sale.view_order_form"/>
         <field name="arch" type="xml">
             <xpath expr="//header/button[@name='action_quotation_send']" position="after">
-                <button name="action_show_time_report" type="object" string="Reporte de Tiempos" class="btn-secondary" icon="fa-hourglass-half"/>
+                <button name="action_show_time_report" type="object" string="Reporte de Tiempos" class="btn-secondary" icon="fa-hourglass-half" groups="sales_time.group_sales_time_user"/>
             </xpath>
         </field>
     </record>

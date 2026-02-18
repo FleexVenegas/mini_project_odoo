@@ -24,6 +24,7 @@
     """,
     "depends": ["base", "sale", "stock"],
     "data": [
+        "security/groups.xml",
         "security/ir.model.access.csv",
         "wizard/sales_time_wizard_views.xml",
         "views/sales_time_views.xml",
