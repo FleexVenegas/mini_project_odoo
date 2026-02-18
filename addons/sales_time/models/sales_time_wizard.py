@@ -66,6 +66,44 @@ class SalesTimeWizard(models.TransientModel):
 
         return " ".join(parts) if parts else "&lt; 1m"
 
+    def _format_timedelta_precise(self, td):
+        """Formatea un timedelta con decimales para promedios más exactos"""
+        if td is None:
+            return "N/A"
+
+        try:
+            total_seconds = td.total_seconds()
+        except (AttributeError, TypeError) as e:
+            _logger.warning(f"Error al formatear timedelta {td}: {e}")
+            return "N/A"
+
+        # Si es 0 segundos o negativo, mostrar < 1m
+        if total_seconds <= 0:
+            return "&lt; 1m"
+
+        days = int(total_seconds // 86400)
+        remaining_seconds = total_seconds % 86400
+        hours = int(remaining_seconds // 3600)
+        remaining_seconds = remaining_seconds % 3600
+        minutes = remaining_seconds / 60  # Mantener decimales
+
+        parts = []
+        if days > 0:
+            parts.append(f"{days}d")
+        if hours > 0:
+            parts.append(f"{hours}h")
+        if minutes >= 1:
+            # Mostrar con 1 decimal si tiene decimales significativos
+            if minutes % 1 >= 0.1:
+                parts.append(f"{minutes:.1f}m")
+            else:
+                parts.append(f"{int(minutes)}m")
+        elif total_seconds < 60:
+            # Si es menos de 1 minuto, mostrar con decimales
+            parts.append(f"{minutes:.1f}m")
+
+        return " ".join(parts) if parts else "&lt; 1m"
+
     def _calculate_times(self, order):
         """Calcula los tiempos para cada etapa de la orden"""
         times = {
@@ -222,6 +260,44 @@ class SalesTimeWizard(models.TransientModel):
         """Genera el reporte de tiempos de las órdenes seleccionadas"""
         self.ensure_one()
 
+        # Calcular promedios de todas las órdenes seleccionadas
+        total_quote_to_order = timedelta()
+        total_order_to_pick = timedelta()
+        total_quote_to_out = timedelta()
+        count_quote_to_order = 0
+        count_order_to_pick = 0
+        count_quote_to_out = 0
+
+        for order in self.order_ids:
+            times, dates = self._calculate_times(order)
+
+            if times["quote_to_order"]:
+                total_quote_to_order += times["quote_to_order"]
+                count_quote_to_order += 1
+
+            if times["order_to_pick"]:
+                total_order_to_pick += times["order_to_pick"]
+                count_order_to_pick += 1
+
+            if times["total_time"]:
+                total_quote_to_out += times["total_time"]
+                count_quote_to_out += 1
+
+        # Calcular promedios
+        avg_quote_to_order = (
+            total_quote_to_order / count_quote_to_order
+            if count_quote_to_order > 0
+            else None
+        )
+        avg_order_to_pick = (
+            total_order_to_pick / count_order_to_pick
+            if count_order_to_pick > 0
+            else None
+        )
+        avg_quote_to_out = (
+            total_quote_to_out / count_quote_to_out if count_quote_to_out > 0 else None
+        )
+
         report_lines = []
 
         # Estilo minimalista y profesional
@@ -231,6 +307,32 @@ class SalesTimeWizard(models.TransientModel):
                 <div style="border-bottom: 2px solid #2c3e50; padding-bottom: 20px; margin-bottom: 30px;">
                     <h1 style="color: #2c3e50; font-size: 28px; font-weight: 300; margin: 0;">Reporte de Tiempos de Entrega</h1>
                     <p style="color: #7f8c8d; font-size: 14px; margin: 5px 0 0 0;">Análisis del proceso completo de ventas</p>
+                </div>
+        """
+        )
+
+        # Sección de promedios - Diseño minimalista y profesional
+        report_lines.append(
+            f"""
+                <div style="background: #ffffff; border: 1px solid #e0e0e0; border-radius: 8px; padding: 30px; margin-bottom: 40px;">
+                    <h3 style="color: #2c3e50; font-size: 16px; font-weight: 600; margin: 0 0 25px 0; text-transform: uppercase; letter-spacing: 1px;">Tiempos Promedio</h3>
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;">
+                        <div style="border-left: 3px solid #3498db; padding: 20px; background: #f8f9fa;">
+                            <div style="color: #7f8c8d; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px;">Cotización → Pedido</div>
+                            <div style="color: #2c3e50; font-size: 32px; font-weight: 700; line-height: 1;">{self._format_timedelta_precise(avg_quote_to_order)}</div>
+                            <div style="color: #95a5a6; font-size: 12px; margin-top: 8px;">{count_quote_to_order} órdenes</div>
+                        </div>
+                        <div style="border-left: 3px solid #e74c3c; padding: 20px; background: #f8f9fa;">
+                            <div style="color: #7f8c8d; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px;">Pedido → Pick</div>
+                            <div style="color: #2c3e50; font-size: 32px; font-weight: 700; line-height: 1;">{self._format_timedelta_precise(avg_order_to_pick)}</div>
+                            <div style="color: #95a5a6; font-size: 12px; margin-top: 8px;">{count_order_to_pick} órdenes</div>
+                        </div>
+                        <div style="border-left: 3px solid #27ae60; padding: 20px; background: #f8f9fa;">
+                            <div style="color: #7f8c8d; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px;">Cotización → OUT</div>
+                            <div style="color: #2c3e50; font-size: 32px; font-weight: 700; line-height: 1;">{self._format_timedelta_precise(avg_quote_to_out)}</div>
+                            <div style="color: #95a5a6; font-size: 12px; margin-top: 8px;">{count_quote_to_out} órdenes</div>
+                        </div>
+                    </div>
                 </div>
         """
         )
@@ -351,6 +453,44 @@ class SalesTimeWizard(models.TransientModel):
                 "La biblioteca xlsxwriter no está instalada. Instálala con: pip install xlsxwriter"
             )
 
+        # Calcular promedios de todas las órdenes seleccionadas
+        total_quote_to_order = timedelta()
+        total_order_to_pick = timedelta()
+        total_quote_to_out = timedelta()
+        count_quote_to_order = 0
+        count_order_to_pick = 0
+        count_quote_to_out = 0
+
+        for order in self.order_ids:
+            times, dates = self._calculate_times(order)
+
+            if times["quote_to_order"]:
+                total_quote_to_order += times["quote_to_order"]
+                count_quote_to_order += 1
+
+            if times["order_to_pick"]:
+                total_order_to_pick += times["order_to_pick"]
+                count_order_to_pick += 1
+
+            if times["total_time"]:
+                total_quote_to_out += times["total_time"]
+                count_quote_to_out += 1
+
+        # Calcular promedios
+        avg_quote_to_order = (
+            total_quote_to_order / count_quote_to_order
+            if count_quote_to_order > 0
+            else None
+        )
+        avg_order_to_pick = (
+            total_order_to_pick / count_order_to_pick
+            if count_order_to_pick > 0
+            else None
+        )
+        avg_quote_to_out = (
+            total_quote_to_out / count_quote_to_out if count_quote_to_out > 0 else None
+        )
+
         # Crear archivo Excel en memoria
         output = BytesIO()
         workbook = xlsxwriter.Workbook(output, {"in_memory": True})
@@ -365,6 +505,38 @@ class SalesTimeWizard(models.TransientModel):
                 "font_color": "white",
                 "align": "center",
                 "valign": "vcenter",
+                "border": 1,
+            }
+        )
+
+        avg_header_format = workbook.add_format(
+            {
+                "bold": True,
+                "font_size": 16,
+                "bg_color": "#667eea",
+                "font_color": "white",
+                "align": "center",
+                "valign": "vcenter",
+                "border": 1,
+            }
+        )
+
+        avg_label_format = workbook.add_format(
+            {
+                "bold": True,
+                "font_size": 11,
+                "bg_color": "#f0f0f0",
+                "align": "left",
+                "border": 1,
+            }
+        )
+
+        avg_value_format = workbook.add_format(
+            {
+                "bold": True,
+                "font_size": 12,
+                "font_color": "#667eea",
+                "align": "right",
                 "border": 1,
             }
         )
@@ -390,6 +562,34 @@ class SalesTimeWizard(models.TransientModel):
         )
 
         row = 0
+
+        # Sección de promedios
+        worksheet.merge_range(row, 0, row, 3, "📊 TIEMPOS PROMEDIO", avg_header_format)
+        row += 1
+
+        worksheet.write(row, 0, "Cotización → Pedido", avg_label_format)
+        worksheet.write(
+            row, 1, self._format_timedelta_precise(avg_quote_to_order), avg_value_format
+        )
+        worksheet.write(row, 2, f"{count_quote_to_order} órdenes", data_format)
+        worksheet.write(row, 3, "", data_format)
+        row += 1
+
+        worksheet.write(row, 0, "Pedido → Pick", avg_label_format)
+        worksheet.write(
+            row, 1, self._format_timedelta_precise(avg_order_to_pick), avg_value_format
+        )
+        worksheet.write(row, 2, f"{count_order_to_pick} órdenes", data_format)
+        worksheet.write(row, 3, "", data_format)
+        row += 1
+
+        worksheet.write(row, 0, "Cotización → OUT", avg_label_format)
+        worksheet.write(
+            row, 1, self._format_timedelta_precise(avg_quote_to_out), avg_value_format
+        )
+        worksheet.write(row, 2, f"{count_quote_to_out} órdenes", data_format)
+        worksheet.write(row, 3, "", data_format)
+        row += 3
 
         for order in self.order_ids:
             times, dates = self._calculate_times(order)
