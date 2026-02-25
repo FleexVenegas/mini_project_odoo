@@ -134,15 +134,19 @@ class SalesTimeWizard(models.TransientModel):
             if dates["quote_date"] and dates["order_date"]:
                 times["quote_to_order"] = dates["order_date"] - dates["quote_date"]
 
-        # Buscar pickings relacionados
-        pickings = order.picking_ids
+        # Buscar pickings relacionados (excluir cancelados)
+        pickings = order.picking_ids.filtered(lambda p: p.state != "cancel")
 
         if pickings:
             # Ordenar por fecha de creación
             pickings = pickings.sorted(key=lambda p: p.create_date)
 
             # Log para debug
-            _logger.info("Order %s - Total pickings: %d", order.name, len(pickings))
+            _logger.info(
+                "Order %s - Total pickings (non-cancelled): %d",
+                order.name,
+                len(pickings),
+            )
             for p in pickings:
                 _logger.info(
                     "  Picking: %s | Type: %s | Code: %s | Create: %s | Scheduled: %s | Done: %s | State: %s",
@@ -155,25 +159,27 @@ class SalesTimeWizard(models.TransientModel):
                     p.state,
                 )
 
-            # Identificar tipos de picking
+            # Identificar tipos de picking (solo los no cancelados)
             pick_operations = pickings.filtered(
                 lambda p: "pick" in p.picking_type_id.name.lower()
                 or p.picking_type_id.code == "internal"
-            )
+            ).filtered(lambda p: p.state != "cancel")
+
             pack_operations = pickings.filtered(
                 lambda p: "pack" in p.picking_type_id.name.lower()
-            )
+            ).filtered(lambda p: p.state != "cancel")
+
             out_operations = pickings.filtered(
                 lambda p: "out" in p.picking_type_id.name.lower()
                 or p.picking_type_id.code == "outgoing"
-            )
+            ).filtered(lambda p: p.state != "cancel")
 
             # 2. PEDIDO -> PICK (Desde confirmación hasta que COMPLETA el picking)
             if pick_operations:
+                # Buscar el primer pick y el último pick que esté done
                 pick_first = pick_operations[0]
-                pick_last = (
-                    pick_operations[-1] if len(pick_operations) > 1 else pick_first
-                )
+                pick_done = pick_operations.filtered(lambda p: p.state == "done")
+                pick_last = pick_done[-1] if pick_done else pick_operations[-1]
 
                 # Inicio: Confirmación del pedido
                 dates["order_date_end"] = dates["order_date"]
@@ -191,8 +197,13 @@ class SalesTimeWizard(models.TransientModel):
 
             # 3. PICK -> PACK (Desde que TERMINA pick hasta que TERMINA pack)
             if pick_operations and pack_operations:
-                pick_last = pick_operations[-1]
-                pack_last = pack_operations[-1]
+                # Tomar el último pick completado
+                pick_done = pick_operations.filtered(lambda p: p.state == "done")
+                pick_last = pick_done[-1] if pick_done else pick_operations[-1]
+
+                # Tomar el último pack completado
+                pack_done = pack_operations.filtered(lambda p: p.state == "done")
+                pack_last = pack_done[-1] if pack_done else pack_operations[-1]
 
                 # Inicio: Cuando TERMINA el pick
                 # Fin: Cuando TERMINA el pack
@@ -207,8 +218,13 @@ class SalesTimeWizard(models.TransientModel):
 
             # 4. PACK -> OUT (Desde que TERMINA pack hasta que TERMINA out)
             if pack_operations and out_operations:
-                pack_last = pack_operations[-1]
-                out_last = out_operations[-1]
+                # Tomar el último pack completado
+                pack_done = pack_operations.filtered(lambda p: p.state == "done")
+                pack_last = pack_done[-1] if pack_done else pack_operations[-1]
+
+                # Tomar el último out completado
+                out_done = out_operations.filtered(lambda p: p.state == "done")
+                out_last = out_done[-1] if out_done else out_operations[-1]
 
                 # Inicio: Cuando TERMINA el pack
                 # Fin: Cuando TERMINA el out
@@ -221,7 +237,8 @@ class SalesTimeWizard(models.TransientModel):
 
             # Caso especial: Solo OUT (sin pick ni pack separados)
             elif not pick_operations and not pack_operations and out_operations:
-                out_first = out_operations[0]
+                out_done = out_operations.filtered(lambda p: p.state == "done")
+                out_first = out_done[0] if out_done else out_operations[0]
 
                 # Etapa 2: Desde confirmación hasta que INICIA el OUT
                 dates["order_date_end"] = dates["order_date"]
@@ -236,8 +253,13 @@ class SalesTimeWizard(models.TransientModel):
 
             # Caso: PICK + OUT (sin pack)
             elif pick_operations and not pack_operations and out_operations:
-                pick_last = pick_operations[-1]
-                out_last = out_operations[-1]
+                # Tomar el último pick completado
+                pick_done = pick_operations.filtered(lambda p: p.state == "done")
+                pick_last = pick_done[-1] if pick_done else pick_operations[-1]
+
+                # Tomar el último out completado
+                out_done = out_operations.filtered(lambda p: p.state == "done")
+                out_last = out_done[-1] if out_done else out_operations[-1]
 
                 # Etapa 3: Desde que TERMINA pick hasta que TERMINA out
                 if pick_last.date_done:
