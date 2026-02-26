@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Group to control who can access the product creation wizard -->
+        <record id="group_create_product_user" model="res.groups">
+            <field name="name">Create Product User</field>
+            <field name="comment">Users who can access the product creation wizard and manage product sizes and types</field>
+        </record>
+    </data>
+</odoo>

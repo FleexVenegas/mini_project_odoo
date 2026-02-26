@@ -45,6 +45,6 @@
         </record>
 
         <!-- Menu -->
-        <menuitem id="product_type_menu_root" name="Types" parent="stock.menu_stock_inventory_control" action="action_product_type" sequence="49" />
+        <menuitem id="product_type_menu_root" name="Product Types" parent="stock.menu_stock_inventory_control" action="action_product_type" sequence="49"/>
     </data>
 </odoo>

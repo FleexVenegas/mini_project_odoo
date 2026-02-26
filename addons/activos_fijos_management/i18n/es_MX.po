@@ -6,40 +6,39 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 17.0-20250123\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-26 18:56+0000\n"
-"PO-Revision-Date: 2026-02-26 19:00+0000\n"
+"POT-Creation-Date: 2026-02-26 19:27+0000\n"
+"PO-Revision-Date: 2026-02-26 19:27+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
-"Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
 
 #. module: activos_fijos_management
 #: model:ir.actions.report,print_report_name:activos_fijos_management.act_report_responsiva_pdf
 msgid "'Responsiva_' + object.activo_id.name"
-msgstr "'Responsiva_' + object.activo_id.name"
+msgstr ""
 
 #. module: activos_fijos_management
 #: model_terms:ir.ui.view,arch_db:activos_fijos_management.responsiva_template
 msgid "<strong>Activo:</strong>"
-msgstr "<strong>Activo:</strong>"
+msgstr "Activo:"
 
 #. module: activos_fijos_management
 #: model_terms:ir.ui.view,arch_db:activos_fijos_management.responsiva_template
 msgid "<strong>Fecha de Asignación:</strong>"
-msgstr "<strong>Fecha de Asignación:</strong>"
+msgstr "Fecha de Asignación:"
 
 #. module: activos_fijos_management
 #: model_terms:ir.ui.view,arch_db:activos_fijos_management.responsiva_template
 msgid "<strong>Observaciones:</strong>"
-msgstr "<strong>Observaciones:</strong>"
+msgstr ""
 
 #. module: activos_fijos_management
 #: model_terms:ir.ui.view,arch_db:activos_fijos_management.responsiva_template
 msgid "<strong>Responsable:</strong>"
-msgstr "<strong>Responsable:</strong>"
+msgstr "Responsable:"
 
 #. module: activos_fijos_management
 #: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo__responsiva_ids
@@ -113,7 +112,9 @@ msgstr "Notas adicionales..."
 msgid ""
 "Administrative accounting account that will be used by default when "
 "registering assets in this category."
-msgstr "Cuenta contable administrativa que se usará por defecto al registrar activos de esta categoría."
+msgstr ""
+"Cuenta contable administrativa que se usará por defecto al registrar activos"
+" de esta categoría."
 
 #. module: activos_fijos_management
 #: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo_responsiva__activo_id
@@ -262,6 +263,11 @@ msgid "Default Accounting Account"
 msgstr "Cuenta Contable Predeterminada"
 
 #. module: activos_fijos_management
+#: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo__departamento_id
+msgid "Department"
+msgstr "Departamento"
+
+#. module: activos_fijos_management
 #: model:ir.model.fields.selection,name:activos_fijos_management.selection__activo_fijo__estado__deprecado
 msgid "Deprecated"
 msgstr "Deprecado"
@@ -352,7 +358,7 @@ msgstr "Activos Fijos"
 #: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo_traslado__activo_folio
 #: model_terms:ir.ui.view,arch_db:activos_fijos_management.view_activo_fijo_form
 msgid "Folio"
-msgstr "Folio"
+msgstr ""
 
 #. module: activos_fijos_management
 #: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo_categoria__codigo_prefijo
@@ -403,7 +409,7 @@ msgstr "Tiene Mensaje"
 #: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo_responsiva__id
 #: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo_traslado__id
 msgid "ID"
-msgstr "ID"
+msgstr ""
 
 #. module: activos_fijos_management
 #: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo__activity_exception_icon
@@ -586,7 +592,9 @@ msgstr "Nombre de Archivo PDF"
 msgid ""
 "Prefix used to generate unique folios by category. For example: TR for "
 "Transport, ME for Machinery."
-msgstr "Prefijo utilizado para generar folios únicos por categoría. Por ejemplo: TR para Transporte, ME para Maquinaria."
+msgstr ""
+"Prefijo utilizado para generar folios únicos por categoría. Por ejemplo: TR "
+"para Transporte, ME para Maquinaria."
 
 #. module: activos_fijos_management
 #: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo_traslado__origen_responsable_id
@@ -632,7 +640,7 @@ msgstr "Responsable:"
 #: model:ir.actions.report,name:activos_fijos_management.act_report_responsiva_pdf
 #: model_terms:ir.ui.view,arch_db:activos_fijos_management.responsiva_template
 msgid "Responsiva de Activo Fijo"
-msgstr "Responsiva de Activo Fijo"
+msgstr ""
 
 #. module: activos_fijos_management
 #: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo__message_has_sms_error
@@ -711,7 +719,9 @@ msgstr "Tipo de actividad de excepción en el registro."
 msgid ""
 "Unique identifier of the asset: UUID, IMEI, serial number, barcode, etc. The"
 " first 4 characters will be used to generate the folio."
-msgstr "Identificador único del activo: UUID, IMEI, número de serie, código de barras, etc. Los primeros 4 caracteres se usarán para generar el folio."
+msgstr ""
+"Identificador único del activo: UUID, IMEI, número de serie, código de "
+"barras, etc. Los primeros 4 caracteres se usarán para generar el folio."
 
 #. module: activos_fijos_management
 #: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo__almacen_id

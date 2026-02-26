@@ -87,6 +87,11 @@ class ActivoFijoTraslado(models.Model):
         # Update the asset with the new destination values
         if record.destino_responsable_id:
             record.activo_id.responsable_id = record.destino_responsable_id
+            # Update department with the responsible's department
+            if record.destino_responsable_id.department_id:
+                record.activo_id.departamento_id = (
+                    record.destino_responsable_id.department_id
+                )
 
         if record.destino_almacen_id:
             record.activo_id.almacen_id = record.destino_almacen_id

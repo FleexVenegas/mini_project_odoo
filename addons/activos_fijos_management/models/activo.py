@@ -43,6 +43,7 @@ class ActivoFijo(models.Model):
     )
 
     responsable_id = fields.Many2one("res.users", string="Responsible")
+    departamento_id = fields.Many2one("hr.department", string="Department")
     ubicacion = fields.Char(string="Location")
     almacen_id = fields.Many2one("stock.warehouse", string="Warehouse")
     image_1920 = fields.Image(max_width=512, max_height=512)

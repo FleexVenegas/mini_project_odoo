@@ -43,6 +43,6 @@
         </record>
 
         <!-- Menu -->
-        <menuitem id="menu_product_size_root" name="Sizes" parent="stock.menu_stock_inventory_control" action="action_product_size" sequence="50" />
+        <menuitem id="menu_product_size_root" name="Product Sizes" parent="stock.menu_stock_inventory_control" action="action_product_size" sequence="50"/>
     </data>
 </odoo>

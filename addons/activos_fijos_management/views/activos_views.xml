@@ -84,6 +84,7 @@
                             <field name="categoria_id" required="1"/>
                             <field name="estado"/>
                             <field name="responsable_id"/>
+                            <field name="departamento_id" options="{'no_create': True}"/>
                             <field name="almacen_id" options="{'no_create': True}"/>
                         </group>
 
