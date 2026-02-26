@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <menuitem id="menu_activos_fijos_root" name="Activos Fijos" sequence="10" web_icon="activos_fijos_management,static/description/icon.png"/>
-    <menuitem id="menu_activo_fijo" name="Activos" parent="menu_activos_fijos_root" action="action_activo_fijo" sequence="10"/>
-    <menuitem id="menu_activo_responsiva" name="Responsivas" parent="menu_activos_fijos_root" action="action_activo_fijo_responsiva" sequence="20"/>
-    <menuitem id="menu_activo_traslado" name="Traslados" parent="menu_activos_fijos_root" action="action_activo_fijo_traslado" sequence="30"/>
-    <menuitem id="menu_activo_categoria" name="Categorías" parent="menu_activos_fijos_root" action="action_activo_fijo_categoria" sequence="40"/>
+    <menuitem id="menu_activos_fijos_root" name="Fixed Assets" sequence="10" web_icon="activos_fijos_management,static/description/icon.png"/>
+    <menuitem id="menu_activo_fijo" name="Assets" parent="menu_activos_fijos_root" action="action_activo_fijo" sequence="10"/>
+    <menuitem id="menu_activo_responsiva" name="Accountabilities" parent="menu_activos_fijos_root" action="action_activo_fijo_responsiva" sequence="20"/>
+    <menuitem id="menu_activo_traslado" name="Transfers" parent="menu_activos_fijos_root" action="action_activo_fijo_traslado" sequence="30"/>
+    <menuitem id="menu_activo_categoria" name="Categories" parent="menu_activos_fijos_root" action="action_activo_fijo_categoria" sequence="40"/>
 </odoo>

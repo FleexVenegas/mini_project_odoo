@@ -1,3 +1,17 @@
 /config
 /.env
-update_module.sh
+
+# macOS
+.DS_Store
+._*
+.Spotlight-V100
+.Trashes
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+
+.idea/
+.vscode/
+

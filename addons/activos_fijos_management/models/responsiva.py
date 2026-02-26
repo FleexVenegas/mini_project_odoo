@@ -9,46 +9,46 @@ _logger = logging.getLogger(__name__)
 
 class ActivoFijoResponsiva(models.Model):
     _name = "activo.fijo.responsiva"
-    _description = "Responsiva de Activo Fijo"
+    _description = "Fixed Asset Accountability"
     _inherit = ["mail.thread", "mail.activity.mixin"]
     _order = "fecha_asignacion desc"
 
-    name = fields.Char(string="Nombre", compute="_compute_name", store=True)
+    name = fields.Char(string="Name", compute="_compute_name", store=True)
     activo_id = fields.Many2one(
-        "activo.fijo", string="Activo", required=True, ondelete="cascade", tracking=True
+        "activo.fijo", string="Asset", required=True, ondelete="cascade", tracking=True
     )
     activo_folio = fields.Char(
         related="activo_id.name", string="Folio", readonly=True, store=True
     )
 
     responsable_id = fields.Many2one(
-        "res.users", string="Responsable", required=True, tracking=True
+        "res.users", string="Responsible", required=True, tracking=True
     )
     fecha_asignacion = fields.Date(
-        string="Fecha de Asignación",
+        string="Assignment Date",
         required=True,
         default=fields.Date.context_today,
         tracking=True,
     )
     estado = fields.Selection(
         [
-            ("vigente", "Vigente"),
-            ("transferida", "Transferida"),
-            ("cancelada", "Cancelada"),
+            ("vigente", "Current"),
+            ("transferida", "Transferred"),
+            ("cancelada", "Cancelled"),
         ],
-        string="Estado",
+        string="Status",
         default="vigente",
         tracking=True,
     )
 
-    responsiva_pdf = fields.Binary(string="Responsiva PDF Generada")
-    pdf_filename = fields.Char(string="Nombre del archivo PDF")
+    responsiva_pdf = fields.Binary(string="Generated Accountability PDF")
+    pdf_filename = fields.Char(string="PDF File Name")
 
-    observaciones = fields.Text(string="Observaciones")
+    observaciones = fields.Text(string="Notes")
 
-    # Imagen relacionada desde el activo
+    # Related image from the asset
     activo_image = fields.Image(
-        string="Imagen del Activo",
+        string="Asset Image",
         related="activo_id.image_1920",
         readonly=True,
         store=False,
@@ -58,11 +58,11 @@ class ActivoFijoResponsiva(models.Model):
     def _compute_name(self):
         for record in self:
             if record.activo_id and record.responsable_id:
-                record.name = f"Responsiva - {record.activo_id.name} - {record.responsable_id.name}"
+                record.name = f"Accountability - {record.activo_id.name} - {record.responsable_id.name}"
             elif record.activo_id:
-                record.name = f"Responsiva - {record.activo_id.name}"
+                record.name = f"Accountability - {record.activo_id.name}"
             else:
-                record.name = "Nueva Responsiva"
+                record.name = "New Accountability"
 
     def generar_responsiva_pdf(self):
         for record in self:
@@ -80,7 +80,7 @@ class ActivoFijoResponsiva(models.Model):
     @api.model
     def create(self, vals):
         record = super().create(vals)
-        # Solo generar PDF automáticamente si no viene de un traslado
+        # Only generate PDF automatically if it does not come from a transfer
         if not self.env.context.get("skip_pdf_generation"):
             try:
                 record.generar_responsiva_pdf()

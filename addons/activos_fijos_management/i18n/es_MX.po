@@ -1,0 +1,733 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* activos_fijos_management
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 17.0-20250123\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-02-26 18:56+0000\n"
+"PO-Revision-Date: 2026-02-26 19:00+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: es\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#. module: activos_fijos_management
+#: model:ir.actions.report,print_report_name:activos_fijos_management.act_report_responsiva_pdf
+msgid "'Responsiva_' + object.activo_id.name"
+msgstr "'Responsiva_' + object.activo_id.name"
+
+#. module: activos_fijos_management
+#: model_terms:ir.ui.view,arch_db:activos_fijos_management.responsiva_template
+msgid "<strong>Activo:</strong>"
+msgstr "<strong>Activo:</strong>"
+
+#. module: activos_fijos_management
+#: model_terms:ir.ui.view,arch_db:activos_fijos_management.responsiva_template
+msgid "<strong>Fecha de Asignación:</strong>"
+msgstr "<strong>Fecha de Asignación:</strong>"
+
+#. module: activos_fijos_management
+#: model_terms:ir.ui.view,arch_db:activos_fijos_management.responsiva_template
+msgid "<strong>Observaciones:</strong>"
+msgstr "<strong>Observaciones:</strong>"
+
+#. module: activos_fijos_management
+#: model_terms:ir.ui.view,arch_db:activos_fijos_management.responsiva_template
+msgid "<strong>Responsable:</strong>"
+msgstr "<strong>Responsable:</strong>"
+
+#. module: activos_fijos_management
+#: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo__responsiva_ids
+#: model:ir.ui.menu,name:activos_fijos_management.menu_activo_responsiva
+#: model_terms:ir.ui.view,arch_db:activos_fijos_management.view_activo_fijo_form
+msgid "Accountabilities"
+msgstr "Responsivas"
+
+#. module: activos_fijos_management
+#: model_terms:ir.ui.view,arch_db:activos_fijos_management.view_activo_fijo_form
+msgid "Accountability"
+msgstr "Responsiva"
+
+#. module: activos_fijos_management
+#: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo__cuenta_contable_id
+msgid "Accounting Account"
+msgstr "Cuenta Contable"
+
+#. module: activos_fijos_management
+#: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo__fecha_adquisicion
+msgid "Acquisition Date"
+msgstr "Fecha de Adquisición"
+
+#. module: activos_fijos_management
+#: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo__message_needaction
+#: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo_responsiva__message_needaction
+#: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo_traslado__message_needaction
+msgid "Action Needed"
+msgstr "Acción Requerida"
+
+#. module: activos_fijos_management
+#: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo__activity_ids
+#: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo_responsiva__activity_ids
+#: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo_traslado__activity_ids
+msgid "Activities"
+msgstr "Actividades"
+
+#. module: activos_fijos_management
+#: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo__activity_exception_decoration
+#: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo_responsiva__activity_exception_decoration
+#: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo_traslado__activity_exception_decoration
+msgid "Activity Exception Decoration"
+msgstr "Decoración de Excepción de Actividad"
+
+#. module: activos_fijos_management
+#: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo__activity_state
+#: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo_responsiva__activity_state
+#: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo_traslado__activity_state
+msgid "Activity State"
+msgstr "Estado de Actividad"
+
+#. module: activos_fijos_management
+#: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo__activity_type_icon
+#: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo_responsiva__activity_type_icon
+#: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo_traslado__activity_type_icon
+msgid "Activity Type Icon"
+msgstr "Ícono de Tipo de Actividad"
+
+#. module: activos_fijos_management
+#: model_terms:ir.ui.view,arch_db:activos_fijos_management.view_activo_fijo_responsiva_form
+msgid "Additional notes about the accountability..."
+msgstr "Notas adicionales sobre la responsiva..."
+
+#. module: activos_fijos_management
+#: model_terms:ir.ui.view,arch_db:activos_fijos_management.view_activo_fijo_form
+msgid "Additional notes..."
+msgstr "Notas adicionales..."
+
+#. module: activos_fijos_management
+#: model:ir.model.fields,help:activos_fijos_management.field_activo_fijo_categoria__cuenta_contable_default_id
+msgid ""
+"Administrative accounting account that will be used by default when "
+"registering assets in this category."
+msgstr "Cuenta contable administrativa que se usará por defecto al registrar activos de esta categoría."
+
+#. module: activos_fijos_management
+#: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo_responsiva__activo_id
+#: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo_traslado__activo_id
+#: model_terms:ir.ui.view,arch_db:activos_fijos_management.view_activo_fijo_kanban
+#: model_terms:ir.ui.view,arch_db:activos_fijos_management.view_activo_fijo_responsiva_form
+msgid "Asset"
+msgstr "Activo"
+
+#. module: activos_fijos_management
+#: model:ir.actions.act_window,name:activos_fijos_management.action_activo_fijo_responsiva
+#: model_terms:ir.ui.view,arch_db:activos_fijos_management.view_activo_fijo_responsiva_tree
+msgid "Asset Accountabilities"
+msgstr "Responsivas de Activos"
+
+#. module: activos_fijos_management
+#: model_terms:ir.ui.view,arch_db:activos_fijos_management.view_activo_fijo_responsiva_form
+msgid "Asset Accountability"
+msgstr "Responsiva de Activo"
+
+#. module: activos_fijos_management
+#: model:ir.actions.act_window,name:activos_fijos_management.action_activo_fijo_categoria
+#: model_terms:ir.ui.view,arch_db:activos_fijos_management.view_activo_fijo_categoria_tree
+msgid "Asset Categories"
+msgstr "Categorías de Activos"
+
+#. module: activos_fijos_management
+#: model_terms:ir.ui.view,arch_db:activos_fijos_management.view_activo_fijo_categoria_form
+msgid "Asset Category"
+msgstr "Categoría de Activo"
+
+#. module: activos_fijos_management
+#: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo__descripcion
+msgid "Asset Description"
+msgstr "Descripción del Activo"
+
+#. module: activos_fijos_management
+#: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo__uuid
+#: model_terms:ir.ui.view,arch_db:activos_fijos_management.view_activo_fijo_form
+msgid "Asset ID"
+msgstr "ID del Activo"
+
+#. module: activos_fijos_management
+#: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo_responsiva__activo_image
+msgid "Asset Image"
+msgstr "Imagen del Activo"
+
+#. module: activos_fijos_management
+#: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo__display_name
+#: model_terms:ir.ui.view,arch_db:activos_fijos_management.view_activo_fijo_form
+msgid "Asset Name"
+msgstr "Nombre del Activo"
+
+#. module: activos_fijos_management
+#: model_terms:ir.ui.view,arch_db:activos_fijos_management.view_activo_fijo_traslado_form
+msgid "Asset Transfer"
+msgstr "Traslado de Activo"
+
+#. module: activos_fijos_management
+#: model:ir.actions.act_window,name:activos_fijos_management.action_activo_fijo_traslado
+#: model_terms:ir.ui.view,arch_db:activos_fijos_management.view_activo_fijo_traslado_tree
+msgid "Asset Transfers"
+msgstr "Traslados de Activos"
+
+#. module: activos_fijos_management
+#: model_terms:ir.ui.view,arch_db:activos_fijos_management.view_activo_fijo_traslado_form
+msgid "Asset to Transfer"
+msgstr "Activo a Trasladar"
+
+#. module: activos_fijos_management
+#: model:ir.ui.menu,name:activos_fijos_management.menu_activo_fijo
+msgid "Assets"
+msgstr "Activos"
+
+#. module: activos_fijos_management
+#: model:ir.model.fields.selection,name:activos_fijos_management.selection__activo_fijo__estado__asignado
+msgid "Assigned"
+msgstr "Asignado"
+
+#. module: activos_fijos_management
+#: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo_responsiva__fecha_asignacion
+msgid "Assignment Date"
+msgstr "Fecha de Asignación"
+
+#. module: activos_fijos_management
+#: model_terms:ir.ui.view,arch_db:activos_fijos_management.view_activo_fijo_responsiva_form
+msgid "Assignment Information"
+msgstr "Información de Asignación"
+
+#. module: activos_fijos_management
+#: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo__message_attachment_count
+#: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo_responsiva__message_attachment_count
+#: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo_traslado__message_attachment_count
+msgid "Attachment Count"
+msgstr "Cantidad de Adjuntos"
+
+#. module: activos_fijos_management
+#: model:ir.model.fields.selection,name:activos_fijos_management.selection__activo_fijo_responsiva__estado__cancelada
+msgid "Cancelled"
+msgstr "Cancelada"
+
+#. module: activos_fijos_management
+#: model:ir.ui.menu,name:activos_fijos_management.menu_activo_categoria
+msgid "Categories"
+msgstr "Categorías"
+
+#. module: activos_fijos_management
+#: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo__categoria_id
+msgid "Category"
+msgstr "Categoría"
+
+#. module: activos_fijos_management
+#: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo_categoria__name
+msgid "Category Name"
+msgstr "Nombre de la Categoría"
+
+#. module: activos_fijos_management
+#: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo__costo
+msgid "Cost"
+msgstr "Costo"
+
+#. module: activos_fijos_management
+#: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo__create_uid
+#: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo_categoria__create_uid
+#: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo_responsiva__create_uid
+#: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo_traslado__create_uid
+msgid "Created by"
+msgstr "Creado por"
+
+#. module: activos_fijos_management
+#: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo__create_date
+#: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo_categoria__create_date
+#: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo_responsiva__create_date
+#: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo_traslado__create_date
+msgid "Created on"
+msgstr "Creado el"
+
+#. module: activos_fijos_management
+#: model:ir.model.fields.selection,name:activos_fijos_management.selection__activo_fijo_responsiva__estado__vigente
+msgid "Current"
+msgstr "Vigente"
+
+#. module: activos_fijos_management
+#: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo_categoria__cuenta_contable_default_id
+msgid "Default Accounting Account"
+msgstr "Cuenta Contable Predeterminada"
+
+#. module: activos_fijos_management
+#: model:ir.model.fields.selection,name:activos_fijos_management.selection__activo_fijo__estado__deprecado
+msgid "Deprecated"
+msgstr "Deprecado"
+
+#. module: activos_fijos_management
+#: model_terms:ir.ui.view,arch_db:activos_fijos_management.view_activo_fijo_traslado_form
+msgid "Describe the reason for the asset transfer..."
+msgstr "Describe el motivo del traslado del activo..."
+
+#. module: activos_fijos_management
+#: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo_categoria__descripcion
+msgid "Description"
+msgstr "Descripción"
+
+#. module: activos_fijos_management
+#: model_terms:ir.ui.view,arch_db:activos_fijos_management.view_activo_fijo_traslado_form
+msgid "Destination (New)"
+msgstr "Destino (Nuevo)"
+
+#. module: activos_fijos_management
+#: model_terms:ir.ui.view,arch_db:activos_fijos_management.view_activo_fijo_form
+msgid "Detailed asset description..."
+msgstr "Descripción detallada del activo..."
+
+#. module: activos_fijos_management
+#: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo_categoria__display_name
+#: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo_responsiva__display_name
+#: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo_traslado__display_name
+msgid "Display Name"
+msgstr "Nombre a Mostrar"
+
+#. module: activos_fijos_management
+#: model_terms:ir.ui.view,arch_db:activos_fijos_management.view_activo_fijo_responsiva_form
+msgid "Document"
+msgstr "Documento"
+
+#. module: activos_fijos_management
+#: model_terms:ir.ui.view,arch_db:activos_fijos_management.view_activo_fijo_form
+msgid "E.g: 9433BA08-AC84-5E04-8BC1, 863478062395409, X7AT447182"
+msgstr "Ej: 9433BA08-AC84-5E04-8BC1, 863478062395409, X7AT447182"
+
+#. module: activos_fijos_management
+#: model_terms:ir.ui.view,arch_db:activos_fijos_management.view_activo_fijo_tree
+msgid "E.g: HP Laptop 2022"
+msgstr "Ej: Laptop HP 2022"
+
+#. module: activos_fijos_management
+#: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo__factura_filename
+msgid "File Name"
+msgstr "Nombre de Archivo"
+
+#. module: activos_fijos_management
+#: model_terms:ir.ui.view,arch_db:activos_fijos_management.view_activo_fijo_form
+msgid "Financial Information"
+msgstr "Información Financiera"
+
+#. module: activos_fijos_management
+#: model:ir.model,name:activos_fijos_management.model_activo_fijo
+#: model_terms:ir.ui.view,arch_db:activos_fijos_management.view_activo_fijo_form
+msgid "Fixed Asset"
+msgstr "Activo Fijo"
+
+#. module: activos_fijos_management
+#: model:ir.model,name:activos_fijos_management.model_activo_fijo_responsiva
+msgid "Fixed Asset Accountability"
+msgstr "Responsiva de Activo Fijo"
+
+#. module: activos_fijos_management
+#: model:ir.model,name:activos_fijos_management.model_activo_fijo_categoria
+msgid "Fixed Asset Category"
+msgstr "Categoría de Activo Fijo"
+
+#. module: activos_fijos_management
+#: model:ir.model,name:activos_fijos_management.model_activo_fijo_traslado
+msgid "Fixed Asset Transfer"
+msgstr "Traslado de Activo Fijo"
+
+#. module: activos_fijos_management
+#: model:ir.actions.act_window,name:activos_fijos_management.action_activo_fijo
+#: model:ir.ui.menu,name:activos_fijos_management.menu_activos_fijos_root
+#: model_terms:ir.ui.view,arch_db:activos_fijos_management.view_activo_fijo_tree
+msgid "Fixed Assets"
+msgstr "Activos Fijos"
+
+#. module: activos_fijos_management
+#: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo__name
+#: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo_responsiva__activo_folio
+#: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo_traslado__activo_folio
+#: model_terms:ir.ui.view,arch_db:activos_fijos_management.view_activo_fijo_form
+msgid "Folio"
+msgstr "Folio"
+
+#. module: activos_fijos_management
+#: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo_categoria__codigo_prefijo
+msgid "Folio Prefix"
+msgstr "Prefijo para Folio"
+
+#. module: activos_fijos_management
+#: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo__message_follower_ids
+#: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo_responsiva__message_follower_ids
+#: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo_traslado__message_follower_ids
+msgid "Followers"
+msgstr "Seguidores"
+
+#. module: activos_fijos_management
+#: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo__message_partner_ids
+#: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo_responsiva__message_partner_ids
+#: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo_traslado__message_partner_ids
+msgid "Followers (Partners)"
+msgstr "Seguidores (Contactos)"
+
+#. module: activos_fijos_management
+#: model:ir.model.fields,help:activos_fijos_management.field_activo_fijo__activity_type_icon
+#: model:ir.model.fields,help:activos_fijos_management.field_activo_fijo_responsiva__activity_type_icon
+#: model:ir.model.fields,help:activos_fijos_management.field_activo_fijo_traslado__activity_type_icon
+msgid "Font awesome icon e.g. fa-tasks"
+msgstr "Ícono de Font Awesome ej. fa-tasks"
+
+#. module: activos_fijos_management
+#: model_terms:ir.ui.view,arch_db:activos_fijos_management.view_activo_fijo_form
+msgid "General Information"
+msgstr "Información General"
+
+#. module: activos_fijos_management
+#: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo_responsiva__responsiva_pdf
+msgid "Generated Accountability PDF"
+msgstr "PDF de Responsiva Generado"
+
+#. module: activos_fijos_management
+#: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo__has_message
+#: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo_responsiva__has_message
+#: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo_traslado__has_message
+msgid "Has Message"
+msgstr "Tiene Mensaje"
+
+#. module: activos_fijos_management
+#: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo__id
+#: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo_categoria__id
+#: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo_responsiva__id
+#: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo_traslado__id
+msgid "ID"
+msgstr "ID"
+
+#. module: activos_fijos_management
+#: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo__activity_exception_icon
+#: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo_responsiva__activity_exception_icon
+#: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo_traslado__activity_exception_icon
+msgid "Icon"
+msgstr "Ícono"
+
+#. module: activos_fijos_management
+#: model:ir.model.fields,help:activos_fijos_management.field_activo_fijo__activity_exception_icon
+#: model:ir.model.fields,help:activos_fijos_management.field_activo_fijo_responsiva__activity_exception_icon
+#: model:ir.model.fields,help:activos_fijos_management.field_activo_fijo_traslado__activity_exception_icon
+msgid "Icon to indicate an exception activity."
+msgstr "Ícono para indicar una actividad de excepción."
+
+#. module: activos_fijos_management
+#: model:ir.model.fields,help:activos_fijos_management.field_activo_fijo__message_needaction
+#: model:ir.model.fields,help:activos_fijos_management.field_activo_fijo_responsiva__message_needaction
+#: model:ir.model.fields,help:activos_fijos_management.field_activo_fijo_traslado__message_needaction
+msgid "If checked, new messages require your attention."
+msgstr "Si está marcado, los nuevos mensajes requieren su atención."
+
+#. module: activos_fijos_management
+#: model:ir.model.fields,help:activos_fijos_management.field_activo_fijo__message_has_error
+#: model:ir.model.fields,help:activos_fijos_management.field_activo_fijo__message_has_sms_error
+#: model:ir.model.fields,help:activos_fijos_management.field_activo_fijo_responsiva__message_has_error
+#: model:ir.model.fields,help:activos_fijos_management.field_activo_fijo_responsiva__message_has_sms_error
+#: model:ir.model.fields,help:activos_fijos_management.field_activo_fijo_traslado__message_has_error
+#: model:ir.model.fields,help:activos_fijos_management.field_activo_fijo_traslado__message_has_sms_error
+msgid "If checked, some messages have a delivery error."
+msgstr "Si está marcado, algunos mensajes tienen un error de entrega."
+
+#. module: activos_fijos_management
+#: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo__image_1920
+msgid "Image 1920"
+msgstr "Imagen 1920"
+
+#. module: activos_fijos_management
+#: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo__factura_pdf
+msgid "Invoice PDF"
+msgstr "PDF de Factura"
+
+#. module: activos_fijos_management
+#: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo__message_is_follower
+#: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo_responsiva__message_is_follower
+#: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo_traslado__message_is_follower
+msgid "Is Follower"
+msgstr "Es Seguidor"
+
+#. module: activos_fijos_management
+#: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo__write_uid
+#: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo_categoria__write_uid
+#: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo_responsiva__write_uid
+#: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo_traslado__write_uid
+msgid "Last Updated by"
+msgstr "Última Actualización por"
+
+#. module: activos_fijos_management
+#: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo__write_date
+#: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo_categoria__write_date
+#: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo_responsiva__write_date
+#: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo_traslado__write_date
+msgid "Last Updated on"
+msgstr "Última Actualización el"
+
+#. module: activos_fijos_management
+#: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo__ubicacion
+msgid "Location"
+msgstr "Ubicación"
+
+#. module: activos_fijos_management
+#: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo__message_has_error
+#: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo_responsiva__message_has_error
+#: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo_traslado__message_has_error
+msgid "Message Delivery error"
+msgstr "Error de Entrega de Mensaje"
+
+#. module: activos_fijos_management
+#: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo__message_ids
+#: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo_responsiva__message_ids
+#: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo_traslado__message_ids
+msgid "Messages"
+msgstr "Mensajes"
+
+#. module: activos_fijos_management
+#: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo__my_activity_date_deadline
+#: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo_responsiva__my_activity_date_deadline
+#: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo_traslado__my_activity_date_deadline
+msgid "My Activity Deadline"
+msgstr "Fecha Límite de Mi Actividad"
+
+#. module: activos_fijos_management
+#: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo_responsiva__name
+#: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo_traslado__name
+msgid "Name"
+msgstr "Nombre"
+
+#. module: activos_fijos_management
+#: model:ir.model.fields.selection,name:activos_fijos_management.selection__activo_fijo__estado__nuevo
+msgid "New"
+msgstr "Nuevo"
+
+#. module: activos_fijos_management
+#: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo_traslado__destino_responsable_id
+msgid "New Responsible"
+msgstr "Responsable Nuevo"
+
+#. module: activos_fijos_management
+#: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo_traslado__destino_almacen_id
+msgid "New Warehouse"
+msgstr "Almacén Nuevo"
+
+#. module: activos_fijos_management
+#: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo__activity_date_deadline
+#: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo_responsiva__activity_date_deadline
+#: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo_traslado__activity_date_deadline
+msgid "Next Activity Deadline"
+msgstr "Fecha Límite de Próxima Actividad"
+
+#. module: activos_fijos_management
+#: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo__activity_summary
+#: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo_responsiva__activity_summary
+#: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo_traslado__activity_summary
+msgid "Next Activity Summary"
+msgstr "Resumen de Próxima Actividad"
+
+#. module: activos_fijos_management
+#: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo__activity_type_id
+#: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo_responsiva__activity_type_id
+#: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo_traslado__activity_type_id
+msgid "Next Activity Type"
+msgstr "Tipo de Próxima Actividad"
+
+#. module: activos_fijos_management
+#: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo_responsiva__observaciones
+#: model_terms:ir.ui.view,arch_db:activos_fijos_management.view_activo_fijo_responsiva_form
+msgid "Notes"
+msgstr "Observaciones"
+
+#. module: activos_fijos_management
+#: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo__message_needaction_counter
+#: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo_responsiva__message_needaction_counter
+#: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo_traslado__message_needaction_counter
+msgid "Number of Actions"
+msgstr "Número de Acciones"
+
+#. module: activos_fijos_management
+#: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo__message_has_error_counter
+#: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo_responsiva__message_has_error_counter
+#: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo_traslado__message_has_error_counter
+msgid "Number of errors"
+msgstr "Número de errores"
+
+#. module: activos_fijos_management
+#: model:ir.model.fields,help:activos_fijos_management.field_activo_fijo__message_needaction_counter
+#: model:ir.model.fields,help:activos_fijos_management.field_activo_fijo_responsiva__message_needaction_counter
+#: model:ir.model.fields,help:activos_fijos_management.field_activo_fijo_traslado__message_needaction_counter
+msgid "Number of messages requiring action"
+msgstr "Número de mensajes que requieren acción"
+
+#. module: activos_fijos_management
+#: model:ir.model.fields,help:activos_fijos_management.field_activo_fijo__message_has_error_counter
+#: model:ir.model.fields,help:activos_fijos_management.field_activo_fijo_responsiva__message_has_error_counter
+#: model:ir.model.fields,help:activos_fijos_management.field_activo_fijo_traslado__message_has_error_counter
+msgid "Number of messages with delivery error"
+msgstr "Número de mensajes con error de entrega"
+
+#. module: activos_fijos_management
+#: model_terms:ir.ui.view,arch_db:activos_fijos_management.view_activo_fijo_traslado_form
+msgid "Origin (Current)"
+msgstr "Origen (Actual)"
+
+#. module: activos_fijos_management
+#: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo_responsiva__pdf_filename
+msgid "PDF File Name"
+msgstr "Nombre de Archivo PDF"
+
+#. module: activos_fijos_management
+#: model:ir.model.fields,help:activos_fijos_management.field_activo_fijo_categoria__codigo_prefijo
+msgid ""
+"Prefix used to generate unique folios by category. For example: TR for "
+"Transport, ME for Machinery."
+msgstr "Prefijo utilizado para generar folios únicos por categoría. Por ejemplo: TR para Transporte, ME para Maquinaria."
+
+#. module: activos_fijos_management
+#: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo_traslado__origen_responsable_id
+msgid "Previous Responsible"
+msgstr "Responsable Anterior"
+
+#. module: activos_fijos_management
+#: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo_traslado__origen_almacen_id
+msgid "Previous Warehouse"
+msgstr "Almacén Anterior"
+
+#. module: activos_fijos_management
+#: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo__rating_ids
+#: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo_responsiva__rating_ids
+#: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo_traslado__rating_ids
+msgid "Ratings"
+msgstr "Calificaciones"
+
+#. module: activos_fijos_management
+#: model_terms:ir.actions.act_window,help:activos_fijos_management.action_activo_fijo
+msgid "Register and manage the company's fixed assets."
+msgstr "Registra y administra los activos fijos de la empresa."
+
+#. module: activos_fijos_management
+#: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo__responsable_id
+#: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo_responsiva__responsable_id
+msgid "Responsible"
+msgstr "Responsable"
+
+#. module: activos_fijos_management
+#: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo__activity_user_id
+#: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo_responsiva__activity_user_id
+#: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo_traslado__activity_user_id
+msgid "Responsible User"
+msgstr "Usuario Responsable"
+
+#. module: activos_fijos_management
+#: model_terms:ir.ui.view,arch_db:activos_fijos_management.view_activo_fijo_kanban
+msgid "Responsible:"
+msgstr "Responsable:"
+
+#. module: activos_fijos_management
+#: model:ir.actions.report,name:activos_fijos_management.act_report_responsiva_pdf
+#: model_terms:ir.ui.view,arch_db:activos_fijos_management.responsiva_template
+msgid "Responsiva de Activo Fijo"
+msgstr "Responsiva de Activo Fijo"
+
+#. module: activos_fijos_management
+#: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo__message_has_sms_error
+#: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo_responsiva__message_has_sms_error
+#: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo_traslado__message_has_sms_error
+msgid "SMS Delivery error"
+msgstr "Error de Entrega de SMS"
+
+#. module: activos_fijos_management
+#: model:ir.model.fields.selection,name:activos_fijos_management.selection__activo_fijo__estado__vendido
+msgid "Sold"
+msgstr "Vendido"
+
+#. module: activos_fijos_management
+#: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo__estado
+#: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo_responsiva__estado
+msgid "Status"
+msgstr "Estado"
+
+#. module: activos_fijos_management
+#: model:ir.model.fields,help:activos_fijos_management.field_activo_fijo__activity_state
+#: model:ir.model.fields,help:activos_fijos_management.field_activo_fijo_responsiva__activity_state
+#: model:ir.model.fields,help:activos_fijos_management.field_activo_fijo_traslado__activity_state
+msgid ""
+"Status based on activities\n"
+"Overdue: Due date is already passed\n"
+"Today: Activity date is today\n"
+"Planned: Future activities."
+msgstr ""
+"Estado basado en actividades\n"
+"Vencido: La fecha límite ya pasó\n"
+"Hoy: La fecha de actividad es hoy\n"
+"Planeado: Actividades futuras."
+
+#. module: activos_fijos_management
+#: model_terms:ir.ui.view,arch_db:activos_fijos_management.view_activo_fijo_kanban
+msgid "Status:"
+msgstr "Estado:"
+
+#. module: activos_fijos_management
+#: model:ir.model.constraint,message:activos_fijos_management.constraint_activo_fijo_categoria_codigo_prefijo_unique
+msgid "The prefix must be unique per category."
+msgstr "El prefijo debe ser único por categoría."
+
+#. module: activos_fijos_management
+#: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo_traslado__fecha
+msgid "Transfer Date"
+msgstr "Fecha de Traslado"
+
+#. module: activos_fijos_management
+#: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo_traslado__motivo
+#: model_terms:ir.ui.view,arch_db:activos_fijos_management.view_activo_fijo_traslado_form
+msgid "Transfer Reason"
+msgstr "Motivo del Traslado"
+
+#. module: activos_fijos_management
+#: model:ir.model.fields.selection,name:activos_fijos_management.selection__activo_fijo__estado__transferido
+#: model:ir.model.fields.selection,name:activos_fijos_management.selection__activo_fijo_responsiva__estado__transferida
+msgid "Transferred"
+msgstr "Transferido"
+
+#. module: activos_fijos_management
+#: model:ir.ui.menu,name:activos_fijos_management.menu_activo_traslado
+msgid "Transfers"
+msgstr "Traslados"
+
+#. module: activos_fijos_management
+#: model:ir.model.fields,help:activos_fijos_management.field_activo_fijo__activity_exception_decoration
+#: model:ir.model.fields,help:activos_fijos_management.field_activo_fijo_responsiva__activity_exception_decoration
+#: model:ir.model.fields,help:activos_fijos_management.field_activo_fijo_traslado__activity_exception_decoration
+msgid "Type of the exception activity on record."
+msgstr "Tipo de actividad de excepción en el registro."
+
+#. module: activos_fijos_management
+#: model:ir.model.fields,help:activos_fijos_management.field_activo_fijo__uuid
+msgid ""
+"Unique identifier of the asset: UUID, IMEI, serial number, barcode, etc. The"
+" first 4 characters will be used to generate the folio."
+msgstr "Identificador único del activo: UUID, IMEI, número de serie, código de barras, etc. Los primeros 4 caracteres se usarán para generar el folio."
+
+#. module: activos_fijos_management
+#: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo__almacen_id
+msgid "Warehouse"
+msgstr "Almacén"
+
+#. module: activos_fijos_management
+#: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo__website_message_ids
+#: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo_responsiva__website_message_ids
+#: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo_traslado__website_message_ids
+msgid "Website Messages"
+msgstr "Mensajes del Sitio Web"
+
+#. module: activos_fijos_management
+#: model:ir.model.fields,help:activos_fijos_management.field_activo_fijo__website_message_ids
+#: model:ir.model.fields,help:activos_fijos_management.field_activo_fijo_responsiva__website_message_ids
+#: model:ir.model.fields,help:activos_fijos_management.field_activo_fijo_traslado__website_message_ids
+msgid "Website communication history"
+msgstr "Historial de comunicación del sitio web"

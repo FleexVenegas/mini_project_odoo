@@ -5,7 +5,7 @@ from odoo.exceptions import ValidationError
 
 class ActivoFijo(models.Model):
     _name = "activo.fijo"
-    _description = "Activo Fijo"
+    _description = "Fixed Asset"
     _inherit = ["mail.thread", "mail.activity.mixin"]
     _order = "name desc"
 
@@ -15,75 +15,75 @@ class ActivoFijo(models.Model):
         readonly=True,
         copy=False,
         index=True,
-        default="Nuevo",
+        default="New",
     )
     uuid = fields.Char(
-        string="ID del Activo",
+        string="Asset ID",
         index=True,
-        help="Identificador único del activo: UUID, IMEI, número de serie, código de barras, etc. Se usarán los primeros 4 caracteres para generar el folio.",
+        help="Unique identifier of the asset: UUID, IMEI, serial number, barcode, etc. The first 4 characters will be used to generate the folio.",
     )
-    descripcion = fields.Text(string="Descripción del Activo")
+    descripcion = fields.Text(string="Asset Description")
     categoria_id = fields.Many2one(
-        "activo.fijo.categoria", string="Categoría", required=True
+        "activo.fijo.categoria", string="Category", required=True
     )
-    cuenta_contable_id = fields.Many2one("account.account", string="Cuenta contable")
-    fecha_adquisicion = fields.Date(string="Fecha de adquisición")
-    costo = fields.Float(string="Costo", digits="Product Price")
+    cuenta_contable_id = fields.Many2one("account.account", string="Accounting Account")
+    fecha_adquisicion = fields.Date(string="Acquisition Date")
+    costo = fields.Float(string="Cost", digits="Product Price")
     estado = fields.Selection(
         [
-            ("nuevo", "Nuevo"),
-            ("asignado", "Asignado"),
-            ("transferido", "Transferido"),
-            ("vendido", "Vendido"),
-            ("deprecado", "Deprecado"),
+            ("nuevo", "New"),
+            ("asignado", "Assigned"),
+            ("transferido", "Transferred"),
+            ("vendido", "Sold"),
+            ("deprecado", "Deprecated"),
         ],
-        string="Estado",
+        string="Status",
         default="nuevo",
         tracking=True,
     )
 
-    responsable_id = fields.Many2one("res.users", string="Responsable")
-    ubicacion = fields.Char(string="Ubicación")
-    almacen_id = fields.Many2one("stock.warehouse", string="Almacén")
+    responsable_id = fields.Many2one("res.users", string="Responsible")
+    ubicacion = fields.Char(string="Location")
+    almacen_id = fields.Many2one("stock.warehouse", string="Warehouse")
     image_1920 = fields.Image(max_width=512, max_height=512)
-    factura_pdf = fields.Binary(string="Factura PDF")
-    factura_filename = fields.Char(string="Nombre de archivo")
+    factura_pdf = fields.Binary(string="Invoice PDF")
+    factura_filename = fields.Char(string="File Name")
 
     responsiva_ids = fields.One2many(
-        "activo.fijo.responsiva", "activo_id", string="Responsivas"
+        "activo.fijo.responsiva", "activo_id", string="Accountabilities"
     )
-    display_name = fields.Char(string="Nombre del Activo")
+    display_name = fields.Char(string="Asset Name")
 
     @api.model
     def create(self, vals):
-        if vals.get("name", "Nuevo") == "Nuevo":
+        if vals.get("name", "New") == "New":
             categoria = self.env["activo.fijo.categoria"].browse(
                 vals.get("categoria_id")
             )
             if not categoria or not categoria.codigo_prefijo:
                 raise ValidationError(
-                    "La categoría seleccionada no tiene un prefijo definido."
+                    "The selected category does not have a defined prefix."
                 )
 
-            # Validar que se haya ingresado un ID del Activo (puede ser UUID, IMEI, serial, etc.)
+            # Validate that an Asset ID has been entered (can be UUID, IMEI, serial, etc.)
             activo_id = vals.get("uuid", "").strip()
             if not activo_id:
                 raise ValidationError(
-                    "Debe ingresar un ID del Activo (UUID, IMEI, serial, etc.) para generar el folio."
+                    "You must enter an Asset ID (UUID, IMEI, serial, etc.) to generate the folio."
                 )
 
-            # Extraer solo caracteres alfanuméricos del ID ingresado
+            # Extract only alphanumeric characters from the entered ID
             id_clean = "".join(c for c in activo_id if c.isalnum())
 
-            # Tomar los primeros 4 caracteres alfanuméricos y convertir a mayúsculas
+            # Take the first 4 alphanumeric characters and convert to uppercase
             id_part = id_clean[:4].upper()
 
             if len(id_part) < 4:
                 raise ValidationError(
-                    "El ID del Activo debe contener al menos 4 caracteres alfanuméricos (letras o números)."
+                    "The Asset ID must contain at least 4 alphanumeric characters (letters or numbers)."
                 )
 
-            # Generar el folio con formato: CATEGORIA-XXXX-SF
+            # Generate folio with format: CATEGORY-XXXX-SF
             vals["name"] = f"{categoria.codigo_prefijo}-{id_part}-SF"
 
         return super(ActivoFijo, self).create(vals)

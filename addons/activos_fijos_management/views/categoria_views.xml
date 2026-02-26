@@ -4,7 +4,7 @@
         <field name="name">activo.fijo.categoria.tree</field>
         <field name="model">activo.fijo.categoria</field>
         <field name="arch" type="xml">
-            <tree string="Categorías de Activos">
+            <tree string="Asset Categories">
                 <field name="name"/>
                 <field name="codigo_prefijo"/>
                 <field name="cuenta_contable_default_id"/>
@@ -16,13 +16,12 @@
         <field name="name">activo.fijo.categoria.form</field>
         <field name="model">activo.fijo.categoria</field>
         <field name="arch" type="xml">
-            <form string="Categoría de Activo">
+            <form string="Asset Category">
                 <sheet>
                     <group>
                         <field name="name" required="1"/>
                         <field name="codigo_prefijo" required="1"/>
-                        <field name="cuenta_contable_default_id" 
-                               context="{'show_account_type': True}"/>
+                        <field name="cuenta_contable_default_id" context="{'show_account_type': True}"/>
                         <field name="descripcion"/>
                     </group>
                 </sheet>
@@ -31,7 +30,7 @@
     </record>
 
     <record id="action_activo_fijo_categoria" model="ir.actions.act_window">
-        <field name="name">Categorías de Activos</field>
+        <field name="name">Asset Categories</field>
         <field name="res_model">activo.fijo.categoria</field>
         <field name="view_mode">tree,form</field>
     </record>

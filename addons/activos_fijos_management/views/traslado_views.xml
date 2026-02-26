@@ -4,7 +4,7 @@
         <field name="name">activo.fijo.traslado.tree</field>
         <field name="model">activo.fijo.traslado</field>
         <field name="arch" type="xml">
-            <tree string="Traslados de Activos">
+            <tree string="Asset Transfers">
                 <field name="activo_folio"/>
                 <field name="activo_id" optional="hide"/>
                 <field name="fecha"/>
@@ -21,10 +21,10 @@
         <field name="name">activo.fijo.traslado.form</field>
         <field name="model">activo.fijo.traslado</field>
         <field name="arch" type="xml">
-            <form string="Traslado de Activo">
+            <form string="Asset Transfer">
                 <sheet>
                     <div class="oe_title">
-                        <label for="activo_id" string="Activo a Trasladar"/>
+                        <label for="activo_id" string="Asset to Transfer"/>
                         <h1>
                             <field name="activo_id" required="1" options="{'no_create': True}"/>
                         </h1>
@@ -35,20 +35,20 @@
                     </group>
 
                     <group>
-                        <group string="Origen (Actual)">
+                        <group string="Origin (Current)">
                             <field name="origen_responsable_id" readonly="1"/>
                             <field name="origen_almacen_id" options="{'no_create': True}" readonly="1"/>
                         </group>
-                        <group string="Destino (Nuevo)">
+                        <group string="Destination (New)">
                             <field name="destino_responsable_id"/>
                             <field name="destino_almacen_id" options="{'no_create': True}"/>
                         </group>
                     </group>
 
-                    <separator string="Motivo del Traslado"/>
-                    <field name="motivo" required="1" nolabel="1" placeholder="Describe el motivo del traslado del activo..."/>
+                    <separator string="Transfer Reason"/>
+                    <field name="motivo" required="1" nolabel="1" placeholder="Describe the reason for the asset transfer..."/>
                 </sheet>
-                <!-- Chatter (si lo tienes configurado) -->
+                <!-- Chatter (if you have it configured) -->
                 <div class="oe_chatter">
                     <field name="message_follower_ids"/>
                     <field name="message_ids"/>
@@ -58,7 +58,7 @@
     </record>
 
     <record id="action_activo_fijo_traslado" model="ir.actions.act_window">
-        <field name="name">Traslados de Activos</field>
+        <field name="name">Asset Transfers</field>
         <field name="res_model">activo.fijo.traslado</field>
         <field name="view_mode">tree,form</field>
     </record>
