@@ -11,7 +11,7 @@
     - Subida de facturas PDF, foto del activo, y control de estados (vendido, deprecado, basura).
     """,
     'icon': '/activos_fijos_management/static/description/icon.png',
-    'author': "Ing. Christian Padilla",
+    'author': "Diego Venegas",
     'website': "https://estudioodoo.com.mx/odoo/",
     'category': 'Inventory',
     'version': '17.0.1.0',
