@@ -5,11 +5,12 @@
         <field name="model">activo.fijo.responsiva</field>
         <field name="arch" type="xml">
             <tree string="Responsivas de Activos">
-                <field name="activo_image" widget="image"/>
-                <field name="activo_id"/>
+                <field name="activo_folio"/>
+                <field name="activo_id" optional="hide"/>
                 <field name="responsable_id"/>
                 <field name="fecha_asignacion"/>
                 <field name="estado"/>
+                <field name="observaciones" optional="hide"/>
             </tree>
         </field>
     </record>
@@ -20,19 +21,34 @@
         <field name="arch" type="xml">
             <form string="Responsiva de Activo">
                 <sheet>
+                    <field name="activo_image" widget="image" class="oe_avatar" options="{'preview_image': 'activo_image'}"/>
+                    <div class="oe_title">
+                        <label for="activo_id" string="Activo"/>
+                        <h1>
+                            <field name="activo_id" required="1" options="{'no_create': True}"/>
+                        </h1>
+                    </div>
+
                     <group>
-                        <field name="activo_id" required="1"/>
-                        <field name="activo_image" widget="image"/>
-                        <field name="responsable_id" required="1"/>
-                        <field name="fecha_asignacion" required="1"/>
-                        <field name="estado"/>
-                        <field name="observaciones"/>
+                        <group string="Información de Asignación">
+                            <field name="responsable_id" required="1"/>
+                            <field name="fecha_asignacion" required="1"/>
+                            <field name="estado"/>
+                        </group>
+                        <group string="Documento">
+                            <field name="responsiva_pdf" filename="pdf_filename" widget="binary" options="{'accepted_file_extensions': '.pdf'}"/>
+                            <field name="pdf_filename" invisible="1"/>
+                        </group>
                     </group>
-                    <group>
-                        <field name="responsiva_pdf" filename="pdf_filename" widget="binary" options="{'accept': 'application/pdf'}"/>
-                        <field name="pdf_filename" invisible="1"/>
-                    </group>
+
+                    <separator string="Observaciones"/>
+                    <field name="observaciones" nolabel="1" placeholder="Observaciones adicionales sobre la responsiva..."/>
                 </sheet>
+                <!-- Chatter (si lo tienes configurado) -->
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="message_ids"/>
+                </div>
             </form>
         </field>
     </record>

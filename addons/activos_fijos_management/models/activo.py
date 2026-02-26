@@ -17,7 +17,11 @@ class ActivoFijo(models.Model):
         index=True,
         default="Nuevo",
     )
-    uuid = fields.Char(string="ID del Activo", readonly=True, copy=False, index=True)
+    uuid = fields.Char(
+        string="ID del Activo",
+        index=True,
+        help="Identificador único del activo: UUID, IMEI, número de serie, código de barras, etc. Se usarán los primeros 4 caracteres para generar el folio.",
+    )
     descripcion = fields.Text(string="Descripción del Activo")
     categoria_id = fields.Many2one(
         "activo.fijo.categoria", string="Categoría", required=True
@@ -29,6 +33,7 @@ class ActivoFijo(models.Model):
         [
             ("nuevo", "Nuevo"),
             ("asignado", "Asignado"),
+            ("transferido", "Transferido"),
             ("vendido", "Vendido"),
             ("deprecado", "Deprecado"),
         ],
@@ -59,8 +64,26 @@ class ActivoFijo(models.Model):
                 raise ValidationError(
                     "La categoría seleccionada no tiene un prefijo definido."
                 )
-            sequence_code = f"activo.fijo.{categoria.codigo_prefijo.lower()}"
-            vals["name"] = (
-                self.env["ir.sequence"].next_by_code(sequence_code) or "Nuevo"
-            )
+
+            # Validar que se haya ingresado un ID del Activo (puede ser UUID, IMEI, serial, etc.)
+            activo_id = vals.get("uuid", "").strip()
+            if not activo_id:
+                raise ValidationError(
+                    "Debe ingresar un ID del Activo (UUID, IMEI, serial, etc.) para generar el folio."
+                )
+
+            # Extraer solo caracteres alfanuméricos del ID ingresado
+            id_clean = "".join(c for c in activo_id if c.isalnum())
+
+            # Tomar los primeros 4 caracteres alfanuméricos y convertir a mayúsculas
+            id_part = id_clean[:4].upper()
+
+            if len(id_part) < 4:
+                raise ValidationError(
+                    "El ID del Activo debe contener al menos 4 caracteres alfanuméricos (letras o números)."
+                )
+
+            # Generar el folio con formato: CATEGORIA-XXXX-SF
+            vals["name"] = f"{categoria.codigo_prefijo}-{id_part}-SF"
+
         return super(ActivoFijo, self).create(vals)
