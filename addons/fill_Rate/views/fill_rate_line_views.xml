@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Vista Tree de Fill Rate Line -->
+    <record id="view_fill_rate_line_tree" model="ir.ui.view">
+        <field name="name">fill.rate.line.tree</field>
+        <field name="model">fill.rate.line</field>
+        <field name="arch" type="xml">
+            <tree string="Historial de Fill Rate" decoration-success="fill_rate_status == 'complete'" decoration-warning="fill_rate_status == 'partial'" decoration-info="fill_rate_status == 'excess'" decoration-muted="fill_rate_status == 'pending'">
+                <field name="order_date"/>
+                <field name="partner_id"/>
+                <field name="purchase_order_id"/>
+                <field name="product_id"/>
+                <field name="qty_ordered"/>
+                <field name="qty_received"/>
+                <field name="uom_id" optional="hide"/>
+                <field name="fill_rate" widget="percentage"/>
+                <field name="fill_rate_status"/>
+                <field name="origin_type" optional="hide"/>
+                <field name="state" optional="hide"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Vista Form de Fill Rate Line -->
+    <record id="view_fill_rate_line_form" model="ir.ui.view">
+        <field name="name">fill.rate.line.form</field>
+        <field name="model">fill.rate.line</field>
+        <field name="arch" type="xml">
+            <form string="Detalle de Fill Rate">
+                <header>
+                    <field name="fill_rate_status" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="update_received_quantity" type="object" class="oe_stat_button" icon="fa-refresh" string="Actualizar">
+                        </button>
+                    </div>
+
+                    <group>
+                        <group name="order_info" string="Información de Orden">
+                            <field name="purchase_order_id"/>
+                            <field name="partner_id"/>
+                            <field name="order_date"/>
+                            <field name="origin_type"/>
+                            <field name="state"/>
+                        </group>
+                        <group name="product_info" string="Producto">
+                            <field name="product_id"/>
+                            <field name="purchase_order_line_id"/>
+                        </group>
+                    </group>
+
+                    <group>
+                        <group name="quantities" string="Cantidades">
+                            <field name="qty_ordered"/>
+                            <field name="qty_received"/>
+                            <field name="uom_id"/>
+                        </group>
+                        <group name="fill_rate_info" string="Fill Rate">
+                            <field name="fill_rate" widget="percentage"/>
+                            <field name="fill_rate_status"/>
+                            <field name="date_received"/>
+                        </group>
+                    </group>
+
+                    <group name="notes" string="Notas">
+                        <field name="notes" nolabel="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Vista Search de Fill Rate Line -->
+    <record id="view_fill_rate_line_search" model="ir.ui.view">
+        <field name="name">fill.rate.line.search</field>
+        <field name="model">fill.rate.line</field>
+        <field name="arch" type="xml">
+            <search string="Buscar Fill Rate">
+                <field name="partner_id"/>
+                <field name="purchase_order_id"/>
+                <field name="product_id"/>
+                <field name="order_date"/>
+
+                <filter string="Completo (100%)" name="complete" domain="[('fill_rate_status', '=', 'complete')]"/>
+                <filter string="Parcial" name="partial" domain="[('fill_rate_status', '=', 'partial')]"/>
+                <filter string="Pendiente" name="pending" domain="[('fill_rate_status', '=', 'pending')]"/>
+
+                <separator/>
+                <filter string="Este Mes" name="this_month" domain="[('order_date', '&gt;=', (context_today() - relativedelta(months=1)).strftime('%Y-%m-01'))]"/>
+                <filter string="Este Año" name="this_year" domain="[('order_date', '&gt;=', (context_today().strftime('%Y-01-01')))]"/>
+
+                <separator/>
+                <filter string="Manual" name="manual" domain="[('origin_type', '=', 'manual')]"/>
+                <filter string="Bot" name="bot" domain="[('origin_type', '=', 'bot')]"/>
+
+                <group expand="0" string="Agrupar por">
+                    <filter string="Proveedor" name="group_partner" context="{'group_by': 'partner_id'}"/>
+                    <filter string="Producto" name="group_product" context="{'group_by': 'product_id'}"/>
+                    <filter string="Estado" name="group_status" context="{'group_by': 'fill_rate_status'}"/>
+                    <filter string="Mes" name="group_month" context="{'group_by': 'order_date:month'}"/>
+                    <filter string="Origen" name="group_origin" context="{'group_by': 'origin_type'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Vista Pivot para Análisis -->
+    <record id="view_fill_rate_line_pivot" model="ir.ui.view">
+        <field name="name">fill.rate.line.pivot</field>
+        <field name="model">fill.rate.line</field>
+        <field name="arch" type="xml">
+            <pivot string="Análisis de Fill Rate">
+                <field name="partner_id" type="row"/>
+                <field name="fill_rate" type="measure"/>
+                <field name="qty_ordered" type="measure"/>
+                <field name="qty_received" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <!-- Vista Graph para Gráficas -->
+    <record id="view_fill_rate_line_graph" model="ir.ui.view">
+        <field name="name">fill.rate.line.graph</field>
+        <field name="model">fill.rate.line</field>
+        <field name="arch" type="xml">
+            <graph string="Gráfica de Fill Rate" type="bar">
+                <field name="partner_id"/>
+                <field name="fill_rate" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <!-- Acción para Fill Rate Lines -->
+    <record id="action_fill_rate_line" model="ir.actions.act_window">
+        <field name="name">Historial de Fill Rate</field>
+        <field name="res_model">fill.rate.line</field>
+        <field name="view_mode">tree,form,pivot,graph</field>
+        <field name="context">{'search_default_this_year': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Crear el primer registro de Fill Rate
+            </p>
+            <p>
+                Los registros se crean automáticamente al confirmar órdenes de compra
+                y se actualizan cuando se valida la recepción de mercancía.
+            </p>
+        </field>
+    </record>
+
+</odoo>

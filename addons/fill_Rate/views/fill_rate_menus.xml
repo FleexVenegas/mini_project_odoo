@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Menú principal de Fill Rate (bajo Compras) -->
+    <menuitem id="menu_fill_rate_root" name="Fill Rate" parent="purchase.menu_purchase_root" sequence="50" groups="purchase.group_purchase_user"/>
+
+    <!-- Submenú: Historial de Fill Rate -->
+    <menuitem id="menu_fill_rate_history" name="Historial" parent="menu_fill_rate_root" action="action_fill_rate_line" sequence="10"/>
+
+    <!-- Submenú: Proveedores por Fill Rate -->
+    <menuitem id="menu_partner_fill_rate" name="Clasificación de Proveedores" parent="menu_fill_rate_root" action="action_partner_supplier_fill_rate" sequence="20"/>
+
+    <!-- Submenú: Reportes (preparado para futura expansión) -->
+    <!--
+    <menuitem id="menu_fill_rate_reports" name="Reportes" parent="menu_fill_rate_root" sequence="30"/>
+    -->
+
+</odoo>

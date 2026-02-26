@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_fill_rate_line_user,access.fill.rate.line.user,model_fill_rate_line,purchase.group_purchase_user,1,1,1,1
+access_fill_rate_line_manager,access.fill.rate.line.manager,model_fill_rate_line,purchase.group_purchase_manager,1,1,1,1
+access_fill_rate_line_stock_user,access.fill.rate.line.stock,model_fill_rate_line,stock.group_stock_user,1,0,0,0
