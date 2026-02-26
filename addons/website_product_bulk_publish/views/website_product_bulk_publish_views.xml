@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+
+        <!-- Server Action: Publish Products on Website -->
+        <record id="server_action_publish_products_website" model="ir.actions.server">
+            <field name="name">Publish on Website</field>
+            <field name="model_id" ref="product.model_product_template"/>
+            <field name="binding_model_id" ref="product.model_product_template"/>
+            <field name="binding_view_types">list</field>
+            <field name="state">code</field>
+            <field name="code">
+action = records.action_publish_on_website()
+            </field>
+        </record>
+
+        <!-- Server Action: Unpublish Products from Website -->
+        <record id="server_action_unpublish_products_website" model="ir.actions.server">
+            <field name="name">Unpublish from Website</field>
+            <field name="model_id" ref="product.model_product_template"/>
+            <field name="binding_model_id" ref="product.model_product_template"/>
+            <field name="binding_view_types">list</field>
+            <field name="state">code</field>
+            <field name="code">
+action = records.action_unpublish_from_website()
+            </field>
+        </record>
+
+    </data>
+</odoo>
