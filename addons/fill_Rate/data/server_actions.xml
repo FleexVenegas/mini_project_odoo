@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+
+        <!-- Acción de servidor para recalcular Fill Rate -->
+        <record id="action_server_recalculate_all_fill_rate" model="ir.actions.server">
+            <field name="name">🔄 Recalcular todos los Fill Rate</field>
+            <field name="model_id" ref="base.model_res_partner"/>
+            <field name="binding_model_id" ref="base.model_res_partner"/>
+            <field name="binding_view_types">list</field>
+            <field name="state">code</field>
+            <field name="code">
+# Recalcular todas las cantidades recibidas desde stock.move
+fill_rate_lines = env['fill.rate.line'].search([])
+for line in fill_rate_lines:
+    line.update_received_quantity()
+
+# Recalcular Fill Rate de todos los proveedores
+partners = env['res.partner'].search([('fill_rate_history_ids', '!=', False)])
+for partner in partners:
+    partner._compute_fill_rate()
+    partner._compute_supplier_class()
+
+# Mostrar mensaje de éxito
+action = {
+    'type': 'ir.actions.client',
+    'tag': 'display_notification',
+    'params': {
+        'title': '¡Listo!',
+        'message': f'Se recalcularon {len(fill_rate_lines)} líneas y {len(partners)} proveedores',
+        'type': 'success',
+        'sticky': False,
+    }
+}
+            </field>
+        </record>
+
+        <!-- Acción para recalcular un solo proveedor (desde el formulario) -->
+        <record id="action_server_recalculate_partner_fill_rate" model="ir.actions.server">
+            <field name="name">♻️ Recalcular Fill Rate</field>
+            <field name="model_id" ref="base.model_res_partner"/>
+            <field name="binding_model_id" ref="base.model_res_partner"/>
+            <field name="binding_view_types">form</field>
+            <field name="state">code</field>
+            <field name="code">
+if records:
+    for partner in records:
+        # Actualizar cantidades recibidas de todas las líneas del proveedor
+        partner.fill_rate_history_ids.update_received_quantity()
+        
+        # Recalcular fill rate y clasificación
+        partner._compute_fill_rate()
+        partner._compute_supplier_class()
+    
+    action = {
+        'type': 'ir.actions.client',
+        'tag': 'display_notification',
+        'params': {
+            'title': 'Recalculado',
+            'message': f'Fill Rate actualizado correctamente para {len(records)} proveedor(es)',
+            'type': 'success',
+            'sticky': False,
+        }
+    }
+            </field>
+        </record>
+
+    </data>
+</odoo>

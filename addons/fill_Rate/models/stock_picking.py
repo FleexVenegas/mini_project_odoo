@@ -74,7 +74,11 @@ class StockMove(models.Model):
 
         # Actualizar fill rate si es una recepción de compra
         for move in self:
-            if move.picking_code == "incoming" and move.purchase_line_id:
+            if (
+                move.location_dest_id.usage == "internal"
+                and move.purchase_line_id
+                and move.state == "done"
+            ):
                 # Buscar y actualizar el registro de fill rate
                 fill_rate_line = self.env["fill.rate.line"].search(
                     [("purchase_order_line_id", "=", move.purchase_line_id.id)], limit=1

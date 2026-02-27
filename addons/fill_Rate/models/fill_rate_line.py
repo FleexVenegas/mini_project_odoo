@@ -67,8 +67,8 @@ class FillRateLine(models.Model):
         string="Fill Rate (%)",
         compute="_compute_fill_rate",
         store=True,
-        digits=(5, 2),
-        help="Porcentaje de cumplimiento: (Cantidad Recibida / Cantidad Ordenada) * 100",
+        digits=(5, 4),
+        help="Porcentaje de cumplimiento: (Cantidad Recibida / Cantidad Ordenada). Valor decimal de 0.0 a 1.0",
     )
 
     fill_rate_status = fields.Selection(
@@ -99,16 +99,17 @@ class FillRateLine(models.Model):
         """Calcula el porcentaje de cumplimiento."""
         for record in self:
             if record.qty_ordered > 0:
-                record.fill_rate = (record.qty_received / record.qty_ordered) * 100
+                record.fill_rate = record.qty_received / record.qty_ordered
 
                 # Determinar estado
                 if record.qty_received == 0 and record.state in ["purchase", "done"]:
                     record.fill_rate_status = "pending"
-                elif record.fill_rate == 100:
-                    record.fill_rate_status = "complete"
-                elif record.fill_rate > 100:
-                    record.fill_rate_status = "excess"
-                elif 0 < record.fill_rate < 100:
+                elif record.fill_rate >= 1.0:
+                    if record.fill_rate == 1.0:
+                        record.fill_rate_status = "complete"
+                    else:
+                        record.fill_rate_status = "excess"
+                elif 0 < record.fill_rate < 1.0:
                     record.fill_rate_status = "partial"
                 else:
                     record.fill_rate_status = "pending"
@@ -125,17 +126,11 @@ class FillRateLine(models.Model):
             if not record.purchase_order_line_id:
                 continue
 
-            # Buscar movimientos de stock relacionados (incoming)
-            moves = self.env["stock.move"].search(
-                [
-                    ("purchase_line_id", "=", record.purchase_order_line_id.id),
-                    ("state", "=", "done"),
-                    ("picking_code", "=", "incoming"),
-                ]
-            )
-
-            # Sumar cantidades recibidas
-            total_received = sum(moves.mapped("product_uom_qty"))
+            # Usar directamente qty_received de la línea de compra
+            # Odoo calcula automáticamente este campo basándose en las recepciones validadas
+            # Esto es más confiable que calcular manualmente desde stock.move
+            purchase_line = record.purchase_order_line_id
+            total_received = purchase_line.qty_received
 
             # Actualizar registro
             record.write(

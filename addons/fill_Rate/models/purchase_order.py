@@ -17,6 +17,7 @@ class PurchaseOrder(models.Model):
     fill_rate_created = fields.Boolean(
         string="Fill Rate Creado",
         default=False,
+        copy=False,
         help="Indica si ya se crearon los registros de fill rate para esta orden",
     )
 

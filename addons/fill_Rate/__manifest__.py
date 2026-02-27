@@ -12,6 +12,7 @@
         "views/res_partner_views.xml",
         "views/fill_rate_menus.xml",
         "data/ir_cron_data.xml",
+        "data/server_actions.xml",
     ],
     "assets": {
         "web.assets_backend": [

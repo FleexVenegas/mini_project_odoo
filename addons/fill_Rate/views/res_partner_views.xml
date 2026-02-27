@@ -31,7 +31,11 @@
 
                     <group>
                         <group string="Clasificación del Proveedor">
-                            <field name="supplier_class" widget="badge" decoration-success="supplier_class == 'A'" decoration-warning="supplier_class == 'B'" decoration-danger="supplier_class == 'C'" decoration-muted="supplier_class == 'new'"/>
+                            <field name="supplier_class" widget="badge" 
+                                   decoration-success="supplier_class == 'A'" 
+                                   decoration-warning="supplier_class == 'B'" 
+                                   decoration-danger="supplier_class == 'C'"
+                                   decoration-muted="supplier_class == 'new'"/>
                             <field name="fill_rate" widget="percentpie"/>
                             <field name="fill_rate_last_update"/>
                         </group>
@@ -75,7 +79,11 @@
         <field name="arch" type="xml">
             <field name="display_name" position="after">
                 <field name="fill_rate" optional="hide" widget="percentage"/>
-                <field name="supplier_class" optional="hide"/>
+                <field name="supplier_class" optional="hide" widget="badge"
+                       decoration-success="supplier_class == 'A'" 
+                       decoration-warning="supplier_class == 'B'" 
+                       decoration-danger="supplier_class == 'C'"
+                       decoration-muted="supplier_class == 'new'"/>
             </field>
         </field>
     </record>
@@ -88,7 +96,11 @@
         <field name="arch" type="xml">
             <tree string="Proveedores por Fill Rate" decoration-success="supplier_class == 'A'" decoration-warning="supplier_class == 'B'" decoration-danger="supplier_class == 'C'">
                 <field name="name"/>
-                <field name="supplier_class" widget="badge"/>
+                <field name="supplier_class" widget="badge" 
+                       decoration-success="supplier_class == 'A'" 
+                       decoration-warning="supplier_class == 'B'" 
+                       decoration-danger="supplier_class == 'C'"
+                       decoration-muted="supplier_class == 'new'"/>
                 <field name="fill_rate" widget="percentage"/>
                 <field name="fill_rate_count"/>
                 <field name="fill_rate_complete_count"/>
@@ -119,8 +131,8 @@
         <field name="name">Proveedores por Fill Rate</field>
         <field name="res_model">res.partner</field>
         <field name="view_mode">tree,form</field>
-        <field name="domain">[('is_company', '=', True)]</field>
-        <field name="context">{'search_default_supplier': 1}</field>
+        <field name="domain">[]</field>
+        <field name="context">{'search_default_supplier': 1, 'search_default_is_company': 1}</field>
         <field name="view_id" ref="view_partner_supplier_fill_rate_tree"/>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">

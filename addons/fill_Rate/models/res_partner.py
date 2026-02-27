@@ -14,8 +14,8 @@ class ResPartner(models.Model):
         string="Fill Rate (%)",
         compute="_compute_fill_rate",
         store=True,
-        digits=(5, 2),
-        help="Porcentaje promedio de cumplimiento del proveedor basado en todas sus órdenes",
+        digits=(5, 4),
+        help="Porcentaje promedio de cumplimiento del proveedor basado en todas sus órdenes. Valor decimal de 0.0 a 1.0",
     )
 
     supplier_class = fields.Selection(
@@ -97,16 +97,18 @@ class ResPartner(models.Model):
         - Nuevo: Sin datos suficientes
         """
         for partner in self:
-            # Verificar si tiene suficientes datos (al menos 1 orden completada)
-            completed_orders = partner.fill_rate_history_ids.filtered(
-                lambda l: l.state == "done" and l.qty_ordered > 0
+            # Verificar si tiene suficientes datos (al menos 1 orden confirmada con recepción)
+            valid_orders = partner.fill_rate_history_ids.filtered(
+                lambda l: l.state in ["purchase", "done"]
+                and l.qty_ordered > 0
+                and l.qty_received > 0
             )
 
-            if not completed_orders:
+            if not valid_orders:
                 partner.supplier_class = "new"
-            elif partner.fill_rate >= 95.0:
+            elif partner.fill_rate >= 0.95:
                 partner.supplier_class = "A"
-            elif partner.fill_rate >= 85.0:
+            elif partner.fill_rate >= 0.85:
                 partner.supplier_class = "B"
             else:
                 partner.supplier_class = "C"
