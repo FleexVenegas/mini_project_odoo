@@ -72,8 +72,12 @@ class PurchaseOrder(models.Model):
                     }
                 )
 
-        # Marcar como creado
-        self.fill_rate_created = True
+        # Marcar como creado usando SQL directo para evitar disparar validaciones de otros módulos
+        self.env.cr.execute(
+            "UPDATE purchase_order SET fill_rate_created = TRUE WHERE id = %s",
+            (self.id,),
+        )
+        # Refrescar el registro para ver el nuevo valor (sin commit para no afectar la transacción principal)
 
     def action_view_fill_rate(self):
         """Abre la vista de las líneas de fill rate de esta orden."""
@@ -86,6 +90,82 @@ class PurchaseOrder(models.Model):
             "domain": [("purchase_order_id", "=", self.id)],
             "context": {"default_purchase_order_id": self.id},
         }
+
+    def create_missing_fill_rate_lines(self):
+        """
+        Crea registros de fill.rate.line para órdenes confirmadas que no los tienen.
+        Útil para órdenes existentes antes de instalar el módulo.
+        Usa SQL directo para evitar disparar validaciones de otros módulos.
+        """
+        from odoo.exceptions import ValidationError
+        import logging
+
+        _logger = logging.getLogger(__name__)
+
+        for order in self:
+            # Solo procesar si la orden está confirmada y no tiene registros
+            if order.state in ["purchase", "done"] and not order.fill_rate_created:
+                try:
+                    # Intentar crear los registros
+                    order._create_fill_rate_lines()
+
+                    # Actualizar las cantidades recibidas basándose en recepciones ya validadas
+                    for fill_line in order.fill_rate_line_ids:
+                        fill_line.update_received_quantity()
+
+                except ValidationError as e:
+                    # Si hay error de validación, intentar con SQL directo
+                    _logger.warning(
+                        f"ValidationError al procesar orden {order.name}: {e}. "
+                        "Intentando método alternativo..."
+                    )
+
+                    # Crear registros directamente sin pasar por write()
+                    FillRateLine = self.env["fill.rate.line"]
+
+                    for line in order.order_line:
+                        if line.product_id and line.product_qty > 0:
+                            origin_type = "manual"
+                            if order.origin and (
+                                "bot" in order.origin.lower()
+                                or "auto" in order.origin.lower()
+                            ):
+                                origin_type = "bot"
+
+                            fill_line = FillRateLine.create(
+                                {
+                                    "partner_id": order.partner_id.id,
+                                    "purchase_order_id": order.id,
+                                    "purchase_order_line_id": line.id,
+                                    "product_id": line.product_id.id,
+                                    "order_date": (
+                                        order.date_order.date()
+                                        if order.date_order
+                                        else fields.Date.today()
+                                    ),
+                                    "origin_type": origin_type,
+                                    "qty_ordered": line.product_qty,
+                                    "qty_received": 0.0,
+                                    "uom_id": line.product_uom.id,
+                                }
+                            )
+
+                            # Actualizar cantidades recibidas
+                            fill_line.update_received_quantity()
+
+                    # Marcar como creado usando SQL directo
+                    self.env.cr.execute(
+                        "UPDATE purchase_order SET fill_rate_created = TRUE WHERE id = %s",
+                        (order.id,),
+                    )
+
+                except Exception as e:
+                    _logger.error(
+                        f"Error inesperado al procesar orden {order.name}: {e}"
+                    )
+                    continue
+
+        return True
 
 
 class PurchaseOrderLine(models.Model):

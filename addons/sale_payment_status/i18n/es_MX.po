@@ -1,0 +1,53 @@
+# Translation of Sale Payment Status to Spanish (Mexico)
+# Copyright (C) 2026 Diego Venegas
+# License LGPL-3 or later (http://www.gnu.org/licenses/lgpl).
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 17.0\n"
+"Report-Msgid-Bugs-To: \n"
+"Language: es_MX\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#. module: sale_payment_status
+#: model:ir.model.fields,field_description:sale_payment_status.field_sale_order__payment_status_manual
+msgid "Payment Status"
+msgstr "Estado de Pago"
+
+#. module: sale_payment_status
+#: model:ir.model.fields,help:sale_payment_status.field_sale_order__payment_status_manual
+msgid "Payment status of the order. Can be edited manually when there are no invoices. Automatically updated when invoices are created and paid."
+msgstr "Estado de pago de la orden. Se puede editar manualmente cuando no hay facturas. Se actualiza automáticamente cuando se crean y pagan facturas."
+
+#. module: sale_payment_status
+#: model:ir.model.fields,field_description:sale_payment_status.field_sale_order__has_posted_invoices
+msgid "Has Posted Invoices"
+msgstr "Tiene Facturas Publicadas"
+
+#. module: sale_payment_status
+#: model:ir.model.fields.selection,name:sale_payment_status.selection__sale_order__payment_status_manual__paid
+msgid "Paid"
+msgstr "Pagado"
+
+#. module: sale_payment_status
+#: model:ir.model.fields.selection,name:sale_payment_status.selection__sale_order__payment_status_manual__pending
+msgid "Pending"
+msgstr "Pendiente"
+
+#. module: sale_payment_status
+#: model:ir.model.fields.selection,name:sale_payment_status.selection__sale_order__payment_status_manual__not_paid
+msgid "Not Paid"
+msgstr "No Pagado"
+
+#. module: sale_payment_status
+#: model:res.groups,name:sale_payment_status.group_payment_status_manager
+msgid "Payment Status Manager"
+msgstr "Gestor de Estado de Pago"
+
+#. module: sale_payment_status
+#: model:res.groups,comment:sale_payment_status.group_payment_status_manager
+msgid "Users in this group can view and edit the Payment Status field on sales orders."
+msgstr "Los usuarios en este grupo pueden ver y editar el campo Estado de Pago en las órdenes de venta."

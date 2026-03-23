@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+  <!-- Vista del Wizard -->
+  <record id="view_pricelist_ponderada_apply_pricelist_wizard_form" model="ir.ui.view">
+    <field name="name">pricelist.ponderada.apply.pricelist.wizard.form</field>
+    <field name="model">pricelist.ponderada.apply.pricelist.wizard</field>
+    <field name="arch" type="xml">
+      <form string="Aplicar precios a lista de precios" version="7.0">
+        <group>
+          <field name="pricelist_id"/>
+        </group>
+        <footer>
+          <button name="apply_prices_to_pricelist" type="object" string="Aplicar" class="btn-primary"/>
+          <button string="Cancelar" class="btn-secondary" special="cancel"/>
+        </footer>
+      </form>
+    </field>
+  </record>
+
+  <!-- Acción para lanzar el Wizard -->
+  <record id="action_pricelist_ponderada_apply_pricelist_wizard" model="ir.actions.act_window">
+    <field name="name">Aplicar precios a lista de precios</field>
+    <field name="res_model">pricelist.ponderada.apply.pricelist.wizard</field>
+    <field name="view_mode">form</field>
+    <field name="view_id" ref="view_pricelist_ponderada_apply_pricelist_wizard_form"/>
+    <field name="target">new</field>
+    <field name="context">{}</field>
+  </record>
+
+  <!-- Acción del servidor (botón de engrane visible en la vista tree/form del modelo) -->
+  <record id="action_pricelist_ponderada_apply_pricelist_server" model="ir.actions.server">
+    <field name="name">Aplicar precios a lista de precios</field>
+    <field name="model_id" ref="model_pricelist_ponderada"/>
+    <field name="binding_model_id" ref="model_pricelist_ponderada"/>
+    <field name="binding_type">action</field>
+    <field name="state">code</field>
+    <field name="sequence">16</field>
+<field name="code">
+action = {
+    'type': 'ir.actions.act_window',
+    'res_model': 'pricelist.ponderada.apply.pricelist.wizard',
+    'view_mode': 'form',
+    'view_id': env.ref('modulo_costo_ponderado_stock.view_pricelist_ponderada_apply_pricelist_wizard_form').id,
+    'target': 'new',
+    'context': {'active_ids': records.ids},
+}
+</field>
+  </record>
+
+</odoo>

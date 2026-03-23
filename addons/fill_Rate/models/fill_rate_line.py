@@ -128,16 +128,50 @@ class FillRateLine(models.Model):
 
             # Usar directamente qty_received de la línea de compra
             # Odoo calcula automáticamente este campo basándose en las recepciones validadas
-            # Esto es más confiable que calcular manualmente desde stock.move
             purchase_line = record.purchase_order_line_id
             total_received = purchase_line.qty_received
 
-            # Actualizar registro
-            record.write(
-                {
-                    "qty_received": total_received,
-                    "date_received": (
-                        fields.Datetime.now() if total_received > 0 else False
-                    ),
-                }
-            )
+            # Actualizar usando write para que se disparen los campos computados
+            if total_received > 0:
+                record.write(
+                    {
+                        "qty_received": total_received,
+                        "date_received": fields.Datetime.now(),
+                    }
+                )
+            else:
+                record.write({"qty_received": total_received, "date_received": False})
+
+        # Los campos computados se recalculan automáticamente con write()
+        return True
+
+    @api.model
+    def read_group(
+        self, domain, fields, groupby, offset=0, limit=None, orderby=False, lazy=True
+    ):
+        """
+        Sobrescribe read_group para calcular correctamente el fill_rate cuando se agrupa.
+        En lugar de promediar o sumar los fill_rates, calcula: suma(qty_received) / suma(qty_ordered)
+        """
+        res = super(FillRateLine, self).read_group(
+            domain,
+            fields,
+            groupby,
+            offset=offset,
+            limit=limit,
+            orderby=orderby,
+            lazy=lazy,
+        )
+
+        # Si el fill_rate está en los campos solicitados y hay agrupación
+        if "fill_rate" in fields and groupby:
+            for line in res:
+                if line.get("qty_ordered") and line.get("qty_ordered") > 0:
+                    # Calcular fill_rate correcto: Total Recibido / Total Ordenado
+                    line["fill_rate"] = (
+                        line.get("qty_received", 0) / line["qty_ordered"]
+                    )
+                else:
+                    line["fill_rate"] = 0.0
+
+        return res

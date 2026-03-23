@@ -1,0 +1,9 @@
+<odoo>
+    <data>
+        <record id="group_payment_status_manager" model="res.groups">
+            <field name="name">Payment Status Manager</field>
+            <field name="category_id" ref="base.module_category_sales_sales"/>
+            <field name="comment">Users in this group can view and edit the Payment Status field on sales orders.</field>
+        </record>
+    </data>
+</odoo>

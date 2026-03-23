@@ -1,7 +1,7 @@
 {
     "name": "Sales Time Report",
     "version": "1.0",
-    "author": "Ing. Diego Venegas",
+    "author": "Diego Venegas",
     "category": "Sales",
     "license": "LGPL-3",
     "summary": "Reporte de tiempos del proceso de ventas: Cotización → Pedido → Pick → Pack → Out",

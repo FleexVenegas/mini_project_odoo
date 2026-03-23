@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Vista heredada para agregar configuración Fill Rate -->
+        <record id="res_config_settings_view_form_fill_rate" model="ir.ui.view">
+            <field name="name">res.config.settings.view.form.inherit.fill.rate</field>
+            <field name="model">res.config.settings</field>
+            <field name="priority" eval="200"/>
+            <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//form" position="inside">
+                    <app string="Fill Rate" name="fill_Rate" groups="base.group_system">
+                        <block title="Configuración de Clasificación de Proveedores">
+                            <setting id="fill_rate_threshold_setting" help="Configure los umbrales para clasificar proveedores según su Fill Rate">
+                                <div class="content-group">
+                                    <div class="row mt16">
+                                        <label string="Umbral A - Excelente (≥)" for="fill_rate_threshold_a" class="col-lg-4 o_light_label"/>
+                                        <field name="fill_rate_threshold_a" class="oe_inline"/>
+ %
+                                        <span class="text-muted ms-2">Proveedores con fill rate mayor o igual a este valor</span>
+                                    </div>
+                                    <div class="row mt16">
+                                        <label string="Umbral B - Bueno (≥)" for="fill_rate_threshold_b" class="col-lg-4 o_light_label"/>
+                                        <field name="fill_rate_threshold_b" class="oe_inline"/>
+ %
+                                        <span class="text-muted ms-2">Proveedores entre este valor y el umbral A</span>
+                                    </div>
+                                    <div class="alert alert-info mt16" role="alert">
+                                        <strong>Clasificación resultante:</strong>
+                                        <ul class="mb-0 mt-2">
+                                            <li>
+                                                <span class="badge badge-success">A - Excelente</span>: Fill Rate ≥ <field name="fill_rate_threshold_a" readonly="1" nolabel="1" class="oe_inline"/>
+%</li>
+                                            <li>
+                                                <span class="badge badge-warning">B - Bueno</span>:                                                <field name="fill_rate_threshold_b" readonly="1" nolabel="1" class="oe_inline"/>
+% ≤ Fill Rate &lt; <field name="fill_rate_threshold_a" readonly="1" nolabel="1" class="oe_inline"/>
+%</li>
+                                            <li>
+                                                <span class="badge badge-danger">C - Deficiente</span>: Fill Rate &lt; <field name="fill_rate_threshold_b" readonly="1" nolabel="1" class="oe_inline"/>
+%</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </setting>
+                        </block>
+                    </app>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- Acción para abrir la configuración de Fill Rate -->
+        <record id="action_fill_rate_configuration" model="ir.actions.act_window">
+            <field name="name">Configuración Fill Rate</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">res.config.settings</field>
+            <field name="view_mode">form</field>
+            <field name="target">inline</field>
+            <field name="context">{'module': 'fill_Rate'}</field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Vista del Wizard -->
+    <record id="view_reload_report_wizard_form" model="ir.ui.view">
+        <field name="name">reload.report.wizard.form</field>
+        <field name="model">reload.report.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Recargar Reporte Consolidado">
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <i class="fa fa-refresh"/>
+ Recargar Reporte Consolidado
+                        </h1>
+                    </div>
+
+                    <group>
+                        <group>
+                            <field name="total_pricelists" readonly="1"/>
+                            <field name="estimated_records" readonly="1"/>
+                            <field name="can_generate" invisible="1"/>
+                        </group>
+                    </group>
+
+                    <group>
+                        <field name="process_all"/>
+                    </group>
+
+                    <group string="Modo de Actualización">
+                        <field name="update_mode" widget="radio"/>
+                    </group>
+
+                    <group string="Seleccionar Listas de Precios" invisible="process_all">
+                        <field name="pricelist_ids" widget="many2many_tags" placeholder="Selecciona las listas a procesar..." options="{'no_create': True, 'no_open': True}"/>
+                    </group>
+
+                    <div class="alert alert-info" role="alert" style="margin: 10px 0;">
+                        <p>
+                            <strong>Nota:</strong>
+                        </p>
+                        <ul>
+                            <li>Si marcas "Procesar todas las listas", se generarán registros para <strong>todas</strong> las listas de precios activas.</li>
+                            <li>Si seleccionas listas específicas, solo se procesarán las seleccionadas.</li>
+                            <li>Los registros existentes de otras listas NO serán eliminados, solo se actualizarán las seleccionadas.</li>
+                            <li>
+                                <strong>Modo de Actualización:</strong>
+                                <ul>
+                                    <li>
+                                        <em>Todos:</em> Actualiza todos los precios (puede tomar más tiempo pero sincroniza todo).</li>
+                                    <li>
+                                        <em>Solo ≤ 0:</em> Solo actualiza productos sin precio o con precio negativo (más rápido, útil para nuevos productos).</li>
+
+                                    <li>
+                                        <em>Importante:</em> Esto no agrega nuevos productos a las listas de precios, solo actualiza los existentes.</li>
+
+
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="alert alert-warning" role="alert" style="margin: 10px 0;" invisible="can_generate">
+                        <p style="margin: 0;">
+                            <i class="fa fa-exclamation-triangle"/>
+                            <strong>Acción requerida:</strong> Debes marcar "Procesar todas las listas" o seleccionar al menos una lista de precios.
+                        </p>
+                    </div>
+
+                </sheet>
+                <footer>
+                    <button name="action_reload_report" string="Generar Reporte" type="object" class="btn-primary" invisible="not can_generate"/>
+                    <button string="Cancelar" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- Acción para abrir el wizard -->
+    <record id="action_reload_report_wizard" model="ir.actions.act_window">
+        <field name="name">Recargar Reporte Consolidado</field>
+        <field name="res_model">reload.report.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="view_id" ref="view_reload_report_wizard_form"/>
+    </record>
+
+</odoo>

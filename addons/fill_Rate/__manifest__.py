@@ -1,6 +1,6 @@
 {
     "name": "Fill Rate - Supplier Performance",
-    "version": "1.0",
+    "version": "1.1",
     "author": "Diego Venegas",
     "category": "Inventory/Purchase",
     "license": "LGPL-3",
@@ -10,6 +10,7 @@
         "security/ir.model.access.csv",
         "views/fill_rate_line_views.xml",
         "views/res_partner_views.xml",
+        "views/res_config_settings_views.xml",
         "views/fill_rate_menus.xml",
         "data/ir_cron_data.xml",
         "data/server_actions.xml",

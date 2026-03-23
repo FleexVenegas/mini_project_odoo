@@ -1,0 +1,29 @@
+<odoo>
+    <!-- Vista del wizard -->
+    <record id="view_stock_weighted_manual_wizard_form" model="ir.ui.view">
+        <field name="name">stock.weighted.manual.wizard.form</field>
+        <field name="model">stock.weighted.manual.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Crear Entrada Manual Costo Ponderado">
+                <group>
+                    <field name="product_id"/>
+                    <field name="cantidad_nueva"/>
+                    <field name="precio_nuevo"/>
+                    <field name="es_dollar"/>
+                </group>
+                <footer>
+                    <button name="action_aplicar" string="Aplicar" type="object" class="btn-primary"/>
+                    <button string="Cancelar" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- Acción para abrir wizard -->
+    <record id="action_stock_weighted_manual_wizard" model="ir.actions.act_window">
+        <field name="name">Entrada Manual Costo Ponderado</field>
+        <field name="res_model">stock.weighted.manual.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+</odoo>

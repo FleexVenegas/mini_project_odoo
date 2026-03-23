@@ -20,15 +20,21 @@ class ResPartner(models.Model):
 
     supplier_class = fields.Selection(
         [
-            ("A", "A - Excelente (≥ 95%)"),
-            ("B", "B - Bueno (85% - 94%)"),
-            ("C", "C - Deficiente (< 85%)"),
+            ("A", "A - Excelente"),
+            ("B", "B - Bueno"),
+            ("C", "C - Deficiente"),
             ("new", "Nuevo (sin datos)"),
         ],
         string="Clasificación",
         compute="_compute_supplier_class",
         store=True,
-        help="Clasificación automática del proveedor según su Fill Rate histórico",
+        help="Clasificación automática del proveedor según su Fill Rate histórico. Los umbrales son configurables desde Ajustes > Fill Rate",
+    )
+
+    supplier_class_display = fields.Char(
+        string="Clasificación Detallada",
+        compute="_compute_supplier_class_display",
+        help="Muestra la clasificación con los umbrales actuales configurados",
     )
 
     # Relación con historial
@@ -90,12 +96,21 @@ class ResPartner(models.Model):
     def _compute_supplier_class(self):
         """
         Clasifica automáticamente al proveedor según su Fill Rate.
-        Umbrales configurables:
-        - A: >= 95%
-        - B: 85% - 94%
-        - C: < 85%
+        Usa umbrales configurables desde Ajustes > Fill Rate.
+        - A: >= Umbral A (defecto 95%)
+        - B: >= Umbral B (defecto 85%)
+        - C: < Umbral B
         - Nuevo: Sin datos suficientes
         """
+        # Obtener umbrales configurables
+        ICP = self.env["ir.config_parameter"].sudo()
+        threshold_a = (
+            float(ICP.get_param("fill_rate.threshold_a", default=95.0)) / 100.0
+        )
+        threshold_b = (
+            float(ICP.get_param("fill_rate.threshold_b", default=85.0)) / 100.0
+        )
+
         for partner in self:
             # Verificar si tiene suficientes datos (al menos 1 orden confirmada con recepción)
             valid_orders = partner.fill_rate_history_ids.filtered(
@@ -106,12 +121,34 @@ class ResPartner(models.Model):
 
             if not valid_orders:
                 partner.supplier_class = "new"
-            elif partner.fill_rate >= 0.95:
+            elif partner.fill_rate >= threshold_a:
                 partner.supplier_class = "A"
-            elif partner.fill_rate >= 0.85:
+            elif partner.fill_rate >= threshold_b:
                 partner.supplier_class = "B"
             else:
                 partner.supplier_class = "C"
+
+    @api.depends("supplier_class")
+    def _compute_supplier_class_display(self):
+        """
+        Genera el texto de clasificación con los umbrales configurados actuales.
+        """
+        # Obtener umbrales configurables
+        ICP = self.env["ir.config_parameter"].sudo()
+        threshold_a = float(ICP.get_param("fill_rate.threshold_a", default=95.0))
+        threshold_b = float(ICP.get_param("fill_rate.threshold_b", default=85.0))
+
+        class_labels = {
+            "A": f"A - Excelente (≥ {threshold_a:.0f}%)",
+            "B": f"B - Bueno ({threshold_b:.0f}% - {threshold_a:.0f}%)",
+            "C": f"C - Deficiente (< {threshold_b:.0f}%)",
+            "new": "Nuevo (sin datos)",
+        }
+
+        for partner in self:
+            partner.supplier_class_display = class_labels.get(
+                partner.supplier_class, "Sin clasificar"
+            )
 
     @api.depends("fill_rate_history_ids.fill_rate_status")
     def _compute_fill_rate_stats(self):
@@ -150,8 +187,33 @@ class ResPartner(models.Model):
             # Actualizar cantidades recibidas de todas las líneas
             partner.fill_rate_history_ids.update_received_quantity()
 
-            # Forzar recálculo
-            partner._compute_fill_rate()
-            partner._compute_supplier_class()
+            # Invalidar caché para forzar recálculo usando el método correcto de Odoo 17
+            partner.fill_rate_history_ids.invalidate_recordset(
+                ["fill_rate", "fill_rate_status"]
+            )
+            partner.invalidate_recordset(
+                [
+                    "fill_rate",
+                    "supplier_class",
+                    "fill_rate_count",
+                    "fill_rate_complete_count",
+                    "fill_rate_partial_count",
+                ]
+            )
 
-        return True
+            # Los campos computados se recalcularán automáticamente al acceder a ellos
+            # Forzar el cálculo accediendo a los campos
+            _ = partner.fill_rate
+            _ = partner.supplier_class
+            _ = partner.fill_rate_count
+
+        return {
+            "type": "ir.actions.client",
+            "tag": "display_notification",
+            "params": {
+                "title": "Fill Rate Recalculado",
+                "message": "El Fill Rate se ha recalculado correctamente.",
+                "type": "success",
+                "sticky": False,
+            },
+        }

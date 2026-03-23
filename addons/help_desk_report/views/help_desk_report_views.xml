@@ -1,10 +1,16 @@
 <odoo>
-    <menuitem 
-        id="help_desk_report_menu_modelo" 
-        name="Ticket time analysis"    
-        parent="helpdesk.helpdesk_ticket_report_menu_main" 
-        action="action_help_desk_report_wizard" 
-        sequence="20" 
-    />
+    <!-- Inherited form view to filter customer field -->
+    <record id="helpdesk_ticket_form_inherit" model="ir.ui.view">
+        <field name="name">helpdesk.ticket.form.inherit</field>
+        <field name="model">helpdesk.ticket</field>
+        <field name="inherit_id" ref="helpdesk.helpdesk_ticket_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='partner_id']" position="attributes">
+                <attribute name="domain">[('active', '=', True), ('user_ids', '!=', False)]</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <menuitem id="help_desk_report_menu_modelo" name="Ticket time analysis" parent="helpdesk.helpdesk_ticket_report_menu_main" action="action_help_desk_report_wizard" sequence="20" />
 
 </odoo>

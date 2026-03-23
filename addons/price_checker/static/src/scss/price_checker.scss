@@ -3,11 +3,15 @@
  */
 
 
-/* Ocultar header y footer de Odoo */
-header,
-.o_header,
-footer,
-.o_footer {
+/* Ocultar header y footer SOLO en páginas del Price Checker */
+body:has(.o_pricechecker) header,
+body:has(.o_pricechecker) .o_header,
+body:has(.o_pricechecker) footer,
+body:has(.o_pricechecker) .o_footer,
+body:has(.o_branch_selector) header,
+body:has(.o_branch_selector) .o_header,
+body:has(.o_branch_selector) footer,
+body:has(.o_branch_selector) .o_footer {
     display: none !important;
 }
 

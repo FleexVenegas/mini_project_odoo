@@ -48,13 +48,13 @@ class SalesTimeWizard(models.TransientModel):
             _logger.warning(f"Error al formatear timedelta {td}: {e}")
             return ""
 
-        # Si es 0 segundos o negativo, mostrar < 1m
         if total_seconds <= 0:
-            return "&lt; 1m"
+            return "0s"
 
         days = total_seconds // 86400
         hours = (total_seconds % 86400) // 3600
         minutes = (total_seconds % 3600) // 60
+        seconds = total_seconds % 60
 
         parts = []
         if days > 0:
@@ -63,46 +63,41 @@ class SalesTimeWizard(models.TransientModel):
             parts.append(f"{hours}h")
         if minutes > 0:
             parts.append(f"{minutes}m")
+        if seconds > 0:
+            parts.append(f"{seconds}s")
 
-        return " ".join(parts) if parts else "&lt; 1m"
+        return " ".join(parts) if parts else "0s"
 
     def _format_timedelta_precise(self, td):
-        """Formatea un timedelta con decimales para promedios más exactos"""
+        """Formatea un timedelta con segundos para promedios exactos"""
         if td is None:
             return "N/A"
 
         try:
-            total_seconds = td.total_seconds()
+            total_seconds = int(td.total_seconds())
         except (AttributeError, TypeError) as e:
             _logger.warning(f"Error al formatear timedelta {td}: {e}")
             return "N/A"
 
-        # Si es 0 segundos o negativo, mostrar < 1m
         if total_seconds <= 0:
-            return "&lt; 1m"
+            return "0s"
 
-        days = int(total_seconds // 86400)
-        remaining_seconds = total_seconds % 86400
-        hours = int(remaining_seconds // 3600)
-        remaining_seconds = remaining_seconds % 3600
-        minutes = remaining_seconds / 60  # Mantener decimales
+        days = total_seconds // 86400
+        hours = (total_seconds % 86400) // 3600
+        minutes = (total_seconds % 3600) // 60
+        seconds = total_seconds % 60
 
         parts = []
         if days > 0:
             parts.append(f"{days}d")
         if hours > 0:
             parts.append(f"{hours}h")
-        if minutes >= 1:
-            # Mostrar con 1 decimal si tiene decimales significativos
-            if minutes % 1 >= 0.1:
-                parts.append(f"{minutes:.1f}m")
-            else:
-                parts.append(f"{int(minutes)}m")
-        elif total_seconds < 60:
-            # Si es menos de 1 minuto, mostrar con decimales
-            parts.append(f"{minutes:.1f}m")
+        if minutes > 0:
+            parts.append(f"{minutes}m")
+        if seconds > 0:
+            parts.append(f"{seconds}s")
 
-        return " ".join(parts) if parts else "&lt; 1m"
+        return " ".join(parts) if parts else "0s"
 
     def _calculate_times(self, order):
         """Calcula los tiempos para cada etapa de la orden"""
@@ -111,6 +106,7 @@ class SalesTimeWizard(models.TransientModel):
             "order_to_pick": None,
             "pick_to_pack": None,
             "pack_to_out": None,
+            "pick_to_out": None,
             "total_time": None,
         }
 
@@ -276,6 +272,12 @@ class SalesTimeWizard(models.TransientModel):
         if dates["quote_date"] and final_date:
             times["total_time"] = final_date - dates["quote_date"]
 
+        # PICK → OUT (desde que INICIA pick = confirmación pedido, hasta que TERMINA out)
+        if dates["order_date"]:
+            final_out = dates["out_date_end"] or dates["pack_date_end"]
+            if final_out:
+                times["pick_to_out"] = final_out - dates["order_date"]
+
         return times, dates
 
     def action_generate_report(self):
@@ -286,9 +288,11 @@ class SalesTimeWizard(models.TransientModel):
         total_quote_to_order = timedelta()
         total_order_to_pick = timedelta()
         total_quote_to_out = timedelta()
+        total_pick_to_out = timedelta()
         count_quote_to_order = 0
         count_order_to_pick = 0
         count_quote_to_out = 0
+        count_pick_to_out = 0
 
         for order in self.order_ids:
             times, dates = self._calculate_times(order)
@@ -305,6 +309,10 @@ class SalesTimeWizard(models.TransientModel):
                 total_quote_to_out += times["total_time"]
                 count_quote_to_out += 1
 
+            if times["pick_to_out"]:
+                total_pick_to_out += times["pick_to_out"]
+                count_pick_to_out += 1
+
         # Calcular promedios
         avg_quote_to_order = (
             total_quote_to_order / count_quote_to_order
@@ -318,6 +326,9 @@ class SalesTimeWizard(models.TransientModel):
         )
         avg_quote_to_out = (
             total_quote_to_out / count_quote_to_out if count_quote_to_out > 0 else None
+        )
+        avg_pick_to_out = (
+            total_pick_to_out / count_pick_to_out if count_pick_to_out > 0 else None
         )
 
         report_lines = []
@@ -338,19 +349,24 @@ class SalesTimeWizard(models.TransientModel):
             f"""
                 <div style="background: #ffffff; border: 1px solid #e0e0e0; border-radius: 8px; padding: 30px; margin-bottom: 40px;">
                     <h3 style="color: #2c3e50; font-size: 16px; font-weight: 600; margin: 0 0 25px 0; text-transform: uppercase; letter-spacing: 1px;">Tiempos Promedio</h3>
-                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;">
+                    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px;">
                         <div style="border-left: 3px solid #3498db; padding: 20px; background: #f8f9fa;">
-                            <div style="color: #7f8c8d; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px;">Cotización → Pedido</div>
+                            <div style="color: #7f8c8d; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px;">Venta</div>
                             <div style="color: #2c3e50; font-size: 32px; font-weight: 700; line-height: 1;">{self._format_timedelta_precise(avg_quote_to_order)}</div>
                             <div style="color: #95a5a6; font-size: 12px; margin-top: 8px;">{count_quote_to_order} órdenes</div>
                         </div>
                         <div style="border-left: 3px solid #e74c3c; padding: 20px; background: #f8f9fa;">
-                            <div style="color: #7f8c8d; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px;">Pedido → Pick</div>
+                            <div style="color: #7f8c8d; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px;">PICK</div>
                             <div style="color: #2c3e50; font-size: 32px; font-weight: 700; line-height: 1;">{self._format_timedelta_precise(avg_order_to_pick)}</div>
                             <div style="color: #95a5a6; font-size: 12px; margin-top: 8px;">{count_order_to_pick} órdenes</div>
                         </div>
+                        <div style="border-left: 3px solid #f39c12; padding: 20px; background: #f8f9fa;">
+                            <div style="color: #7f8c8d; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px;">PACK</div>
+                            <div style="color: #2c3e50; font-size: 32px; font-weight: 700; line-height: 1;">{self._format_timedelta_precise(avg_pick_to_out)}</div>
+                            <div style="color: #95a5a6; font-size: 12px; margin-top: 8px;">{count_pick_to_out} órdenes</div>
+                        </div>
                         <div style="border-left: 3px solid #27ae60; padding: 20px; background: #f8f9fa;">
-                            <div style="color: #7f8c8d; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px;">Cotización → OUT</div>
+                            <div style="color: #7f8c8d; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px;">OUT</div>
                             <div style="color: #2c3e50; font-size: 32px; font-weight: 700; line-height: 1;">{self._format_timedelta_precise(avg_quote_to_out)}</div>
                             <div style="color: #95a5a6; font-size: 12px; margin-top: 8px;">{count_quote_to_out} órdenes</div>
                         </div>
@@ -400,25 +416,25 @@ class SalesTimeWizard(models.TransientModel):
             # Etapas con diseño limpio
             stages = [
                 (
-                    "Cotización → Pedido",
+                    "Venta",
                     dates["quote_date"],
                     dates["quote_date_end"],
                     times["quote_to_order"],
                 ),
                 (
-                    "Pedido → Pick",
+                    "PICK",
                     dates["order_date"],
                     dates["pick_date"],
                     times["order_to_pick"],
                 ),
                 (
-                    "Pick → Pack",
+                    "PACK",
                     dates["pack_date"],
                     dates["pack_date_end"],
                     times["pick_to_pack"],
                 ),
                 (
-                    "Pack → Out",
+                    "OUT",
                     dates["out_date"],
                     dates["out_date_end"],
                     times["pack_to_out"],
@@ -479,9 +495,11 @@ class SalesTimeWizard(models.TransientModel):
         total_quote_to_order = timedelta()
         total_order_to_pick = timedelta()
         total_quote_to_out = timedelta()
+        total_pick_to_out = timedelta()
         count_quote_to_order = 0
         count_order_to_pick = 0
         count_quote_to_out = 0
+        count_pick_to_out = 0
 
         for order in self.order_ids:
             times, dates = self._calculate_times(order)
@@ -498,6 +516,10 @@ class SalesTimeWizard(models.TransientModel):
                 total_quote_to_out += times["total_time"]
                 count_quote_to_out += 1
 
+            if times["pick_to_out"]:
+                total_pick_to_out += times["pick_to_out"]
+                count_pick_to_out += 1
+
         # Calcular promedios
         avg_quote_to_order = (
             total_quote_to_order / count_quote_to_order
@@ -511,6 +533,9 @@ class SalesTimeWizard(models.TransientModel):
         )
         avg_quote_to_out = (
             total_quote_to_out / count_quote_to_out if count_quote_to_out > 0 else None
+        )
+        avg_pick_to_out = (
+            total_pick_to_out / count_pick_to_out if count_pick_to_out > 0 else None
         )
 
         # Crear archivo Excel en memoria
@@ -589,7 +614,7 @@ class SalesTimeWizard(models.TransientModel):
         worksheet.merge_range(row, 0, row, 3, "📊 TIEMPOS PROMEDIO", avg_header_format)
         row += 1
 
-        worksheet.write(row, 0, "Cotización → Pedido", avg_label_format)
+        worksheet.write(row, 0, "Venta", avg_label_format)
         worksheet.write(
             row, 1, self._format_timedelta_precise(avg_quote_to_order), avg_value_format
         )
@@ -597,7 +622,7 @@ class SalesTimeWizard(models.TransientModel):
         worksheet.write(row, 3, "", data_format)
         row += 1
 
-        worksheet.write(row, 0, "Pedido → Pick", avg_label_format)
+        worksheet.write(row, 0, "PICK", avg_label_format)
         worksheet.write(
             row, 1, self._format_timedelta_precise(avg_order_to_pick), avg_value_format
         )
@@ -605,7 +630,15 @@ class SalesTimeWizard(models.TransientModel):
         worksheet.write(row, 3, "", data_format)
         row += 1
 
-        worksheet.write(row, 0, "Cotización → OUT", avg_label_format)
+        worksheet.write(row, 0, "PACK", avg_label_format)
+        worksheet.write(
+            row, 1, self._format_timedelta_precise(avg_pick_to_out), avg_value_format
+        )
+        worksheet.write(row, 2, f"{count_pick_to_out} órdenes", data_format)
+        worksheet.write(row, 3, "", data_format)
+        row += 1
+
+        worksheet.write(row, 0, "OUT", avg_label_format)
         worksheet.write(
             row, 1, self._format_timedelta_precise(avg_quote_to_out), avg_value_format
         )
@@ -637,25 +670,25 @@ class SalesTimeWizard(models.TransientModel):
             # Datos de las etapas
             stages = [
                 (
-                    "Cotización → Pedido",
+                    "Venta",
                     dates["quote_date"],
                     dates["quote_date_end"],
                     times["quote_to_order"],
                 ),
                 (
-                    "Pedido → Pick",
+                    "PICK",
                     dates["order_date"],
                     dates["pick_date"],
                     times["order_to_pick"],
                 ),
                 (
-                    "Pick → Pack",
+                    "PACK",
                     dates["pack_date"],
                     dates["pack_date_end"],
                     times["pick_to_pack"],
                 ),
                 (
-                    "Pack → Out",
+                    "OUT",
                     dates["out_date"],
                     dates["out_date_end"],
                     times["pack_to_out"],

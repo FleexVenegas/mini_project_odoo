@@ -19,7 +19,7 @@
         3. Receive notification with operation result
     """,
     "author": "Ing. Diego Venegas",
-    # "website": "https://www.your-company.com",
+    "website": "https://estudioodoo.com.mx/odoo/",
     "license": "LGPL-3",
     "depends": [
         "sale_management",
@@ -27,7 +27,6 @@
     ],
     "data": [
         "security/groups.xml",
-        # View to add button in quotations list
         "security/ir.model.access.csv",
         "views/confirm_quotes_views.xml",
     ],

@@ -10,9 +10,7 @@
     <!-- Submenú: Proveedores por Fill Rate -->
     <menuitem id="menu_partner_fill_rate" name="Clasificación de Proveedores" parent="menu_fill_rate_root" action="action_partner_supplier_fill_rate" sequence="20"/>
 
-    <!-- Submenú: Reportes (preparado para futura expansión) -->
-    <!--
-    <menuitem id="menu_fill_rate_reports" name="Reportes" parent="menu_fill_rate_root" sequence="30"/>
-    -->
+    <!-- Submenú: Configuración -->
+    <menuitem id="menu_fill_rate_config" name="Configuración" parent="menu_fill_rate_root" action="action_fill_rate_configuration" sequence="30" groups="purchase.group_purchase_manager"/>
 
 </odoo>

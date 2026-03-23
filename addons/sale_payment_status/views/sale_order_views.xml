@@ -1,0 +1,40 @@
+<odoo>
+
+    <!-- LIST VIEW -->
+    <record id="view_order_tree_payment_status" model="ir.ui.view">
+        <field name="name">sale.order.tree.payment.status</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_quotation_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//tree" position="inside">
+                <field name="payment_status_manual" widget="badge" decoration-success="payment_status_manual == 'paid'" decoration-warning="payment_status_manual == 'pending'" decoration-danger="payment_status_manual == 'not_paid'" groups="sale_payment_status.group_payment_status_manager"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- FORM VIEW -->
+
+    <record id="view_order_form_payment_status" model="ir.ui.view">
+        <field name="name">sale.order.form.payment.status</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+
+            <!-- Hidden auxiliary field used for readonly logic -->
+            <xpath expr="//sheet" position="inside">
+                <field name="has_posted_invoices" invisible="1"/>
+            </xpath>
+
+            <!-- Payment Status fields (visible only to Payment Status Manager group) -->
+            <xpath expr="//field[@name='payment_term_id']" position="after">
+                <!-- Editable dropdown when there are NO posted invoices -->
+                <field name="payment_status_manual" invisible="has_posted_invoices" groups="sale_payment_status.group_payment_status_manager"/>
+
+                <!-- Read-only badge when there ARE posted invoices -->
+                <field name="payment_status_manual" widget="badge" decoration-success="payment_status_manual == 'paid'" decoration-warning="payment_status_manual == 'pending'" decoration-danger="payment_status_manual == 'not_paid'" invisible="not has_posted_invoices" readonly="1" groups="sale_payment_status.group_payment_status_manager"/>
+            </xpath>
+
+        </field>
+    </record>
+
+</odoo>

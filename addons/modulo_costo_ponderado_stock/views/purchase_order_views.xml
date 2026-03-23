@@ -1,0 +1,19 @@
+<odoo>
+    
+    <record id="view_order_form_inherit" model="ir.ui.view">
+        <field name="name">purchase.order.form.inherit.usd</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_form"/>
+        <field name="arch" type="xml">
+
+            <!-- Agregamos los campos de configuración del dólar -->
+            <xpath expr="//sheet/group" position="after">
+                <group string="Configuración en dólares">
+                    <field name="es_dollar"/>
+                    <field name="valor_dolar_actual" readonly="1"/>
+                </group>
+            </xpath>
+
+        </field>
+    </record>
+</odoo>

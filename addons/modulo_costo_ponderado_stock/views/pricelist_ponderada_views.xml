@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <!-- Vista tipo tree -->
+    <record id="view_pricelist_ponderada_tree" model="ir.ui.view">
+        <field name="name">pricelist.ponderada.tree</field>
+        <field name="model">pricelist.ponderada</field>
+        <field name="arch" type="xml">
+            <tree string="Precios Ponderados Calculados">
+               <!-- <field name="product_id"/> -->
+               <field name="image_1920" widget="image" options="{'preview_image': 'image_1920'}"/>
+                <field name="product_internal_ref"/>
+                <field name="designer"/>
+                <field name="product_description_fixed"/>
+                <field name="categ_id"/>
+                <field name="pricelist_id"/>
+                <field name="base_cost"/>
+                <!--<field name="price_calculated" widget="badge" class="o_tag_color_3"/>-->
+                <field name="price_calculated_str" widget="badge" class="o_tag_color_3"/>
+                <!--<field name="currency_id"/>-->
+                
+                <!--<field name="date_applied" string="Última Aplicación"/>-->
+                  <field name="stock_central"/>
+                    <field name="stock_gran_patio"/>
+                    <field name="stock_showroom_central"/>
+                    <field name="stock_showroom_obregon"/>
+
+                    <field name="date_calculated"/>
+                <field name="application_status" string="Estado de Aplicación"/>
+       
+            </tree>
+        </field>
+    </record>
+
+    <!-- Vista tipo form -->
+    <record id="view_pricelist_ponderada_form" model="ir.ui.view">
+        <field name="name">pricelist.ponderada.form</field>
+        <field name="model">pricelist.ponderada</field>
+        <field name="arch" type="xml">
+            <form string="Detalle de Precio Ponderado">
+                <sheet>
+                    <group>
+                        <field name="image_1920" widget="image" options="{'preview_image': 'image_1920'}"/>
+                        <field name="product_id"/>
+                        <field name="product_internal_ref"/>
+                        <field name="designer"/>
+                        <field name="product_description_fixed"/>
+                        <field name="categ_id"/>
+                        <field name="pricelist_id"/>
+                        <field name="base_cost"/>
+                        <field name="price_calculated"/>
+                        <!--<field name="currency_id"/>-->
+                        <field name="date_calculated"/>
+
+                        
+
+                          <field name="stock_central"/>
+                            <field name="stock_gran_patio"/>
+                            <field name="stock_showroom_central"/>
+                            <field name="stock_showroom_obregon"/>
+
+                            <field name="application_status" string="Estado de Aplicación"/>
+                        <field name="date_applied" string="Última Aplicación"/>
+
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Acción principal para ver los registros -->
+    <record id="action_pricelist_ponderada" model="ir.actions.act_window">
+        <field name="name">Precios Calculados Base Costo Ponderado</field>
+        <field name="res_model">pricelist.ponderada</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p>Lista de precios generados automáticamente a partir del costo ponderado.</p>
+        </field>
+    </record>
+
+    <!-- Acción de servidor para cálculo -->
+    <record id="action_calcular_precios_ponderada" model="ir.actions.server">
+        <field name="name">Calcular Precios desde Costo</field>
+        <field name="model_id" ref="model_pricelist_ponderada"/>
+        <field name="state">code</field>
+        <field name="code">model.calcular_precios()</field>
+    </record>
+
+    <!-- Acción servidor para lanzar wizard "Aplicar a lista de precios" -->
+    <record id="action_pricelist_ponderada_apply_to_pricelist" model="ir.actions.server">
+        <field name="name">Aplicar a lista de precios</field>
+        <field name="model_id" ref="model_pricelist_ponderada"/>
+        <field name="state">code</field>
+        <field name="code">
+            action = {
+                'type': 'ir.actions.act_window',
+                'res_model': 'pricelist.ponderada.apply.pricelist.wizard',
+                'view_mode': 'form',
+                'target': 'new',
+                'context': {'active_ids': records.ids},
+            }
+        </field>
+    </record>
+</odoo>

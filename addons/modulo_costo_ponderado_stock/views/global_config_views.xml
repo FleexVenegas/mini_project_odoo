@@ -1,0 +1,194 @@
+<odoo>
+
+    <record id="action_global_config" model="ir.actions.act_window">
+        <field name="name">Parámetros Globales</field>
+        <field name="res_model">global.config</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Define aquí los valores globales de la operación.
+            </p>
+        </field>
+    </record>
+
+
+    <record id="view_global_config_form" model="ir.ui.view">
+        <field name="name">global.config.form</field>
+        <field name="model">global.config</field>
+        <field name="arch" type="xml">
+              <form string="Configuración Global">
+    <sheet>
+        <notebook>
+
+            <page string="General">
+                <group>
+                    <group>
+                        <field name="name" readonly="1"/>
+                        <field name="valor_dollar"/>
+                        <field name="multiplicador_gral"/>
+                        <field name="costo_importacion"/>
+                        <field name="flete_americano"/>
+                        <field name="costo_facturacion"/>
+                        <field name="prima_riesgo_nacional"/>
+                        <field name="desgloce_iva"/>
+                    </group>
+                    <group>
+                        <field name="kit_hr"/>
+                        <field name="normal_hr"/>
+                        <field name="margen_bruto"/>
+                        <field name="margen_f2_ml_minimo"/>
+                        <field name="margen_f3_ml_regular"/>
+                        <field name="margen_f4_walmart"/>
+                        <field name="margen_f5_coppel"/>
+                        <field name="margen_f5_liverpool"/>
+                    </group>
+                </group>
+            </page>
+
+
+            <page string="Denominadores">
+                <group>
+                    <group>
+                        <field name="denominador_785"/>
+                        <field name="denominador_pesos_mxn"/>
+                        <field name="denominador_aromax_mayoreo"/>
+                        <field name="denominador_aromax_contado"/>
+                    </group>
+                    <group>
+                        <field name="denominador_medio_mayoreo"/>
+                        <field name="denominador_aromax_foraneo"/>
+                        <field name="denominador_ale_diaz"/>
+                    </group>
+                </group>
+            </page>
+
+
+            <page string="Margen High Runner">
+                <group>
+                    <group>
+                        <field name="margen_hr"/>
+    
+                    </group>
+        
+                </group>
+            </page>
+
+            <page string="Ecommerce">
+                <group>
+                    <field name="envio_ecommerce_h1"/>
+                    <field name="envio_ecommerce_h2"/>
+                    <field name="envio_ecommerce_h3"/>
+                    <field name="envio_ecommerce_h4"/>
+                </group>
+            </page>
+
+
+        
+            <page string="Ajustes de Licitación">
+                <group>
+                    <group>
+                        <field name="equipos_venta_excluidos" widget="many2many_tags"/>
+                        <field name="inicio_licitacion_hora" />
+                        <field name="cierre_licitacion_hora" />
+
+                        <field name="mails_para_licitaciones" />
+
+                    </group>
+                </group>
+            </page>
+
+
+            <page string="Avanzado">
+                <separator string="Usuarios Compras NUBE e IMPORTACIÓN" colspan="4"/>
+                <field name="purchase_superusers" widget="many2many_tags" options="{'no_create': True}" placeholder="Seleccionar usuarios..." />
+
+                <separator string="Utilidad Buscadora de SKU en Orden de compra" colspan="4"/>
+                <group>
+                    <field name="sku_finder"/>
+                    <button name="action_buscar_sku" type="object" string="Buscar" class="btn-primary"/>
+                </group>
+
+                <separator string="Actualiza en tiempo real el stock de costos ponderados" colspan="4"/>
+                <group>
+                    <button name="action_update_stock_weighted" type="object" 
+                    string="Hacerlo..." class="btn-primary"/>
+                </group>
+
+
+                <separator string="Ajustar existencias negativas a cero" colspan="4"/>
+                <group>
+                    <field name="warehouse_id"/>
+                    <button name="ajustar_existencias_negativas_a_cero"
+                            type="object"
+                            string="Ajustar existencias"
+                            class="btn-primary"
+                            icon="fa-check"/>
+                </group>
+
+
+            </page>
+
+
+                <page string="Reporteo">
+                
+                    <group>
+                        <field name="email_reporte_consolidado" />
+                    </group>
+                </page>
+
+        </notebook>
+    </sheet>
+</form>
+        </field>
+    </record>
+
+    <record id="view_global_config_tree" model="ir.ui.view">
+        <field name="name">global.config.tree</field>
+        <field name="model">global.config</field>
+        <field name="arch" type="xml">
+            <tree string="Configuraciones Globales">
+                <field name="name" readonly="1"/>
+                <field name="valor_dollar"/>
+                <field name="kit_hr"/>
+                <field name="normal_hr"/>
+            </tree>
+        </field>
+    </record>
+
+    <menuitem id="menu_global_config_root"
+              name="SAFI Smart"
+              sequence="1"
+              web_icon="modulo_costo_ponderado_stock,static/description/icon.png"/>
+
+    <menuitem id="menu_global_config"
+              name="Parámetros Globales"
+              parent="menu_global_config_root"
+              action="modulo_costo_ponderado_stock.action_global_config"/>
+
+    <menuitem id="menu_stock_weighted_tree"
+              name="Ver Costos"
+              parent="menu_global_config_root"
+              action="action_stock_weighted"/>
+
+
+
+    <menuitem id="menu_purchase_usd_history_root2"
+              name="Consolidación  de Compras"
+              parent="menu_global_config_root"
+              sequence="20"/>
+
+
+<menuitem id="menu_price_calculation_test"
+          name="Prueba cálculo de precios"
+          parent="menu_global_config_root"
+          action="action_price_calculation_test_form"
+          sequence="40"/> 
+
+    <menuitem id="menu_historico_calculo_precio"
+              name="Histórico de Cálculos de Precios"
+              parent="menu_global_config_root"
+              action="action_historico_calculo_precio"
+              sequence="30"/>
+              
+
+</odoo>

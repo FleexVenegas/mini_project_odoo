@@ -5,7 +5,7 @@
     "category": "Custom",
     "license": "LGPL-3",
     "summary": "Automatically generated module",
-    "depends": ["base"],
+    "depends": ["base", "helpdesk", "mail"],
     "data": [
         "security/ir.model.access.csv",
         "views/help_desk_report_wizard_views.xml",

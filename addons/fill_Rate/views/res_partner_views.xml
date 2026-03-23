@@ -31,7 +31,8 @@
 
                     <group>
                         <group string="Clasificación del Proveedor">
-                            <field name="supplier_class" widget="badge" decoration-success="supplier_class == 'A'" decoration-warning="supplier_class == 'B'" decoration-danger="supplier_class == 'C'" decoration-muted="supplier_class == 'new'"/>
+                            <field name="supplier_class" invisible="1"/>
+                            <field name="supplier_class_display" widget="badge" decoration-success="supplier_class == 'A'" decoration-warning="supplier_class == 'B'" decoration-danger="supplier_class == 'C'" decoration-muted="supplier_class == 'new'"/>
                             <field name="fill_rate" widget="percentpie"/>
                             <field name="fill_rate_last_update"/>
                         </group>

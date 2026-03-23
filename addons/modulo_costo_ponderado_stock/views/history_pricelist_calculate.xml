@@ -1,0 +1,72 @@
+<odoo>
+    <!-- Acción para abrir el historial -->
+    <record id="action_historico_calculo_precio" model="ir.actions.act_window">
+        <field name="name">Histórico de Cálculos</field>
+        <field name="res_model">historico.calculo.precio</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- Menú -->
+    <menuitem id="menu_historico_root"
+              name="Histórico Precios"
+              parent="menu_global_config_root"
+              sequence="50"/>
+              
+
+    <!-- Vista Tree -->
+    <record id="view_historico_calculo_precio_tree" model="ir.ui.view">
+        <field name="name">historico.calculo.precio.tree</field>
+        <field name="model">historico.calculo.precio</field>
+        <field name="arch" type="xml">
+            <tree string="Histórico de Cálculos" default_order="create_date desc">
+                <field name="fecha"/>
+                <field name="order_id"/>
+                <field name="product_id"/>
+                <field name="pricelist_id"/>
+                <field name="costo"/>
+                <field name="resultado"/>
+                <field name="valor_dollar"/>
+                <field name="currency_name"/>
+                <field name="usuario_id"/>
+                <field name="error"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Vista Form -->
+    <record id="view_historico_calculo_precio_form" model="ir.ui.view">
+        <field name="name">historico.calculo.precio.form</field>
+        <field name="model">historico.calculo.precio</field>
+        <field name="arch" type="xml">
+            <form string="Detalle del Cálculo">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="fecha"/>
+                            <field name="usuario_id"/>
+                            <field name="product_id"/>
+                            <field name="pricelist_id"/>
+                        </group>
+                        <group>
+                            <field name="costo"/>
+                            <field name="resultado"/>
+                            <field name="valor_dollar"/>
+                            <field name="currency_name"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Fórmula">
+                            <group>
+                                <field name="formula_utilizada"/>
+                                <field name="formula_completa"/>
+                            </group>
+                        </page>
+                        <page string="Error">
+                            <field name="error"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+</odoo>

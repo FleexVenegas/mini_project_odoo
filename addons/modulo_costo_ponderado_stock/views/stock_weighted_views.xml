@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Vista tree de stock.weighted -->
+    <record id="view_stock_weighted_tree" model="ir.ui.view">
+        <field name="name">stock.weighted.tree</field>
+        <field name="model">stock.weighted</field>
+        <field name="arch" type="xml">
+            <tree editable="bottom">
+                <field name="order_id" readonly="1"/>
+                <field name="product_id" readonly="1"/>
+                <field name="unit_weighted_cost" string="Costo Ponderado"/>
+                <field name="currency_display" />
+                <field name="ultimo_tipo_cambio" />
+                <field name="current_stock" readonly="1"/>
+                <field name="ultimo_calculo_date" readonly="1"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Acción principal del modelo -->
+    <record id="action_stock_weighted" model="ir.actions.act_window">
+        <field name="name">Costo Ponderado</field>
+        <field name="res_model">stock.weighted</field>
+        <field name="view_mode">tree</field>
+    </record>
+
+
+    <!-- Vista del wizard manual -->
+    <record id="view_stock_weighted_manual_wizard_form" model="ir.ui.view">
+        <field name="name">stock.weighted.manual.wizard.form</field>
+        <field name="model">stock.weighted.manual.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Crear Entrada Manual Costo Ponderado">
+                <group>
+                    <field name="product_id"/>
+                    <field name="cantidad_nueva"/>
+                    <field name="precio_nuevo"/>
+                    <field name="es_dollar"/>
+                </group>
+                <footer>
+                    <button name="action_aplicar" string="Aplicar" type="object" class="btn-primary"/>
+                    <button string="Cancelar" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- Acción para abrir wizard manual -->
+    <record id="action_stock_weighted_manual_wizard" model="ir.actions.act_window">
+        <field name="name">Entrada Manual Costo Ponderado</field>
+        <field name="res_model">stock.weighted.manual.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <!-- Botón visible desde la vista tipo lista -->
+    <record id="action_stock_weighted_manual_wizard_bind" model="ir.actions.server">
+        <field name="name">Agregar Entrada Manual</field>
+        <field name="model_id" ref="model_stock_weighted"/>
+        <field name="binding_model_id" ref="model_stock_weighted"/>
+        <field name="binding_view_types">list</field>
+        <field name="state">code</field>
+        <field name="code">
+            action = {
+                "type": "ir.actions.act_window",
+                "name": "Entrada Manual Costo Ponderado",
+                "res_model": "stock.weighted.manual.wizard",
+                "view_mode": "form",
+                "target": "new",
+            }
+        </field>
+    </record>
+
+</odoo>
+

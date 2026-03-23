@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_stock_pricelist_report" model="ir.actions.act_window">
+        <field name="name">Reporte Consolidado</field>
+        <field name="res_model">stock.pricelist.report</field>
+        <field name="view_mode">tree</field>
+        <field name="help" type="html">
+            <p>Vista consolidada de stock actual, costo ponderado y lista de precios.</p>
+        </field>
+    </record>
+
+    <menuitem id="menu_stock_pricelist_report" name="Reporte Consolidado V" parent="modulo_costo_ponderado_stock.menu_global_config_root" action="action_stock_pricelist_report" sequence="20"/>
+
+    <!-- 🔥 Menú que abre el wizard de recarga -->
+    <menuitem id="menu_reload_stock_pricelist_report" name="⟳ Recargar Reporte Consolidado" parent="modulo_costo_ponderado_stock.menu_global_config_root" action="action_reload_report_wizard" sequence="21"/>
+
+    <record id="view_stock_pricelist_report_tree" model="ir.ui.view">
+        <field name="name">stock.pricelist.report.tree</field>
+        <field name="model">stock.pricelist.report</field>
+        <field name="arch" type="xml">
+            <tree string="Reporte Consolidado de Stock y Lista de Precios" create="false" edit="false">
+                <!-- Botón de recarga -->
+                <header>
+                    <button name="reload_report" string="Recargar Reporte" type="object" class="btn-primary" confirm="¿Está seguro de recargar el reporte? Esto puede tomar unos momentos."/>
+                    <button name="reload_report" string="Forzar Recarga" type="object" class="btn-secondary"/>
+                </header>
+
+                <!-- Campos principales -->
+                <field name="referencia" optional="show"/>
+                <field name="disenador" optional="show"/>
+                <field name="descripcion" optional="show"/>
+                <field name="tamano" optional="show"/>
+                <field name="genero" optional="show"/>
+
+                <!-- 🔹 Nuevos campos -->
+                <field name="tipo" optional="show"/>
+                <field name="stock_showroom_central" sum="Central Total" optional="show"/>
+                <field name="stock_showroom_obregon" sum="Obregón Total" optional="show"/>
+                <field name="current_stock" sum="Stock Total"/>
+                <field name="unit_weighted_cost" widget="monetary" options="{'currency_field': 'currency_id'}" sum="Costo Total"/>
+                <field name="currency_display" optional="show"/>
+
+                <field name="pricelist_id" optional="show"/>
+                <field name="price" optional="show"/>
+
+
+            </tree>
+        </field>
+    </record>
+</odoo>

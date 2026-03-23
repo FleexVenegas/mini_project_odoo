@@ -1,0 +1,63 @@
+<odoo>
+    <!-- Vista form para price.calculation.test -->
+    <record id="view_price_calculation_test_form" model="ir.ui.view">
+        <field name="name">price.calculation.test.form</field>
+        <field name="model">price.calculation.test</field>
+        <field name="arch" type="xml">
+            <form string="Prueba de Cálculo de Precio" readonly="1">
+                <sheet>
+                    <group>
+                        <field name="product_id"/>
+                        <field name="pricelist_id"/>
+                    </group>
+                    <group string="Simulador Detallado de Calculadora de precios SAFI *********** 2025 ***********">
+                        <button name="ejecutar_prueba" type="object" string="Ejecutar" class="btn-primary"/>
+                        <separator string="Variables" colspan="4"/>
+                        <field name="valor_dollar"/>
+                        <field name="costo"/>
+                        <field name="currency_name"/>
+                        <field name="A"/>
+                        <field name="B"/>
+                        <field name="C"/>
+                        <field name="D"/>
+                        <field name="E"/>
+                        <field name="G"/>
+                        <field name="F1"/>
+                        <field name="F"/>
+                        <field name="H1"/>
+                        <field name="divisor_final"/>
+                    </group>
+                    <group string="Resultado">
+                        <!-- <field name="formula_utilizada"/>-->
+                        <field name="formula_completa" widget="textarea" readonly="1"/>
+                        <field name="resultado"/>
+                        <!-- <field name="error"/> -->
+                        
+                    </group>
+                    <group>
+                        <button name="actualiza_lista" type="object" string="Aplicalo" class="btn-primary"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <!-- Acción ventana para abrir la vista form -->
+    <record id="action_price_calculation_test_form" model="ir.actions.act_window">
+        <field name="name">Prueba Cálculo de Precios</field>
+        <field name="res_model">price.calculation.test</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_price_calculation_test_form"/>
+        <field name="target">new</field>
+    </record>
+
+    <!-- Menú para abrir la acción ventana 
+    <menuitem id="menu_price_calculation_test"
+              name="Prueba cálculo de precios"
+              parent="menu_global_config_root"
+              action="action_price_calculation_test_form"
+              sequence="3"/>
+
+              -->
+</odoo>
+
+

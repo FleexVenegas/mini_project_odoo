@@ -4,8 +4,8 @@
     "version": "1.0",
     "summary": "Sistema de checador de precios con escáner",
     "category": "Sales",
-    "author": "Tu Nombre",
-    "website": "https://www.tudominio.com",
+    "author": "Ing. Diego Venegas",
+    # "website": "https://estudioodoo.com.mx/odoo/",
     "depends": ["base_setup", "base", "product", "sale", "website"],
     "data": [
         "security/ir.model.access.csv",

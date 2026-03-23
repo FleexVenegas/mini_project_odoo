@@ -65,5 +65,66 @@ if records:
             </field>
         </record>
 
+        <!-- Acción para crear registros de órdenes existentes (sin fill rate) -->
+        <record id="action_server_create_missing_fill_rate" model="ir.actions.server">
+            <field name="name">🔧 Crear Fill Rate para órdenes existentes</field>
+            <field name="model_id" ref="purchase.model_purchase_order"/>
+            <field name="binding_model_id" ref="purchase.model_purchase_order"/>
+            <field name="binding_view_types">list</field>
+            <field name="state">code</field>
+            <field name="code">
+# Usar las órdenes seleccionadas por el usuario
+# Si seleccionó órdenes, usar esas; si no, buscar todas las que califiquen
+if records:
+    orders = records.filtered(lambda o: o.state in ['purchase', 'done'])
+else:
+    orders = env['purchase.order'].search([
+        ('state', 'in', ['purchase', 'done']),
+        ('fill_rate_created', '=', False)
+    ])
+
+# Procesar órdenes (el método maneja ValidationError internamente)
+created_count = 0
+errors = 0
+processed = 0
+
+for order in orders:
+    try:
+        # Solo procesar si no tiene fill rate creado
+        if not order.fill_rate_created:
+            order.create_missing_fill_rate_lines()
+            created_count += len(order.fill_rate_line_ids)
+            processed += 1
+    except Exception as e:
+        errors += 1
+        continue
+
+# Recalcular fill rate de proveedores afectados
+partners = orders.mapped('partner_id')
+for partner in partners:
+    partner._compute_fill_rate()
+    partner._compute_supplier_class()
+
+# Mostrar resultado
+if errors == 0:
+    message = f'Se crearon {created_count} registros para {processed} órdenes de {len(orders)} seleccionadas. Afectados {len(partners)} proveedores.'
+    msg_type = 'success'
+else:
+    message = f'Se crearon {created_count} registros para {processed} órdenes. {errors} órdenes tuvieron problemas (ver logs).'
+    msg_type = 'warning'
+
+action = {
+    'type': 'ir.actions.client',
+    'tag': 'display_notification',
+    'params': {
+        'title': '¡Completado!',
+        'message': message,
+        'type': msg_type,
+        'sticky': True,
+    }
+}
+            </field>
+        </record>
+
     </data>
 </odoo>
