@@ -2,7 +2,7 @@
     "name": "Anonymous Mailbox",
     "version": "1.0",
     "author": "Ing. Diego Venegas",
-    "icon": "anonymous_mailbox/static/description/icon.png",
+    "icon": "/anonymous_mailbox/static/description/icon.png",
     "category": "Custom",
     "summary": "Anonymous Mailbox Module",
     "depends": ["base", "hr", "web", "website"],
@@ -16,6 +16,7 @@
     ],
     "assets": {
         "web.assets_backend": [
+            "anonymous_mailbox/static/src/xml/*.xml",
             "anonymous_mailbox/static/src/js/*.js",
             "anonymous_mailbox/static/src/scss/*.scss",
             # "anonymous_mailbox/static/src/xml/*.xml",

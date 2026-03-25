@@ -403,6 +403,13 @@ msgid "Your message has been successfully received."
 msgstr "Tu mensaje ha sido recibido correctamente."
 
 #. module: anonymous_mailbox
+#: code:addons/anonymous_mailbox/static/src/js/script.js:0
+#: code:addons/anonymous_mailbox/static/src/xml/anonymous_mailbox_systray.xml:0
+#, python-format
+msgid "Mailbox"
+msgstr "Buzón"
+
+#. module: anonymous_mailbox
 #: model:ir.ui.menu,name:anonymous_mailbox.anonymous_mailbox_public_menu
 msgid "My Anonymous Mailbox"
 msgstr "Mi Buzón Anónimo"

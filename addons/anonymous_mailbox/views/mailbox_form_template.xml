@@ -4,6 +4,8 @@
         <!-- Formulario del Buzón Anónimo -->
         <template id="mailbox_form_template" name="Anonymous Mailbox Form">
             <t t-call="website.layout">
+                <t t-set="no_header" t-value="True"/>
+                <t t-set="no_footer" t-value="True"/>
                 <div id="wrap" class="oe_structure">
                     <div class="container py-5">
                         <div class="row justify-content-center">
@@ -35,7 +37,7 @@
                                                     <option value="">-- Selecciona una opción --</option>
                                                     <option value="suggestion">Sugerencia</option>
                                                     <option value="complaint">Queja</option>
-                                                    <option value="inquiry">Consulta</option>
+                                                    <option value="recognition">Reconocimiento</option>
                                                     <option value="other">Otro</option>
                                                 </select>
                                             </div>
@@ -72,12 +74,108 @@
 
                                             <!-- Archivos Adjuntos -->
                                             <div class="mb-4">
-                                                <label for="attachments" class="form-label fw-semibold" style="color: #34495e;">
+                                                <label class="form-label fw-semibold" style="color: #34495e;">
                                                     Archivos Adjuntos <small class="text-muted">(opcional, máximo 3)</small>
                                                 </label>
-                                                <input type="file" class="form-control" id="attachments" name="attachments" multiple="multiple" accept="image/*,.pdf,.doc,.docx" style="border-radius: 8px; border: 1.5px solid #e0e0e0;"/>
-                                                <small class="form-text text-muted">Formatos: Imágenes, PDF, Word</small>
+                                                <input type="file" id="attachments" name="attachments" multiple="multiple" accept="image/*,.pdf,.doc,.docx" style="display:none;"/>
+                                                <div>
+                                                    <button type="button" id="btn-add-file" class="btn btn-outline-secondary" style="border-radius: 8px; border: 1.5px dashed #adb5bd;">
+                                                        <i class="fa fa-paperclip me-1"></i> Agregar archivo
+                                                    </button>
+                                                    <small class="form-text text-muted ms-2">Formatos: Imágenes, PDF, Word</small>
+                                                </div>
+                                                <ul id="file-list" class="list-group mt-2" style="display:none;"></ul>
                                             </div>
+
+                                            <script type="text/javascript">
+                                            (function () {
+                                                var MAX_FILES = 3;
+                                                var accumulated = [];
+                                                var input = document.getElementById('attachments');
+                                                var btn   = document.getElementById('btn-add-file');
+                                                var list  = document.getElementById('file-list');
+
+                                                btn.addEventListener('click', function () {
+                                                    input.value = '';
+                                                    input.click();
+                                                });
+
+                                                input.addEventListener('change', function () {
+                                                    Array.from(input.files).forEach(function (f) {
+                                                        if (accumulated.length &lt; MAX_FILES) {
+                                                            accumulated.push(f);
+                                                        }
+                                                    });
+                                                    syncInputFiles();
+                                                    renderList();
+                                                });
+
+                                                function syncInputFiles() {
+                                                    var dt = new DataTransfer();
+                                                    accumulated.forEach(function (f) { dt.items.add(f); });
+                                                    input.files = dt.files;
+                                                }
+
+                                                function renderList() {
+                                                    list.innerHTML = '';
+                                                    if (accumulated.length === 0) {
+                                                        list.style.display = 'none';
+                                                        btn.disabled = false;
+                                                        return;
+                                                    }
+                                                    list.style.display = 'block';
+                                                    btn.disabled = accumulated.length >= MAX_FILES;
+
+                                                    accumulated.forEach(function (f, idx) {
+                                                        var icon = f.type.startsWith('image/') ? 'fa-image' :
+                                                                   f.type === 'application/pdf' ? 'fa-file-pdf-o' : 'fa-file-word-o';
+
+                                                        var li   = document.createElement('li');
+                                                        li.className = 'list-group-item d-flex justify-content-between align-items-center py-2';
+                                                        li.style.borderRadius = '8px';
+
+                                                        var spanEl = document.createElement('span');
+                                                        var iconEl = document.createElement('i');
+                                                        iconEl.className = 'fa ' + icon + ' me-2 text-secondary';
+                                                        var nameNode = document.createTextNode(f.name);
+                                                        var sizeEl = document.createElement('small');
+                                                        sizeEl.className = 'text-muted ms-1';
+                                                        sizeEl.textContent = '(' + formatSize(f.size) + ')';
+                                                        spanEl.appendChild(iconEl);
+                                                        spanEl.appendChild(nameNode);
+                                                        spanEl.appendChild(sizeEl);
+
+                                                        var removeBtn = document.createElement('button');
+                                                        removeBtn.type = 'button';
+                                                        removeBtn.className = 'btn btn-sm btn-outline-danger';
+                                                        removeBtn.style.borderRadius = '6px';
+                                                        removeBtn.setAttribute('data-idx', idx);
+                                                        var timesIcon = document.createElement('i');
+                                                        timesIcon.className = 'fa fa-times';
+                                                        removeBtn.appendChild(timesIcon);
+                                                        removeBtn.addEventListener('click', function () {
+                                                            removeFile(parseInt(this.getAttribute('data-idx')));
+                                                        });
+
+                                                        li.appendChild(spanEl);
+                                                        li.appendChild(removeBtn);
+                                                        list.appendChild(li);
+                                                    });
+                                                }
+
+                                                function removeFile(idx) {
+                                                    accumulated.splice(idx, 1);
+                                                    syncInputFiles();
+                                                    renderList();
+                                                }
+
+                                                function formatSize(bytes) {
+                                                    if (bytes &lt; 1024) { return bytes + ' B'; }
+                                                    if (bytes &lt; 1048576) { return (bytes / 1024).toFixed(1) + ' KB'; }
+                                                    return (bytes / 1048576).toFixed(1) + ' MB';
+                                                }
+                                            })();
+                                            </script>
 
                                             <!-- Botón de Envío -->
                                             <div class="d-grid gap-2 mt-5">
@@ -107,6 +205,8 @@
         <!-- Plantilla de Éxito -->
         <template id="mailbox_success_template" name="Mailbox Success">
             <t t-call="website.layout">
+                <t t-set="no_header" t-value="True"/>
+                <t t-set="no_footer" t-value="True"/>
                 <div id="wrap" class="oe_structure">
                     <div class="container py-5">
                         <div class="row justify-content-center">
@@ -145,6 +245,8 @@
         <!-- Plantilla de Error -->
         <template id="mailbox_error_template" name="Mailbox Error">
             <t t-call="website.layout">
+                <t t-set="no_header" t-value="True"/>
+                <t t-set="no_footer" t-value="True"/>
                 <div id="wrap" class="oe_structure">
                     <div class="container py-5">
                         <div class="row justify-content-center">

@@ -27,7 +27,7 @@ class AnonymousMailbox(models.Model):
         [
             ("suggestion", "Suggestion"),
             ("complaint", "Complaint"),
-            ("inquiry", "Inquiry"),
+            ("recognition", "Recognition"),
             ("other", "Other"),
         ],
         string="Type",

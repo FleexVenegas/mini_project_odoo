@@ -74,7 +74,5 @@
     <!-- Submenu - Messages List -->
     <menuitem id="anonymous_mailbox_menu_modelo" name="Messages" parent="anonymous_mailbox_menu_root" action="action_anonymous_mailbox" sequence="10"/>
 
-    <!-- Public Menu (visible for all users) -->
-    <menuitem id="anonymous_mailbox_public_menu" name="My Anonymous Mailbox" sequence="11" action="action_open_mailbox_form"/>
 
 </odoo>

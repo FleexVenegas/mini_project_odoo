@@ -1,8 +1,13 @@
 <odoo>
     <data>
+        <record id="module_category_sale_payment_status" model="ir.module.category">
+            <field name="name">Estado de Pago en Ventas</field>
+            <field name="sequence">100</field>
+        </record>
+
         <record id="group_payment_status_manager" model="res.groups">
             <field name="name">Payment Status Manager</field>
-            <field name="category_id" ref="base.module_category_sales_sales"/>
+            <field name="category_id" ref="module_category_sale_payment_status"/>
             <field name="comment">Users in this group can view and edit the Payment Status field on sales orders.</field>
         </record>
     </data>
