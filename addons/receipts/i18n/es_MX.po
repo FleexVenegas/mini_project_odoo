@@ -287,6 +287,11 @@ msgstr "Recibos de Pago"
 
 #. module: receipts
 #: model_terms:ir.ui.view,arch_db:receipts.report_receipts_document
+msgid "Payment Method"
+msgstr "Método de Pago"
+
+#. module: receipts
+#: model_terms:ir.ui.view,arch_db:receipts.report_receipts_document
 msgid "Payment Voucher"
 msgstr "Comprobante de Pago"
 
@@ -377,3 +382,98 @@ msgstr "Mensajes del Sitio Web"
 #: model:ir.model.fields,help:receipts.field_receipts__website_message_ids
 msgid "Website communication history"
 msgstr "Historial de comunicación del sitio web"
+
+#. module: receipts
+#: model:ir.module.category,name:receipts.module_category_receipts
+msgid "Payment Receipts"
+msgstr "Recibos de Pago"
+
+#. module: receipts
+#: model:ir.module.category,description:receipts.module_category_receipts
+msgid "Manage payment receipts"
+msgstr "Gestionar recibos de pago"
+
+#. module: receipts
+#: model:res.groups,name:receipts.group_receipts_user
+msgid "User"
+msgstr "Usuario"
+
+#. module: receipts
+#: model:res.groups,comment:receipts.group_receipts_user
+msgid "Users in this group can view payment receipts."
+msgstr "Los usuarios de este grupo pueden ver recibos de pago."
+
+#. module: receipts
+#: model:res.groups,name:receipts.group_receipts_manager
+msgid "Manager"
+msgstr "Administrador"
+
+#. module: receipts
+#: model:res.groups,comment:receipts.group_receipts_manager
+msgid "Users in this group can create, edit and delete payment receipts."
+msgstr "Los usuarios de este grupo pueden crear, editar y eliminar recibos de pago."
+
+#. module: receipts
+#: model:ir.model.fields,field_description:receipts.field_receipts__payment_method
+msgid "Payment Method"
+msgstr "Método de Pago"
+
+#. module: receipts
+#: model:ir.model.fields,help:receipts.field_receipts__payment_method
+msgid "Select the payment method"
+msgstr "Seleccione el método de pago"
+
+#. module: receipts
+#: model:ir.model.fields.selection,name:receipts.selection__receipts__payment_method__cash
+msgid "Cash"
+msgstr "Efectivo"
+
+#. module: receipts
+#: model:ir.model.fields.selection,name:receipts.selection__receipts__payment_method__bank_transfer
+msgid "Bank Transfer"
+msgstr "Transferencia Bancaria"
+
+#. module: receipts
+#: model:ir.model.fields.selection,name:receipts.selection__receipts__payment_method__check
+msgid "Check"
+msgstr "Cheque"
+
+#. module: receipts
+#: model:ir.model.fields.selection,name:receipts.selection__receipts__payment_method__credit_card
+msgid "Credit Card"
+msgstr "Tarjeta de Crédito"
+
+#. module: receipts
+#: model:ir.model.fields.selection,name:receipts.selection__receipts__payment_method__debit_card
+msgid "Debit Card"
+msgstr "Tarjeta de Débito"
+
+#. module: receipts
+#: model:ir.model.fields.selection,name:receipts.selection__receipts__payment_method__other
+msgid "Other"
+msgstr "Otro"
+
+#. module: receipts
+#: model:ir.model.fields,field_description:receipts.field_receipts__status
+msgid "Status"
+msgstr "Estado"
+
+#. module: receipts
+#: model:ir.model.fields,help:receipts.field_receipts__status
+msgid "Receipt status"
+msgstr "Estado del recibo"
+
+#. module: receipts
+#: model:ir.model.fields.selection,name:receipts.selection__receipts__status__draft
+msgid "Draft"
+msgstr "Borrador"
+
+#. module: receipts
+#: model:ir.model.fields.selection,name:receipts.selection__receipts__status__active
+msgid "Active"
+msgstr "Activo"
+
+#. module: receipts
+#: model:ir.model.fields.selection,name:receipts.selection__receipts__status__cancelled
+msgid "Cancelled"
+msgstr "Cancelado"

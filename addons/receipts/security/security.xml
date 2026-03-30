@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Category for receipts module -->
+        <record id="module_category_receipts" model="ir.module.category">
+            <field name="name">Payment Receipts</field>
+            <field name="description">Manage payment receipts</field>
+            <field name="sequence">10</field>
+        </record>
+
+        <!-- User: Can view receipts -->
+        <record id="group_receipts_user" model="res.groups">
+            <field name="name">User</field>
+            <field name="category_id" ref="module_category_receipts"/>
+            <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+            <field name="comment">Users in this group can view payment receipts.</field>
+        </record>
+
+        <!-- Manager: Can create, edit and delete receipts -->
+        <record id="group_receipts_manager" model="res.groups">
+            <field name="name">Manager</field>
+            <field name="category_id" ref="module_category_receipts"/>
+            <field name="implied_ids" eval="[(4, ref('group_receipts_user'))]"/>
+            <field name="users" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
+            <field name="comment">Users in this group can create, edit and delete payment receipts.</field>
+        </record>
+    </data>
+</odoo>

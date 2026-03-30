@@ -50,6 +50,31 @@ class Receipts(models.Model):
         readonly=True,
         help="Department to which the user who prepared the receipt belongs",
     )
+    payment_method = fields.Selection(
+        [
+            ("cash", "Cash"),
+            ("bank_transfer", "Bank Transfer"),
+            ("check", "Check"),
+            ("credit_card", "Credit Card"),
+            ("debit_card", "Debit Card"),
+            ("other", "Other"),
+        ],
+        string="Payment Method",
+        help="Select the payment method",
+        tracking=True,
+    )
+    status = fields.Selection(
+        [
+            ("draft", "Draft"),
+            ("active", "Active"),
+            ("cancelled", "Cancelled"),
+        ],
+        string="Status",
+        default="draft",
+        required=True,
+        tracking=True,
+        help="Receipt status",
+    )
 
     @api.depends("total_amount")
     def _compute_amount_to_text(self):
@@ -181,4 +206,7 @@ class Receipts(models.Model):
                 vals["name"] = (
                     self.env["ir.sequence"].next_by_code("receipts.folio") or "New"
                 )
+            # Automatically set status to active when saving
+            if vals.get("status", "draft") == "draft":
+                vals["status"] = "active"
         return super(Receipts, self).create(vals_list)

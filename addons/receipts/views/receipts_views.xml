@@ -17,6 +17,8 @@
                 <field name="client_id"/>
                 <field name="date"/>
                 <field name="total_amount"/>
+                <field name="payment_method"/>
+                <field name="status" widget="badge" decoration-info="status == 'draft'" decoration-success="status == 'active'" decoration-danger="status == 'cancelled'"/>
                 <field name="user_id"/>
                 <field name="department_id"/>
             </tree>
@@ -29,6 +31,9 @@
         <field name="model">receipts</field>
         <field name="arch" type="xml">
             <form>
+                <header>
+                    <field name="status" widget="statusbar" options="{'clickable': '1'}"/>
+                </header>
                 <sheet>
                     <div class="oe_title">
                         <label for="name" string="Folio"/>
@@ -42,6 +47,7 @@
                             <field name="client_id" options="{'no_create': False, 'no_open': False}"/>
                             <field name="date"/>
                             <field name="total_amount" widget="monetary"/>
+                            <field name="payment_method"/>
                         </group>
                         <group string="Additional Information">
                             <field name="user_id"/>

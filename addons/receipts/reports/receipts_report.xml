@@ -38,52 +38,62 @@
                         </div>
 
                         <!-- Información principal -->
-                        <table style="width: 100%; margin-bottom: 40px; border-collapse: collapse;">
+                        <table style="width: 100%; margin-bottom: 40px; border-collapse: collapse; border: .5px solid #fff;">
                             <tr>
-                                <td style="padding: 18px 0; border-bottom: 2px solid #ccc; width: 30%; vertical-align: top;">
+                                <td style="padding: 18px 0; border-bottom: 2px solid #ccc; border-left: 0; border-right: 0; border-top: 0; width: 30%; vertical-align: top;">
                                     <div style="font-size: 12pt; color: #444; text-transform: uppercase; letter-spacing: 1px; font-weight: 500;">Received from</div>
                                 </td>
-                                <td style="padding: 18px 0; border-bottom: 2px solid #ccc;">
+                                <td style="padding: 18px 0; border-bottom: 2px solid #ccc; border-left: 0; border-right: 0; border-top: 0;">
                                     <div style="font-size: 15pt; font-weight: 400; color: #000;">
                                         <span t-field="doc.client_id.name"/>
                                     </div>
                                 </td>
                             </tr>
                             <tr>
-                                <td style="padding: 18px 0; border-bottom: 2px solid #ccc; vertical-align: top;">
+                                <td style="padding: 18px 0; border-bottom: 2px solid #ccc; border-left: 0; border-right: 0; border-top: 0; vertical-align: top;">
                                     <div style="font-size: 12pt; color: #444; text-transform: uppercase; letter-spacing: 1px; font-weight: 500;">Date</div>
                                 </td>
-                                <td style="padding: 18px 0; border-bottom: 2px solid #ccc;">
+                                <td style="padding: 18px 0; border-bottom: 2px solid #ccc; border-left: 0; border-right: 0; border-top: 0;">
                                     <div style="font-size: 15pt; color: #000;">
                                         <span t-field="doc.date" t-options='{"format": "dd/MM/yyyy"}'/>
                                     </div>
                                 </td>
                             </tr>
                             <tr>
-                                <td style="padding: 18px 0; border-bottom: 2px solid #ccc; vertical-align: top;">
+                                <td style="padding: 18px 0; border-bottom: 2px solid #ccc; border-left: 0; border-right: 0; border-top: 0; vertical-align: top;">
                                     <div style="font-size: 12pt; color: #444; text-transform: uppercase; letter-spacing: 1px; font-weight: 500;">Amount</div>
                                 </td>
-                                <td style="padding: 18px 0; border-bottom: 2px solid #ccc;">
+                                <td style="padding: 18px 0; border-bottom: 2px solid #ccc; border-left: 0; border-right: 0; border-top: 0;">
                                     <div style="font-size: 28pt; font-weight: 400; color: #000;">
                                         $                                        <t t-esc="'{:,.2f}'.format(doc.total_amount)"/>
                                     </div>
                                 </td>
                             </tr>
                             <tr>
-                                <td style="padding: 18px 0; border-bottom: 2px solid #ccc; vertical-align: top;">
+                                <td style="padding: 18px 0; border-bottom: 2px solid #ccc; border-left: 0; border-right: 0; border-top: 0; vertical-align: top;">
                                     <div style="font-size: 12pt; color: #444; text-transform: uppercase; letter-spacing: 1px; font-weight: 500;">In words</div>
                                 </td>
-                                <td style="padding: 18px 0; border-bottom: 2px solid #ccc;">
+                                <td style="padding: 18px 0; border-bottom: 2px solid #ccc; border-left: 0; border-right: 0; border-top: 0;">
                                     <div style="font-size: 13pt; font-style: italic; color: #333;">
                                         <span t-field="doc.amount_to_text"/>
                                     </div>
                                 </td>
                             </tr>
+                            <tr t-if="doc.payment_method">
+                                <td style="padding: 18px 0; border-bottom: 2px solid #ccc; border-left: 0; border-right: 0; border-top: 0; vertical-align: top;">
+                                    <div style="font-size: 12pt; color: #444; text-transform: uppercase; letter-spacing: 1px; font-weight: 500;">Payment Method</div>
+                                </td>
+                                <td style="padding: 18px 0; border-bottom: 2px solid #ccc; border-left: 0; border-right: 0; border-top: 0;">
+                                    <div style="font-size: 15pt; color: #000;">
+                                        <span t-field="doc.payment_method"/>
+                                    </div>
+                                </td>
+                            </tr>
                             <tr>
-                                <td style="padding: 18px 0; vertical-align: top;">
+                                <td style="padding: 18px 0; border: 0; vertical-align: top;">
                                     <div style="font-size: 12pt; color: #444; text-transform: uppercase; letter-spacing: 1px; font-weight: 500;">Concept</div>
                                 </td>
-                                <td style="padding: 18px 0;">
+                                <td style="padding: 18px 0; border: 0;">
                                     <div style="font-size: 14pt; line-height: 1.6; color: #222;">
                                         <span t-field="doc.concept"/>
                                     </div>
