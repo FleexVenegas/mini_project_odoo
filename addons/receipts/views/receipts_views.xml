@@ -1,0 +1,71 @@
+<odoo>
+
+    <!-- Acción primero (evita ParseError) -->
+    <record id="action_receipts" model="ir.actions.act_window">
+        <field name="name">Receipts</field>
+        <field name="res_model">receipts</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- Vista Tree -->
+    <record id="view_receipts_tree" model="ir.ui.view">
+        <field name="name">receipts.tree</field>
+        <field name="model">receipts</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="client_id"/>
+                <field name="date"/>
+                <field name="total_amount"/>
+                <field name="user_id"/>
+                <field name="department_id"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Vista Form -->
+    <record id="view_receipts_form" model="ir.ui.view">
+        <field name="name">receipts.form</field>
+        <field name="model">receipts</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name" string="Folio"/>
+                        <h1>
+                            <field name="name" readonly="1" placeholder="New receipt"/>
+                        </h1>
+                    </div>
+
+                    <group>
+                        <group string="Receipt Information">
+                            <field name="client_id" options="{'no_create': False, 'no_open': False}"/>
+                            <field name="date"/>
+                            <field name="total_amount" widget="monetary"/>
+                        </group>
+                        <group string="Additional Information">
+                            <field name="user_id"/>
+                            <field name="department_id"/>
+                            <field name="amount_to_text" readonly="1"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page string="Payment Concept" name="payment_details">
+                            <field name="concept" placeholder="Describe the payment concept..." nolabel="1"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+
+    <!-- Submenú -->
+    <menuitem id="receipts_menu_v34" name="Payment Receipts" parent="sale.sale_menu_root" action="action_receipts" sequence="60"/>
+
+</odoo>
