@@ -17,7 +17,7 @@
         <t t-call="web.html_container">
             <t t-foreach="docs" t-as="doc">
                 <t t-call="web.basic_layout">
-                    <div class="page" style="font-family: 'Helvetica', 'Arial', sans-serif; padding: 40px; color: #222;">
+                    <div class="page" style="font-family: 'Helvetica', 'Arial', sans-serif; padding-left: 40px; padding-right: 40px; color: #222;">
 
                         <!-- Logo y Encabezado -->
                         <div style="display: table; width: 100%; margin-bottom: 40px; padding-bottom: 20px; border-bottom: 2px solid #999;">

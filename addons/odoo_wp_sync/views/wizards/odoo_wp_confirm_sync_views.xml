@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Vista genérica del wizard de confirmación -->
+    <record id="view_confirmation_wizard_form" model="ir.ui.view">
+        <field name="name">confirmation.wizard.form</field>
+        <field name="model">confirmation.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Confirmación">
+                <style>
+                    .confirmation_wizard_container {
+                        padding: 30px 20px;
+                        text-align: center;
+                    }
+                    .confirmation_wizard_icon {
+                        font-size: 48px;
+                        color: #f0ad4e;
+                        margin-bottom: 20px;
+                    }
+                    .confirmation_wizard_title {
+                        font-size: 24px;
+                        font-weight: 600;
+                        color: #2c3e50;
+                        margin-bottom: 15px;
+                    }
+                    .confirmation_wizard_description {
+                        font-size: 15px;
+                        color: #5f6368;
+                        line-height: 1.6;
+                        max-width: 500px;
+                        margin: 0 auto 25px;
+                    }
+                    .modal-footer {
+                        border-top: 1px solid #e9ecef;
+                        padding-top: 15px;
+                        margin-top: 20px;
+                    }
+                </style>
+                <sheet>
+                    <div class="confirmation_wizard_container">
+                        <!-- Icono de confirmación -->
+                        <div class="confirmation_wizard_icon">
+                            <i class="fa fa-question-circle" title="Confirmación"/>
+                        </div>
+
+                        <!-- Título -->
+                        <div class="confirmation_wizard_title">
+                            <field name="title" readonly="1" nolabel="1"/>
+                        </div>
+
+                        <!-- Descripción -->
+                        <div class="confirmation_wizard_description">
+                            <field name="description" readonly="1" nolabel="1"/>
+                        </div>
+                    </div>
+
+                    <!-- Campos ocultos para el funcionamiento interno -->
+                    <group invisible="1">
+                        <field name="model_name"/>
+                        <field name="method_name"/>
+                        <field name="record_id"/>
+                        <field name="context_data"/>
+                    </group>
+                </sheet>
+                <footer>
+                    <button name="action_confirm" type="object" string="Confirmar" class="btn-primary"/>
+                    <button string="Cancelar" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action del wizard de confirmación genérico -->
+    <record id="action_confirmation_wizard" model="ir.actions.act_window">
+        <field name="name">Confirmación</field>
+        <field name="res_model">confirmation.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+</odoo>

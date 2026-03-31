@@ -24,8 +24,34 @@
                             </setting>
                         </block>
 
+                        <block title="Acciones">
+                            <setting string="Probar conexión" help="Verifica que las credenciales sean correctas y que puedas conectarte a WooCommerce.">
+                                <button name="action_test_connection" type="object" string="Probar Conexión" class="btn-secondary" icon="fa-plug"/>
+                            </setting>
+                            <!-- <setting string="Sincronizar ahora" help="Sincroniza productos/órdenes desde WooCommerce a Odoo.">
+                                <button name="%(action_server_sync_woocommerce)d" type="action" string="Sincronizar WooCommerce" class="btn-primary" icon="fa-refresh"/>
+                            </setting> -->
+                        </block>
+
                     </app>
                 </xpath>
+            </field>
+        </record>
+        <record id="action_wp_sync_settings" model="ir.actions.act_window">
+            <field name="name">WordPress Sync Settings</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">res.config.settings</field>
+            <field name="view_mode">form</field>
+            <field name="target">inline</field>
+            <field name="context">{'module': 'odoo_wp_sync'}</field>
+        </record>
+
+        <record id="action_wp_test_connection" model="ir.actions.server">
+            <field name="name">Test Connection</field>
+            <field name="model_id" ref="base.model_res_config_settings"/>
+            <field name="state">code</field>
+            <field name="code">
+action = env['res.config.settings'].action_test_connection()
             </field>
         </record>
     </data>

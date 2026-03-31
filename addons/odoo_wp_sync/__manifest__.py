@@ -10,7 +10,7 @@ Odoo WordPress Sync
 - Base structure for WooCommerce integration
     """,
     "author": "Diego Venegas - Depsistemas",
-    'icon': '/odoo_wp_sync/static/description/icon.png',
+    "icon": "/odoo_wp_sync/static/description/icon.png",
     "website": "https://tusitio.com",
     "category": "Sales",
     "license": "LGPL-3",
@@ -28,6 +28,9 @@ Odoo WordPress Sync
         # "views/product_views.xml",
         "views/odoo_wp_sync_views.xml",
         "views/res_config_settings_views.xml",
+        "views/woo_parameters_views.xml",
+        "views/odoo_wp_menu.xml",
+        "views/wizards/odoo_wp_confirm_sync_views.xml",
     ],
     "installable": True,
     "application": True,

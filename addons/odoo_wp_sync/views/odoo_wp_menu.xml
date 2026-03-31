@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <menuitem id="odoo_wp_sync_menu_root" name="OdooWpSync"/>
+
+    <menuitem id="odoo_wp_sync_menu_modelo" name="Orders" parent="odoo_wp_sync_menu_root" action="action_odoo_wp_sync" sequence="5"/>
+
+    <menuitem id="odoo_wp_sync_menu_sync" name="Sincronizar Ahora" parent="odoo_wp_sync_menu_root" action="action_server_woo_sync_wizard" sequence="8"/>
+
+    <menuitem id="odoo_wp_sync_menu_options" name="Configuration" parent="odoo_wp_sync_menu_root" sequence="10"/>
+
+    <menuitem id="odoo_wp_sync__menu_settings" name="Settings" parent="odoo_wp_sync_menu_options" action="action_wp_sync_settings" sequence="1"/>
+
+    <menuitem id="odoo_wp_sync__menu_tests" name="Test Connection" parent="odoo_wp_sync_menu_options" action="action_wp_test_connection" sequence="2"/>
+    
+    <menuitem id="odoo_wp_sync__menu_params" name="Parameters" parent="odoo_wp_sync_menu_options" action="action_odoo_wp_sync_parameters" sequence="3"/>
+
+</odoo>

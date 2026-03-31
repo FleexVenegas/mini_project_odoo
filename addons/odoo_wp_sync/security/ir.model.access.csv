@@ -1,2 +1,4 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_odoo_wp_sync,access_odoo_wp_sync,model_odoo_wp_sync,base.group_user,1,1,1,1
+access_confirmation_wizard,access_confirmation_wizard,model_confirmation_wizard,base.group_user,1,1,1,1
+access_odoo_wp_sync_parameters,access_odoo_wp_sync_parameters,model_odoo_wp_sync_parameters,base.group_user,1,1,1,1
