@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Vista form para el wizard de fórmula del costo -->
+    <record id="view_costo_formula_wizard_form" model="ir.ui.view">
+        <field name="name">costo.formula.wizard.form</field>
+        <field name="model">costo.formula.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Cálculo del Costo Ponderado" create="false" edit="false">
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="product_id" readonly="1" nolabel="1"/>
+                        </h1>
+                    </div>
+
+                    <group>
+                        <group string="Información del Producto">
+                            <field name="costo_actual" widget="monetary" options="{'currency_field': 'moneda'}"/>
+                            <field name="moneda" invisible="1"/>
+                            <field name="stock_actual"/>
+                        </group>
+                        <group string="Última Actualización">
+                            <field name="tipo_cambio"/>
+                            <field name="fecha_calculo"/>
+                            <field name="orden_compra"/>
+                        </group>
+                    </group>
+
+                    <separator string="Componentes del Cálculo"/>
+                    <group>
+                        <group string="Stock Anterior">
+                            <field name="cantidad_anterior"/>
+                            <field name="costo_anterior"/>
+                        </group>
+                        <group string="Última Compra">
+                            <field name="cantidad_nueva"/>
+                            <field name="costo_nuevo"/>
+                        </group>
+                    </group>
+
+                    <separator string="Desarrollo del Cálculo"/>
+                    <group>
+                        <field name="formula_detallada" widget="text" nolabel="1" colspan="2" style="font-family: 'Courier New', monospace; white-space: pre; font-size: 12px; background-color: #f8f9fa; padding: 15px; border: 1px solid #dee2e6; border-radius: 4px;"/>
+                    </group>
+                </sheet>
+                <footer>
+                    <button string="Cerrar" type="object" name="action_close" class="btn-primary"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

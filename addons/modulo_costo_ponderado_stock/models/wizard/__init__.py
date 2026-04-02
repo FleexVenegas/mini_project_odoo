@@ -1,3 +1,4 @@
 from . import pricelist_ponderada_set_price_wizard
 from . import pricelist_ponderada_apply_pricelist_wizard
 from . import stock_weighted_manual_wizard
+from . import costo_formula_wizard

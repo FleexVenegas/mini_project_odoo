@@ -9,12 +9,13 @@
                 <header>
                     <button name="action_open_create_sale_order_wizard" type="object" string="Crear Pedidos" class="btn-secondary" icon="fa-plus"/>
                 </header>
+                <field name="instance_id" string="Instance" optional="show"/>
                 <field name="name" string="Pedido"/>
                 <field name="total" string="Total" widget="monetary" options="{'currency_field': 'currency'}"/>
                 <field name="currency" string="Moneda"/>
                 <field name="date_created" string="Fecha"/>
                 <field name="status" string="Estado" widget="badge" decoration-info="status in ('pending', 'on-hold')" decoration-success="status == 'completed'" decoration-warning="status == 'processing'" decoration-danger="status in ('cancelled', 'refunded', 'failed')"/>
-                <field name="sale_order_id" string="Pedido Odoo"/>
+                <field name="sale_order_id" string="Pedido Odoo" readonly="1"/>
             </tree>
         </field>
     </record>
@@ -30,6 +31,15 @@
                 </header>
 
                 <sheet>
+                    <div name="button_box" class="oe_button_box">
+                        <button name="action_open_sale_order" type="object" class="oe_stat_button" icon="fa-shopping-cart" invisible="not sale_order_id">
+                            <div class="o_field_widget o_stat_info">
+                                <span class="o_stat_text">Ver Pedido</span>
+                                <field name="sale_order_id" nolabel="1" readonly="1" no_open="0"/>
+                            </div>
+                        </button>
+                    </div>
+
                     <!-- Title Section with Total Amount -->
                     <div class="oe_title mb-3">
                         <div class="row">
@@ -55,7 +65,8 @@
                     <!-- Summary Card -->
                     <div class="o_group">
                         <group>
-                            <group string="Información del Cliente" class="mb-4">
+                            <group string="Instance &amp; Customer Info" class="mb-4">
+                                <field name="instance_id" readonly="1"/>
                                 <field name="customer_name" string="Nombre" readonly="1"/>
                                 <field name="customer_email" string="Email" widget="email" readonly="1"/>
                                 <field name="customer_phone" string="Teléfono" widget="phone" readonly="1"/>
@@ -108,6 +119,7 @@
                 <field name="order_number"/>
                 <field name="customer_name"/>
                 <field name="customer_email"/>
+                <field name="instance_id"/>
 
                 <filter string="Pending" name="filter_pending" domain="[('status', 'in', ['pending', 'on-hold'])]"/>
                 <filter string="Processing" name="filter_processing" domain="[('status', '=', 'processing')]"/>
@@ -118,6 +130,7 @@
                 <filter string="This Week" name="filter_week" domain="[('date_created', '&gt;=', (context_today() - relativedelta(weeks=1)).strftime('%Y-%m-%d 00:00:00'))]"/>
 
                 <group expand="0" string="Group By">
+                    <filter string="Instance" name="group_instance" context="{'group_by': 'instance_id'}"/>
                     <filter string="Status" name="group_status" context="{'group_by': 'status'}"/>
                     <filter string="Date" name="group_date" context="{'group_by': 'date_created:day'}"/>
                 </group>

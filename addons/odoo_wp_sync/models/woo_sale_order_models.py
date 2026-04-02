@@ -5,6 +5,9 @@ Este archivo separa la lógica de negocio de creación de pedidos.
 
 from odoo import models, _
 import logging
+from odoo.exceptions import UserError
+import json
+
 
 _logger = logging.getLogger(__name__)
 
@@ -70,17 +73,57 @@ class WooSaleOrderHelper(models.AbstractModel):
 
         Returns:
             dict: Valores para crear el sale.order
+
         """
+
+        data = woo_order_record.raw_data
+        order_lines = []
+
+        # Si raw_data es un string JSON, lo parseamos
+        if isinstance(data, str):
+            data = json.loads(data)
+
+        for item in data.get("line_items", []):
+            sku = item.get("sku")
+
+            # Buscamos el producto por su referencia interna (default_code)
+            product = self.env["product.product"].search(
+                [("default_code", "=", sku)], limit=1
+            )
+
+            if not product:
+                _logger.warning(
+                    f"Producto con SKU '{sku}' no encontrado para WooCommerce Order {woo_order_record.order_number}"
+                )
+                continue
+
+            qty = item.get("quantity", 1)
+
+            # Precio REAL de Woo (más confiable que price)
+            total = float(item.get("total", 0))
+            price_unit = total / qty if qty else 0
+
+            order_lines.append(
+                (
+                    0,
+                    0,
+                    {
+                        "product_id": product.id,
+                        "product_uom_qty": qty,
+                        "price_unit": price_unit,
+                        "name": product.name,
+                        # "name": item.get("name"),
+                    },
+                )
+            )
+
+        # raise UserError(f"Error: {woo_order_record}")
+
         note_lines = [
             f"Importado de WooCommerce",
-            f"Order ID: {woo_order_record.wc_order_id}",
             f"Order Number: {woo_order_record.order_number}",
-            f"Estado WooCommerce: {woo_order_record.status}",
             f"Fecha creación: {woo_order_record.date_created}",
             f"Método de pago: {woo_order_record.payment_method}",
-            "",
-            "Productos:",
-            woo_order_record.items_info or "Sin información de productos",
         ]
 
         if woo_order_record.shipping_address:
@@ -97,4 +140,5 @@ class WooSaleOrderHelper(models.AbstractModel):
             "client_order_ref": woo_order_record.order_number,
             "note": "\n".join(note_lines),
             "date_order": woo_order_record.date_created or False,
+            "order_line": order_lines,
         }

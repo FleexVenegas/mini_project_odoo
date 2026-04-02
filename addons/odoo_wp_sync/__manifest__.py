@@ -1,13 +1,15 @@
 {
     "name": "Odoo WordPress Sync",
-    "version": "17.0.1.0.0",
-    "summary": "Sync products and orders between Odoo and WordPress (WooCommerce)",
+    "version": "17.0.2.0.0",
+    "summary": "Sync products and orders between Odoo and WordPress (WooCommerce) - Multi-Instance Support",
     "description": """
 Odoo WordPress Sync
 
+- Multi-instance support: Connect multiple WooCommerce stores
 - Sync products from Odoo to WordPress
 - Receive orders from WordPress and create quotations in Odoo
-- Base structure for WooCommerce integration
+- Manage multiple WooCommerce instances with separate credentials
+- Per-instance order tracking and synchronization
     """,
     "author": "Diego Venegas - Depsistemas",
     "icon": "/odoo_wp_sync/static/description/icon.png",
@@ -20,15 +22,14 @@ Odoo WordPress Sync
         "sale",
         "stock",
         "product",
+        "mail",
     ],
     "data": [
         # Seguridad (obligatorio cuando agregues modelos)
         "security/ir.model.access.csv",
-        # Vistas (cuando las tengas)
-        # "views/product_views.xml",
+        # Vistas
+        "views/woo_instance_views.xml",
         "views/odoo_wp_sync_views.xml",
-        "views/res_config_settings_views.xml",
-        "views/woo_parameters_views.xml",
         "views/odoo_wp_menu.xml",
         "views/wizards/odoo_wp_confirm_sync_views.xml",
     ],

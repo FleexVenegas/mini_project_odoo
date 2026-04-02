@@ -14,6 +14,24 @@ class OdooWpSync(models.Model):
     # Display name
     name = fields.Char(string="Name", compute="_compute_name", store=True)
 
+    # Instance (Multi-Instance Support)
+    instance_id = fields.Many2one(
+        "woo.instance",
+        string="WooCommerce Instance",
+        required=True,
+        ondelete="restrict",
+        index=True,
+        default=lambda self: self.env["woo.instance"].get_default_instance(),
+        help="WooCommerce instance from which this order was imported",
+    )
+    company_id = fields.Many2one(
+        "res.company",
+        string="Company",
+        related="instance_id.company_id",
+        store=True,
+        readonly=True,
+    )
+
     # WooCommerce Order Info
     wc_order_id = fields.Integer(
         string="WooCommerce Order ID", required=True, index=True
@@ -62,9 +80,9 @@ class OdooWpSync(models.Model):
 
     _sql_constraints = [
         (
-            "wc_order_id_unique",
-            "unique(wc_order_id)",
-            "WooCommerce Order ID must be unique!",
+            "wc_order_id_instance_unique",
+            "unique(wc_order_id, instance_id)",
+            "WooCommerce Order ID must be unique per instance!",
         )
     ]
 
@@ -94,30 +112,167 @@ class OdooWpSync(models.Model):
             dialog_size="medium",  # Opciones: 'small', 'medium', 'large', 'extra-large'
         )
 
+    def _build_sync_params(self, instance, force_full=False):
+        """
+        Build WooCommerce API query parameters based on instance settings
+        Implements incremental sync using modified_after when applicable
+
+        :param instance: woo.instance record
+        :param force_full: Force full synchronization
+        :return: tuple (params dict, sync_type string)
+        """
+        from datetime import datetime, timedelta
+
+        params = {
+            "per_page": instance.sync_order_limit or 100,
+            "orderby": "modified",  # Order by modification date for incremental
+            "order": "desc",
+        }
+
+        sync_type = "full"  # Default to full sync
+
+        # Determine if we should do incremental or full sync
+        should_do_full = force_full or instance._should_do_full_sync()
+
+        if should_do_full:
+            # Full sync: Use date range from sync_days_back
+            sync_type = "full"
+            if instance.sync_days_back and instance.sync_days_back > 0:
+                date_from = datetime.now() - timedelta(days=instance.sync_days_back)
+                params["after"] = date_from.strftime("%Y-%m-%dT%H:%M:%S")
+        else:
+            # Incremental sync: Only orders modified since last sync
+            sync_type = "incremental"
+            if instance.last_sync_date:
+                # Add a small buffer (1 minute) to avoid missing orders
+                last_sync_with_buffer = instance.last_sync_date - timedelta(minutes=1)
+                params["modified_after"] = last_sync_with_buffer.strftime(
+                    "%Y-%m-%dT%H:%M:%S"
+                )
+                _logger.info(
+                    f"Incremental sync for {instance.name}: syncing orders modified after {last_sync_with_buffer}"
+                )
+            else:
+                # Fallback to full sync if no previous sync date
+                sync_type = "full"
+                if instance.sync_days_back and instance.sync_days_back > 0:
+                    date_from = datetime.now() - timedelta(days=instance.sync_days_back)
+                    params["after"] = date_from.strftime("%Y-%m-%dT%H:%M:%S")
+
+        # Filter by order status
+        if instance.sync_order_status and instance.sync_order_status != "all":
+            if instance.sync_order_status == "custom":
+                # Use custom statuses from configuration
+                if instance.sync_custom_statuses:
+                    statuses = [
+                        s.strip() for s in instance.sync_custom_statuses.split(",")
+                    ]
+                    params["status"] = ",".join(statuses)
+            else:
+                # Use predefined status filter
+                params["status"] = instance.sync_order_status
+
+        return params, sync_type
+
     def action_sync(self):
-        """Synchronize orders from WooCommerce"""
+        """
+        Synchronize orders from WooCommerce using instance configuration parameters
+        Implements intelligent incremental/full sync with statistics tracking
+        """
+        import time
+
+        start_time = time.time()
+
+        instance = None
+        created_count = 0
+        updated_count = 0
+        all_orders = []
+
         try:
+            # Get instance from context or use default
+            instance_id = self.env.context.get("default_instance_id")
+            force_full = self.env.context.get("full_sync", False)
+
+            if not instance_id:
+                instance = self.env["woo.instance"].get_default_instance()
+                if not instance:
+                    return {
+                        "type": "ir.actions.client",
+                        "tag": "display_notification",
+                        "params": {
+                            "title": "No Instance",
+                            "message": "Please create a WooCommerce instance first",
+                            "type": "warning",
+                            "sticky": True,
+                        },
+                    }
+                instance_id = instance.id
+            else:
+                instance = self.env["woo.instance"].browse(instance_id)
+
+            # Validate instance is connected
+            if instance.state != "connected":
+                return {
+                    "type": "ir.actions.client",
+                    "tag": "display_notification",
+                    "params": {
+                        "title": "Instance Not Connected",
+                        "message": f"Instance '{instance.name}' is not connected. Please test connection first.",
+                        "type": "warning",
+                        "sticky": True,
+                    },
+                }
+
             api = self.env["odoo.wp.sync.wc.api"]
 
+            # Build query parameters from instance settings
+            params, sync_type = self._build_sync_params(instance, force_full=force_full)
+
+            # Build endpoint with parameters
+            param_string = "&".join([f"{k}={v}" for k, v in params.items()])
+            endpoint = f"orders?{param_string}"
+
+            _logger.info(
+                f"Starting {sync_type} sync for {instance.name} with params: {params}"
+            )
+
+            # Fetch orders from WooCommerce with pagination
             page = 1
-            per_page = 4
+            max_pages = 100  # Increased safety limit for full syncs
 
-            # Get orders from WooCommerce (adjust pagination as needed)
-            orders = api._wp_request(f"orders?per_page={per_page}&page={page}")
+            while page <= max_pages:
+                paginated_endpoint = f"{endpoint}&page={page}"
+                orders = api._wp_request(endpoint=paginated_endpoint, instance=instance)
 
-            _logger.info(f"Órdenes obtenidas de WooCommerce: {len(orders)}")
+                if not orders:
+                    # No more orders to fetch
+                    break
 
-            created_count = 0
-            updated_count = 0
+                all_orders.extend(orders)
 
-            for order_data in orders:
+                # If we got less than per_page, we've reached the last page
+                if len(orders) < params["per_page"]:
+                    break
+
+                page += 1
+
+            _logger.info(
+                f"Fetched {len(all_orders)} orders from {instance.name} in {page} page(s)"
+            )
+
+            # Process all fetched orders
+            for order_data in all_orders:
                 order_id = order_data.get("id")
 
-                # Check if order already exists
-                existing_order = self.search([("wc_order_id", "=", order_id)], limit=1)
+                # Check if order already exists for this instance
+                existing_order = self.search(
+                    [("wc_order_id", "=", order_id), ("instance_id", "=", instance_id)],
+                    limit=1,
+                )
 
                 # Prepare order values
                 vals = self._prepare_order_vals(order_data)
+                vals["instance_id"] = instance_id
 
                 if existing_order:
                     existing_order.write(vals)
@@ -126,26 +281,83 @@ class OdooWpSync(models.Model):
                     self.create(vals)
                     created_count += 1
 
+            # Calculate sync duration
+            duration = time.time() - start_time
+
+            # Update instance statistics
+            instance._update_sync_statistics(
+                created=created_count,
+                updated=updated_count,
+                total=len(all_orders),
+                duration=duration,
+                error=None,
+            )
+
+            # Build success message with details
+            sync_type_label = (
+                "🔄 Incremental" if sync_type == "incremental" else "📦 Full"
+            )
+            filter_info = [sync_type_label]
+
+            if sync_type == "incremental" and instance.last_sync_date:
+                time_diff = datetime.now() - instance.last_sync_date
+                if time_diff.days > 0:
+                    filter_info.append(f"desde hace {time_diff.days}d")
+                else:
+                    hours = time_diff.seconds // 3600
+                    filter_info.append(f"desde hace {hours}h")
+            elif instance.sync_days_back and sync_type == "full":
+                filter_info.append(f"últimos {instance.sync_days_back} días")
+
+            if instance.sync_order_status and instance.sync_order_status != "all":
+                status_label = dict(
+                    instance._fields["sync_order_status"].selection
+                ).get(instance.sync_order_status, instance.sync_order_status)
+                filter_info.append(f"estado: {status_label}")
+
+            filter_msg = f" ({', '.join(filter_info)})"
+
+            # Prepare message
+            message = (
+                f"✅ Creadas: {created_count} | ✏️ Actualizadas: {updated_count} | "
+                f"📊 Total: {len(all_orders)} órdenes\n"
+                f"⏱️ Duración: {duration:.2f}s{filter_msg}"
+            )
+
             # Show result to user
             return {
                 "type": "ir.actions.client",
                 "tag": "display_notification",
                 "params": {
-                    "title": "Sincronización exitosa",
-                    "message": f"Creadas: {created_count} | Actualizadas: {updated_count} | Total: {len(orders)} órdenes",
+                    "title": f"Sincronización exitosa - {instance.name}",
+                    "message": message,
                     "type": "success",
                     "sticky": False,
                 },
             }
 
         except Exception as e:
-            _logger.error(f"Error en sincronización: {str(e)}", exc_info=True)
+            error_msg = str(e)
+            duration = time.time() - start_time
+
+            # Update instance with error statistics
+            if instance:
+                instance._update_sync_statistics(
+                    created=created_count,
+                    updated=updated_count,
+                    total=len(all_orders),
+                    duration=duration,
+                    error=error_msg,
+                )
+
+            _logger.error(f"Error en sincronización: {error_msg}", exc_info=True)
+
             return {
                 "type": "ir.actions.client",
                 "tag": "display_notification",
                 "params": {
                     "title": "Error de sincronización",
-                    "message": str(e),
+                    "message": f"{error_msg}\n\nConsecutive errors: {instance.sync_error_count if instance else 0}",
                     "type": "danger",
                     "sticky": True,
                 },
