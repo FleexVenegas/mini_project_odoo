@@ -38,8 +38,8 @@ class WooInstanceSales(models.Model):
     )
     client_id = fields.Many2one(
         "res.partner",
-        string="Cliente por Defecto",
-        help="Cliente asignado a los pedidos importados de esta instancia "
+        string="Cliente específico",
+        help="Cliente específico al que se asignarán los pedidos importados de esta instancia "
         "(si no se encuentra el cliente del pedido)",
     )
 

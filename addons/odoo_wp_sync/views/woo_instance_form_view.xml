@@ -198,7 +198,7 @@ Auto Sync
                                     <group>
                                         <field name="seller_id" string="Vendedor"/>
                                         <field name="sale_team_id" string="Equipo de Ventas"/>
-                                        <field name="client_id" string="Cliente por Defecto"/>
+                                        <field name="client_id" string="Cliente específico"/>
                                     </group>
                                     <group>
                                         <field name="use_sequence" string="Usar Secuencia" widget="boolean_toggle"/>

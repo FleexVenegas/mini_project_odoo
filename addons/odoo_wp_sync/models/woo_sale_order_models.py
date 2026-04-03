@@ -3,9 +3,8 @@ Helper class para creación de pedidos de venta desde WooCommerce.
 Este archivo separa la lógica de negocio de creación de pedidos.
 """
 
-from odoo import models, _
+from odoo import models
 import logging
-from odoo.exceptions import UserError
 import json
 
 
@@ -64,7 +63,7 @@ class WooSaleOrderHelper(models.AbstractModel):
             prefix = instance.prefix_sequence or "WC-"
             order.name = f"{prefix}{order.name}"
 
-        ## Confirmar pedido si la configuración lo indica y el pedido está en borrador
+        # Confirmar pedido si la configuración lo indica y el pedido está en borrador
         if instance.confirm_orders and order.state == "draft":
             # TODO - manejar excepciones al confirmar (ej. stock, reglas de negocio)
             order.action_confirm()
@@ -107,6 +106,7 @@ class WooSaleOrderHelper(models.AbstractModel):
                 for i in raw.get("line_items", [])
             ]
 
+        note_lines = []
         for item in items:
             sku = item.get("sku")
 
@@ -119,12 +119,10 @@ class WooSaleOrderHelper(models.AbstractModel):
                     f"Producto con SKU '{sku}' no encontrado para WooCommerce Order "
                     f"{woo_order_record.order_number}"
                 )
-
-                note_lines = [
+                note_lines.append(
                     f"Producto con SKU '{sku}' no encontrado. "
                     f"Revisar línea del pedido en WooCommerce."
-                ]
-
+                )
                 continue
 
             qty = item.get("quantity", 1) or 1
@@ -135,22 +133,16 @@ class WooSaleOrderHelper(models.AbstractModel):
             item_taxes = item.get("taxes", [])
 
             taxes = instance.tax_id
+            price_unit = price_unit_raw
             tax_id = [(6, 0, taxes.ids)] if taxes else [(5, 0, 0)]
 
-            if instance.taxes_included_price and not total_tax and not item_taxes:
-                # Woo no desglosó IVA → pasar precio directo sin impuesto
-                price_unit = price_unit_raw
-                tax_id = [(5, 0, 0)]
-
-            elif instance.taxes_included_price and item_taxes and total_tax:
-                # Woo sí desglosó IVA → extraer base restando el impuesto
-                price_unit = price_unit_raw - (total_tax / qty)
-                tax_id = [(6, 0, taxes.ids)] if taxes else [(5, 0, 0)]
-
-            else:
-                # Precio sin IVA incluido → usar directo, Odoo aplica impuesto
-                price_unit = price_unit_raw
-                tax_id = [(6, 0, taxes.ids)] if taxes else [(5, 0, 0)]
+            if instance.taxes_included_price:
+                if not total_tax and not item_taxes:
+                    # Woo no desglosó IVA → precio directo sin impuesto
+                    tax_id = [(5, 0, 0)]
+                elif item_taxes and total_tax:
+                    # Woo sí desglosó IVA → extraer base restando el impuesto
+                    price_unit = price_unit_raw - (total_tax / qty)
 
             order_lines.append(
                 (
@@ -197,20 +189,15 @@ class WooSaleOrderHelper(models.AbstractModel):
                     )
                 )
 
-        seller = instance.seller_id or None
-        pricelist = instance.pricelist_id or None
-        warehouse = instance.warehouse_id or None
-        payment_term = instance.payment_term_id or None
-
         order_vals = {
             "partner_id": partner.id,
-            "user_id": seller.id if seller else None,
+            "user_id": instance.seller_id.id or False,
             "client_order_ref": woo_order_record.order_number,
             "note": "\n".join(note_lines),
             "date_order": woo_order_record.date_created or False,
-            "pricelist_id": pricelist.id if pricelist else None,
-            "warehouse_id": warehouse.id if warehouse else None,
-            "payment_term_id": payment_term.id if payment_term else None,
+            "pricelist_id": instance.pricelist_id.id or False,
+            "warehouse_id": instance.warehouse_id.id or False,
+            "payment_term_id": instance.payment_term_id.id or False,
             "order_line": order_lines,
         }
 
