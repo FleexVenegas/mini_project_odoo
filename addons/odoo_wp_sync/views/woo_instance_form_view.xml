@@ -1,27 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Este archivo fue dividido en archivos separados por responsabilidad.
-     Ver: woo_instance_action.xml, woo_instance_list_view.xml,
-          woo_instance_form_view.xml, woo_instance_kanban_view.xml,
-          woo_instance_search_view.xml -->
 <odoo>
-    <record id="view_woo_instance_tree" model="ir.ui.view">
-        <field name="name">woo.instance.tree</field>
-        <field name="model">woo.instance</field>
-        <field name="arch" type="xml">
-            <tree string="WooCommerce Instances" decoration-muted="not active" open_form_view="False">
-                <field name="sequence" widget="handle"/>
-                <field name="name" string="Instance"/>
-                <field name="wp_url" string="URL"/>
-                <field name="state" widget="badge" decoration-success="state=='connected'" decoration-warning="state=='draft'" decoration-danger="state=='error'"/>
-                <field name="order_count"/>
-                <field name="company_id" groups="base.group_multi_company" optional="hide"/>
-                <field name="active" column_invisible="1"/>
-                <button name="action_open_instance" type="object" string="Open" class="btn-primary" icon="fa-external-link"/>
-                <button name="action_sync_orders" type="object" string="Sync Orders" class="btn-secondary" icon="fa-refresh" invisible="state != 'connected'"/>
-                <button name="%(action_woo_instance)d" type="action" context="{'form_view_ref': 'odoo_wp_sync.view_woo_instance_form'}" string="Settings" class="btn-link" icon="fa-cog" groups="base.group_no_one"/>
-            </tree>
-        </field>
-    </record>
 
     <!-- Form View -->
     <record id="view_woo_instance_form" model="ir.ui.view">
@@ -58,7 +36,7 @@
                         </h1>
                     </div>
 
-                    <!-- Connection Details Card -->
+                    <!-- Connection Details -->
                     <div class="mb-3">
                         <group>
                             <group>
@@ -86,8 +64,9 @@
                         </div>
                     </div>
 
-                    <!-- Setup Guide -->
                     <notebook>
+
+                        <!-- ── Setup Guide ─────────────────────────────── -->
                         <page string="Setup Guide" name="setup_guide" invisible="state == 'connected'">
                             <div class="p-3">
                                 <h4 class="text-primary mb-3">
@@ -135,15 +114,14 @@ Quick Setup
                             </div>
                         </page>
 
-                        <!-- Parameters Tab -->
+                        <!-- ── Parameters ──────────────────────────────── -->
                         <page string="Parameters" name="parameters" invisible="state != 'connected'">
                             <div class="p-3">
                                 <div class="alert alert-info mb-4" role="alert">
                                     <i class="fa fa-info-circle me-2"/>
-Configure synchronization settings for this WooCommerce instance
+                                    Configure synchronization settings for this WooCommerce instance
                                 </div>
 
-                                <!-- Sync Configuration -->
                                 <group string="Synchronization Settings">
                                     <group>
                                         <field name="sync_order_limit" widget="integer"/>
@@ -207,6 +185,7 @@ Auto Sync
                             </div>
                         </page>
 
+                        <!-- ── Sales ───────────────────────────────────── -->
                         <page name="sales" string="Sales" invisible="state != 'connected'">
                             <div class="p-3">
                                 <div class="alert alert-info mb-4" role="alert">
@@ -222,15 +201,18 @@ Auto Sync
                                         <field name="client_id" string="Cliente por Defecto"/>
                                     </group>
                                     <group>
-                                        <field name="sequence" string="Secuencia"/>
+                                        <field name="use_sequence" string="Usar Secuencia" widget="boolean_toggle"/>
+                                        <field name="prefix_sequence" invisible="use_sequence != False"/>
+                                        <field name="sequence" invisible="use_sequence != True"/>
                                     </group>
                                 </group>
 
                                 <!-- Precios y Pagos -->
                                 <group string="Precios y Pagos" class="mt-3">
                                     <group>
-                                        <field name="price_list_id" string="Lista de Precios"/>
+                                        <field name="pricelist_id" string="Lista de Precios"/>
                                         <field name="payment_term_id" string="Términos de Pago"/>
+                                        <field name="wc_shipping" string="Incluir costo de envíos en pedidos" widget="boolean_toggle"/>
                                     </group>
                                     <group>
                                         <field name="taxes_included_price" string="Impuestos Incluidos en Precio" widget="boolean_toggle"/>
@@ -317,152 +299,24 @@ Equipo de Ventas
                             </div>
                         </page>
 
+                        <!-- ── Warehouse ────────────────────────────────── -->
                         <page name="warehouse" string="Warehouse" invisible="state != 'connected'">
                             <div class="p-3">
                                 <div class="alert alert-info mb-4" role="alert">
                                     <i class="fa fa-info-circle me-2"/>
-Configure lo necesario para el almacén de esta instancia de WooCommerce
+                                    Configure lo necesario para el almacén de esta instancia de WooCommerce
                                 </div>
-
                                 <group string="Warehouse">
                                     <group>
-                                        <field name="warehouse_id" />
+                                        <field name="warehouse_id"/>
                                     </group>
                                 </group>
                             </div>
-
                         </page>
+
                     </notebook>
                 </sheet>
             </form>
-        </field>
-    </record>
-
-    <!-- Kanban View -->
-    <record id="view_woo_instance_kanban" model="ir.ui.view">
-        <field name="name">woo.instance.kanban</field>
-        <field name="model">woo.instance</field>
-        <field name="arch" type="xml">
-            <kanban class="o_kanban_mobile" sample="1">
-                <field name="id"/>
-                <field name="name"/>
-                <field name="wp_url"/>
-                <field name="state"/>
-                <field name="order_count"/>
-                <field name="color"/>
-                <field name="active"/>
-                <templates>
-                    <t t-name="kanban-box">
-                        <div t-attf-class="oe_kanban_card {{record.active.raw_value == false and 'opacity-50' or ''}}" t-attf-style="
-                                cursor: pointer; 
-                                border-radius: 12px; 
-                                border: 1px solid #e5e7eb;
-                                border-top: 4px solid {{record.color.raw_value or '#6f42c1'}};
-                                background: #ffffff;
-                                transition: all 0.3s ease;
-                                box-shadow: 0 1px 3px rgba(0,0,0,0.08);
-                             " onmouseover="this.style.boxShadow='0 8px 16px rgba(0,0,0,0.12)'; this.style.transform='translateY(-2px)';" onmouseout="this.style.boxShadow='0 1px 3px rgba(0,0,0,0.08)'; this.style.transform='translateY(0)';">
-
-                            <a type="object" name="action_open_instance" class="text-decoration-none d-block">
-                                <!-- Card Content -->
-                                <div class="p-3">
-                                    <!-- Status Badge - Top Right -->
-                                    <div class="d-flex justify-content-end mb-2">
-                                        <span t-attf-class="badge rounded-pill px-2 py-1 {{record.state.raw_value == 'connected' and 'bg-success' or (record.state.raw_value == 'error' and 'bg-danger' or 'bg-secondary')}}" style="font-size: 0.7rem; font-weight: 600; letter-spacing: 0.3px;">
-                                            <i t-attf-class="fa {{record.state.raw_value == 'connected' and 'fa-check-circle' or (record.state.raw_value == 'error' and 'fa-times-circle' or 'fa-circle')}} me-1"/>
-                                            <t t-esc="record.state.value.toUpperCase()"/>
-                                        </span>
-                                    </div>
-
-                                    <!-- Instance Icon and Name -->
-                                    <div class="text-center mb-3">
-                                        <div class="d-inline-flex align-items-center justify-content-center rounded-circle mb-2" t-attf-style="width: 48px; height: 48px; background: linear-gradient(135deg, {{record.color.raw_value or '#6f42c1'}}22 0%, {{record.color.raw_value or '#6f42c1'}}44 100%);">
-                                            <i class="fa fa-shopping-bag fa-lg" t-attf-style="color: {{record.color.raw_value or '#6f42c1'}};"/>
-                                        </div>
-                                        <h5 class="mb-1 fw-bold" style="color: #1f2937; font-size: 0.95rem; line-height: 1.3;">
-                                            <t t-esc="record.name.value"/>
-                                        </h5>
-                                        <div class="text-muted small d-flex align-items-center justify-content-center" style="font-size: 0.75rem;">
-                                            <i class="fa fa-globe me-1" style="color: #9ca3af; font-size: 0.7rem;"/>
-                                            <span style="max-width: 180px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
-                                                <t t-esc="record.wp_url.value"/>
-                                            </span>
-                                        </div>
-                                    </div>
-
-                                    <!-- Divider -->
-                                    <hr style="border-top: 1px solid #e5e7eb; margin: 0.75rem 0;"/>
-
-                                    <!-- Orders Count -->
-                                    <div class="text-center">
-                                        <div class="d-flex align-items-center justify-content-center">
-                                            <div class="text-center">
-                                                <div class="fw-bold mb-1" style="font-size: 1.4rem; color: #1f2937; line-height: 1;">
-                                                    <t t-esc="record.order_count.value"/>
-                                                </div>
-                                                <div class="text-muted" style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.3px; font-weight: 500;">
-                                                    <t t-if="record.order_count.raw_value == 1">Order</t>
-                                                    <t t-else="">Orders</t>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </a>
-
-                            <!-- Action Buttons -->
-                            <div class="p-2 pt-0">
-                                <div class="d-flex gap-2 justify-content-center">
-                                    <button name="action_sync_orders" type="object" class="btn btn-sm btn-secondary flex-fill" t-if="record.state.raw_value == 'connected'" style="font-size: 0.75rem;">
-                                        <i class="fa fa-refresh me-1"/>
-Sync Orders
-                                    </button>
-                                    <button name="edit" type="edit" class="btn btn-sm btn-outline-secondary" groups="base.group_no_one" style="font-size: 0.75rem;">
-                                        <i class="fa fa-cog"/>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </t>
-                </templates>
-            </kanban>
-        </field>
-    </record>
-
-    <!-- Search View -->
-    <record id="view_woo_instance_search" model="ir.ui.view">
-        <field name="name">woo.instance.search</field>
-        <field name="model">woo.instance</field>
-        <field name="arch" type="xml">
-            <search string="WooCommerce Instances">
-                <field name="name" string="Instance" filter_domain="['|', ('name', 'ilike', self), ('wp_url', 'ilike', self)]"/>
-                <filter string="Connected" name="connected" domain="[('state', '=', 'connected')]"/>
-                <filter string="Draft" name="draft" domain="[('state', '=', 'draft')]"/>
-                <filter string="Error" name="error" domain="[('state', '=', 'error')]"/>
-                <separator/>
-                <filter string="Archived" name="inactive" domain="[('active', '=', False)]"/>
-                <group expand="0" string="Group By">
-                    <filter string="Status" name="group_state" context="{'group_by': 'state'}"/>
-                    <filter string="Company" name="group_company" context="{'group_by': 'company_id'}" groups="base.group_multi_company"/>
-                </group>
-            </search>
-        </field>
-    </record>
-
-    <!-- Action -->
-    <record id="action_woo_instance" model="ir.actions.act_window">
-        <field name="name">WooCommerce Instances</field>
-        <field name="res_model">woo.instance</field>
-        <field name="view_mode">kanban,tree,form</field>
-        <field name="context">{}</field>
-        <field name="help" type="html">
-            <p class="o_view_nocontent_smiling_face">
-                Create your first WooCommerce Instance
-            </p>
-            <p>
-                Connect multiple WooCommerce stores to sync products and orders.<br/>
-                Each instance represents a separate WooCommerce installation.
-            </p>
         </field>
     </record>
 

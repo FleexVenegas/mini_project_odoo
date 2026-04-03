@@ -210,77 +210,8 @@ class WooInstance(models.Model):
         help="Maximum number of retry attempts before giving up",
     )
 
-
-
-    # -------------------------
-    # SALES
-    # -------------------------
-
-    sequence = fields.Many2one(
-        "ir.sequence",
-        string="Sequence",
-        help="Sequence used to generate unique Woo IDs for orders",
-    )
-
-    seller_id = fields.Many2one(
-        "res.users",
-        string="Vendedor",
-        help="Vendedor asignado a los pedidos importados de esta instancia",
-    )
-
-    price_list_id = fields.Many2one(
-        "product.pricelist",
-        string="Lista de Precios",
-        help="Lista de precios asignada a los pedidos importados de esta instancia",
-    )
-
-    client_id = fields.Many2one(
-        "res.partner",
-        string="Cliente",
-        help="Cliente asignado a los pedidos importados de esta instancia (si no se encuentra el cliente del pedido)",
-    )
-
-    sale_team_id = fields.Many2one(
-        "crm.team",
-        string="Equipo de Ventas",
-        help="Equipo de ventas asignado a los pedidos importados de esta instancia",
-    )
-
-    payment_term_id = fields.Many2one(
-        "account.payment.term",
-        string="Condiciones de Pago",
-        help="Condiciones de pago asignadas a los pedidos importados de esta instancia",
-    )
-
-    confirm_orders = fields.Boolean(
-        string="Confirmar Pedidos",
-        default=False,
-        help="Si está activo, los pedidos importados se confirmarán automáticamente",
-    )
-
-    taxes_included_price = fields.Boolean(
-        string="Precios con Impuestos",
-        default=False,
-        help="Si está activo, los precios de los pedidos importados incluirán impuestos",
-    )
-
-    tax_id = fields.Many2many(
-        "account.tax",
-        string="Impuestos",
-        help="Impuestos aplicables a los pedidos importados de esta instancia (si no se especifican impuestos en WooCommerce, se aplicarán estos impuestos por defecto)",
-    )
-
-
-    # --------------------------
-    # WAREHOUSE
-    # --------------------------
-
-    warehouse_id = fields.Many2one(
-        "stock.warehouse",
-        string="Warehouse",
-        help="Default warehouse for stock movements related to synced orders",
-    )
-
+    # NOTE: Sales fields → woo_instance_sales.py
+    # NOTE: Warehouse fields → woo_instance_warehouse.py
 
     _sql_constraints = [
         (

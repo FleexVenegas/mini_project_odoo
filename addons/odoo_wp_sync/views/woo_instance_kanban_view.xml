@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Kanban View -->
+    <record id="view_woo_instance_kanban" model="ir.ui.view">
+        <field name="name">woo.instance.kanban</field>
+        <field name="model">woo.instance</field>
+        <field name="arch" type="xml">
+            <kanban class="o_kanban_mobile" sample="1">
+                <field name="id"/>
+                <field name="name"/>
+                <field name="wp_url"/>
+                <field name="state"/>
+                <field name="order_count"/>
+                <field name="color"/>
+                <field name="active"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div t-attf-class="oe_kanban_card {{record.active.raw_value == false and 'opacity-50' or ''}}" t-attf-style="
+                                cursor: pointer;
+                                border-radius: 12px;
+                                border: 1px solid #e5e7eb;
+                                border-top: 4px solid {{record.color.raw_value or '#6f42c1'}};
+                                background: #ffffff;
+                                transition: all 0.3s ease;
+                                box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+                            " onmouseover="this.style.boxShadow='0 8px 16px rgba(0,0,0,0.12)'; this.style.transform='translateY(-2px)';" onmouseout="this.style.boxShadow='0 1px 3px rgba(0,0,0,0.08)'; this.style.transform='translateY(0)';">
+
+                            <a type="object" name="action_open_instance" class="text-decoration-none d-block">
+                                <div class="p-3">
+                                    <!-- Status Badge -->
+                                    <div class="d-flex justify-content-end mb-2">
+                                        <span t-attf-class="badge rounded-pill px-2 py-1 {{record.state.raw_value == 'connected' and 'bg-success' or (record.state.raw_value == 'error' and 'bg-danger' or 'bg-secondary')}}" style="font-size: 0.7rem; font-weight: 600; letter-spacing: 0.3px;">
+                                            <i t-attf-class="fa {{record.state.raw_value == 'connected' and 'fa-check-circle' or (record.state.raw_value == 'error' and 'fa-times-circle' or 'fa-circle')}} me-1"/>
+                                            <t t-esc="record.state.value.toUpperCase()"/>
+                                        </span>
+                                    </div>
+
+                                    <!-- Instance Icon and Name -->
+                                    <div class="text-center mb-3">
+                                        <div class="d-inline-flex align-items-center justify-content-center rounded-circle mb-2" t-attf-style="width: 48px; height: 48px; background: linear-gradient(135deg, {{record.color.raw_value or '#6f42c1'}}22 0%, {{record.color.raw_value or '#6f42c1'}}44 100%);">
+                                            <i class="fa fa-shopping-bag fa-lg" t-attf-style="color: {{record.color.raw_value or '#6f42c1'}};"/>
+                                        </div>
+                                        <h5 class="mb-1 fw-bold" style="color: #1f2937; font-size: 0.95rem; line-height: 1.3;">
+                                            <t t-esc="record.name.value"/>
+                                        </h5>
+                                        <div class="text-muted small d-flex align-items-center justify-content-center" style="font-size: 0.75rem;">
+                                            <i class="fa fa-globe me-1" style="color: #9ca3af; font-size: 0.7rem;"/>
+                                            <span style="max-width: 180px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                                                <t t-esc="record.wp_url.value"/>
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <hr style="border-top: 1px solid #e5e7eb; margin: 0.75rem 0;"/>
+
+                                    <!-- Orders Count -->
+                                    <div class="text-center">
+                                        <div class="fw-bold mb-1" style="font-size: 1.4rem; color: #1f2937; line-height: 1;">
+                                            <t t-esc="record.order_count.value"/>
+                                        </div>
+                                        <div class="text-muted" style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.3px; font-weight: 500;">
+                                            <t t-if="record.order_count.raw_value == 1">Order</t>
+                                            <t t-else="">Orders</t>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+
+                            <!-- Action Buttons -->
+                            <div class="p-2 pt-0">
+                                <div class="d-flex gap-2 justify-content-center">
+                                    <button name="action_sync_orders" type="object" class="btn btn-sm btn-secondary flex-fill" t-if="record.state.raw_value == 'connected'" style="font-size: 0.75rem;">
+                                        <i class="fa fa-refresh me-1"/>
+Sync Orders
+                                    </button>
+                                    <button name="edit" type="edit" class="btn btn-sm btn-outline-secondary" groups="base.group_no_one" style="font-size: 0.75rem;">
+                                        <i class="fa fa-cog"/>
+                                    </button>
+                                </div>
+                            </div>
+
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+</odoo>

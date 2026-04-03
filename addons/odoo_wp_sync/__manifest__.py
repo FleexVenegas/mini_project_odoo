@@ -25,11 +25,17 @@ Odoo WordPress Sync
         "mail",
     ],
     "data": [
-        # Seguridad (obligatorio cuando agregues modelos)
+        # Seguridad
         "security/ir.model.access.csv",
-        # Vistas
-        "views/woo_instance_views.xml",
+        # woo.instance — action primero (el tree lo referencia con %(xmlid)d)
+        "views/woo_instance_action.xml",
+        "views/woo_instance_list_view.xml",
+        "views/woo_instance_form_view.xml",
+        "views/woo_instance_kanban_view.xml",
+        "views/woo_instance_search_view.xml",
+        # odoo.wp.sync
         "views/odoo_wp_sync_views.xml",
+        # Menú y wizards
         "views/odoo_wp_menu.xml",
         "views/wizards/odoo_wp_confirm_sync_views.xml",
     ],

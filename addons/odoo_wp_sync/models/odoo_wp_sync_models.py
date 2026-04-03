@@ -2,6 +2,8 @@ from odoo import models, fields, api
 import json
 import logging
 from datetime import datetime
+from odoo.exceptions import UserError
+
 
 _logger = logging.getLogger(__name__)
 
@@ -60,6 +62,8 @@ class OdooWpSync(models.Model):
 
     date_created = fields.Datetime(string="Date Created")
     total = fields.Float(string="Total Amount")
+    shipping_total = fields.Float(string="Shipping Total")
+    discount_total = fields.Float(string="Discount Total")
     currency = fields.Char(string="Currency", default="USD")
 
     # Items and Details
@@ -72,6 +76,7 @@ class OdooWpSync(models.Model):
 
     # Raw Data
     raw_data = fields.Text(string="Raw JSON Data", readonly=True)
+    order_lines = fields.Text(string="Order Lines JSON", readonly=True)
 
     sale_order_id = fields.Many2one("sale.order")
 
@@ -382,12 +387,21 @@ class OdooWpSync(models.Model):
             )
 
         # Order items
-        items_list = []
+        order_lines = []
+
         for item in order_data.get("line_items", []):
-            items_list.append(
-                f"•[{item.get('sku', '')}] {item.get('name', '')} x {item.get('quantity', 0)} - ${item.get('total', 0)}"
+            order_lines.append(
+                {
+                    "sku": item.get("sku"),
+                    "name": item.get("name"),
+                    "quantity": item.get("quantity", 0),
+                    "total": float(item.get("total", 0)),
+                    "price": float(item.get("price", 0)),
+                    "subtotal": float(item.get("subtotal", 0)),
+                    "total_tax": float(item.get("total_tax", 0)),
+                    "taxes": item.get("taxes", []),
+                }
             )
-        items_info = "\n".join(items_list)
 
         # Convert WooCommerce date format to Odoo format
         date_created = order_data.get("date_created")
@@ -406,15 +420,18 @@ class OdooWpSync(models.Model):
             "customer_phone": billing.get("phone", ""),
             "status": order_data.get("status", "pending"),
             "date_created": date_created,
+            "shipping_total": float(order_data.get("shipping_total", 0)),
+            "discount_total": float(order_data.get("discount_total", 0)),
             "total": float(order_data.get("total", 0)),
             "currency": order_data.get("currency", "USD"),
-            "items_info": items_info,
             "shipping_address": shipping_address.strip(),
             "payment_method": order_data.get("payment_method_title", ""),
             "created_via": order_data.get("created_via", ""),
+            "order_lines": json.dumps(order_lines),
             "raw_data": json.dumps(order_data, indent=2),
             "synced_date": fields.Datetime.now(),
         }
+    
 
     def action_open_create_sale_order_wizard(self):
         """Abre el wizard de confirmación para crear pedidos en Odoo (soporta múltiples registros)"""

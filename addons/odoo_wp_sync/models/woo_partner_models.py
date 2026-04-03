@@ -16,6 +16,14 @@ class WooPartner(models.AbstractModel):
         :return: Registro del partner creado o actualizado en Odoo
         """
 
+        # Usar el cliente por defecto de la instancia si está configurado
+        default_client = woo_order_record.instance_id.client_id
+        if default_client:
+            _logger.debug(
+                f"Usando cliente por defecto de la instancia: {default_client.name}"
+            )
+            return default_client
+
         Partner = self.env["res.partner"]
 
         # Buscar por email si existe

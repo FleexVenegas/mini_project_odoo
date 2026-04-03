@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Action — debe cargarse antes que las vistas que la referencian -->
+    <record id="action_woo_instance" model="ir.actions.act_window">
+        <field name="name">WooCommerce Instances</field>
+        <field name="res_model">woo.instance</field>
+        <field name="view_mode">kanban,tree,form</field>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first WooCommerce Instance
+            </p>
+            <p>
+                Connect multiple WooCommerce stores to sync products and orders.<br/>
+                Each instance represents a separate WooCommerce installation.
+            </p>
+        </field>
+    </record>
+
+</odoo>
