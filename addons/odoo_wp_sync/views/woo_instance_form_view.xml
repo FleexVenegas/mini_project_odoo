@@ -342,6 +342,8 @@ Equipo de Ventas
                                 <group string="Warehouse">
                                     <group>
                                         <field name="warehouse_id"/>
+                                        <field name="update_stock" widget="boolean_toggle"/>
+                                        <field name="update_order_status_wc" widget="boolean_toggle"/>
                                     </group>
                                 </group>
                             </div>
