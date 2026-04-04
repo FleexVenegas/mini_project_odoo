@@ -1,5 +1,6 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_odoo_wp_sync,access_odoo_wp_sync,model_odoo_wp_sync,base.group_user,1,1,1,1
+access_woo_order_line,access_woo_order_line,model_woo_order_line,base.group_user,1,1,1,1
 access_confirmation_wizard,access_confirmation_wizard,model_confirmation_wizard,base.group_user,1,1,1,1
 access_woo_instance_user,access_woo_instance_user,model_woo_instance,base.group_user,1,0,0,0
 access_woo_instance_manager,access_woo_instance_manager,model_woo_instance,sales_team.group_sale_manager,1,1,1,1

@@ -125,13 +125,24 @@ Quick Setup
                                 <group string="Synchronization Settings">
                                     <group>
                                         <field name="sync_order_limit" widget="integer"/>
-                                        <field name="sync_days_back" widget="integer"/>
+                                        <field name="sync_from_date"/>
                                         <field name="sync_order_status"/>
+                                        <field name="sync_custom_statuses" placeholder="pending,processing,completed" invisible="sync_order_status != 'custom'"/>
                                     </group>
                                     <group>
                                         <field name="auto_sync" widget="boolean_toggle"/>
                                         <field name="sync_interval" invisible="not auto_sync"/>
-                                        <field name="sync_custom_statuses" placeholder="pending,processing,completed" invisible="sync_order_status != 'custom'"/>
+                                        <field name="next_auto_sync_date" readonly="1" invisible="not auto_sync"/>
+                                    </group>
+                                </group>
+
+                                <group string="Sync Strategy" class="mt-3">
+                                    <group>
+                                        <field name="incremental_enabled" widget="boolean_toggle"/>
+                                        <field name="full_sync_interval_days" invisible="not incremental_enabled"/>
+                                    </group>
+                                    <group>
+                                        <field name="sync_mode"/>
                                     </group>
                                 </group>
 
@@ -153,9 +164,9 @@ Orders per Sync
                                             <div class="card-body">
                                                 <h6 class="text-primary mb-2">
                                                     <i class="fa fa-calendar me-2"/>
-Days to Sync Back
+Sync From Date
                                                 </h6>
-                                                <p class="small text-muted mb-0">How many days back to sync orders (0 = all orders from beginning).</p>
+                                                <p class="small text-muted mb-0">Sync orders created from this date onwards. Leave empty to sync all orders.</p>
                                             </div>
                                         </div>
                                     </div>
@@ -178,6 +189,28 @@ Order Status Filter
 Auto Sync
                                                 </h6>
                                                 <p class="small text-muted mb-0">Enable automatic synchronization at regular intervals.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="card border-0 shadow-sm mb-3">
+                                            <div class="card-body">
+                                                <h6 class="text-primary mb-2">
+                                                    <i class="fa fa-bolt me-2"/>
+Incremental Sync
+                                                </h6>
+                                                <p class="small text-muted mb-0">When enabled, only orders modified since the last sync are fetched. Disabling forces a full sync every time.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="card border-0 shadow-sm mb-3">
+                                            <div class="card-body">
+                                                <h6 class="text-primary mb-2">
+                                                    <i class="fa fa-history me-2"/>
+Sync Mode
+                                                </h6>
+                                                <p class="small text-muted mb-0">Full: re-fetches all orders in each run. Incremental: only new or changed orders since last sync.</p>
                                             </div>
                                         </div>
                                     </div>

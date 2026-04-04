@@ -8,6 +8,10 @@
             <tree string="WooCommerce Orders" default_order="date_created desc" multi_edit="1">
                 <header>
                     <button name="action_open_create_sale_order_wizard" type="object" string="Crear Pedidos" class="btn-secondary" icon="fa-plus"/>
+                    <button name="action_wc_mark_processing" type="object" string="→ En Proceso"/>
+                    <button name="action_wc_mark_completed" type="object" string="→ Completado"/>
+                    <button name="action_wc_mark_on_hold" type="object" string="→ En Espera"/>
+                    <button name="action_wc_mark_cancelled" type="object" string="→ Cancelar en WC"/>
                 </header>
                 <field name="instance_id" string="Instance" optional="show"/>
                 <field name="name" string="Pedido"/>
@@ -27,6 +31,15 @@
         <field name="arch" type="xml">
             <form string="WooCommerce Order">
                 <header>
+                    <button name="action_open_create_sale_order_wizard" type="object" string="Crear Pedido en Odoo" class="btn-primary" invisible="sale_order_id" />
+
+                    <!-- Cambiar estado en WooCommerce -->
+                    <button name="action_wc_mark_processing" type="object" string="Marcar En Proceso" class="btn-secondary" invisible="status == 'processing'"/>
+                    <button name="action_wc_mark_completed" type="object" string="Marcar Completado" class="btn-secondary" invisible="status == 'completed'"/>
+                    <button name="action_wc_mark_on_hold" type="object" string="Poner En Espera" class="btn-secondary" invisible="status in ('on-hold', 'cancelled', 'refunded', 'failed')"/>
+                    <button name="action_wc_mark_cancelled" type="object" string="Cancelar en WC" class="btn-secondary" invisible="status in ('cancelled', 'refunded', 'failed')"/>
+                    <button name="action_wc_mark_refunded" type="object" string="Marcar Reembolsado" class="btn-secondary" invisible="status in ('refunded', 'cancelled', 'failed')"/>
+
                     <field name="status" widget="statusbar" options="{'clickable': '0'}" statusbar_visible="pending,processing,completed"/>
                 </header>
 
@@ -83,9 +96,18 @@
                     <notebook>
                         <!-- Order Items -->
                         <page string="Productos" name="items">
-
-                            <field name="items_info" nolabel="1" readonly="1" placeholder="La información de los productos aparecerá aquí..." options="{'resizable': False}"/>
-
+                            <field name="line_ids" nolabel="1" readonly="1">
+                                <tree string="Líneas del Pedido" create="false" delete="false" edit="false" no_open="true">
+                                    <field name="name" string="Producto"/>
+                                    <field name="sku" string="SKU"/>
+                                    <field name="quantity" string="Cantidad"/>
+                                    <field name="price" string="Precio Unit." widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                    <field name="subtotal" string="Subtotal" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                    <field name="total_tax" string="Impuesto" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                    <field name="total" string="Total" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                    <field name="currency_id" column_invisible="1"/>
+                                </tree>
+                            </field>
                         </page>
 
                         <!-- Shipping Information -->

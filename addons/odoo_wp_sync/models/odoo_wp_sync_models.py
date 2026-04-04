@@ -78,6 +78,13 @@ class OdooWpSync(models.Model):
     raw_data = fields.Text(string="Raw JSON Data", readonly=True)
     order_lines = fields.Text(string="Order Lines JSON", readonly=True)
 
+    line_ids = fields.One2many(
+        "woo.order.line",
+        "order_id",
+        string="Líneas del Pedido",
+        readonly=True,
+    )
+
     sale_order_id = fields.Many2one("sale.order")
 
     # Sync Info
@@ -140,11 +147,10 @@ class OdooWpSync(models.Model):
         should_do_full = force_full or instance._should_do_full_sync()
 
         if should_do_full:
-            # Full sync: Use date range from sync_days_back
+            # Full sync: Use configured start date
             sync_type = "full"
-            if instance.sync_days_back and instance.sync_days_back > 0:
-                date_from = datetime.now() - timedelta(days=instance.sync_days_back)
-                params["after"] = date_from.strftime("%Y-%m-%dT%H:%M:%S")
+            if instance.sync_from_date:
+                params["after"] = f"{instance.sync_from_date}T00:00:00"
         else:
             # Incremental sync: Only orders modified since last sync
             sync_type = "incremental"
@@ -160,9 +166,8 @@ class OdooWpSync(models.Model):
             else:
                 # Fallback to full sync if no previous sync date
                 sync_type = "full"
-                if instance.sync_days_back and instance.sync_days_back > 0:
-                    date_from = datetime.now() - timedelta(days=instance.sync_days_back)
-                    params["after"] = date_from.strftime("%Y-%m-%dT%H:%M:%S")
+                if instance.sync_from_date:
+                    params["after"] = f"{instance.sync_from_date}T00:00:00"
 
         # Filter by order status
         if instance.sync_order_status and instance.sync_order_status != "all":
@@ -311,8 +316,8 @@ class OdooWpSync(models.Model):
                 else:
                     hours = time_diff.seconds // 3600
                     filter_info.append(f"desde hace {hours}h")
-            elif instance.sync_days_back and sync_type == "full":
-                filter_info.append(f"últimos {instance.sync_days_back} días")
+            elif instance.sync_from_date and sync_type == "full":
+                filter_info.append(f"desde {instance.sync_from_date}")
 
             if instance.sync_order_status and instance.sync_order_status != "all":
                 status_label = dict(
@@ -388,19 +393,34 @@ class OdooWpSync(models.Model):
 
         # Order items
         order_lines = []
+        line_ids_commands = [(5, 0, 0)]  # Clear existing lines on update
 
         for item in order_data.get("line_items", []):
-            order_lines.append(
-                {
-                    "sku": item.get("sku"),
-                    "name": item.get("name"),
-                    "quantity": item.get("quantity", 0),
-                    "total": float(item.get("total", 0)),
-                    "price": float(item.get("price", 0)),
-                    "subtotal": float(item.get("subtotal", 0)),
-                    "total_tax": float(item.get("total_tax", 0)),
-                    "taxes": item.get("taxes", []),
-                }
+            line_data = {
+                "sku": item.get("sku"),
+                "name": item.get("name"),
+                "quantity": item.get("quantity", 0),
+                "total": float(item.get("total", 0)),
+                "price": float(item.get("price", 0)),
+                "subtotal": float(item.get("subtotal", 0)),
+                "total_tax": float(item.get("total_tax", 0)),
+                "taxes": item.get("taxes", []),
+            }
+            order_lines.append(line_data)
+            line_ids_commands.append(
+                (
+                    0,
+                    0,
+                    {
+                        "sku": line_data["sku"],
+                        "name": line_data["name"],
+                        "quantity": line_data["quantity"],
+                        "price": line_data["price"],
+                        "subtotal": line_data["subtotal"],
+                        "total": line_data["total"],
+                        "total_tax": line_data["total_tax"],
+                    },
+                )
             )
 
         # Convert WooCommerce date format to Odoo format
@@ -428,10 +448,10 @@ class OdooWpSync(models.Model):
             "payment_method": order_data.get("payment_method_title", ""),
             "created_via": order_data.get("created_via", ""),
             "order_lines": json.dumps(order_lines),
+            "line_ids": line_ids_commands,
             "raw_data": json.dumps(order_data, indent=2),
             "synced_date": fields.Datetime.now(),
         }
-    
 
     def action_open_create_sale_order_wizard(self):
         """Abre el wizard de confirmación para crear pedidos en Odoo (soporta múltiples registros)"""

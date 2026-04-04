@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--
+        Cron único y compartido para la sincronización automática con WooCommerce.
+
+        Funciona así:
+        - Se ejecuta cada 15 minutos (frecuencia máxima de resolución para intervalos de instancia).
+        - El método _run_scheduled_sync() itera las instancias con auto_sync=True
+          y sólo lanza la sincronización si el sync_interval de cada instancia ha expirado.
+        - Activarlo/desactivarlo se controla desde la instancia (auto_sync toggle),
+          no modificando este registro.
+    -->
+    <record id="ir_cron_woo_auto_sync" model="ir.cron">
+        <field name="name">WooCommerce: Auto Sync Instances</field>
+        <field name="model_id" ref="model_woo_instance"/>
+        <field name="state">code</field>
+        <field name="code">model._run_scheduled_sync()</field>
+        <field name="interval_number">15</field>
+        <field name="interval_type">minutes</field>
+        <field name="numbercall">-1</field>
+        <field name="active">True</field>
+        <field name="priority">10</field>
+    </record>
+</odoo>

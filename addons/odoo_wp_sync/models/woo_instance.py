@@ -91,10 +91,9 @@ class WooInstance(models.Model):
         default=100,
         help="Maximum number of orders to sync per execution",
     )
-    sync_days_back = fields.Integer(
-        string="Days to Sync Back",
-        default=30,
-        help="Number of days back to sync orders from (0 = all orders)",
+    sync_from_date = fields.Date(
+        string="Sync From Date",
+        help="Sync orders created from this date onwards. Leave empty to sync all orders.",
     )
     sync_order_status = fields.Selection(
         [
@@ -143,12 +142,17 @@ class WooInstance(models.Model):
     auto_sync = fields.Boolean(
         string="Auto Sync",
         default=False,
-        help="Enable automatic synchronization (requires scheduled action)",
+        help="Enable automatic synchronization via the scheduled cron job",
     )
     sync_interval = fields.Integer(
         string="Sync Interval (minutes)",
         default=60,
-        help="Interval in minutes for automatic synchronization",
+        help="Minimum minutes between automatic syncs for this instance",
+    )
+    next_auto_sync_date = fields.Datetime(
+        string="Next Sync",
+        compute="_compute_next_auto_sync_date",
+        help="Estimated date/time of next automatic synchronization",
     )
 
     # Sync Statistics and Tracking
@@ -650,3 +654,56 @@ class WooInstance(models.Model):
                 "sticky": False,
             },
         }
+
+    # ── Auto Sync ──────────────────────────────────────────────────────────────
+
+    @api.depends("auto_sync", "last_sync_date", "sync_interval")
+    def _compute_next_auto_sync_date(self):
+        from datetime import timedelta
+
+        for record in self:
+            if not record.auto_sync or not record.last_sync_date:
+                record.next_auto_sync_date = False
+            else:
+                interval = timedelta(minutes=record.sync_interval or 60)
+                record.next_auto_sync_date = record.last_sync_date + interval
+
+    def _is_sync_due(self):
+        """Return True if this instance is due for an automatic sync."""
+        self.ensure_one()
+        if not self.auto_sync or self.state != "connected":
+            return False
+        if not self.last_sync_date:
+            return True
+        from datetime import timedelta
+
+        interval = timedelta(minutes=self.sync_interval or 60)
+        return (self.last_sync_date + interval) <= fields.Datetime.now()
+
+    @api.model
+    def _run_scheduled_sync(self):
+        """
+        Entry point for the cron job.
+        Iterates all active, connected instances that have auto_sync=True
+        and whose sync interval has elapsed, then triggers a sync for each.
+        """
+        instances = self.search(
+            [
+                ("active", "=", True),
+                ("auto_sync", "=", True),
+                ("state", "=", "connected"),
+            ]
+        )
+
+        for instance in instances:
+            if not instance._is_sync_due():
+                continue
+
+            try:
+                _logger.info("Auto sync starting for instance: %s", instance.name)
+                self.env["odoo.wp.sync"].with_context(
+                    default_instance_id=instance.id
+                ).action_sync()
+                _logger.info("Auto sync completed for instance: %s", instance.name)
+            except Exception:
+                _logger.exception("Auto sync failed for instance: %s", instance.name)
