@@ -18,4 +18,11 @@
         </field>
     </record>
 
+
+    <record id="action_products_kanban" model="ir.actions.act_window">
+        <field name="name">Products</field>
+        <field name="res_model">product.product</field>
+        <field name="view_mode">kanban,tree,form</field>
+    </record>
+
 </odoo>

@@ -85,6 +85,8 @@ class WooOrderActions(models.Model):
             message = "\n".join(errors[:5])
             if len(errors) > 5:
                 message += f"\n… y {len(errors) - 5} error(es) más"
+            # Sin reload — nada cambió
+            next_action = False
         elif errors:
             title = _("Actualizado con advertencias")
             notif_type = "warning"
@@ -92,6 +94,7 @@ class WooOrderActions(models.Model):
                 f"✅ {len(successes)} actualizado(s) a '{label}'\n"
                 f"❌ {len(errors)} error(es):\n" + "\n".join(errors[:3])
             )
+            next_action = {"type": "ir.actions.client", "tag": "reload"}
         else:
             title = _("Estado actualizado")
             notif_type = "success"
@@ -99,16 +102,21 @@ class WooOrderActions(models.Model):
                 f"✅ {len(successes)} de {total} pedido(s) "
                 f"actualizado(s) a '{label}' en WooCommerce"
             )
+            next_action = {"type": "ir.actions.client", "tag": "reload"}
+
+        params = {
+            "title": title,
+            "message": message,
+            "type": notif_type,
+            "sticky": notif_type != "success",
+        }
+        if next_action:
+            params["next"] = next_action
 
         return {
             "type": "ir.actions.client",
             "tag": "display_notification",
-            "params": {
-                "title": title,
-                "message": message,
-                "type": notif_type,
-                "sticky": notif_type != "success",
-            },
+            "params": params,
         }
 
     # ── Acciones públicas de cambio de estado ──────────────────────────────────
@@ -145,3 +153,52 @@ class WooOrderActions(models.Model):
 
     # ── Otras acciones futuras ─────────────────────────────────────────────────
     # Añadir aquí: notas de pedido, reenvío de correo, actualización de tracking, etc.
+
+
+class StockPickingWooSync(models.Model):
+    """
+    Gancho en stock.picking para actualizar automáticamente el estado del
+    pedido en WooCommerce a 'completed' cuando se valida una entrega en Odoo.
+
+    Sólo actúa cuando:
+      - El picking es de tipo salida ('outgoing').
+      - Está vinculado a un pedido de venta.
+      - Ese pedido de venta tiene un registro odoo.wp.sync asociado.
+      - La instancia WooCommerce tiene update_order_status_wc = True.
+    """
+
+    _inherit = "stock.picking"
+
+    def _action_done(self):
+        result = super()._action_done()
+
+        # Solo procesamos albaranes de salida que quedaron 'done'
+        outgoing_done = self.filtered(
+            lambda p: p.state == "done"
+            and p.picking_type_code == "outgoing"
+            and p.sale_id
+        )
+
+        for picking in outgoing_done:
+            woo_order = self.env["odoo.wp.sync"].search(
+                [("sale_order_id", "=", picking.sale_id.id)], limit=1
+            )
+            if not woo_order:
+                continue
+            if not woo_order.instance_id.update_order_status_wc:
+                continue
+            try:
+                woo_order._wc_update_order_status("completed")
+                _logger.info(
+                    "Auto-completed WooCommerce order %s after delivery %s",
+                    woo_order.order_number,
+                    picking.name,
+                )
+            except Exception:
+                _logger.exception(
+                    "Failed to auto-complete WooCommerce order %s after delivery %s",
+                    woo_order.order_number,
+                    picking.name,
+                )
+
+        return result
