@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Herencia del formulario de producto para añadir pestaña WooCommerce -->
+    <record id="view_product_template_inherit_woo" model="ir.ui.view">
+        <field name="name">product.template.form.inherit.woo</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_form_view"/>
+        <field name="arch" type="xml">
+
+            <!-- Campo auxiliar para controlar visibilidad según instancia -->
+            <xpath expr="//sheet" position="inside">
+                <field name="woo_allow_publish" invisible="1"/>
+            </xpath>
+
+            <!-- Botón estadístico en el smart button bar -->
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button name="action_publish_to_woocommerce" type="object" class="oe_stat_button" icon="fa-shopping-cart" string="WooCommerce" invisible="not woo_allow_publish">
+                    <field name="woo_published_count" widget="statinfo" string="Instancias"/>
+                </button>
+            </xpath>
+
+            <!-- Pestaña WooCommerce al final del notebook -->
+            <xpath expr="//notebook" position="inside">
+                <page string="WooCommerce" name="page_woocommerce" invisible="not woo_allow_publish">
+                    <group>
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <button name="action_publish_to_woocommerce"
+                                    type="object"
+                                    string="Publicar en instancia…"
+                                    class="btn btn-primary wc-custom-btn-instance"
+                                    invisible="not woo_allow_publish"/>
+                        </div>
+                    </group>
+                    <field name="woo_mapping_ids" nolabel="1" readonly="1">
+                        <tree editable="bottom" create="false" delete="false">
+                            <field name="instance_id" optional="show"/>
+                            <field name="woo_id" optional="show"/>
+                            <field name="woo_name" optional="show"/>
+                            <field name="woo_sku" optional="show"/>
+                            <field name="woo_status" optional="show" widget="badge" decoration-success="woo_status == 'publish'" decoration-warning="woo_status == 'pending'" decoration-muted="woo_status in ('draft','private')"/>
+                            <field name="woo_price" optional="show" widget="monetary"/>
+                            <field name="link_state" optional="show" widget="badge" decoration-success="link_state == 'linked'" decoration-danger="link_state == 'unlinked'"/>
+                            <field name="last_sync_date" optional="hide"/>
+                        </tree>
+                    </field>
+                </page>
+            </xpath>
+
+        </field>
+    </record>
+
+    <!-- Server action: aparece en el menú "Acción" al seleccionar productos en la lista -->
+    <record id="action_bulk_publish_to_woocommerce" model="ir.actions.server">
+        <field name="name">Publicar en WooCommerce</field>
+        <field name="model_id" ref="product.model_product_template"/>
+        <field name="binding_model_id" ref="product.model_product_template"/>
+        <field name="binding_view_types">list</field>
+        <field name="state">code</field>
+        <field name="code">
+if records:
+    action = {
+        "type": "ir.actions.act_window",
+        "name": "Publicar en WooCommerce",
+        "res_model": "woo.bulk.publish.wizard",
+        "view_mode": "form",
+        "target": "new",
+        "context": {
+            "active_ids": records.ids,
+            "active_model": "product.template",
+        },
+    }
+        </field>
+    </record>
+
+</odoo>

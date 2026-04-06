@@ -1,1 +1,8 @@
 /* SCSS base */
+.wc-custom-btn-instance {
+    width: 400px !important;
+
+    @media screen and (max-width: 768px) {
+        width: 100% !important;
+    }
+}

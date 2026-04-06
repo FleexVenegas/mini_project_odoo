@@ -81,6 +81,16 @@ class WooInstance(models.Model):
         compute="_compute_statistics",
         help="Number of completed orders from this instance",
     )
+    woo_product_count = fields.Integer(
+        string="Productos WC",
+        compute="_compute_statistics",
+        help="Número de productos importados desde esta instancia de WooCommerce",
+    )
+    woo_product_linked_count = fields.Integer(
+        string="Productos Vinculados",
+        compute="_compute_statistics",
+        help="Productos WooCommerce vinculados a un producto de Odoo",
+    )
 
     # Technical
     color = fields.Integer(string="Color Index", default=0)
@@ -235,6 +245,10 @@ class WooInstance(models.Model):
             )
             record.completed_order_count = self.env["odoo.wp.sync"].search_count(
                 domain_base + [("status", "=", "completed")]
+            )
+            record.woo_product_count = self.env["woo.product"].search_count(domain_base)
+            record.woo_product_linked_count = self.env["woo.product"].search_count(
+                domain_base + [("link_state", "=", "linked")]
             )
 
     @api.constrains("wp_url")
@@ -707,3 +721,82 @@ class WooInstance(models.Model):
                 _logger.info("Auto sync completed for instance: %s", instance.name)
             except Exception:
                 _logger.exception("Auto sync failed for instance: %s", instance.name)
+
+    def action_sync_products(self):
+        """Abre el wizard de confirmación antes de importar productos."""
+        self.ensure_one()
+
+        if self.state != "connected":
+            return {
+                "type": "ir.actions.client",
+                "tag": "display_notification",
+                "params": {
+                    "title": _("No conectado"),
+                    "message": _("La instancia '%s' no está conectada.") % self.name,
+                    "type": "warning",
+                    "sticky": False,
+                },
+            }
+
+        return self.env["confirmation.wizard"].create_confirmation(
+            model_name="woo.instance",
+            method_name="_do_sync_products",
+            title=_("¿Importar productos desde WooCommerce?"),
+            description=(
+                f"Esta acción descargará todos los productos de <b>{self.name}</b> "
+                "desde WooCommerce y los vinculará automáticamente a los productos "
+                "de Odoo que coincidan por SKU.<br/><br/>"
+                "Los productos ya vinculados manualmente no serán sobreescritos."
+            ),
+            record_id=self.id,
+            dialog_size="medium",
+        )
+
+    def _do_sync_products(self):
+        """Ejecuta la importación real de productos (llamado por el wizard de confirmación)."""
+        self.ensure_one()
+
+        try:
+            stats = self.env["woo.product.sync"].import_and_link(self)
+        except Exception as e:
+            return {
+                "type": "ir.actions.client",
+                "tag": "display_notification",
+                "params": {
+                    "title": _("Error al importar productos"),
+                    "message": str(e),
+                    "type": "danger",
+                    "sticky": True,
+                },
+            }
+
+        message = (
+            f"✅ Creados: {stats['created']} | "
+            f"🔄 Actualizados: {stats['updated']} | "
+            f"🔗 Vinculados: {stats['linked']} | "
+            f"⚠️ Sin vincular: {stats['unlinked']}"
+        )
+        if stats["errors"]:
+            message += f"\n❌ Errores: {stats['errors']}"
+
+        return {
+            "type": "ir.actions.act_window",
+            "name": message,
+            "res_model": "woo.product",
+            "view_mode": "tree,form",
+            "domain": [("instance_id", "=", self.id)],
+            "context": {"default_instance_id": self.id},
+            "target": "current",
+        }
+
+    def action_view_woo_products(self):
+        """Abre los productos WooCommerce de esta instancia."""
+        self.ensure_one()
+        return {
+            "type": "ir.actions.act_window",
+            "name": _("Productos WooCommerce — %s") % self.name,
+            "res_model": "woo.product",
+            "view_mode": "tree,form",
+            "domain": [("instance_id", "=", self.id)],
+            "context": {"default_instance_id": self.id},
+        }

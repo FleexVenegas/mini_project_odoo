@@ -24,3 +24,16 @@ class WooInstanceWarehouse(models.Model):
         default=False,
         help="Si está activo, se actualizará el estado del pedido en WooCommerce al sincronizar (por ejemplo, a 'processing' o 'completed' según la configuración de estados)",
     )
+
+    # Utilizamos este archivo para los productos
+    allow_create_products = fields.Boolean(
+        string="Permitir creación de productos",
+        default=False,
+        help="Si está activo, se crearán productos de Odoo a WooCommerce",
+    )
+
+    who_can_publish = fields.Many2many(
+        "res.users",
+        string="Permitir publicación",
+        help="Usuarios que pueden publicar productos en WooCommerce",
+    )

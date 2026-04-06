@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ── Action ─────────────────────────────────────────────────────────── -->
+    <record id="action_woo_product" model="ir.actions.act_window">
+        <field name="name">Productos WooCommerce</field>
+        <field name="res_model">woo.product</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No hay productos importados todavía
+            </p>
+            <p>
+                Ve a una instancia WooCommerce y haz clic en
+                <strong>Sincronizar Productos</strong> para importarlos.
+            </p>
+        </field>
+    </record>
+
+    <!-- ── Tree ───────────────────────────────────────────────────────────── -->
+    <record id="view_woo_product_tree" model="ir.ui.view">
+        <field name="name">woo.product.tree</field>
+        <field name="model">woo.product</field>
+        <field name="arch" type="xml">
+            <tree string="Productos WooCommerce" default_order="instance_id, woo_id" decoration-muted="link_state == 'unlinked'">
+                <field name="instance_id" string="Instancia" optional="show"/>
+                <field name="woo_id" string="ID WC" optional="show"/>
+                <field name="woo_name" string="Nombre en WC"/>
+                <field name="woo_sku" string="SKU"/>
+                <field name="woo_status" string="Estado WC" widget="badge" decoration-success="woo_status == 'publish'" decoration-warning="woo_status == 'draft'" decoration-info="woo_status == 'pending'" decoration-muted="woo_status == 'private'"/>
+                <field name="woo_type" string="Tipo" optional="hide"/>
+                <field name="woo_price" string="Precio" optional="show"/>
+                <field name="product_tmpl_id" string="Producto Odoo"/>
+                <field name="woo_min_stock" string="Stock mínimo" optional="hide"/>
+                <field name="woo_max_stock" string="Stock máximo" optional="hide"/>
+                <field name="stock_status" string="Estado de stock" widget="badge" decoration-success="stock_status == 'instock'" decoration-warning="stock_status == 'onbackorder'" decoration-muted="stock_status == 'outofstock'"/>
+                <field name="link_state" string="Vínculo" widget="badge" decoration-success="link_state == 'linked'" decoration-warning="link_state == 'unlinked'"/>
+                <field name="last_sync_date" string="Sincronizado" optional="hide"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- ── Form ───────────────────────────────────────────────────────────── -->
+    <record id="view_woo_product_form" model="ir.ui.view">
+        <field name="name">woo.product.form</field>
+        <field name="model">woo.product</field>
+        <field name="arch" type="xml">
+            <form string="Producto WooCommerce">
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_link_manually" type="object" class="oe_stat_button" icon="fa-link" invisible="product_tmpl_id">
+                            <div class="o_field_widget o_stat_info">
+                                <span class="o_stat_text">Vincular</span>
+                            </div>
+                        </button>
+                        <button name="action_unlink" type="object" class="oe_stat_button" icon="fa-unlink" invisible="not product_tmpl_id">
+                            <div class="o_field_widget o_stat_info">
+                                <span class="o_stat_text">Desvincular</span>
+                            </div>
+                        </button>
+                    </div>
+
+                    <div class="oe_title">
+                        <h1>
+                            <field name="woo_name" readonly="1"/>
+                        </h1>
+                        <h3>
+                            <field name="link_state" widget="badge" decoration-success="link_state == 'linked'" decoration-warning="link_state == 'unlinked'"/>
+                        </h3>
+                    </div>
+
+                    <group>
+                        <group string="Datos WooCommerce">
+                            <field name="instance_id" readonly="1"/>
+                            <field name="woo_id" readonly="1"/>
+                            <field name="woo_sku" readonly="1"/>
+                            <field name="woo_status" readonly="1"/>
+                            <field name="woo_type" readonly="1"/>
+                            <field name="woo_price" readonly="1"/>
+                            <!-- <field name="woo_permalink" readonly="1" widget="url"/> -->
+                        </group>
+                        <group string="Vínculo con Odoo">
+                            <field name="product_tmpl_id" options="{'no_create': True}" domain="[('sale_ok', '=', True)]"/>
+                            <field name="last_sync_date" readonly="1"/>
+                        </group>
+
+                    </group>
+                    <group>
+                        <group string="Estado de stock">
+                            <field name="woo_min_stock" />
+                            <field name="woo_max_stock" />
+                            <field name="stock_status" 
+                                widget="badge" 
+                                decoration-success="stock_status == 'instock'" 
+                                decoration-warning="stock_status == 'onbackorder'" 
+                                decoration-muted="stock_status == 'outofstock'"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- ── Search ─────────────────────────────────────────────────────────── -->
+    <record id="view_woo_product_search" model="ir.ui.view">
+        <field name="name">woo.product.search</field>
+        <field name="model">woo.product</field>
+        <field name="arch" type="xml">
+            <search string="Buscar Productos WooCommerce">
+                <field name="woo_name" string="Nombre"/>
+                <field name="woo_sku" string="SKU"/>
+                <field name="product_tmpl_id" string="Producto Odoo"/>
+                <field name="instance_id" string="Instancia"/>
+
+                <filter name="linked" string="Vinculados" domain="[('link_state','=','linked')]"/>
+                <filter name="unlinked" string="Sin vincular" domain="[('link_state','=','unlinked')]"/>
+                <separator/>
+                <filter name="published" string="Publicados" domain="[('woo_status','=','publish')]"/>
+                <filter name="draft" string="Borradores" domain="[('woo_status','=','draft')]"/>
+
+                <group expand="0" string="Agrupar por">
+                    <filter name="group_instance" string="Instancia" context="{'group_by': 'instance_id'}"/>
+                    <filter name="group_link" string="Estado de vínculo" context="{'group_by': 'link_state'}"/>
+                    <filter name="group_status" string="Estado WC" context="{'group_by': 'woo_status'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+</odoo>

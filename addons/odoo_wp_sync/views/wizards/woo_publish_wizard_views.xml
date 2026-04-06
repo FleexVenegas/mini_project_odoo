@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_woo_publish_wizard_form" model="ir.ui.view">
+        <field name="name">woo.publish.wizard.form</field>
+        <field name="model">woo.publish.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Publicar en WooCommerce">
+                <sheet>
+                    <div class="oe_title">
+                        <h1>Publicar producto en WooCommerce</h1>
+                        <p class="text-muted">
+                            Elija la instancia de destino y configure las opciones
+                            antes de enviar el producto.
+                        </p>
+                    </div>
+
+                    <group string="Producto seleccionado" col="2">
+                        <field name="product_tmpl_id" invisible="1"/>
+                        <field name="product_name" readonly="1"/>
+                        <field name="product_sku" readonly="1"/>
+                        <field name="product_price" readonly="1" widget="monetary"/>
+                    </group>
+
+                    <group string="Configuración de publicación" col="2">
+                        <field name="instance_id" options="{'no_create': True}" placeholder="Seleccionar instancia…"/>
+                        <field name="wc_status" widget="radio"/>
+                        <field name="price_override" widget="monetary" placeholder="0 = usar precio de lista"/>
+                    </group>
+                    
+                    <group string="Descripción del producto">
+
+                        <field name="description" />
+                    </group>
+
+                    <div class="alert alert-info" role="status">
+                        <i class="fa fa-info-circle me-1"/>
+                        Si este producto ya existe en la instancia seleccionada,
+                        se actualizará en lugar de crear uno nuevo.
+                    </div>
+                </sheet>
+                <footer>
+                    <button name="action_publish" string="Publicar en WooCommerce" type="object" class="btn-primary" data-hotkey="q"/>
+                    <button string="Cancelar" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

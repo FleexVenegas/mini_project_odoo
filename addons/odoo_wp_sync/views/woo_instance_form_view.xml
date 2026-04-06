@@ -21,6 +21,14 @@
                         <button name="action_view_orders" type="object" class="oe_stat_button" icon="fa-shopping-cart" invisible="state != 'connected'">
                             <field name="order_count" widget="statinfo" string="Orders"/>
                         </button>
+                        <button name="action_view_woo_products" type="object" class="oe_stat_button" icon="fa-cube" invisible="state != 'connected'">
+                            <field name="woo_product_count" widget="statinfo" string="Productos WC"/>
+                        </button>
+                        <button name="action_sync_products" type="object" class="oe_stat_button" icon="fa-download" invisible="state != 'connected'">
+                            <div class="o_field_widget o_stat_info">
+                                <span class="o_stat_text">Importar Productos</span>
+                            </div>
+                        </button>
                         <button name="action_sync_orders" type="object" class="oe_stat_button" icon="fa-refresh" invisible="state != 'connected'">
                             <div class="o_field_widget o_stat_info">
                                 <span class="o_stat_text">Sync Now</span>
@@ -344,6 +352,22 @@ Equipo de Ventas
                                         <field name="warehouse_id"/>
                                         <field name="update_stock" widget="boolean_toggle"/>
                                         <field name="update_order_status_wc" widget="boolean_toggle"/>
+                                    </group>
+                                </group>
+                            </div>
+                        </page>
+
+
+                        <page name="wc_product" string="Products" invisible="state != 'connected'">
+                            <div class="p-3">
+                                <div class="alert alert-info mb-4" role="alert">
+                                    <i class="fa fa-info-circle me-2"/>
+                                    Configure lo necesario para los productos de WooCommerce
+                                </div>
+                                <group string="Products">
+                                    <group>
+                                        <field name="allow_create_products" widget="boolean_toggle"/>
+                                        <field name="who_can_publish" widget="many2many_tags" invisible="not allow_create_products"/>
                                     </group>
                                 </group>
                             </div>

@@ -35,12 +35,25 @@ Odoo WordPress Sync
         "views/woo_instance_form_view.xml",
         "views/woo_instance_kanban_view.xml",
         "views/woo_instance_search_view.xml",
+        # woo.product
+        "views/woo_product_views.xml",
         # odoo.wp.sync
         "views/odoo_wp_sync_views.xml",
         # Menú y wizards
         "views/odoo_wp_menu.xml",
         "views/wizards/odoo_wp_confirm_sync_views.xml",
+        "views/wizards/woo_link_wizard_views.xml",
+        "views/wizards/woo_publish_wizard_views.xml",
+        "views/wizards/woo_bulk_publish_wizard_views.xml",
+        # Herencia producto
+        "views/woo_product_template_views.xml",
     ],
+    "assets": {
+        "web.assets_backend": [
+            # "odoo_wp_sync/static/src/js/script.js",
+            "odoo_wp_sync/static/src/scss/styles.scss",
+        ]
+    },
     "installable": True,
     "application": True,
     "auto_install": False,
