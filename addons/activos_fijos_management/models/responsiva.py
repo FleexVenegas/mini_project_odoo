@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import base64
 import logging
 from odoo import models, fields, api
 from odoo.exceptions import ValidationError
@@ -41,10 +42,16 @@ class ActivoFijoResponsiva(models.Model):
         tracking=True,
     )
 
-    responsiva_pdf = fields.Binary(string="Generated Accountability PDF")
-    pdf_filename = fields.Char(string="PDF File Name")
+    puesto_id = fields.Many2one("hr.job", string="Puesto / Cargo", tracking=True)
+    departamento_id = fields.Many2one(
+        "hr.department", string="Departamento", tracking=True
+    )
+    almacen_id = fields.Many2one("stock.warehouse", string="Almacén", tracking=True)
 
-    observaciones = fields.Text(string="Notes")
+    responsiva_pdf = fields.Binary(string="PDF Responsiva Generado")
+    pdf_filename = fields.Char(string="Nombre del Archivo PDF")
+
+    observaciones = fields.Text(string="Observaciones")
 
     # Related image from the asset
     activo_image = fields.Image(
@@ -53,6 +60,29 @@ class ActivoFijoResponsiva(models.Model):
         readonly=True,
         store=False,
     )
+
+    @api.onchange("activo_id")
+    def _onchange_activo_id(self):
+        if self.activo_id:
+            self.responsable_id = self.activo_id.responsable_id
+            self.departamento_id = self.activo_id.departamento_id
+            self.almacen_id = self.activo_id.almacen_id
+            # Auto-fill puesto from the employee linked to the responsible
+            if self.activo_id.responsable_id:
+                employee = self.env["hr.employee"].search(
+                    [("user_id", "=", self.activo_id.responsable_id.id)], limit=1
+                )
+                if employee and employee.job_id:
+                    self.puesto_id = employee.job_id
+
+    @api.onchange("responsable_id")
+    def _onchange_responsable_id(self):
+        if self.responsable_id and not self.puesto_id:
+            employee = self.env["hr.employee"].search(
+                [("user_id", "=", self.responsable_id.id)], limit=1
+            )
+            if employee and employee.job_id:
+                self.puesto_id = employee.job_id
 
     @api.depends("activo_id", "responsable_id", "fecha_asignacion")
     def _compute_name(self):
@@ -66,13 +96,14 @@ class ActivoFijoResponsiva(models.Model):
 
     def generar_responsiva_pdf(self):
         for record in self:
-            pdf_content, _ = self.env.ref(
-                "activos_fijos_management.act_report_responsiva_pdf"
-            )._render_qweb_pdf(record)
+            pdf_content, _ = self.env["ir.actions.report"]._render_qweb_pdf(
+                "activos_fijos_management.act_report_responsiva_pdf",
+                record.ids,
+            )
             filename = f"RESPONSIVA_{record.activo_id.name}.pdf"
             record.write(
                 {
-                    "responsiva_pdf": pdf_content,
+                    "responsiva_pdf": base64.b64encode(pdf_content),
                     "pdf_filename": filename,
                 }
             )

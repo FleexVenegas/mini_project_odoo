@@ -1,63 +1,339 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-  <template id="responsiva_template">
-  <t t-call="web.basic_layout">
-    <t t-set="title">Responsiva de Activo Fijo - <t t-esc="docs.activo_id.name"/></t>
-    <div class="page">
-      <h2>Responsiva de Activo Fijo</h2>
-      <table class="table table-sm" style="width:100%; margin-bottom: 20px;">
-        <tbody>
-          <tr>
-            <th>Folio:</th>
-            <td><t t-esc="docs.activo_id.name"/></td>
-            <th>Fecha de Asignación:</th>
-            <td><t t-esc="docs.fecha_asignacion"/></td>
-          </tr>
-          <tr>
-            <th>Activo:</th>
-            <td colspan="3"><t t-esc="docs.activo_id.descripcion or '-'"/></td>
-          </tr>
-          <tr>
-            <th>Categoría:</th>
-            <td><t t-esc="docs.activo_id.categoria_id.name"/></td>
-            <th>Estado:</th>
-            <td><t t-esc="docs.activo_id.estado"/></td>
-          </tr>
-          <tr>
-            <th>Responsable:</th>
-            <td><t t-esc="docs.responsable_id.name"/></td>
-            <th>Ubicación:</th>
-            <td><t t-esc="docs.activo_id.ubicacion or '-'"/></td>
-          </tr>
-          <tr>
-            <th>Costo:</th>
-            <td>$<t t-esc="docs.activo_id.costo or 0.0"/></td>
-            <th>Cuenta Contable:</th>
-            <td><t t-esc="docs.activo_id.cuenta_contable_id.name or '-'"/></td>
-          </tr>
-        </tbody>
-      </table>
+  <template id="responsiva_template" name="Responsiva de Activo Fijo">
+    <t t-call="web.html_container">
+      <t t-foreach="docs" t-as="doc">
+        <t t-call="web.external_layout">
 
-      <div style="margin-top: 30px;">
-        <strong>Observaciones:</strong>
-        <p><t t-esc="docs.observaciones or 'Ninguna'"/></p>
-      </div>
+          <style>
+            @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&amp;family=DM+Mono:wght@400;500&amp;display=swap');
 
-      <div style="margin-top: 60px;">
-        <table style="width: 100%; border-top: 1px solid #000; padding-top: 10px;">
-          <tr>
-            <td style="width: 50%; text-align: center;">
-              <p>__________________________</p>
-              <p>Firma del Responsable</p>
-            </td>
-            <td style="width: 50%; text-align: center;">
-              <p>__________________________</p>
-              <p>Firma de quien entrega</p>
-            </td>
-          </tr>
-        </table>
-      </div>
-    </div>
-  </t>
-</template>
+            .responsiva-wrap * {
+              box-sizing: border-box;
+            }
+
+            .responsiva-wrap {
+              font-family: 'DM Sans', sans-serif;
+              font-size: 11px;
+              color: #1a1a1a;
+              line-height: 1.6;
+              padding: 0;
+            }
+
+            /* ── Encabezado ─────────────────────────────── */
+            .rv-header {
+              display: flex;
+              justify-content: space-between;
+              align-items: flex-start;
+              margin-bottom: 32px;
+            }
+
+            .rv-title {
+              font-size: 22px;
+              font-weight: 300;
+              letter-spacing: -0.5px;
+              color: #1a1a1a;
+              margin: 0 0 4px 0;
+            }
+
+            .rv-subtitle {
+              font-size: 10.5px;
+              color: #888;
+              letter-spacing: 0.8px;
+              text-transform: uppercase;
+              font-weight: 500;
+            }
+
+            .rv-meta {
+              text-align: right;
+            }
+
+            .rv-meta-row {
+              display: flex;
+              justify-content: flex-end;
+              align-items: baseline;
+              gap: 12px;
+              margin-bottom: 3px;
+            }
+
+            .rv-meta-label {
+              font-size: 9.5px;
+              color: #aaa;
+              text-transform: uppercase;
+              letter-spacing: 0.8px;
+              font-weight: 500;
+            }
+
+            .rv-meta-value {
+              font-family: 'DM Mono', monospace;
+              font-size: 11px;
+              font-weight: 500;
+              color: #1a1a1a;
+            }
+
+            /* ── Divisor fino ───────────────────────────── */
+            .rv-rule {
+              border: none;
+              border-top: 1px solid #e0e0e0;
+              margin: 0 0 28px 0;
+            }
+
+            .rv-rule-heavy {
+              border: none;
+              border-top: 2px solid #1a1a1a;
+              margin: 0 0 28px 0;
+            }
+
+            /* ── Párrafos ───────────────────────────────── */
+            .rv-body {
+              font-size: 11.5px;
+              line-height: 2;
+              text-align: justify;
+              color: #333;
+              margin-bottom: 20px;
+            }
+
+            .rv-body strong {
+              font-weight: 600;
+              color: #1a1a1a;
+            }
+
+            /* ── Tabla de activo ────────────────────────── */
+            .rv-table {
+              width: 100%;
+              border-collapse: collapse;
+              margin-bottom: 28px;
+            }
+
+            .rv-table thead tr {
+              border-top: 2px solid #1a1a1a;
+              border-bottom: 1px solid #1a1a1a;
+            }
+
+            .rv-table th {
+              font-size: 9px;
+              font-weight: 600;
+              letter-spacing: 0.9px;
+              text-transform: uppercase;
+              color: #555;
+              padding: 8px 10px;
+              text-align: left;
+            }
+
+            .rv-table th.center { text-align: center; }
+
+            .rv-table tbody tr {
+              border-bottom: 1px solid #e8e8e8;
+            }
+
+            .rv-table td {
+              font-size: 11.5px;
+              padding: 12px 10px;
+              color: #1a1a1a;
+              vertical-align: middle;
+            }
+
+            .rv-table td.center { text-align: center; }
+
+            .rv-table td.mono {
+              font-family: 'DM Mono', monospace;
+              font-size: 10.5px;
+              color: #444;
+            }
+
+            .rv-table td.desc {
+              font-weight: 500;
+            }
+
+            /* ── Tag de categoría ───────────────────────── */
+            .rv-tag {
+              display: inline-block;
+              background: #f2f2f2;
+              color: #555;
+              font-size: 9.5px;
+              font-weight: 600;
+              letter-spacing: 0.6px;
+              text-transform: uppercase;
+              padding: 2px 8px;
+              border-radius: 2px;
+            }
+
+            /* ── Observaciones ──────────────────────────── */
+            .rv-obs-label {
+              font-size: 9px;
+              font-weight: 600;
+              letter-spacing: 1px;
+              text-transform: uppercase;
+              color: #aaa;
+              margin-bottom: 6px;
+            }
+
+            .rv-obs-text {
+              font-size: 11px;
+              color: #555;
+              line-height: 1.7;
+              padding: 12px 14px;
+              background: #fafafa;
+              border-left: 2px solid #e0e0e0;
+            }
+
+            /* ── Firmas ─────────────────────────────────── */
+            .rv-signatures {
+              width: 100%;
+              border-collapse: collapse;
+              margin-top: 72px;
+            }
+
+            .rv-sig-cell {
+              width: 42%;
+              text-align: center;
+              vertical-align: top;
+              padding: 0 16px;
+            }
+
+            .rv-sig-line {
+              border-top: 1px solid #555;
+              padding-top: 10px;
+              margin-top: 56px;
+            }
+
+            .rv-sig-name {
+              font-size: 11.5px;
+              font-weight: 600;
+              display: block;
+              margin-bottom: 2px;
+              color: #1a1a1a;
+            }
+
+            .rv-sig-role {
+              font-size: 10px;
+              color: #888;
+              display: block;
+              margin-bottom: 4px;
+            }
+
+            .rv-sig-caption {
+              font-size: 9px;
+              color: #bbb;
+              letter-spacing: 0.6px;
+              text-transform: uppercase;
+            }
+          </style>
+
+          <div class="page responsiva-wrap">
+
+            <!-- ── Encabezado ── -->
+            <div class="rv-header">
+              <div>
+                <h2 class="rv-title">Responsiva de Equipo</h2>
+                <span class="rv-subtitle">
+                  <t t-esc="doc.activo_id.categoria_id.name or ''"/>
+                </span>
+              </div>
+              <div class="rv-meta">
+                <div class="rv-meta-row">
+                  <span class="rv-meta-label">Folio</span>
+                  <span class="rv-meta-value">
+                    <t t-esc="doc.activo_id.name"/>
+                  </span>
+                </div>
+                <div class="rv-meta-row">
+                  <span class="rv-meta-label">Fecha</span>
+                  <span class="rv-meta-value">
+                    <t t-esc="doc.fecha_asignacion.strftime('%d / %m / %Y') if doc.fecha_asignacion else '—'"/>
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <hr class="rv-rule-heavy"/>
+
+            <!-- ── Párrafo de recepción ── -->
+            <p class="rv-body">
+              Con la presente manifiesto que estoy recibiendo de
+              <strong><t t-esc="doc.responsable_id.company_id.name or 'LA EMPRESA'"/></strong>
+              el siguiente equipo, a fin de desempeñar las funciones de mi puesto como
+              <strong><t t-esc="doc.puesto_id.name if doc.puesto_id else '______________________'"/></strong>.
+            </p>
+
+            <!-- ── Tabla del activo ── -->
+            <table class="rv-table">
+              <thead>
+                <tr>
+                  <th class="center" style="width:12%;">Folio</th>
+                  <th class="center" style="width:18%;">Categoría</th>
+                  <th style="width:30%;">Descripción</th>
+                  <!-- <th class="center" style="width:20%;">No. Serie / ID</th> -->
+                  <th class="center" style="width:20%;">Ubicación</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="center mono"><t t-esc="doc.activo_id.name"/></td>
+                  <td class="center">
+                    <span class="rv-tag"><t t-esc="doc.activo_id.categoria_id.name or '—'"/></span>
+                  </td>
+                  <!-- <td class="center mono"><t t-esc="doc.activo_id.uuid or '—'"/></td> -->
+                  <td class="desc"><t t-esc="doc.activo_id.descripcion or '—'"/></td>
+                  <td class="center"><t t-esc="doc.activo_id.almacen_id.name or '—'"/></td>
+                </tr>
+              </tbody>
+            </table>
+
+            <!-- ── Párrafo de resguardo ── -->
+            <p class="rv-body">
+              Dicho equipo queda bajo mi resguardo y responsabilidad, comprometiéndome a cuidar
+              su integridad y buen funcionamiento. Será utilizado exclusivamente para actividades de
+              <strong><t t-esc="doc.responsable_id.company_id.name or 'LA EMPRESA'"/></strong>.
+            </p>
+
+            <!-- ── Párrafo de devolución ── -->
+            <p class="rv-body">
+              Asimismo, me comprometo a devolver este equipo en el momento en que
+              <strong><t t-esc="doc.responsable_id.company_id.name or 'LA EMPRESA'"/></strong>
+              así me lo solicite, en las mismas condiciones en que lo recibo.
+            </p>
+
+            <!-- ── Observaciones (condicional) ── -->
+            <t t-if="doc.observaciones">
+              <div style="margin-bottom: 28px;">
+                <div class="rv-obs-label">Observaciones</div>
+                <div class="rv-obs-text">
+                  <t t-esc="doc.observaciones"/>
+                </div>
+              </div>
+            </t>
+
+            <!-- ── Firmas ── -->
+            <hr class="rv-rule" style="margin-top: 150px;"/>
+            <table class="rv-signatures">
+              <tr>
+                <td class="rv-sig-cell">
+                  <div class="rv-sig-line">
+                    <span class="rv-sig-name"><t t-esc="doc.responsable_id.name"/></span>
+                    <span class="rv-sig-role">
+                      <t t-esc="doc.puesto_id.name if doc.puesto_id else (doc.responsable_id.job_title or 'Empleado')"/>
+                    </span>
+                    <span class="rv-sig-caption">Quien recibe</span>
+                  </div>
+                </td>
+                <td style="width:16%;"/>
+                <td class="rv-sig-cell">
+                  <div class="rv-sig-line">
+                    <span class="rv-sig-name">
+                      <t t-esc="doc.responsable_id.company_id.name or 'LA EMPRESA'"/>
+                    </span>
+                    <span class="rv-sig-role">Representante Autorizado</span>
+                    <span class="rv-sig-caption">Quien entrega</span>
+                  </div>
+                </td>
+              </tr>
+            </table>
+
+          </div>
+
+        </t>
+      </t>
+    </t>
+  </template>
 </odoo>

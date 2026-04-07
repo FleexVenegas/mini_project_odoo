@@ -4,13 +4,12 @@
         <field name="name">activo.fijo.responsiva.tree</field>
         <field name="model">activo.fijo.responsiva</field>
         <field name="arch" type="xml">
-            <tree string="Asset Accountabilities">
+            <tree string="Responsivas de Activos">
                 <field name="activo_folio"/>
-                <field name="activo_id" optional="hide"/>
                 <field name="responsable_id"/>
+                <field name="puesto_id" optional="show"/>
                 <field name="fecha_asignacion"/>
-                <field name="estado"/>
-                <field name="observaciones" optional="hide"/>
+                <field name="estado" decoration-success="estado == 'vigente'" decoration-warning="estado == 'transferida'" decoration-danger="estado == 'cancelada'" widget="badge"/>
             </tree>
         </field>
     </record>
@@ -19,32 +18,49 @@
         <field name="name">activo.fijo.responsiva.form</field>
         <field name="model">activo.fijo.responsiva</field>
         <field name="arch" type="xml">
-            <form string="Asset Accountability">
+            <form string="Responsiva">
+                <header>
+                    <button name="generar_responsiva_pdf" string="Generar PDF" type="object" class="btn-primary" icon="fa-file-pdf-o"/>
+                    <field name="estado" widget="statusbar" statusbar_visible="vigente,transferida,cancelada"/>
+                </header>
                 <sheet>
+                    <!-- Ribbons de estado -->
+                    <widget name="web_ribbon" title="Transferida" bg_color="bg-warning" invisible="estado != 'transferida'"/>
+                    <widget name="web_ribbon" title="Cancelada" bg_color="bg-danger" invisible="estado != 'cancelada'"/>
+
+                    <!-- Avatar del activo -->
                     <field name="activo_image" widget="image" class="oe_avatar" options="{'preview_image': 'activo_image'}"/>
+
                     <div class="oe_title">
-                        <label for="activo_id" string="Asset"/>
+                        <label for="activo_id" class="text-muted" style="font-size:13px;"/>
                         <h1>
-                            <field name="activo_id" required="1" options="{'no_create': True}"/>
+                            <field name="activo_id" required="1" options="{'no_create': True}" placeholder="Seleccionar activo…"/>
                         </h1>
                     </div>
 
+                    <!-- Datos de asignación -->
                     <group>
-                        <group string="Assignment Information">
+                        <group string="Asignación">
                             <field name="responsable_id" required="1"/>
+                            <field name="puesto_id"/>
+                            <field name="departamento_id"/>
+                            <field name="almacen_id"/>
                             <field name="fecha_asignacion" required="1"/>
-                            <field name="estado"/>
                         </group>
-                        <group string="Document">
-                            <field name="responsiva_pdf" filename="pdf_filename" widget="binary" options="{'accepted_file_extensions': '.pdf'}"/>
+                        <group string="Documento">
+                            <field name="responsiva_pdf" filename="pdf_filename" widget="binary" readonly="1" string="Descargar PDF" invisible="not responsiva_pdf"/>
                             <field name="pdf_filename" invisible="1"/>
                         </group>
                     </group>
 
-                    <separator string="Notes"/>
-                    <field name="observaciones" nolabel="1" placeholder="Additional notes about the accountability..."/>
+                    <!-- Observaciones -->
+                    <separator string="Observaciones"/>
+                    <field name="observaciones" nolabel="1" placeholder="Notas adicionales sobre la responsiva…"/>
+
+                    <!-- Preview del PDF -->
+                    <field name="responsiva_pdf" widget="pdf_viewer" nolabel="1" readonly="1" invisible="not responsiva_pdf"/>
                 </sheet>
-                <!-- Chatter (if you have it configured) -->
+
                 <div class="oe_chatter">
                     <field name="message_follower_ids"/>
                     <field name="message_ids"/>
@@ -54,7 +70,7 @@
     </record>
 
     <record id="action_activo_fijo_responsiva" model="ir.actions.act_window">
-        <field name="name">Asset Accountabilities</field>
+        <field name="name">Responsivas</field>
         <field name="res_model">activo.fijo.responsiva</field>
         <field name="view_mode">tree,form</field>
     </record>
