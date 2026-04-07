@@ -2,7 +2,7 @@
 <odoo>
 
     <record id="act_report_responsiva_pdf" model="ir.actions.report">
-        <field name="name">Responsiva de Activo Fijo</field>
+        <field name="name">Asset Accountability</field>
         <field name="model">activo.fijo.responsiva</field>
         <field name="report_type">qweb-pdf</field>
         <field name="report_name">activos_fijos_management.responsiva_template</field>

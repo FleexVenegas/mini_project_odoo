@@ -205,6 +205,11 @@ msgid "Assignment Information"
 msgstr "Información de Asignación"
 
 #. module: activos_fijos_management
+#: model_terms:ir.ui.view,arch_db:activos_fijos_management.view_activo_fijo_responsiva_form
+msgid "Assignment"
+msgstr "Asignación"
+
+#. module: activos_fijos_management
 #: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo__message_attachment_count
 #: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo_responsiva__message_attachment_count
 #: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo_traslado__message_attachment_count
@@ -305,6 +310,11 @@ msgid "Document"
 msgstr "Documento"
 
 #. module: activos_fijos_management
+#: model_terms:ir.ui.view,arch_db:activos_fijos_management.view_activo_fijo_responsiva_form
+msgid "Download PDF"
+msgstr "Descargar PDF"
+
+#. module: activos_fijos_management
 #: model_terms:ir.ui.view,arch_db:activos_fijos_management.view_activo_fijo_form
 msgid "E.g: 9433BA08-AC84-5E04-8BC1, 863478062395409, X7AT447182"
 msgstr "Ej: 9433BA08-AC84-5E04-8BC1, 863478062395409, X7AT447182"
@@ -397,6 +407,11 @@ msgid "Generated Accountability PDF"
 msgstr "PDF de Responsiva Generado"
 
 #. module: activos_fijos_management
+#: model_terms:ir.ui.view,arch_db:activos_fijos_management.view_activo_fijo_responsiva_form
+msgid "Generate PDF"
+msgstr "Generar PDF"
+
+#. module: activos_fijos_management
 #: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo__has_message
 #: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo_responsiva__has_message
 #: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo_traslado__has_message
@@ -458,6 +473,11 @@ msgstr "PDF de Factura"
 #: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo_traslado__message_is_follower
 msgid "Is Follower"
 msgstr "Es Seguidor"
+
+#. module: activos_fijos_management
+#: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo_responsiva__puesto_id
+msgid "Job Position"
+msgstr "Puesto / Cargo"
 
 #. module: activos_fijos_management
 #: model:ir.model.fields,field_description:activos_fijos_management.field_activo_fijo__write_uid
@@ -700,7 +720,7 @@ msgstr "Motivo del Traslado"
 #: model:ir.model.fields.selection,name:activos_fijos_management.selection__activo_fijo__estado__transferido
 #: model:ir.model.fields.selection,name:activos_fijos_management.selection__activo_fijo_responsiva__estado__transferida
 msgid "Transferred"
-msgstr "Transferido"
+msgstr "Transferida"
 
 #. module: activos_fijos_management
 #: model:ir.ui.menu,name:activos_fijos_management.menu_activo_traslado

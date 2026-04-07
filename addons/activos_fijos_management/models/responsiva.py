@@ -42,16 +42,16 @@ class ActivoFijoResponsiva(models.Model):
         tracking=True,
     )
 
-    puesto_id = fields.Many2one("hr.job", string="Puesto / Cargo", tracking=True)
+    puesto_id = fields.Many2one("hr.job", string="Job Position", tracking=True)
     departamento_id = fields.Many2one(
-        "hr.department", string="Departamento", tracking=True
+        "hr.department", string="Department", tracking=True
     )
-    almacen_id = fields.Many2one("stock.warehouse", string="Almacén", tracking=True)
+    almacen_id = fields.Many2one("stock.warehouse", string="Warehouse", tracking=True)
 
-    responsiva_pdf = fields.Binary(string="PDF Responsiva Generado")
-    pdf_filename = fields.Char(string="Nombre del Archivo PDF")
+    responsiva_pdf = fields.Binary(string="Generated Accountability PDF")
+    pdf_filename = fields.Char(string="PDF File Name")
 
-    observaciones = fields.Text(string="Observaciones")
+    observaciones = fields.Text(string="Notes")
 
     # Related image from the asset
     activo_image = fields.Image(
