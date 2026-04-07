@@ -17,6 +17,8 @@
                     <group string="Configuración" col="2">
                         <field name="instance_id" options="{'no_create': True}" placeholder="Seleccionar instancia…"/>
                         <field name="wc_status" widget="radio"/>
+                        <field name="include_taxes_product" invisible="1"/>
+                        <field name="taxes_product" readonly="1" widget="many2many_tags" string="Impuestos a aplicar" invisible="not include_taxes_product"/>
                     </group>
 
                     <group string="Productos a publicar" col="1">

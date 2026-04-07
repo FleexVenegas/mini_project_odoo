@@ -12,6 +12,7 @@
                 <field name="wp_url"/>
                 <field name="state"/>
                 <field name="order_count"/>
+                <field name="woo_product_count"/>
                 <field name="color"/>
                 <field name="active"/>
                 <templates>
@@ -54,14 +55,25 @@
 
                                     <hr style="border-top: 1px solid #e5e7eb; margin: 0.75rem 0;"/>
 
-                                    <!-- Orders Count -->
-                                    <div class="text-center">
-                                        <div class="fw-bold mb-1" style="font-size: 1.4rem; color: #1f2937; line-height: 1;">
-                                            <t t-esc="record.order_count.value"/>
+                                    <!-- Orders & Products Count -->
+                                    <div class="d-flex justify-content-around">
+                                        <div class="text-center">
+                                            <div class="fw-bold mb-1" style="font-size: 1.4rem; color: #1f2937; line-height: 1;">
+                                                <t t-esc="record.order_count.value"/>
+                                            </div>
+                                            <div class="text-muted" style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.3px; font-weight: 500;">
+                                                <t t-if="record.order_count.raw_value == 1">Order</t>
+                                                <t t-else="">Orders</t>
+                                            </div>
                                         </div>
-                                        <div class="text-muted" style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.3px; font-weight: 500;">
-                                            <t t-if="record.order_count.raw_value == 1">Order</t>
-                                            <t t-else="">Orders</t>
+                                        <div style="border-left: 1px solid #e5e7eb;"/>
+                                        <div class="text-center">
+                                            <div class="fw-bold mb-1" style="font-size: 1.4rem; color: #1f2937; line-height: 1;">
+                                                <t t-esc="record.woo_product_count.value"/>
+                                            </div>
+                                            <div class="text-muted" style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.3px; font-weight: 500;">
+                                                Productos
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -70,6 +82,10 @@
                             <!-- Action Buttons -->
                             <div class="p-2 pt-0">
                                 <div class="d-flex gap-2 justify-content-center">
+                                    <button name="action_view_woo_products" type="object" class="btn btn-sm btn-primary flex-fill" t-if="record.state.raw_value == 'connected'" style="font-size: 0.75rem;">
+                                        <i class="fa fa-cube me-1"/>
+Productos
+                                    </button>
                                     <button name="action_sync_orders" type="object" class="btn btn-sm btn-secondary flex-fill" t-if="record.state.raw_value == 'connected'" style="font-size: 0.75rem;">
                                         <i class="fa fa-refresh me-1"/>
 Sync Orders

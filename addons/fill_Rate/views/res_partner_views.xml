@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-    <!-- Extensión del Form de Proveedor/Contacto -->
+    <!-- Extension of Supplier/Contact Form -->
     <record id="view_partner_form_fill_rate" model="ir.ui.view">
         <field name="name">res.partner.form.fill.rate</field>
         <field name="model">res.partner</field>
@@ -10,34 +10,34 @@
 
             <!-- Agregar botón en la parte superior -->
             <div name="button_box" position="inside">
-                <button class="oe_stat_button" type="object" name="action_view_fill_rate_history" icon="fa-line-chart" invisible="not is_company and not company_type == 'company'" groups="purchase.group_purchase_user">
+                <button class="oe_stat_button" type="object" name="action_view_fill_rate_history" icon="fa-line-chart" invisible="not is_company" groups="fill_Rate.group_fill_rate_user">
                     <div class="o_stat_info">
                         <field name="fill_rate" widget="percentage"/>
                         <span class="o_stat_text">Fill Rate</span>
                     </div>
                 </button>
 
-                <button class="oe_stat_button" type="action" name="%(fill_Rate.action_fill_rate_line)d" icon="fa-list" invisible="not is_company and not company_type == 'company'" context="{'default_partner_id': active_id, 'search_default_partner_id': active_id}" groups="purchase.group_purchase_user">
+                <button class="oe_stat_button" type="action" name="%(fill_Rate.action_fill_rate_line)d" icon="fa-list" invisible="not is_company" context="{'default_partner_id': active_id, 'search_default_partner_id': active_id}" groups="fill_Rate.group_fill_rate_user">
                     <div class="o_stat_info">
                         <field name="fill_rate_count" widget="integer"/>
-                        <span class="o_stat_text">Órdenes</span>
+                        <span class="o_stat_text">Orders</span>
                     </div>
                 </button>
             </div>
 
             <!-- Agregar página de Fill Rate en el notebook -->
             <xpath expr="//notebook" position="inside">
-                <page string="Fill Rate" name="fill_rate" invisible="not is_company and not company_type == 'company'" groups="purchase.group_purchase_user">
+                <page string="Fill Rate" name="fill_rate" invisible="not is_company" groups="fill_Rate.group_fill_rate_user">
 
                     <group>
-                        <group string="Clasificación del Proveedor">
+                        <group string="Supplier Classification">
                             <field name="supplier_class" invisible="1"/>
                             <field name="supplier_class_display" widget="badge" decoration-success="supplier_class == 'A'" decoration-warning="supplier_class == 'B'" decoration-danger="supplier_class == 'C'" decoration-muted="supplier_class == 'new'"/>
                             <field name="fill_rate" widget="percentpie"/>
                             <field name="fill_rate_last_update"/>
                         </group>
 
-                        <group string="Estadísticas">
+                        <group string="Statistics">
                             <field name="fill_rate_count"/>
                             <field name="fill_rate_complete_count"/>
                             <field name="fill_rate_partial_count"/>
@@ -45,11 +45,11 @@
                     </group>
 
                     <group>
-                        <button name="recalculate_fill_rate" type="object" string="Recalcular Fill Rate" class="btn-secondary" icon="fa-refresh"/>
+                        <button name="recalculate_fill_rate" type="object" string="Recalculate Fill Rate" class="btn-secondary btn-refresh-calculate" icon="fa-refresh"/>
                     </group>
 
-                    <group string="Historial Reciente">
-                        <field name="fill_rate_history_ids" nolabel="1">
+                    <group string="Recent History">
+                        <field name="fill_rate_history_ids">
                             <tree decoration-success="fill_rate_status == 'complete'" decoration-warning="fill_rate_status == 'partial'" decoration-info="fill_rate_status == 'excess'" limit="10">
                                 <field name="order_date"/>
                                 <field name="purchase_order_id"/>
@@ -68,7 +68,7 @@
         </field>
     </record>
 
-    <!-- Extensión de la vista Tree de Proveedores -->
+    <!-- Extension of Supplier Tree List View -->
     <record id="view_partner_tree_fill_rate" model="ir.ui.view">
         <field name="name">res.partner.tree.fill.rate</field>
         <field name="model">res.partner</field>
@@ -81,13 +81,13 @@
         </field>
     </record>
 
-    <!-- Vista Tree especifica para Proveedores con Fill Rate -->
+    <!-- Specific Tree View for Suppliers with Fill Rate -->
     <record id="view_partner_supplier_fill_rate_tree" model="ir.ui.view">
         <field name="name">res.partner.supplier.fill.rate.tree</field>
         <field name="model">res.partner</field>
         <field name="priority">20</field>
         <field name="arch" type="xml">
-            <tree string="Proveedores por Fill Rate" decoration-success="supplier_class == 'A'" decoration-warning="supplier_class == 'B'" decoration-danger="supplier_class == 'C'">
+            <tree string="Suppliers by Fill Rate" decoration-success="supplier_class == 'A'" decoration-warning="supplier_class == 'B'" decoration-danger="supplier_class == 'C'">
                 <field name="name"/>
                 <field name="supplier_class" widget="badge" decoration-success="supplier_class == 'A'" decoration-warning="supplier_class == 'B'" decoration-danger="supplier_class == 'C'" decoration-muted="supplier_class == 'new'"/>
                 <field name="fill_rate" widget="percentage"/>
@@ -99,7 +99,7 @@
         </field>
     </record>
 
-    <!-- Filtros adicionales en la búsqueda de proveedores -->
+    <!-- Additional filters in supplier search -->
     <record id="view_partner_search_fill_rate" model="ir.ui.view">
         <field name="name">res.partner.search.fill.rate</field>
         <field name="model">res.partner</field>
@@ -107,17 +107,17 @@
         <field name="arch" type="xml">
             <filter name="supplier" position="after">
                 <separator/>
-                <filter string="Clase A (≥95%)" name="class_a" domain="[('supplier_class', '=', 'A')]"/>
-                <filter string="Clase B (85-94%)" name="class_b" domain="[('supplier_class', '=', 'B')]"/>
-                <filter string="Clase C (&lt;85%)" name="class_c" domain="[('supplier_class', '=', 'C')]"/>
-                <filter string="Nuevos" name="class_new" domain="[('supplier_class', '=', 'new')]"/>
+                <filter string="Class A (≥95%)" name="class_a" domain="[('supplier_class', '=', 'A')]"/>
+                <filter string="Class B (85-94%)" name="class_b" domain="[('supplier_class', '=', 'B')]"/>
+                <filter string="Class C (&lt;85%)" name="class_c" domain="[('supplier_class', '=', 'C')]"/>
+                <filter string="New" name="class_new" domain="[('supplier_class', '=', 'new')]"/>
             </filter>
         </field>
     </record>
 
-    <!-- Acción para ver proveedores por Fill Rate -->
+    <!-- Action to view suppliers by Fill Rate -->
     <record id="action_partner_supplier_fill_rate" model="ir.actions.act_window">
-        <field name="name">Proveedores por Fill Rate</field>
+        <field name="name">Suppliers by Fill Rate</field>
         <field name="res_model">res.partner</field>
         <field name="view_mode">tree,form</field>
         <field name="domain">[]</field>
@@ -125,11 +125,11 @@
         <field name="view_id" ref="view_partner_supplier_fill_rate_tree"/>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">
-                Agregar un proveedor
+                Add a supplier
             </p>
             <p>
-                Aquí verás la clasificación automática de tus proveedores
-                según su cumplimiento en las entregas (Fill Rate).
+                Here you will see the automatic classification of your suppliers
+                based on their delivery fulfillment (Fill Rate).
             </p>
         </field>
     </record>

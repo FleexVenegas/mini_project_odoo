@@ -6,6 +6,6 @@
 
     <!-- WooCommerce Instances - First thing users see -->
     <menuitem id="odoo_wp_sync__menu_instances" name="Instances" parent="odoo_wp_sync_menu_root" action="action_woo_instance" sequence="1"/>
-    <menuitem id="odoo_wp_sync__menu_products" name="Products" parent="odoo_wp_sync_menu_root" action="action_woo_product" sequence="2"/>
+    <!-- <menuitem id="odoo_wp_sync__menu_products" name="Products" parent="odoo_wp_sync_menu_root" action="action_woo_product" sequence="2"/> -->
 
 </odoo>

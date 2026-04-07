@@ -31,6 +31,16 @@ class WooBulkPublishWizard(models.TransientModel):
         domain="[('allow_create_products', '=', True), ('who_can_publish', 'in', [uid])]",
         help="Solo instancias habilitadas y en las que tienes permiso de publicación.",
     )
+    include_taxes_product = fields.Boolean(
+        related="instance_id.include_taxes_wc_product_sync",
+        string="Incluir impuestos",
+        readonly=True,
+    )
+    taxes_product = fields.Many2many(
+        related="instance_id.taxes_product",
+        string="Impuestos para el producto",
+        readonly=True,
+    )
     wc_status = fields.Selection(
         [
             ("draft", "Borrador"),

@@ -37,3 +37,18 @@ class WooInstanceWarehouse(models.Model):
         string="Permitir publicación",
         help="Usuarios que pueden publicar productos en WooCommerce",
     )
+
+    include_taxes_wc_product_sync = fields.Boolean(
+        string="Incluir impuestos en la creación de productos",
+        default=False,
+        help="Si está activo, se incluirán los impuestos en la creación de productos a WooCommerce",
+    )
+
+    taxes_product = fields.Many2many(
+        "account.tax",
+        relation="woo_instance_taxes_product_rel",
+        column1="instance_id",
+        column2="tax_id",
+        string="Impuestos para productos",
+        help="Impuestos que se asignarán a los productos creados en WooCommerce (si 'Incluir impuestos en la creación de productos' está activo)",
+    )

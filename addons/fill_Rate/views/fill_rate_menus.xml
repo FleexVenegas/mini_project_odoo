@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-    <!-- Menú principal de Fill Rate (bajo Compras) -->
-    <menuitem id="menu_fill_rate_root" name="Fill Rate" parent="purchase.menu_purchase_root" sequence="50" groups="purchase.group_purchase_user"/>
+    <!-- Fill Rate main menu (under Purchases) -->
+    <menuitem id="menu_fill_rate_root" name="Fill Rate" parent="purchase.menu_purchase_root" sequence="50" groups="fill_Rate.group_fill_rate_user"/>
 
-    <!-- Submenú: Historial de Fill Rate -->
-    <menuitem id="menu_fill_rate_history" name="Historial" parent="menu_fill_rate_root" action="action_fill_rate_line" sequence="10"/>
+    <!-- Submenu: Fill Rate History -->
+    <menuitem id="menu_fill_rate_history" name="History" parent="menu_fill_rate_root" action="action_fill_rate_line" sequence="10"/>
 
-    <!-- Submenú: Proveedores por Fill Rate -->
-    <menuitem id="menu_partner_fill_rate" name="Clasificación de Proveedores" parent="menu_fill_rate_root" action="action_partner_supplier_fill_rate" sequence="20"/>
+    <!-- Submenu: Supplier Classification -->
+    <menuitem id="menu_partner_fill_rate" name="Supplier Classification" parent="menu_fill_rate_root" action="action_partner_supplier_fill_rate" sequence="20"/>
 
-    <!-- Submenú: Configuración -->
-    <menuitem id="menu_fill_rate_config" name="Configuración" parent="menu_fill_rate_root" action="action_fill_rate_configuration" sequence="30" groups="purchase.group_purchase_manager"/>
+    <!-- Submenu: Configuration -->
+    <menuitem id="menu_fill_rate_config" name="Configuration" parent="menu_fill_rate_root" action="action_fill_rate_configuration" sequence="30" groups="fill_Rate.group_fill_rate_manager"/>
 
 </odoo>

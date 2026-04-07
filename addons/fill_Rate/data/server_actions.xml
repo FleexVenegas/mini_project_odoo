@@ -2,32 +2,33 @@
 <odoo>
     <data noupdate="0">
 
-        <!-- Acción de servidor para recalcular Fill Rate -->
+        <!-- Server action to recalculate Fill Rate (managers only) -->
         <record id="action_server_recalculate_all_fill_rate" model="ir.actions.server">
-            <field name="name">🔄 Recalcular todos los Fill Rate</field>
+            <field name="name">Recalculate All Fill Rates</field>
             <field name="model_id" ref="base.model_res_partner"/>
             <field name="binding_model_id" ref="base.model_res_partner"/>
             <field name="binding_view_types">list</field>
+            <field name="groups_id" eval="[(4, ref('fill_Rate.group_fill_rate_manager'))]"/>
             <field name="state">code</field>
             <field name="code">
-# Recalcular todas las cantidades recibidas desde stock.move
+# Recalculate all received quantities from stock.move
 fill_rate_lines = env['fill.rate.line'].search([])
 for line in fill_rate_lines:
     line.update_received_quantity()
 
-# Recalcular Fill Rate de todos los proveedores
+# Recalculate Fill Rate for all suppliers
 partners = env['res.partner'].search([('fill_rate_history_ids', '!=', False)])
 for partner in partners:
     partner._compute_fill_rate()
     partner._compute_supplier_class()
 
-# Mostrar mensaje de éxito
+# Show success message
 action = {
     'type': 'ir.actions.client',
     'tag': 'display_notification',
     'params': {
-        'title': '¡Listo!',
-        'message': f'Se recalcularon {len(fill_rate_lines)} líneas y {len(partners)} proveedores',
+        'title': 'Done!',
+        'message': f'Recalculated {len(fill_rate_lines)} lines and {len(partners)} suppliers',
         'type': 'success',
         'sticky': False,
     }
@@ -35,20 +36,21 @@ action = {
             </field>
         </record>
 
-        <!-- Acción para recalcular un solo proveedor (desde el formulario) -->
+        <!-- Server action to recalculate a single supplier (managers only) -->
         <record id="action_server_recalculate_partner_fill_rate" model="ir.actions.server">
-            <field name="name">♻️ Recalcular Fill Rate</field>
+            <field name="name">Recalculate Fill Rate</field>
             <field name="model_id" ref="base.model_res_partner"/>
             <field name="binding_model_id" ref="base.model_res_partner"/>
             <field name="binding_view_types">form</field>
+            <field name="groups_id" eval="[(4, ref('fill_Rate.group_fill_rate_manager'))]"/>
             <field name="state">code</field>
             <field name="code">
 if records:
     for partner in records:
-        # Actualizar cantidades recibidas de todas las líneas del proveedor
+        # Update received quantities for all supplier lines
         partner.fill_rate_history_ids.update_received_quantity()
         
-        # Recalcular fill rate y clasificación
+        # Recalculate fill rate and classification
         partner._compute_fill_rate()
         partner._compute_supplier_class()
     
@@ -56,8 +58,8 @@ if records:
         'type': 'ir.actions.client',
         'tag': 'display_notification',
         'params': {
-            'title': 'Recalculado',
-            'message': f'Fill Rate actualizado correctamente para {len(records)} proveedor(es)',
+            'title': 'Recalculated',
+            'message': f'Fill Rate updated successfully for {len(records)} supplier(s)',
             'type': 'success',
             'sticky': False,
         }
@@ -65,16 +67,17 @@ if records:
             </field>
         </record>
 
-        <!-- Acción para crear registros de órdenes existentes (sin fill rate) -->
+        <!-- Server action to create records for existing orders (managers only) -->
         <record id="action_server_create_missing_fill_rate" model="ir.actions.server">
-            <field name="name">🔧 Crear Fill Rate para órdenes existentes</field>
+            <field name="name">Create Fill Rate for existing orders</field>
             <field name="model_id" ref="purchase.model_purchase_order"/>
             <field name="binding_model_id" ref="purchase.model_purchase_order"/>
             <field name="binding_view_types">list</field>
+            <field name="groups_id" eval="[(4, ref('fill_Rate.group_fill_rate_manager'))]"/>
             <field name="state">code</field>
             <field name="code">
-# Usar las órdenes seleccionadas por el usuario
-# Si seleccionó órdenes, usar esas; si no, buscar todas las que califiquen
+# Use the orders selected by the user
+# If orders were selected, use those; otherwise search all qualifying ones
 if records:
     orders = records.filtered(lambda o: o.state in ['purchase', 'done'])
 else:
@@ -83,14 +86,14 @@ else:
         ('fill_rate_created', '=', False)
     ])
 
-# Procesar órdenes (el método maneja ValidationError internamente)
+# Process orders (method handles ValidationError internally)
 created_count = 0
 errors = 0
 processed = 0
 
 for order in orders:
     try:
-        # Solo procesar si no tiene fill rate creado
+        # Only process if fill rate has not been created
         if not order.fill_rate_created:
             order.create_missing_fill_rate_lines()
             created_count += len(order.fill_rate_line_ids)
@@ -99,25 +102,25 @@ for order in orders:
         errors += 1
         continue
 
-# Recalcular fill rate de proveedores afectados
+# Recalculate fill rate for affected suppliers
 partners = orders.mapped('partner_id')
 for partner in partners:
     partner._compute_fill_rate()
     partner._compute_supplier_class()
 
-# Mostrar resultado
+# Show result
 if errors == 0:
-    message = f'Se crearon {created_count} registros para {processed} órdenes de {len(orders)} seleccionadas. Afectados {len(partners)} proveedores.'
+    message = f'Created {created_count} records for {processed} orders out of {len(orders)} selected. {len(partners)} suppliers affected.'
     msg_type = 'success'
 else:
-    message = f'Se crearon {created_count} registros para {processed} órdenes. {errors} órdenes tuvieron problemas (ver logs).'
+    message = f'Created {created_count} records for {processed} orders. {errors} orders had issues (see logs).'
     msg_type = 'warning'
 
 action = {
     'type': 'ir.actions.client',
     'tag': 'display_notification',
     'params': {
-        'title': '¡Completado!',
+        'title': 'Completed!',
         'message': message,
         'type': msg_type,
         'sticky': True,

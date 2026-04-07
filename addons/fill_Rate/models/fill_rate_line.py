@@ -1,27 +1,27 @@
 # -*- coding: utf-8 -*-
 from odoo import models, fields, api
-from datetime import datetime
+from odoo.tools.float_utils import float_compare
 
 
 class FillRateLine(models.Model):
     """
-    Historial de Fill Rate por línea de orden de compra.
-    Registra el cumplimiento de cada producto pedido vs recibido.
+    Fill Rate history per purchase order line.
+    Records the fulfillment of each ordered product vs received.
     """
 
     _name = "fill.rate.line"
-    _description = "Historial de Fill Rate por Orden de Compra"
+    _description = "Fill Rate History by Purchase Order"
     _order = "order_date desc, id desc"
     _rec_name = "purchase_order_id"
 
-    # Relaciones
+    # Relations
     partner_id = fields.Many2one(
-        "res.partner", string="Proveedor", required=True, index=True, ondelete="cascade"
+        "res.partner", string="Supplier", required=True, index=True, ondelete="cascade"
     )
 
     purchase_order_id = fields.Many2one(
         "purchase.order",
-        string="Orden de Compra",
+        string="Purchase Order",
         required=True,
         index=True,
         ondelete="cascade",
@@ -29,87 +29,89 @@ class FillRateLine(models.Model):
 
     purchase_order_line_id = fields.Many2one(
         "purchase.order.line",
-        string="Línea de Orden",
+        string="Order Line",
         required=True,
         ondelete="cascade",
     )
 
-    product_id = fields.Many2one("product.product", string="Producto", required=True)
+    product_id = fields.Many2one("product.product", string="Product", required=True)
 
-    # Datos de la orden
-    order_date = fields.Date(string="Fecha de Orden", required=True, index=True)
+    # Order data
+    order_date = fields.Date(string="Order Date", required=True, index=True)
 
     order_reference = fields.Char(
-        string="Referencia", related="purchase_order_id.name", store=True
+        string="Reference", related="purchase_order_id.name", store=True
     )
 
     origin_type = fields.Selection(
-        [("manual", "Manual"), ("bot", "Bot/Automático"), ("system", "Sistema")],
-        string="Origen",
+        [("manual", "Manual"), ("bot", "Bot/Automatic"), ("system", "System")],
+        string="Origin",
         default="manual",
     )
 
-    # Cantidades
+    # Quantities
     qty_ordered = fields.Float(
-        string="Cantidad Ordenada", required=True, digits="Product Unit of Measure"
+        string="Ordered Quantity", required=True, digits="Product Unit of Measure"
     )
 
     qty_received = fields.Float(
-        string="Cantidad Recibida",
+        string="Received Quantity",
         digits="Product Unit of Measure",
-        help="Cantidad realmente recibida en almacén (movimientos validados)",
+        help="Quantity actually received in warehouse (validated moves)",
     )
 
-    uom_id = fields.Many2one("uom.uom", string="Unidad de Medida")
+    uom_id = fields.Many2one("uom.uom", string="Unit of Measure")
 
-    # Cálculo del Fill Rate
+    # Fill Rate computation
     fill_rate = fields.Float(
         string="Fill Rate (%)",
         compute="_compute_fill_rate",
         store=True,
         digits=(5, 4),
-        help="Porcentaje de cumplimiento: (Cantidad Recibida / Cantidad Ordenada). Valor decimal de 0.0 a 1.0",
+        help="Fulfillment percentage: (Received Quantity / Ordered Quantity). Decimal value from 0.0 to 1.0",
     )
 
     fill_rate_status = fields.Selection(
         [
-            ("complete", "Completo (100%)"),
-            ("partial", "Parcial (< 100%)"),
-            ("excess", "Exceso (> 100%)"),
-            ("pending", "Pendiente"),
+            ("complete", "Complete (100%)"),
+            ("partial", "Partial (< 100%)"),
+            ("excess", "Excess (> 100%)"),
+            ("pending", "Pending"),
         ],
-        string="Estado",
+        string="Status",
         compute="_compute_fill_rate",
         store=True,
     )
 
-    # Metadatos
+    # Metadata
     state = fields.Selection(
-        related="purchase_order_id.state", string="Estado de Orden", store=True
+        related="purchase_order_id.state", string="Order Status", store=True
     )
 
     date_received = fields.Datetime(
-        string="Última Recepción", help="Fecha de la última recepción validada"
+        string="Last Receipt", help="Date of the last validated receipt"
     )
 
-    notes = fields.Text(string="Notas")
+    notes = fields.Text(string="Notes")
 
     @api.depends("qty_ordered", "qty_received")
     def _compute_fill_rate(self):
-        """Calcula el porcentaje de cumplimiento."""
+        """Computes the fulfillment percentage."""
         for record in self:
             if record.qty_ordered > 0:
                 record.fill_rate = record.qty_received / record.qty_ordered
 
-                # Determinar estado
+                # Usar float_compare para evitar errores de precisión flotante
+                cmp = float_compare(
+                    record.qty_received, record.qty_ordered, precision_digits=5
+                )
                 if record.qty_received == 0 and record.state in ["purchase", "done"]:
                     record.fill_rate_status = "pending"
-                elif record.fill_rate >= 1.0:
-                    if record.fill_rate == 1.0:
-                        record.fill_rate_status = "complete"
-                    else:
-                        record.fill_rate_status = "excess"
-                elif 0 < record.fill_rate < 1.0:
+                elif cmp == 0:
+                    record.fill_rate_status = "complete"
+                elif cmp > 0:
+                    record.fill_rate_status = "excess"
+                elif record.fill_rate > 0:
                     record.fill_rate_status = "partial"
                 else:
                     record.fill_rate_status = "pending"
@@ -119,19 +121,19 @@ class FillRateLine(models.Model):
 
     def update_received_quantity(self):
         """
-        Actualiza la cantidad recibida desde los movimientos de stock validados.
-        Se llama automáticamente cuando se valida una recepción.
+        Updates the received quantity from validated stock moves.
+        Called automatically when a receipt is validated.
         """
         for record in self:
             if not record.purchase_order_line_id:
                 continue
 
-            # Usar directamente qty_received de la línea de compra
-            # Odoo calcula automáticamente este campo basándose en las recepciones validadas
+            # Use qty_received directly from the purchase line
+            # Odoo automatically computes this field based on validated receipts
             purchase_line = record.purchase_order_line_id
             total_received = purchase_line.qty_received
 
-            # Actualizar usando write para que se disparen los campos computados
+            # Update using write so that computed fields are triggered
             if total_received > 0:
                 record.write(
                     {
@@ -142,7 +144,7 @@ class FillRateLine(models.Model):
             else:
                 record.write({"qty_received": total_received, "date_received": False})
 
-        # Los campos computados se recalculan automáticamente con write()
+        # Computed fields are automatically recalculated with write()
         return True
 
     @api.model

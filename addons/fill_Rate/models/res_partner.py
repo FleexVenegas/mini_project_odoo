@@ -4,88 +4,89 @@ from odoo import models, fields, api
 
 class ResPartner(models.Model):
     """
-    Extensión del modelo de contactos/proveedores para agregar métricas de Fill Rate.
+    Extension of the contacts/suppliers model to add Fill Rate metrics.
     """
 
     _inherit = "res.partner"
 
-    # Campos de Fill Rate
+    # Fill Rate fields
     fill_rate = fields.Float(
         string="Fill Rate (%)",
         compute="_compute_fill_rate",
         store=True,
         digits=(5, 4),
-        help="Porcentaje promedio de cumplimiento del proveedor basado en todas sus órdenes. Valor decimal de 0.0 a 1.0",
+        help="Average fulfillment percentage for the supplier based on all orders. Decimal value from 0.0 to 1.0",
     )
 
     supplier_class = fields.Selection(
         [
-            ("A", "A - Excelente"),
-            ("B", "B - Bueno"),
-            ("C", "C - Deficiente"),
-            ("new", "Nuevo (sin datos)"),
+            ("A", "A - Excellent"),
+            ("B", "B - Good"),
+            ("C", "C - Poor"),
+            ("new", "New (no data)"),
         ],
-        string="Clasificación",
+        string="Classification",
         compute="_compute_supplier_class",
         store=True,
-        help="Clasificación automática del proveedor según su Fill Rate histórico. Los umbrales son configurables desde Ajustes > Fill Rate",
+        help="Automatic supplier classification based on historical Fill Rate. Thresholds are configurable from Settings > Fill Rate",
     )
 
     supplier_class_display = fields.Char(
-        string="Clasificación Detallada",
+        string="Detailed Classification",
         compute="_compute_supplier_class_display",
-        help="Muestra la clasificación con los umbrales actuales configurados",
+        help="Shows the classification with the currently configured thresholds",
     )
 
-    # Relación con historial
+    # Relation with history
     fill_rate_history_ids = fields.One2many(
-        "fill.rate.line", "partner_id", string="Historial de Fill Rate"
+        "fill.rate.line", "partner_id", string="Fill Rate History"
     )
 
-    # Estadísticas
+    # Statistics
     fill_rate_count = fields.Integer(
-        string="Total de Órdenes",
+        string="Total Orders",
         compute="_compute_fill_rate_stats",
-        help="Cantidad total de líneas de órdenes evaluadas",
+        help="Total number of evaluated order lines",
     )
 
     fill_rate_complete_count = fields.Integer(
-        string="Órdenes Completas",
+        string="Complete Orders",
         compute="_compute_fill_rate_stats",
-        help="Órdenes con 100% de cumplimiento",
+        help="Orders with 100% fulfillment",
     )
 
     fill_rate_partial_count = fields.Integer(
-        string="Órdenes Parciales",
+        string="Partial Orders",
         compute="_compute_fill_rate_stats",
-        help="Órdenes con menos del 100% de cumplimiento",
+        help="Orders with less than 100% fulfillment",
     )
 
     fill_rate_last_update = fields.Datetime(
-        string="Última Actualización", compute="_compute_fill_rate", store=True
+        string="Last Update", compute="_compute_fill_rate", store=True
     )
 
-    @api.depends("fill_rate_history_ids.fill_rate", "fill_rate_history_ids.state")
+    @api.depends(
+        "fill_rate_history_ids.fill_rate",
+        "fill_rate_history_ids.state",
+        "fill_rate_history_ids.qty_ordered",
+        "fill_rate_history_ids.qty_received",
+    )
     def _compute_fill_rate(self):
         """
-        Calcula el Fill Rate promedio del proveedor basado en su historial.
-        Solo considera órdenes en estado 'purchase' o 'done'.
+        Computes the supplier's average Fill Rate based on their history.
+        Only considers orders in 'purchase' or 'done' state.
         """
         for partner in self:
-            # Filtrar líneas válidas (órdenes confirmadas o finalizadas)
             valid_lines = partner.fill_rate_history_ids.filtered(
                 lambda l: l.state in ["purchase", "done"] and l.qty_ordered > 0
             )
 
             if valid_lines:
-                # Calcular promedio ponderado por cantidad ordenada
                 total_ordered = sum(valid_lines.mapped("qty_ordered"))
-                weighted_sum = sum(
-                    line.fill_rate * line.qty_ordered for line in valid_lines
-                )
+                total_received = sum(valid_lines.mapped("qty_received"))
 
                 partner.fill_rate = (
-                    weighted_sum / total_ordered if total_ordered > 0 else 0.0
+                    total_received / total_ordered if total_ordered > 0 else 0.0
                 )
                 partner.fill_rate_last_update = fields.Datetime.now()
             else:
@@ -95,14 +96,14 @@ class ResPartner(models.Model):
     @api.depends("fill_rate", "fill_rate_history_ids")
     def _compute_supplier_class(self):
         """
-        Clasifica automáticamente al proveedor según su Fill Rate.
-        Usa umbrales configurables desde Ajustes > Fill Rate.
-        - A: >= Umbral A (defecto 95%)
-        - B: >= Umbral B (defecto 85%)
-        - C: < Umbral B
-        - Nuevo: Sin datos suficientes
+        Automatically classifies the supplier according to their Fill Rate.
+        Uses configurable thresholds from Settings > Fill Rate.
+        - A: >= Threshold A (default 95%)
+        - B: >= Threshold B (default 85%)
+        - C: < Threshold B
+        - New: Insufficient data
         """
-        # Obtener umbrales configurables
+        # Get configurable thresholds
         ICP = self.env["ir.config_parameter"].sudo()
         threshold_a = (
             float(ICP.get_param("fill_rate.threshold_a", default=95.0)) / 100.0
@@ -112,7 +113,7 @@ class ResPartner(models.Model):
         )
 
         for partner in self:
-            # Verificar si tiene suficientes datos (al menos 1 orden confirmada con recepción)
+            # Check whether there is sufficient data (at least 1 confirmed order with receipt)
             valid_orders = partner.fill_rate_history_ids.filtered(
                 lambda l: l.state in ["purchase", "done"]
                 and l.qty_ordered > 0
@@ -131,28 +132,30 @@ class ResPartner(models.Model):
     @api.depends("supplier_class")
     def _compute_supplier_class_display(self):
         """
-        Genera el texto de clasificación con los umbrales configurados actuales.
+        Generates the classification text with the currently configured thresholds.
         """
-        # Obtener umbrales configurables
+        # Get configurable thresholds
         ICP = self.env["ir.config_parameter"].sudo()
         threshold_a = float(ICP.get_param("fill_rate.threshold_a", default=95.0))
         threshold_b = float(ICP.get_param("fill_rate.threshold_b", default=85.0))
 
         class_labels = {
-            "A": f"A - Excelente (≥ {threshold_a:.0f}%)",
-            "B": f"B - Bueno ({threshold_b:.0f}% - {threshold_a:.0f}%)",
-            "C": f"C - Deficiente (< {threshold_b:.0f}%)",
-            "new": "Nuevo (sin datos)",
+            "A": f"A - Excellent (≥ {threshold_a:.0f}%)",
+            "B": f"B - Good ({threshold_b:.0f}% - {threshold_a:.0f}%)",
+            "C": f"C - Poor (< {threshold_b:.0f}%)",
+            "new": "New (no data)",
         }
 
         for partner in self:
             partner.supplier_class_display = class_labels.get(
-                partner.supplier_class, "Sin clasificar"
+                partner.supplier_class, "Unclassified"
             )
 
-    @api.depends("fill_rate_history_ids.fill_rate_status")
+    @api.depends(
+        "fill_rate_history_ids.fill_rate_status", "fill_rate_history_ids.state"
+    )
     def _compute_fill_rate_stats(self):
-        """Calcula estadísticas del historial del proveedor."""
+        """Computes statistics from the supplier's history."""
         for partner in self:
             history = partner.fill_rate_history_ids.filtered(
                 lambda l: l.state in ["purchase", "done"]
@@ -167,10 +170,10 @@ class ResPartner(models.Model):
             )
 
     def action_view_fill_rate_history(self):
-        """Abre la vista del historial de Fill Rate del proveedor."""
+        """Opens the Fill Rate history view for this supplier."""
         self.ensure_one()
         return {
-            "name": f"Historial Fill Rate - {self.name}",
+            "name": f"Fill Rate History - {self.name}",
             "type": "ir.actions.act_window",
             "res_model": "fill.rate.line",
             "view_mode": "tree,form",
@@ -180,39 +183,23 @@ class ResPartner(models.Model):
 
     def recalculate_fill_rate(self):
         """
-        Recalcula manualmente el Fill Rate del proveedor.
-        Útil para correcciones o actualizaciones masivas.
+        Manually recalculates the supplier's Fill Rate.
+        Useful for corrections or bulk updates.
         """
         for partner in self:
-            # Actualizar cantidades recibidas de todas las líneas
             partner.fill_rate_history_ids.update_received_quantity()
 
-            # Invalidar caché para forzar recálculo usando el método correcto de Odoo 17
-            partner.fill_rate_history_ids.invalidate_recordset(
-                ["fill_rate", "fill_rate_status"]
-            )
-            partner.invalidate_recordset(
-                [
-                    "fill_rate",
-                    "supplier_class",
-                    "fill_rate_count",
-                    "fill_rate_complete_count",
-                    "fill_rate_partial_count",
-                ]
-            )
-
-            # Los campos computados se recalcularán automáticamente al acceder a ellos
-            # Forzar el cálculo accediendo a los campos
-            _ = partner.fill_rate
-            _ = partner.supplier_class
-            _ = partner.fill_rate_count
+        # Force recomputation of stored computed fields
+        self._compute_fill_rate()
+        self._compute_supplier_class()
+        self._compute_fill_rate_stats()
 
         return {
             "type": "ir.actions.client",
             "tag": "display_notification",
             "params": {
-                "title": "Fill Rate Recalculado",
-                "message": "El Fill Rate se ha recalculado correctamente.",
+                "title": "Fill Rate Recalculated",
+                "message": "Fill Rate has been recalculated successfully.",
                 "type": "success",
                 "sticky": False,
             },

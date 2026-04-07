@@ -178,7 +178,12 @@ class WooProductSync(models.AbstractModel):
         return stats
 
     def publish_to_wc(
-        self, product_tmpl, instance, wc_status="draft", price_override=0.0, description=""
+        self,
+        product_tmpl,
+        instance,
+        wc_status="draft",
+        price_override=0.0,
+        description="",
     ):
         """
         Publica (o actualiza) un product.template en una instancia WooCommerce.
@@ -193,7 +198,17 @@ class WooProductSync(models.AbstractModel):
             price_override: si > 0 sobreescribe el precio de lista del producto.
         """
         api = self.env["odoo.wp.sync.wc.api"]
-        price = price_override if price_override > 0 else product_tmpl.list_price
+
+        if instance.pricelist_id:
+            product_variant = product_tmpl.product_variant_id
+            price = (
+                instance.pricelist_id._get_product_price(product_variant, 1.0)
+                or product_tmpl.list_price
+            )
+        elif price_override and price_override > 0:
+            price = price_override
+        else:
+            price = product_tmpl.list_price
 
         payload = {
             "name": product_tmpl.name,
@@ -203,6 +218,13 @@ class WooProductSync(models.AbstractModel):
             "sku": product_tmpl.default_code or "",
             "type": "simple",
         }
+
+        # Apply taxes configured in instance to the Odoo product and WC payload
+        if instance.include_taxes_wc_product_sync and instance.taxes_product:
+            product_tmpl.write(
+                {"taxes_id": [fields.Command.set(instance.taxes_product.ids)]}
+            )
+            payload["tax_status"] = "taxable"
 
         # _logger.debug(f"product_tmpl: {product_tmpl}")
 

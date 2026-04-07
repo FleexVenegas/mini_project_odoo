@@ -49,11 +49,11 @@
                         <group>
                             <group>
                                 <field name="wp_url" placeholder="https://yourstore.com" widget="url"/>
-                                <field name="consumer_key" password="True" placeholder="ck_xxxxxxxxxxxxx"/>
+                                <field name="consumer_key" password="True" placeholder="ck_xxxxxxxxxxxxx" readonly="state == 'connected'"/>
                             </group>
                             <group>
                                 <field name="company_id" groups="base.group_multi_company"/>
-                                <field name="consumer_secret" password="True" placeholder="cs_xxxxxxxxxxxxx"/>
+                                <field name="consumer_secret" password="True" placeholder="cs_xxxxxxxxxxxxx" readonly="state == 'connected'"/>
                             </group>
                         </group>
                     </div>
@@ -347,13 +347,53 @@ Equipo de Ventas
                                     <i class="fa fa-info-circle me-2"/>
                                     Configure lo necesario para el almacén de esta instancia de WooCommerce
                                 </div>
-                                <group string="Warehouse">
+
+                                <group string="Almacén">
                                     <group>
                                         <field name="warehouse_id"/>
+                                    </group>
+                                    <group>
                                         <field name="update_stock" widget="boolean_toggle"/>
                                         <field name="update_order_status_wc" widget="boolean_toggle"/>
                                     </group>
                                 </group>
+
+                                <separator string="Descripción de Parámetros" class="mt-4"/>
+                                <div class="row mt-3">
+                                    <div class="col-md-4">
+                                        <div class="card border-0 shadow-sm mb-3">
+                                            <div class="card-body">
+                                                <h6 class="text-primary mb-2">
+                                                    <i class="fa fa-home me-2"/>
+Almacén
+                                                </h6>
+                                                <p class="small text-muted mb-0">Almacén por defecto para los movimientos de stock de los pedidos sincronizados.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="card border-0 shadow-sm mb-3">
+                                            <div class="card-body">
+                                                <h6 class="text-primary mb-2">
+                                                    <i class="fa fa-cubes me-2"/>
+Actualizar Stock
+                                                </h6>
+                                                <p class="small text-muted mb-0">Si está activo, se actualizará el stock en WooCommerce al sincronizar los pedidos.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="card border-0 shadow-sm mb-3">
+                                            <div class="card-body">
+                                                <h6 class="text-primary mb-2">
+                                                    <i class="fa fa-exchange me-2"/>
+Actualizar estado en WooCommerce
+                                                </h6>
+                                                <p class="small text-muted mb-0">Si está activo, se actualizará el estado del pedido en WooCommerce al sincronizar (por ejemplo, a 'processing' o 'completed').</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </page>
 
@@ -364,12 +404,65 @@ Equipo de Ventas
                                     <i class="fa fa-info-circle me-2"/>
                                     Configure lo necesario para los productos de WooCommerce
                                 </div>
-                                <group string="Products">
+
+                                <group string="Configuración de Productos">
                                     <group>
                                         <field name="allow_create_products" widget="boolean_toggle"/>
                                         <field name="who_can_publish" widget="many2many_tags" invisible="not allow_create_products"/>
                                     </group>
+                                    <group>
+                                        <field name="include_taxes_wc_product_sync" widget="boolean_toggle" invisible="not allow_create_products"/>
+                                        <field name="taxes_product" string="Impuestos" invisible="not allow_create_products or not include_taxes_wc_product_sync"/>
+                                    </group>
                                 </group>
+
+                                <separator string="Descripción de Parámetros" class="mt-4"/>
+                                <div class="row mt-3">
+                                    <div class="col-md-4">
+                                        <div class="card border-0 shadow-sm mb-3">
+                                            <div class="card-body">
+                                                <h6 class="text-primary mb-2">
+                                                    <i class="fa fa-plus-square me-2"/>
+Permitir creación de productos
+                                                </h6>
+                                                <p class="small text-muted mb-0">Si está activo, se podrán crear productos de Odoo en WooCommerce desde esta instancia.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="card border-0 shadow-sm mb-3">
+                                            <div class="card-body">
+                                                <h6 class="text-primary mb-2">
+                                                    <i class="fa fa-users me-2"/>
+Permitir publicación
+                                                </h6>
+                                                <p class="small text-muted mb-0">Usuarios autorizados a publicar productos en WooCommerce desde esta instancia.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="card border-0 shadow-sm mb-3">
+                                            <div class="card-body">
+                                                <h6 class="text-primary mb-2">
+                                                    <i class="fa fa-percent me-2"/>
+Incluir impuestos en productos
+                                                </h6>
+                                                <p class="small text-muted mb-0">Si está activo, se incluirán los impuestos al crear o sincronizar productos en WooCommerce.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="card border-0 shadow-sm mb-3">
+                                            <div class="card-body">
+                                                <h6 class="text-primary mb-2">
+                                                    <i class="fa fa-tags me-2"/>
+Impuestos para productos
+                                                </h6>
+                                                <p class="small text-muted mb-0">Impuestos que se asignarán automáticamente al producto en Odoo al publicarlo en WooCommerce.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </page>
 

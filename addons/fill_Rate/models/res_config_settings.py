@@ -1,41 +1,42 @@
 # -*- coding: utf-8 -*-
 from odoo import models, fields, api
+from odoo.exceptions import ValidationError
 
 
 class ResConfigSettings(models.TransientModel):
     """
-    Configuración de umbrales para clasificación de proveedores por Fill Rate.
+    Configuration of thresholds for supplier classification by Fill Rate.
     """
 
     _inherit = "res.config.settings"
 
     fill_rate_threshold_a = fields.Float(
-        string="Umbral Excelente (A)",
+        string="Excellent Threshold (A)",
         default=95.0,
         config_parameter="fill_rate.threshold_a",
-        help="Porcentaje mínimo para clasificar un proveedor como Excelente (A). Ejemplo: 95.0 = 95%",
+        help="Minimum percentage to classify a supplier as Excellent (A). Example: 95.0 = 95%",
     )
 
     fill_rate_threshold_b = fields.Float(
-        string="Umbral Bueno (B)",
+        string="Good Threshold (B)",
         default=85.0,
         config_parameter="fill_rate.threshold_b",
-        help="Porcentaje mínimo para clasificar un proveedor como Bueno (B). Ejemplo: 85.0 = 85%",
+        help="Minimum percentage to classify a supplier as Good (B). Example: 85.0 = 85%",
     )
 
     @api.constrains("fill_rate_threshold_a", "fill_rate_threshold_b")
     def _check_thresholds(self):
-        """Validar que el umbral A sea mayor que B."""
+        """Validate that Threshold A is greater than Threshold B."""
         for record in self:
             if record.fill_rate_threshold_a <= record.fill_rate_threshold_b:
-                raise models.ValidationError(
-                    "El umbral Excelente (A) debe ser mayor que el umbral Bueno (B)"
+                raise ValidationError(
+                    "The Excellent Threshold (A) must be greater than the Good Threshold (B)"
                 )
             if record.fill_rate_threshold_a < 0 or record.fill_rate_threshold_a > 100:
-                raise models.ValidationError(
-                    "El umbral Excelente (A) debe estar entre 0 y 100"
+                raise ValidationError(
+                    "The Excellent Threshold (A) must be between 0 and 100"
                 )
             if record.fill_rate_threshold_b < 0 or record.fill_rate_threshold_b > 100:
-                raise models.ValidationError(
-                    "El umbral Bueno (B) debe estar entre 0 y 100"
+                raise ValidationError(
+                    "The Good Threshold (B) must be between 0 and 100"
                 )

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <data>
+        <record id="module_category_fill_rate" model="ir.module.category">
+            <field name="name">Fill Rate - Supplier Performance</field>
+            <field name="sequence">100</field>
+        </record>
+
+        <!-- Fill Rate User: can view and record fill rate -->
+        <record id="group_fill_rate_user" model="res.groups">
+            <field name="name">Fill Rate User</field>
+            <field name="category_id" ref="module_category_fill_rate"/>
+            <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+            <field name="comment">Can view Fill Rate and supplier classification.</field>
+        </record>
+
+        <!-- Fill Rate Manager: can configure thresholds and run bulk recalculations -->
+        <record id="group_fill_rate_manager" model="res.groups">
+            <field name="name">Fill Rate Manager</field>
+            <field name="category_id" ref="module_category_fill_rate"/>
+            <field name="implied_ids" eval="[(4, ref('fill_Rate.group_fill_rate_user'))]"/>
+            <field name="comment">Can configure classification thresholds and run bulk recalculations.</field>
+        </record>
+
+        <!-- Multi-company rule: isolate fill.rate.line records by company of the purchase order -->
+        <record id="fill_rate_line_comp_rule" model="ir.rule">
+            <field name="name">Fill Rate Line: multi-company</field>
+            <field name="model_id" ref="model_fill_rate_line"/>
+            <field name="global" eval="True"/>
+            <field name="domain_force">['|', ('purchase_order_id.company_id', '=', False), ('purchase_order_id.company_id', 'in', company_ids)]</field>
+        </record>
+
+    </data>
+
+</odoo>

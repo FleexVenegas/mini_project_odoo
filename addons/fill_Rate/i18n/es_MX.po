@@ -1,0 +1,289 @@
+# Translation of fill_Rate module to Spanish (Mexico)
+# This file contains the translation of the following modules:
+# * fill_Rate
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 17.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-04-07 00:00+0000\n"
+"PO-Revision-Date: 2026-04-07 00:00+0000\n"
+"Last-Translator: Diego Venegas\n"
+"Language-Team: Spanish (Mexico)\n"
+"Language: es_MX\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#. module: fill_Rate
+#: model:ir.model,name:fill_Rate.model_fill_rate_line
+msgid "Fill Rate History by Purchase Order"
+msgstr "Historial de Fill Rate por Orden de Compra"
+
+#. module: fill_Rate
+#: model:ir.model.fields,field_description:fill_Rate.field_fill_rate_line__partner_id
+msgid "Supplier"
+msgstr "Proveedor"
+
+#. module: fill_Rate
+#: model:ir.model.fields,field_description:fill_Rate.field_fill_rate_line__purchase_order_id
+msgid "Purchase Order"
+msgstr "Orden de Compra"
+
+#. module: fill_Rate
+#: model:ir.model.fields,field_description:fill_Rate.field_fill_rate_line__purchase_order_line_id
+msgid "Order Line"
+msgstr "Línea de Orden"
+
+#. module: fill_Rate
+#: model:ir.model.fields,field_description:fill_Rate.field_fill_rate_line__order_date
+msgid "Order Date"
+msgstr "Fecha de Orden"
+
+#. module: fill_Rate
+#: model:ir.model.fields,field_description:fill_Rate.field_fill_rate_line__order_reference
+msgid "Reference"
+msgstr "Referencia"
+
+#. module: fill_Rate
+#: model:ir.model.fields,field_description:fill_Rate.field_fill_rate_line__origin_type
+msgid "Origin"
+msgstr "Origen"
+
+#. module: fill_Rate
+#: model:ir.model.fields,field_description:fill_Rate.field_fill_rate_line__qty_ordered
+msgid "Ordered Quantity"
+msgstr "Cantidad Ordenada"
+
+#. module: fill_Rate
+#: model:ir.model.fields,field_description:fill_Rate.field_fill_rate_line__qty_received
+msgid "Received Quantity"
+msgstr "Cantidad Recibida"
+
+#. module: fill_Rate
+#: model:ir.model.fields,help:fill_Rate.field_fill_rate_line__qty_received
+msgid "Quantity actually received in warehouse (validated moves)"
+msgstr "Cantidad realmente recibida en almacén (movimientos validados)"
+
+#. module: fill_Rate
+#: model:ir.model.fields,field_description:fill_Rate.field_fill_rate_line__uom_id
+msgid "Unit of Measure"
+msgstr "Unidad de Medida"
+
+#. module: fill_Rate
+#: model:ir.model.fields,field_description:fill_Rate.field_fill_rate_line__fill_rate
+#: model:ir.model.fields,field_description:fill_Rate.field_res_partner__fill_rate
+#: model:ir.model.fields,field_description:fill_Rate.field_purchase_order_line__fill_rate
+msgid "Fill Rate (%)"
+msgstr "Fill Rate (%)"
+
+#. module: fill_Rate
+#: model:ir.model.fields,help:fill_Rate.field_fill_rate_line__fill_rate
+msgid "Fulfillment percentage: (Received Quantity / Ordered Quantity). Decimal value from 0.0 to 1.0"
+msgstr "Porcentaje de cumplimiento: (Cantidad Recibida / Cantidad Ordenada). Valor decimal de 0.0 a 1.0"
+
+#. module: fill_Rate
+#: model:ir.model.fields,field_description:fill_Rate.field_fill_rate_line__fill_rate_status
+msgid "Status"
+msgstr "Estado"
+
+#. module: fill_Rate
+#: model:ir.model.fields,field_description:fill_Rate.field_fill_rate_line__state
+msgid "Order Status"
+msgstr "Estado de Orden"
+
+#. module: fill_Rate
+#: model:ir.model.fields,field_description:fill_Rate.field_fill_rate_line__date_received
+msgid "Last Receipt"
+msgstr "Última Recepción"
+
+#. module: fill_Rate
+#: model:ir.model.fields,help:fill_Rate.field_fill_rate_line__date_received
+msgid "Date of the last validated receipt"
+msgstr "Fecha de la última recepción validada"
+
+#. module: fill_Rate
+#: model:ir.model.fields,field_description:fill_Rate.field_fill_rate_line__notes
+msgid "Notes"
+msgstr "Notas"
+
+#. module: fill_Rate
+#: model:ir.model.fields,field_description:fill_Rate.field_purchase_order__fill_rate_line_ids
+msgid "Fill Rate Lines"
+msgstr "Líneas de Fill Rate"
+
+#. module: fill_Rate
+#: model:ir.model.fields,field_description:fill_Rate.field_purchase_order__fill_rate_created
+msgid "Fill Rate Created"
+msgstr "Fill Rate Creado"
+
+#. module: fill_Rate
+#: model:ir.model.fields,help:fill_Rate.field_purchase_order__fill_rate_created
+msgid "Indicates whether fill rate records have already been created for this order"
+msgstr "Indica si ya se crearon los registros de fill rate para esta orden"
+
+#. module: fill_Rate
+#: model:ir.model.fields,field_description:fill_Rate.field_purchase_order_line__fill_rate_line_id
+msgid "Fill Rate Line"
+msgstr "Línea Fill Rate"
+
+#. module: fill_Rate
+#: model:ir.model.fields,help:fill_Rate.field_purchase_order_line__fill_rate_line_id
+msgid "Fill rate record associated with this line"
+msgstr "Registro de fill rate asociado a esta línea"
+
+#. module: fill_Rate
+#: model:ir.model.fields,help:fill_Rate.field_purchase_order_line__fill_rate
+msgid "Fulfillment percentage for this line"
+msgstr "Porcentaje de cumplimiento de esta línea"
+
+#. module: fill_Rate
+#: model:ir.model.fields,field_description:fill_Rate.field_res_config_settings__fill_rate_threshold_a
+msgid "Excellent Threshold (A)"
+msgstr "Umbral Excelente (A)"
+
+#. module: fill_Rate
+#: model:ir.model.fields,help:fill_Rate.field_res_config_settings__fill_rate_threshold_a
+msgid "Minimum percentage to classify a supplier as Excellent (A). Example: 95.0 = 95%"
+msgstr "Porcentaje mínimo para clasificar un proveedor como Excelente (A). Ejemplo: 95.0 = 95%"
+
+#. module: fill_Rate
+#: model:ir.model.fields,field_description:fill_Rate.field_res_config_settings__fill_rate_threshold_b
+msgid "Good Threshold (B)"
+msgstr "Umbral Bueno (B)"
+
+#. module: fill_Rate
+#: model:ir.model.fields,help:fill_Rate.field_res_config_settings__fill_rate_threshold_b
+msgid "Minimum percentage to classify a supplier as Good (B). Example: 85.0 = 85%"
+msgstr "Porcentaje mínimo para clasificar un proveedor como Bueno (B). Ejemplo: 85.0 = 85%"
+
+#. module: fill_Rate
+#: model:ir.model.fields,field_description:fill_Rate.field_res_partner__supplier_class
+msgid "Classification"
+msgstr "Clasificación"
+
+#. module: fill_Rate
+#: model:ir.model.fields,help:fill_Rate.field_res_partner__supplier_class
+msgid "Automatic supplier classification based on historical Fill Rate. Thresholds are configurable from Settings > Fill Rate"
+msgstr "Clasificación automática del proveedor según su Fill Rate histórico. Los umbrales son configurables desde Ajustes > Fill Rate"
+
+#. module: fill_Rate
+#: model:ir.model.fields,field_description:fill_Rate.field_res_partner__supplier_class_display
+msgid "Detailed Classification"
+msgstr "Clasificación Detallada"
+
+#. module: fill_Rate
+#: model:ir.model.fields,help:fill_Rate.field_res_partner__supplier_class_display
+msgid "Shows the classification with the currently configured thresholds"
+msgstr "Muestra la clasificación con los umbrales actuales configurados"
+
+#. module: fill_Rate
+#: model:ir.model.fields,field_description:fill_Rate.field_res_partner__fill_rate_history_ids
+msgid "Fill Rate History"
+msgstr "Historial de Fill Rate"
+
+#. module: fill_Rate
+#: model:ir.model.fields,field_description:fill_Rate.field_res_partner__fill_rate_count
+msgid "Total Orders"
+msgstr "Total de Órdenes"
+
+#. module: fill_Rate
+#: model:ir.model.fields,help:fill_Rate.field_res_partner__fill_rate_count
+msgid "Total number of evaluated order lines"
+msgstr "Cantidad total de líneas de órdenes evaluadas"
+
+#. module: fill_Rate
+#: model:ir.model.fields,field_description:fill_Rate.field_res_partner__fill_rate_complete_count
+msgid "Complete Orders"
+msgstr "Órdenes Completas"
+
+#. module: fill_Rate
+#: model:ir.model.fields,help:fill_Rate.field_res_partner__fill_rate_complete_count
+msgid "Orders with 100% fulfillment"
+msgstr "Órdenes con 100% de cumplimiento"
+
+#. module: fill_Rate
+#: model:ir.model.fields,field_description:fill_Rate.field_res_partner__fill_rate_partial_count
+msgid "Partial Orders"
+msgstr "Órdenes Parciales"
+
+#. module: fill_Rate
+#: model:ir.model.fields,help:fill_Rate.field_res_partner__fill_rate_partial_count
+msgid "Orders with less than 100% fulfillment"
+msgstr "Órdenes con menos del 100% de cumplimiento"
+
+#. module: fill_Rate
+#: model:ir.model.fields,field_description:fill_Rate.field_res_partner__fill_rate_last_update
+msgid "Last Update"
+msgstr "Última Actualización"
+
+#. module: fill_Rate
+#: model:ir.model.fields,help:fill_Rate.field_res_partner__fill_rate
+msgid "Average fulfillment percentage for the supplier based on all orders. Decimal value from 0.0 to 1.0"
+msgstr "Porcentaje promedio de cumplimiento del proveedor basado en todas sus órdenes. Valor decimal de 0.0 a 1.0"
+
+#. module: fill_Rate
+#: model:ir.actions.act_window,name:fill_Rate.action_fill_rate_line
+msgid "Fill Rate History"
+msgstr "Historial de Fill Rate"
+
+#. module: fill_Rate
+#: model:ir.actions.act_window,name:fill_Rate.action_partner_supplier_fill_rate
+msgid "Suppliers by Fill Rate"
+msgstr "Proveedores por Fill Rate"
+
+#. module: fill_Rate
+#: model:ir.actions.act_window,name:fill_Rate.action_fill_rate_configuration
+msgid "Fill Rate Configuration"
+msgstr "Configuración Fill Rate"
+
+#. module: fill_Rate
+#: model:ir.ui.menu,name:fill_Rate.menu_fill_rate_history
+msgid "History"
+msgstr "Historial"
+
+#. module: fill_Rate
+#: model:ir.ui.menu,name:fill_Rate.menu_partner_fill_rate
+msgid "Supplier Classification"
+msgstr "Clasificación de Proveedores"
+
+#. module: fill_Rate
+#: model:ir.ui.menu,name:fill_Rate.menu_fill_rate_config
+msgid "Configuration"
+msgstr "Configuración"
+
+#. module: fill_Rate
+#: model:ir.cron,name:fill_Rate.ir_cron_recalculate_fill_rate
+msgid "Fill Rate: Recalculate Automatically"
+msgstr "Fill Rate: Recalcular automáticamente"
+
+#. module: fill_Rate
+#: model:ir.actions.server,name:fill_Rate.action_server_recalculate_all_fill_rate
+msgid "Recalculate All Fill Rates"
+msgstr "Recalcular todos los Fill Rate"
+
+#. module: fill_Rate
+#: model:ir.actions.server,name:fill_Rate.action_server_recalculate_partner_fill_rate
+msgid "Recalculate Fill Rate"
+msgstr "Recalcular Fill Rate"
+
+#. module: fill_Rate
+#: model:ir.actions.server,name:fill_Rate.action_server_create_missing_fill_rate
+msgid "Create Fill Rate for existing orders"
+msgstr "Crear Fill Rate para ordenes existentes"
+
+#. module: fill_Rate
+#: model:ir.module.category,name:fill_Rate.module_category_fill_rate
+msgid "Fill Rate - Supplier Performance"
+msgstr "Fill Rate - Desempeño de Proveedores"
+
+#. module: fill_Rate
+#: model:res.groups,name:fill_Rate.group_fill_rate_user
+msgid "Fill Rate User"
+msgstr "Usuario Fill Rate"
+
+#. module: fill_Rate
+#: model:res.groups,name:fill_Rate.group_fill_rate_manager
+msgid "Fill Rate Manager"
+msgstr "Manager Fill Rate"
