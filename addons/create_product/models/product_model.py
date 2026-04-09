@@ -18,7 +18,7 @@ class ProductCreationWizard(models.TransientModel):
 
     designer = fields.Char(
         string="Designer",
-        required=True,
+        # required=True,
         help="Person or company that designed the product",
     )
 
@@ -31,7 +31,7 @@ class ProductCreationWizard(models.TransientModel):
 
     barcode = fields.Char(
         string="Barcode",
-        required=True,
+        # required=True,
         help="EAN/ISBN/UPC code or similar",
     )
 
@@ -51,35 +51,35 @@ class ProductCreationWizard(models.TransientModel):
             ("NIÑO", "Kids"),
         ],
         string="Gender",
-        required=True,
+        # required=True,
         help="Product gender",
     )
 
     classification = fields.Many2one(
         comodel_name="product.type",
         string="Product Type",
-        required=True,
+        # required=True,
         help="Product classification",
     )
 
     ml = fields.Many2one(
         comodel_name="product.size",
         string="Size",
-        required=True,
+        # required=True,
         help="Product size presentation",
     )
 
     category_product = fields.Many2one(
         comodel_name="product.category",
         string="Product Category",
-        required=True,
+        # required=True,
         help="General category to which this product belongs",
     )
 
     uom_id = fields.Many2one(
         comodel_name="uom.uom",
         string="Unit of Measure",
-        required=True,
+        # required=True,
         default=lambda self: self.env.ref(
             "uom.product_uom_unit", raise_if_not_found=False
         ),
@@ -89,6 +89,18 @@ class ProductCreationWizard(models.TransientModel):
     description_product = fields.Text(
         string="Description",
         help="Detailed product description",
+    )
+
+    # unspsc_code_id = fields.Many2one(
+    #     comodel_name="unspsc.code",
+    #     string="UNSPSC Code",
+    #     help="United Nations Standard Products and Services Code",
+    # )
+
+    product_type = fields.Boolean(
+        string="Is a Product",
+        default=True,
+        help="Indicates that this record represents a product or combo",
     )
 
     @api.model
@@ -163,6 +175,9 @@ class ProductCreationWizard(models.TransientModel):
         # Build formatted product name
         product_name = self._build_product_name()
 
+        # Get UNSPSC code ID
+        unspsc_code_id = self._get_unspsc_code_id()
+
         # Create the product
         product_vals = {
             "name": product_name,
@@ -170,18 +185,23 @@ class ProductCreationWizard(models.TransientModel):
             "sale_ok": True,
             "purchase_ok": True,
             "available_in_pos": True,
-            "uom_id": self.uom_id.id,
-            "uom_po_id": self.uom_id.id,
+            "uom_id": self.uom_id.id or False,
+            "uom_po_id": self.uom_id.id or False,
             "list_price": 0.0,
             "standard_price": 0.0,
             "barcode": self.barcode,
             "default_code": self.default_code,
             "detailed_type": "product",
-            "categ_id": self.category_product.id,
+            "categ_id": self.category_product.id
+            or self.env.ref("product.product_category_all", raise_if_not_found=False).id
+            or False,
             "product_tag_ids": [(6, 0, tag_ids)],
             "taxes_id": [(6, 0, tax_ids)],
             "route_ids": [(6, 0, route_ids)],
         }
+
+        if "unspsc_code_id" in self.env["product.template"]._fields:
+            product_vals["unspsc_code_id"] = unspsc_code_id
 
         # Add purchase_method only if the field exists (purchase module installed)
         if "purchase_method" in self.env["product.template"]._fields:
@@ -322,3 +342,17 @@ class ProductCreationWizard(models.TransientModel):
 
         _logger.info("Buy route found: %s (ID: %s)", route.name, route.id)
         return [route.id]
+
+    def _get_unspsc_code_id(self):
+        """Gets the UNSPSC code ID for '53131620'"""
+        try:
+            unspsc = self.env["product.unspsc.code"].search(
+                [("code", "=", "53131620")], limit=1
+            )
+            if not unspsc:
+                _logger.warning("UNSPSC code '53131620' not found")
+                return []
+        except Exception as e:
+            _logger.warning("Error while fetching UNSPSC code '53131620': %s", str(e))
+            return []
+        return unspsc.id
