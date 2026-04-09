@@ -8,18 +8,18 @@
         <field name="arch" type="xml">
             <form string="WooCommerce Instance">
                 <header>
-                    <button name="action_test_connection" string="Test Connection" type="object" class="btn-primary" invisible="state == 'connected'"/>
-                    <button name="action_test_connection" string="Retest Connection" type="object" class="btn-secondary" invisible="state != 'connected'"/>
+                    <button name="action_test_connection" string="Probar Conexión" type="object" class="btn-primary" invisible="state == 'connected'"/>
+                    <button name="action_test_connection" string="Reconectar" type="object" class="btn-secondary" invisible="state != 'connected'"/>
                     <field name="state" widget="statusbar" statusbar_visible="draft,connected"/>
                 </header>
                 <sheet>
-                    <widget name="web_ribbon" title="Archived" bg_color="text-bg-danger" invisible="active"/>
+                    <widget name="web_ribbon" title="Archivado" bg_color="text-bg-danger" invisible="active"/>
                     <field name="active" invisible="1"/>
 
-                    <!-- Stats Box -->
+                    <!-- Smart Buttons -->
                     <div class="oe_button_box" name="button_box">
                         <button name="action_view_orders" type="object" class="oe_stat_button" icon="fa-shopping-cart" invisible="state != 'connected'">
-                            <field name="order_count" widget="statinfo" string="Orders"/>
+                            <field name="order_count" widget="statinfo" string="Pedidos"/>
                         </button>
                         <button name="action_view_woo_products" type="object" class="oe_stat_button" icon="fa-cube" invisible="state != 'connected'">
                             <field name="woo_product_count" widget="statinfo" string="Productos WC"/>
@@ -31,42 +31,39 @@
                         </button>
                         <button name="action_sync_orders" type="object" class="oe_stat_button" icon="fa-refresh" invisible="state != 'connected'">
                             <div class="o_field_widget o_stat_info">
-                                <span class="o_stat_text">Sync Now</span>
+                                <span class="o_stat_text">Sincronizar Ahora</span>
                             </div>
                         </button>
                     </div>
 
                     <!-- Title -->
                     <div class="oe_title mb-3">
-                        <h1 class="d-flex align-items-center">
-                            <field name="color" widget="color_picker" class="me-2"/>
-                            <field name="name" placeholder="Instance Name" class="o_text_overflow" style="max-width: 500px;"/>
+                        <h1 class="d-flex align-items-center gap-2">
+                            <field name="color" widget="color_picker"/>
+                            <field name="name" placeholder="Nombre de la instancia" class="o_text_overflow"/>
                         </h1>
                     </div>
 
-                    <!-- Connection Details -->
-                    <div class="mb-3">
-                        <group>
-                            <group>
-                                <field name="wp_url" placeholder="https://yourstore.com" widget="url"/>
-                                <field name="consumer_key" password="True" placeholder="ck_xxxxxxxxxxxxx" readonly="state == 'connected'"/>
-                            </group>
-                            <group>
-                                <field name="company_id" groups="base.group_multi_company"/>
-                                <field name="consumer_secret" password="True" placeholder="cs_xxxxxxxxxxxxx" readonly="state == 'connected'"/>
-                            </group>
+                    <!-- Connection fields -->
+                    <group>
+                        <group string="Credenciales WooCommerce">
+                            <field name="wp_url" placeholder="https://mitienda.com" widget="url" readonly="state == 'connected'"/>
+                            <field name="consumer_key" password="True" placeholder="ck_xxxxxxxxxxxxx" readonly="state == 'connected'"/>
+                            <field name="consumer_secret" password="True" placeholder="cs_xxxxxxxxxxxxx" readonly="state == 'connected'"/>
                         </group>
-                    </div>
+                        <group string="General">
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                    </group>
 
-                    <!-- Connection Status -->
+                    <!-- Connection Status Alert -->
                     <div class="alert" role="alert" invisible="not last_connection_test" t-attf-class="alert-{{state == 'connected' and 'success' or (state == 'error' and 'danger' or 'info')}}">
-                        <div class="d-flex align-items-center">
-                            <i t-attf-class="fa {{state == 'connected' and 'fa-check-circle' or (state == 'error' and 'fa-times-circle' or 'fa-info-circle')}} me-2 fs-4"/>
-                            <div class="flex-grow-1">
-                                <strong>Status:</strong>
+                        <div class="d-flex align-items-center gap-2">
+                            <i t-attf-class="fa fa-lg {{state == 'connected' and 'fa-check-circle' or (state == 'error' and 'fa-times-circle' or 'fa-info-circle')}}"/>
+                            <div>
                                 <field name="connection_message"/>
                                 <div class="small text-muted mt-1">
-                                    Last tested: <field name="last_connection_test"/>
+                                    Última prueba: <field name="last_connection_test"/>
                                 </div>
                             </div>
                         </div>
@@ -74,47 +71,43 @@
 
                     <notebook>
 
-                        <!-- ── Setup Guide ─────────────────────────────── -->
-                        <page string="Setup Guide" name="setup_guide" invisible="state == 'connected'">
+                        <!-- ── Guía de Inicio ─────────────────────────── -->
+                        <page string="Guía de Inicio" name="setup_guide" invisible="state == 'connected'">
                             <div class="p-3">
-                                <h4 class="text-primary mb-3">
+                                <div class="alert alert-info" role="alert">
                                     <i class="fa fa-lightbulb-o me-2"/>
-Quick Setup
-                                </h4>
-                                <div class="row">
+                                    Sigue los pasos para conectar tu tienda WooCommerce.
+                                </div>
+                                <div class="row g-3">
                                     <div class="col-md-6">
-                                        <div class="border rounded p-3 mb-3 bg-light">
-                                            <h5 class="mb-2">
-                                                <span class="badge bg-primary me-2">1</span>Access WooCommerce
-                                            </h5>
-                                            <p class="mb-0 small">Go to: <code>WooCommerce → Settings → Advanced → REST API</code>
+                                        <div class="border rounded p-3 bg-light">
+                                            <h6>
+                                                <span class="badge bg-primary me-2">1</span>Accede a WooCommerce</h6>
+                                            <p class="mb-0 small">Ve a: <code>WooCommerce → Ajustes → Avanzado → API REST</code>
                                             </p>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
-                                        <div class="border rounded p-3 mb-3 bg-light">
-                                            <h5 class="mb-2">
-                                                <span class="badge bg-primary me-2">2</span>Generate API Key
-                                            </h5>
-                                            <p class="mb-0 small">Click <strong>Add Key</strong>, set permissions to <code>Read/Write</code>
+                                        <div class="border rounded p-3 bg-light">
+                                            <h6>
+                                                <span class="badge bg-primary me-2">2</span>Genera una API Key</h6>
+                                            <p class="mb-0 small">Haz clic en <strong>Agregar clave</strong>, permisos: <code>Lectura/Escritura</code>
                                             </p>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
-                                        <div class="border rounded p-3 mb-3 bg-light">
-                                            <h5 class="mb-2">
-                                                <span class="badge bg-primary me-2">3</span>Copy Credentials
-                                            </h5>
-                                            <p class="mb-0 small">Copy the <strong>Consumer Key</strong> and <strong>Consumer Secret</strong>
+                                        <div class="border rounded p-3 bg-light">
+                                            <h6>
+                                                <span class="badge bg-primary me-2">3</span>Copia las credenciales</h6>
+                                            <p class="mb-0 small">Copia el <strong>Consumer Key</strong> y el <strong>Consumer Secret</strong>
                                             </p>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
-                                        <div class="border rounded p-3 mb-3 bg-light">
-                                            <h5 class="mb-2">
-                                                <span class="badge bg-primary me-2">4</span>Test Connection
-                                            </h5>
-                                            <p class="mb-0 small">Paste credentials above and click <strong>Test Connection</strong>
+                                        <div class="border rounded p-3 bg-light">
+                                            <h6>
+                                                <span class="badge bg-primary me-2">4</span>Prueba la conexión</h6>
+                                            <p class="mb-0 small">Pega las credenciales arriba y haz clic en <strong>Probar Conexión</strong>
                                             </p>
                                         </div>
                                     </div>
@@ -122,352 +115,122 @@ Quick Setup
                             </div>
                         </page>
 
-                        <!-- ── Parameters ──────────────────────────────── -->
-                        <page string="Parameters" name="parameters" invisible="state != 'connected'">
-                            <div class="p-3">
-                                <div class="alert alert-info mb-4" role="alert">
-                                    <i class="fa fa-info-circle me-2"/>
-                                    Configure synchronization settings for this WooCommerce instance
-                                </div>
-
-                                <group string="Synchronization Settings">
-                                    <group>
-                                        <field name="sync_order_limit" widget="integer"/>
-                                        <field name="sync_from_date"/>
-                                        <field name="sync_order_status"/>
-                                        <field name="sync_custom_statuses" placeholder="pending,processing,completed" invisible="sync_order_status != 'custom'"/>
-                                    </group>
-                                    <group>
-                                        <field name="auto_sync" widget="boolean_toggle"/>
-                                        <field name="sync_interval" invisible="not auto_sync"/>
-                                        <field name="next_auto_sync_date" readonly="1" invisible="not auto_sync"/>
-                                    </group>
+                        <!-- ── Sincronización ─────────────────────────── -->
+                        <page string="Sincronización" name="parameters" invisible="state != 'connected'">
+                            <group string="Configuración de Pedidos">
+                                <group>
+                                    <field name="sync_order_limit" widget="integer"/>
+                                    <field name="sync_from_date"/>
+                                    <field name="sync_order_status"/>
+                                    <field name="sync_custom_statuses" placeholder="pending,processing,completed" invisible="sync_order_status != 'custom'"/>
                                 </group>
-
-                                <group string="Sync Strategy" class="mt-3">
-                                    <group>
-                                        <field name="incremental_enabled" widget="boolean_toggle"/>
-                                        <field name="full_sync_interval_days" invisible="not incremental_enabled"/>
-                                    </group>
-                                    <group>
-                                        <field name="sync_mode"/>
-                                    </group>
+                                <group>
+                                    <field name="auto_sync" widget="boolean_toggle"/>
+                                    <field name="sync_interval" invisible="not auto_sync"/>
+                                    <field name="next_auto_sync_date" readonly="1" invisible="not auto_sync"/>
                                 </group>
+                            </group>
 
-                                <separator string="Parameter Description" class="mt-4"/>
-                                <div class="row mt-3">
-                                    <div class="col-md-6">
-                                        <div class="card border-0 shadow-sm mb-3">
-                                            <div class="card-body">
-                                                <h6 class="text-primary mb-2">
-                                                    <i class="fa fa-list-ol me-2"/>
-Orders per Sync
-                                                </h6>
-                                                <p class="small text-muted mb-0">Maximum number of orders to retrieve in each synchronization. Higher values may take longer.</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="card border-0 shadow-sm mb-3">
-                                            <div class="card-body">
-                                                <h6 class="text-primary mb-2">
-                                                    <i class="fa fa-calendar me-2"/>
-Sync From Date
-                                                </h6>
-                                                <p class="small text-muted mb-0">Sync orders created from this date onwards. Leave empty to sync all orders.</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="card border-0 shadow-sm mb-3">
-                                            <div class="card-body">
-                                                <h6 class="text-primary mb-2">
-                                                    <i class="fa fa-filter me-2"/>
-Order Status Filter
-                                                </h6>
-                                                <p class="small text-muted mb-0">Filter which order statuses to sync from WooCommerce.</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="card border-0 shadow-sm mb-3">
-                                            <div class="card-body">
-                                                <h6 class="text-primary mb-2">
-                                                    <i class="fa fa-refresh me-2"/>
-Auto Sync
-                                                </h6>
-                                                <p class="small text-muted mb-0">Enable automatic synchronization at regular intervals.</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="card border-0 shadow-sm mb-3">
-                                            <div class="card-body">
-                                                <h6 class="text-primary mb-2">
-                                                    <i class="fa fa-bolt me-2"/>
-Incremental Sync
-                                                </h6>
-                                                <p class="small text-muted mb-0">When enabled, only orders modified since the last sync are fetched. Disabling forces a full sync every time.</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="card border-0 shadow-sm mb-3">
-                                            <div class="card-body">
-                                                <h6 class="text-primary mb-2">
-                                                    <i class="fa fa-history me-2"/>
-Sync Mode
-                                                </h6>
-                                                <p class="small text-muted mb-0">Full: re-fetches all orders in each run. Incremental: only new or changed orders since last sync.</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            <group string="Estrategia de Sincronización">
+                                <group>
+                                    <field name="incremental_enabled" widget="boolean_toggle"/>
+                                    <field name="full_sync_interval_days" invisible="not incremental_enabled"/>
+                                </group>
+                                <group>
+                                    <field name="sync_mode"/>
+                                </group>
+                            </group>
+
+                            <group string="Estadísticas" invisible="not last_sync_date">
+                                <group>
+                                    <field name="last_sync_date" readonly="1"/>
+                                    <field name="last_full_sync_date" readonly="1"/>
+                                    <field name="total_synced_orders" readonly="1"/>
+                                </group>
+                                <group>
+                                    <field name="last_sync_order_count" readonly="1"/>
+                                    <field name="sync_error_count" readonly="1"/>
+                                    <field name="sync_duration" readonly="1"/>
+                                </group>
+                            </group>
                         </page>
 
-                        <!-- ── Sales ───────────────────────────────────── -->
-                        <page name="sales" string="Sales" invisible="state != 'connected'">
-                            <div class="p-3">
-                                <div class="alert alert-info mb-4" role="alert">
-                                    <i class="fa fa-info-circle me-2"/>
-                                    Configure lo necesario para las ventas de esta instancia de WooCommerce
-                                </div>
-
-                                <!-- Equipo Comercial -->
-                                <group string="Equipo Comercial">
-                                    <group>
-                                        <field name="seller_id" string="Vendedor"/>
-                                        <field name="sale_team_id" string="Equipo de Ventas"/>
-                                        <field name="client_id" string="Cliente específico"/>
-                                    </group>
-                                    <group>
-                                        <field name="use_sequence" string="Usar Secuencia" widget="boolean_toggle"/>
-                                        <field name="prefix_sequence" invisible="use_sequence != False"/>
-                                        <field name="sequence" invisible="use_sequence != True"/>
-                                    </group>
+                        <!-- ── Ventas ─────────────────────────────────── -->
+                        <page string="Ventas" name="sales" invisible="state != 'connected'">
+                            <group string="Equipo Comercial">
+                                <group>
+                                    <field name="seller_id" string="Vendedor"/>
+                                    <field name="sale_team_id" string="Equipo de Ventas"/>
+                                    <field name="client_id" string="Cliente por defecto"/>
                                 </group>
-
-                                <!-- Precios y Pagos -->
-                                <group string="Precios y Pagos" class="mt-3">
-                                    <group>
-                                        <field name="pricelist_id" string="Lista de Precios"/>
-                                        <field name="payment_term_id" string="Términos de Pago"/>
-                                        <field name="wc_shipping" string="Incluir costo de envíos en pedidos" widget="boolean_toggle"/>
-                                    </group>
-                                    <group>
-                                        <field name="taxes_included_price" string="Impuestos Incluidos en Precio" widget="boolean_toggle"/>
-                                        <field name="tax_id" string="Impuesto" invisible="taxes_included_price != False"/>
-                                    </group>
+                                <group>
+                                    <field name="use_sequence" string="Usar Secuencia" widget="boolean_toggle"/>
+                                    <field name="prefix_sequence" invisible="use_sequence != False"/>
+                                    <field name="sequence" invisible="use_sequence != True"/>
                                 </group>
+                            </group>
 
-                                <!-- Comportamiento de Pedidos -->
-                                <group string="Comportamiento de Pedidos" class="mt-3">
-                                    <group>
-                                        <field name="confirm_orders" string="Confirmar Pedidos Automáticamente" widget="boolean_toggle"/>
-                                    </group>
+                            <group string="Precios y Pagos">
+                                <group>
+                                    <field name="pricelist_id" string="Lista de Precios"/>
+                                    <field name="payment_term_id" string="Términos de Pago"/>
+                                    <field name="wc_shipping" string="Incluir costo de envío" widget="boolean_toggle"/>
                                 </group>
+                                <group>
+                                    <field name="taxes_included_price" string="Precios con IVA incluido" widget="boolean_toggle"/>
+                                    <field name="tax_id" string="Impuesto" invisible="taxes_included_price != False"/>
+                                </group>
+                            </group>
 
-                                <separator string="Descripción de Parámetros" class="mt-4"/>
-                                <div class="row mt-3">
-                                    <div class="col-md-4">
-                                        <div class="card border-0 shadow-sm mb-3">
-                                            <div class="card-body">
-                                                <h6 class="text-primary mb-2">
-                                                    <i class="fa fa-user me-2"/>
-Vendedor
-                                                </h6>
-                                                <p class="small text-muted mb-0">Vendedor asignado por defecto a los pedidos generados desde esta instancia.</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="card border-0 shadow-sm mb-3">
-                                            <div class="card-body">
-                                                <h6 class="text-primary mb-2">
-                                                    <i class="fa fa-tag me-2"/>
-Lista de Precios
-                                                </h6>
-                                                <p class="small text-muted mb-0">Lista de precios aplicada al crear pedidos de venta desde WooCommerce.</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="card border-0 shadow-sm mb-3">
-                                            <div class="card-body">
-                                                <h6 class="text-primary mb-2">
-                                                    <i class="fa fa-check-square me-2"/>
-Confirmar Pedidos
-                                                </h6>
-                                                <p class="small text-muted mb-0">Si está activo, los pedidos se confirman automáticamente al importarse desde WooCommerce.</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="card border-0 shadow-sm mb-3">
-                                            <div class="card-body">
-                                                <h6 class="text-primary mb-2">
-                                                    <i class="fa fa-credit-card me-2"/>
-Términos de Pago
-                                                </h6>
-                                                <p class="small text-muted mb-0">Condiciones de pago predeterminadas para los pedidos de esta tienda.</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="card border-0 shadow-sm mb-3">
-                                            <div class="card-body">
-                                                <h6 class="text-primary mb-2">
-                                                    <i class="fa fa-percent me-2"/>
-Impuestos Incluidos
-                                                </h6>
-                                                <p class="small text-muted mb-0">Indica si los precios enviados por WooCommerce ya incluyen impuestos.</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="card border-0 shadow-sm mb-3">
-                                            <div class="card-body">
-                                                <h6 class="text-primary mb-2">
-                                                    <i class="fa fa-users me-2"/>
-Equipo de Ventas
-                                                </h6>
-                                                <p class="small text-muted mb-0">Equipo de ventas responsable de gestionar los pedidos de esta instancia.</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            <group string="Comportamiento">
+                                <group>
+                                    <field name="confirm_orders" string="Confirmar pedidos automáticamente" widget="boolean_toggle"/>
+                                </group>
+                            </group>
                         </page>
 
-                        <!-- ── Warehouse ────────────────────────────────── -->
-                        <page name="warehouse" string="Warehouse" invisible="state != 'connected'">
-                            <div class="p-3">
-                                <div class="alert alert-info mb-4" role="alert">
-                                    <i class="fa fa-info-circle me-2"/>
-                                    Configure lo necesario para el almacén de esta instancia de WooCommerce
-                                </div>
-
-                                <group string="Almacén">
-                                    <group>
-                                        <field name="warehouse_id"/>
-                                    </group>
-                                    <group>
-                                        <field name="update_stock" widget="boolean_toggle"/>
-                                        <field name="update_order_status_wc" widget="boolean_toggle"/>
-                                    </group>
+                        <!-- ── Almacén ────────────────────────────────── -->
+                        <page string="Almacén" name="warehouse" invisible="state != 'connected'">
+                            <group string="Configuración de Almacén">
+                                <group>
+                                    <field name="warehouse_id"/>
                                 </group>
-
-                                <separator string="Descripción de Parámetros" class="mt-4"/>
-                                <div class="row mt-3">
-                                    <div class="col-md-4">
-                                        <div class="card border-0 shadow-sm mb-3">
-                                            <div class="card-body">
-                                                <h6 class="text-primary mb-2">
-                                                    <i class="fa fa-home me-2"/>
-Almacén
-                                                </h6>
-                                                <p class="small text-muted mb-0">Almacén por defecto para los movimientos de stock de los pedidos sincronizados.</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="card border-0 shadow-sm mb-3">
-                                            <div class="card-body">
-                                                <h6 class="text-primary mb-2">
-                                                    <i class="fa fa-cubes me-2"/>
-Actualizar Stock
-                                                </h6>
-                                                <p class="small text-muted mb-0">Si está activo, se actualizará el stock en WooCommerce al sincronizar los pedidos.</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="card border-0 shadow-sm mb-3">
-                                            <div class="card-body">
-                                                <h6 class="text-primary mb-2">
-                                                    <i class="fa fa-exchange me-2"/>
-Actualizar estado en WooCommerce
-                                                </h6>
-                                                <p class="small text-muted mb-0">Si está activo, se actualizará el estado del pedido en WooCommerce al sincronizar (por ejemplo, a 'processing' o 'completed').</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                                <group>
+                                    <field name="update_stock" widget="boolean_toggle"/>
+                                    <field name="update_order_status_wc" widget="boolean_toggle"/>
+                                </group>
+                            </group>
                         </page>
 
-
-                        <page name="wc_product" string="Products" invisible="state != 'connected'">
-                            <div class="p-3">
-                                <div class="alert alert-info mb-4" role="alert">
-                                    <i class="fa fa-info-circle me-2"/>
-                                    Configure lo necesario para los productos de WooCommerce
-                                </div>
-
-                                <group string="Configuración de Productos">
-                                    <group>
-                                        <field name="allow_create_products" widget="boolean_toggle"/>
-                                        <field name="who_can_publish" widget="many2many_tags" invisible="not allow_create_products"/>
-                                    </group>
-                                    <group>
-                                        <field name="include_taxes_wc_product_sync" widget="boolean_toggle" invisible="not allow_create_products"/>
-                                        <field name="taxes_product" string="Impuestos" invisible="not allow_create_products or not include_taxes_wc_product_sync"/>
-                                    </group>
+                        <!-- ── Productos ──────────────────────────────── -->
+                        <page string="Productos" name="wc_product" invisible="state != 'connected'">
+                            <group string="Publicación de Productos">
+                                <group>
+                                    <field name="allow_create_products" widget="boolean_toggle"/>
+                                    <field name="who_can_publish" widget="many2many_tags" invisible="not allow_create_products"/>
                                 </group>
+                                <group>
+                                    <field name="include_taxes_wc_product_sync" widget="boolean_toggle" invisible="not allow_create_products"/>
+                                    <field name="taxes_product" string="Impuestos" invisible="not allow_create_products or not include_taxes_wc_product_sync"/>
+                                </group>
+                            </group>
+                        </page>
 
-                                <separator string="Descripción de Parámetros" class="mt-4"/>
-                                <div class="row mt-3">
-                                    <div class="col-md-4">
-                                        <div class="card border-0 shadow-sm mb-3">
-                                            <div class="card-body">
-                                                <h6 class="text-primary mb-2">
-                                                    <i class="fa fa-plus-square me-2"/>
-Permitir creación de productos
-                                                </h6>
-                                                <p class="small text-muted mb-0">Si está activo, se podrán crear productos de Odoo en WooCommerce desde esta instancia.</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="card border-0 shadow-sm mb-3">
-                                            <div class="card-body">
-                                                <h6 class="text-primary mb-2">
-                                                    <i class="fa fa-users me-2"/>
-Permitir publicación
-                                                </h6>
-                                                <p class="small text-muted mb-0">Usuarios autorizados a publicar productos en WooCommerce desde esta instancia.</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="card border-0 shadow-sm mb-3">
-                                            <div class="card-body">
-                                                <h6 class="text-primary mb-2">
-                                                    <i class="fa fa-percent me-2"/>
-Incluir impuestos en productos
-                                                </h6>
-                                                <p class="small text-muted mb-0">Si está activo, se incluirán los impuestos al crear o sincronizar productos en WooCommerce.</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="card border-0 shadow-sm mb-3">
-                                            <div class="card-body">
-                                                <h6 class="text-primary mb-2">
-                                                    <i class="fa fa-tags me-2"/>
-Impuestos para productos
-                                                </h6>
-                                                <p class="small text-muted mb-0">Impuestos que se asignarán automáticamente al producto en Odoo al publicarlo en WooCommerce.</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                        <!-- ── Cupones (próximamente) ─────────────────── -->
+                        <page string="Cupones" name="coupons" invisible="state != 'connected'">
+                            <div class="p-4 text-center text-muted">
+                                <i class="fa fa-tag fa-3x mb-3" style="color: #d1d5db;"/>
+                                <h5 style="color: #6b7280;">Cupones WooCommerce</h5>
+                                <p class="small">
+                                    La sincronización de cupones estará disponible próximamente.<br/>
+                                    Podrás importar, crear y gestionar cupones desde esta instancia.
+                                </p>
                             </div>
                         </page>
 
                     </notebook>
                 </sheet>
+                <chatter/>
             </form>
         </field>
     </record>

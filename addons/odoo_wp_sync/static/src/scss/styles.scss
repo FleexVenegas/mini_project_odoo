@@ -1,4 +1,171 @@
-/* SCSS base */
+// ── WooCommerce Instance Kanban ─────────────────────────────────────────────
+
+.woo_instance_kanban {
+    .o_kanban_record {
+        padding: 0;
+    }
+}
+
+.woo_instance_card {
+    border-radius: 10px !important;
+    border: 1px solid #e5e7eb !important;
+    overflow: hidden !important;
+    cursor: pointer;
+    transition: box-shadow 0.25s ease, transform 0.25s ease;
+    background: #fff;
+    position: relative !important;
+
+    &::after {
+        width: 4px !important;
+    }
+
+    &:hover {
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.11) !important;
+        transform: translateY(-2px);
+    }
+
+    &.woo_instance_card--archived {
+        opacity: 0.55;
+    }
+
+    // Dropdown (⋮) — click to open, renders inside the card
+    .o_dropdown_kanban {
+        position: absolute;
+        top: 6px;
+        right: 6px;
+        z-index: 10;
+
+        .dropdown-toggle {
+            color: #9ca3af;
+            padding: 2px 6px;
+            font-size: 0.85rem;
+            line-height: 1;
+            border-radius: 6px;
+
+            &:hover {
+                color: #374151;
+                background: #f3f4f6;
+            }
+        }
+
+        .dropdown-menu {
+            min-width: 180px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+            border-radius: 8px;
+            border: 1px solid #e5e7eb;
+            z-index: 1060;
+        }
+
+        .dropdown-item {
+            font-size: 0.82rem;
+            padding: 6px 14px;
+
+            i {
+                width: 16px;
+                text-align: center;
+                color: #6b7280;
+            }
+        }
+    }
+
+    .woo_card_accent {
+        height: 4px;
+        width: 100%;
+    }
+
+    .woo_card_body {
+        padding: 1rem;
+    }
+
+    .woo_card_header_row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 0.85rem;
+    }
+
+    .woo_card_icon {
+        width: 36px;
+        height: 36px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1rem;
+    }
+
+    .woo_state_badge {
+        font-size: 0.7rem;
+        font-weight: 600;
+        letter-spacing: 0.2px;
+        text-transform: uppercase;
+    }
+
+    .woo_card_info {
+        margin-bottom: 1rem;
+    }
+
+    .woo_card_name {
+        font-weight: 700;
+        font-size: 0.95rem;
+        color: #111827;
+        margin-bottom: 0.2rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .woo_card_url {
+        font-size: 0.72rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 220px;
+
+        i {
+            font-size: 0.65rem;
+        }
+    }
+
+    .woo_card_stats {
+        display: flex;
+        align-items: center;
+        border-top: 1px solid #f3f4f6;
+        padding-top: 0.8rem;
+    }
+
+    .woo_stat_item {
+        flex: 1;
+        text-align: center;
+    }
+
+    .woo_stat_value {
+        display: block;
+        font-size: 1.3rem;
+        font-weight: 700;
+        color: #111827;
+        line-height: 1;
+        margin-bottom: 0.2rem;
+    }
+
+    .woo_stat_label {
+        display: block;
+        font-size: 0.65rem;
+        text-transform: uppercase;
+        letter-spacing: 0.4px;
+        font-weight: 500;
+        color: #9ca3af;
+    }
+
+    .woo_stat_divider {
+        width: 1px;
+        height: 36px;
+        background: #e5e7eb;
+    }
+}
+
+// ── Legacy utility ───────────────────────────────────────────────────────────
+
 .wc-custom-btn-instance {
     width: 400px !important;
 
