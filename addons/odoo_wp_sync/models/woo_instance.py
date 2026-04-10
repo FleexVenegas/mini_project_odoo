@@ -119,7 +119,7 @@ class WooInstance(models.Model):
     )
     sync_custom_statuses = fields.Char(
         string="Custom Statuses",
-        help="Comma-separated list of statuses (e.g., pending,processing,completed)",
+        help="Comma-separated list of statuses (e.g., pending, processing, completed, on-hold, cancelled, refunded, failed) to sync when 'Custom Selection' is chosen",
     )
 
     # Synchronization Parameters - Advanced
@@ -490,6 +490,9 @@ class WooInstance(models.Model):
         """
         self.ensure_one()
 
+        # Store as the active instance for the current user
+        self.env.user.sudo().woo_active_instance_id = self
+
         # If instance is connected, redirect to orders
         if self.state == "connected":
             return {
@@ -792,11 +795,10 @@ class WooInstance(models.Model):
     def action_view_woo_products(self):
         """Abre los productos WooCommerce de esta instancia."""
         self.ensure_one()
-        return {
-            "type": "ir.actions.act_window",
-            "name": _("Productos WooCommerce — %s") % self.name,
-            "res_model": "woo.product",
-            "view_mode": "tree,form",
-            "domain": [("instance_id", "=", self.id)],
-            "context": {"default_instance_id": self.id},
-        }
+        action = self.env["ir.actions.act_window"]._for_xml_id(
+            "odoo_wp_sync.action_woo_product"
+        )
+        action["name"] = _("Productos WooCommerce — %s") % self.name
+        action["domain"] = [("instance_id", "=", self.id)]
+        action["context"] = {"default_instance_id": self.id}
+        return action

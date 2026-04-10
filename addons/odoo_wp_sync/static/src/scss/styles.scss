@@ -9,19 +9,23 @@
 .woo_instance_card {
     border-radius: 10px !important;
     border: 1px solid #e5e7eb !important;
-    overflow: hidden !important;
+    // overflow: hidden !important;
     cursor: pointer;
     transition: box-shadow 0.25s ease, transform 0.25s ease;
     background: #fff;
     position: relative !important;
 
     &::after {
-        width: 4px !important;
+        width: 100% !important;
+        opacity: 0.06 !important;
+        pointer-events: none !important;
+        // display: none !important;
     }
 
     &:hover {
         box-shadow: 0 6px 18px rgba(0, 0, 0, 0.11) !important;
         transform: translateY(-2px);
+        z-index: 1;
     }
 
     &.woo_instance_card--archived {

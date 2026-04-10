@@ -15,9 +15,9 @@
                 <field name="woo_product_count" string="Productos" optional="show"/>
                 <field name="company_id" groups="base.group_multi_company" optional="hide"/>
                 <field name="active" column_invisible="1"/>
-                <button name="action_open_instance" type="object" string="Open" class="btn-primary" icon="fa-external-link"/>
-                <button name="action_view_woo_products" type="object" string="Productos" class="btn-primary" icon="fa-cube" invisible="state != 'connected'"/>
-                <button name="action_sync_orders" type="object" string="Sync Orders" class="btn-secondary" icon="fa-refresh" invisible="state != 'connected'"/>
+                <button name="action_open_instance" type="object" string="Open" class="btn-link" icon="fa-external-link"/>
+                <button name="action_view_woo_products" type="object" string="Productos" class="btn-link" icon="fa-cube" invisible="state != 'connected'"/>
+                <button name="action_sync_orders" type="object" string="Sync Orders" class="btn-link" icon="fa-refresh" invisible="state != 'connected'"/>
                 <button name="%(action_woo_instance)d" type="action" context="{'form_view_ref': 'odoo_wp_sync.view_woo_instance_form'}" string="Settings" class="btn-link" icon="fa-cog" groups="base.group_no_one"/>
             </tree>
         </field>

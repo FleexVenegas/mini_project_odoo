@@ -59,7 +59,7 @@
                     <!-- Connection Status Alert -->
                     <div class="alert" role="alert" invisible="not last_connection_test" t-attf-class="alert-{{state == 'connected' and 'success' or (state == 'error' and 'danger' or 'info')}}">
                         <div class="d-flex align-items-center gap-2">
-                            <i t-attf-class="fa fa-lg {{state == 'connected' and 'fa-check-circle' or (state == 'error' and 'fa-times-circle' or 'fa-info-circle')}}"/>
+                            <i t-attf-class="fa fa-lg {{state == 'connected' and 'fa-check-circle' or (state == 'error' and 'fa-times-circle' or 'fa-info-circle')}}" title="Estado de conexión"/>
                             <div>
                                 <field name="connection_message"/>
                                 <div class="small text-muted mt-1">
@@ -123,6 +123,7 @@
                                     <field name="sync_from_date"/>
                                     <field name="sync_order_status"/>
                                     <field name="sync_custom_statuses" placeholder="pending,processing,completed" invisible="sync_order_status != 'custom'"/>
+
                                 </group>
                                 <group>
                                     <field name="auto_sync" widget="boolean_toggle"/>
@@ -130,6 +131,7 @@
                                     <field name="next_auto_sync_date" readonly="1" invisible="not auto_sync"/>
                                 </group>
                             </group>
+
 
                             <group string="Estrategia de Sincronización">
                                 <group>
@@ -219,7 +221,7 @@
                         <!-- ── Cupones (próximamente) ─────────────────── -->
                         <page string="Cupones" name="coupons" invisible="state != 'connected'">
                             <div class="p-4 text-center text-muted">
-                                <i class="fa fa-tag fa-3x mb-3" style="color: #d1d5db;"/>
+                                <i class="fa fa-tag fa-3x mb-3" style="color: #d1d5db;" title="Cupones WooCommerce"/>
                                 <h5 style="color: #6b7280;">Cupones WooCommerce</h5>
                                 <p class="small">
                                     La sincronización de cupones estará disponible próximamente.<br/>

@@ -2,7 +2,7 @@ from odoo import models, fields, api
 import json
 import logging
 from datetime import datetime
-from odoo.exceptions import UserError
+from odoo.exceptions import UserError, ValidationError
 
 
 _logger = logging.getLogger(__name__)
@@ -629,6 +629,16 @@ class OdooWpSync(models.Model):
                 "sticky": error_count > 0,
             },
         }
+
+    @api.constrains("instance_id")
+    def _check_instance_connected(self):
+        for rec in self:
+            if rec.instance_id and rec.instance_id.state != "connected":
+                raise ValidationError(
+                    "La instancia '%s' no está conectada. "
+                    "Completa la configuración y verifica la conexión antes de crear órdenes."
+                    % rec.instance_id.name
+                )
 
     def action_open_sale_order(self):
         """Abre el pedido de venta asociado"""

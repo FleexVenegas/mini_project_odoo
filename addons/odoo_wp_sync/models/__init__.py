@@ -17,3 +17,4 @@ from . import woo_sync_wizard
 from . import sale_order_models
 from . import woo_partner_models
 from . import woo_sale_order_models  # Helper para creación de pedidos desde WooCommerce
+from . import woo_res_users  # Active instance per user

@@ -39,6 +39,8 @@ Odoo WordPress Sync
         "views/woo_product_views.xml",
         # odoo.wp.sync
         "views/odoo_wp_sync_views.xml",
+        # Acciones filtradas por instancia activa (Ordenes, Productos, ...)
+        "views/woo_instance_filtered_actions.xml",
         # Menú y wizards
         "views/odoo_wp_menu.xml",
         "views/wizards/odoo_wp_confirm_sync_views.xml",

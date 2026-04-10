@@ -104,16 +104,6 @@ class WooPublishWizard(models.TransientModel):
         """Envía el producto a WooCommerce y cierra el wizard."""
         self.ensure_one()
 
-        payload = {
-            "product_tmpl": self.product_tmpl_id,
-            "instance": self.instance_id,
-            "wc_status": self.wc_status,
-            "price_override": self.price_override,
-            "description": self.description,
-        }
-
-        raise UserError(f"Payload: {payload}")
-
         self.env["woo.product.sync"].publish_to_wc(
             product_tmpl=self.product_tmpl_id,
             instance=self.instance_id,

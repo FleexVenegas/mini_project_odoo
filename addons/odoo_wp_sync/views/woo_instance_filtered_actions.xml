@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--
+    ============================================================
+    ACCIONES FILTRADAS POR INSTANCIA ACTIVA
+    ============================================================
+    Cada server action aquí lee la instancia activa del usuario
+    (env.user.woo_active_instance_id) y filtra el modelo
+    correspondiente. Si no hay instancia seleccionada, muestra
+    un aviso pidiendo que seleccionen una.
+
+    Para agregar un nuevo menú filtrado:
+      1. Copia uno de los bloques de abajo
+      2. Cambia el id, name, res_model y domain
+      3. Agrega el menuitem en odoo_wp_menu.xml apuntando al nuevo id
+    ============================================================
+    -->
+
+    <!-- ── ÓRDENES ─────────────────────────────────────────── -->
+    <record id="action_server_orders_by_instance" model="ir.actions.server">
+        <field name="name">Ordenes por Instancia</field>
+        <field name="model_id" ref="model_woo_instance"/>
+        <field name="state">code</field>
+        <field name="code">
+instance = env.user.woo_active_instance_id
+if not instance:
+    action = {
+        'type': 'ir.actions.client',
+        'tag': 'display_notification',
+        'params': {
+            'title': 'Sin instancia seleccionada',
+            'message': 'Por favor, selecciona una instancia desde el menú Instancias.',
+            'type': 'warning',
+            'sticky': False,
+        },
+    }
+else:
+    action = {
+        'type': 'ir.actions.act_window',
+        'name': 'Ordenes - %s' % instance.name,
+        'res_model': 'odoo.wp.sync',
+        'view_mode': 'tree,form',
+        'domain': [('instance_id', '=', instance.id)],
+        'context': {'default_instance_id': instance.id},
+    }
+        </field>
+    </record>
+
+    <!-- ── PRODUCTOS WOOCOMMERCE ────────────────────────────── -->
+    <record id="action_server_products_by_instance" model="ir.actions.server">
+        <field name="name">Productos por Instancia</field>
+        <field name="model_id" ref="model_woo_instance"/>
+        <field name="state">code</field>
+        <field name="code">
+instance = env.user.woo_active_instance_id
+if not instance:
+    action = {
+        'type': 'ir.actions.client',
+        'tag': 'display_notification',
+        'params': {
+            'title': 'Sin instancia seleccionada',
+            'message': 'Por favor, selecciona una instancia desde el menú Instancias.',
+            'type': 'warning',
+            'sticky': False,
+        },
+    }
+else:
+    action = {
+        'type': 'ir.actions.act_window',
+        'name': 'Productos WooCommerce - %s' % instance.name,
+        'res_model': 'woo.product',
+        'view_mode': 'tree,form',
+        'domain': [('instance_id', '=', instance.id)],
+        'context': {'default_instance_id': instance.id},
+    }
+        </field>
+    </record>
+
+    <!--
+    ── PLANTILLA PARA NUEVAS SECCIONES ────────────────────────
+    <record id="action_server_NOMBRE_by_instance" model="ir.actions.server">
+        <field name="name">NOMBRE por Instancia</field>
+        <field name="model_id" ref="model_woo_instance"/>
+        <field name="state">code</field>
+        <field name="code">
+instance = env.user.woo_active_instance_id
+if not instance:
+    action = {
+        'type': 'ir.actions.client',
+        'tag': 'display_notification',
+        'params': {
+            'title': 'Sin instancia seleccionada',
+            'message': 'Por favor, selecciona una instancia desde el menú Instancias.',
+            'type': 'warning',
+            'sticky': False,
+        },
+    }
+else:
+    action = {
+        'type': 'ir.actions.act_window',
+        'name': 'NOMBRE - %s' % instance.name,
+        'res_model': 'EL_MODELO_AQUI',
+        'view_mode': 'tree,form',
+        'domain': [('instance_id', '=', instance.id)],
+        'context': {'default_instance_id': instance.id},
+    }
+        </field>
+    </record>
+    -->
+
+</odoo>

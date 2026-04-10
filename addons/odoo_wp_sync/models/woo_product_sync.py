@@ -66,6 +66,9 @@ class WooProductSync(models.AbstractModel):
         except (TypeError, ValueError):
             pass
 
+        images = wc_product.get("images") or []
+        first_image = images[0] if images else {}
+
         return {
             "instance_id": instance.id,
             "woo_id": wc_product["id"],
@@ -77,6 +80,8 @@ class WooProductSync(models.AbstractModel):
             "woo_min_stock": wc_product.get("min_quantity", 0),
             "woo_max_stock": wc_product.get("max_quantity", 0),
             "woo_permalink": wc_product.get("permalink", ""),
+            "woo_image_id": first_image.get("id", 0),
+            "woo_image_src": first_image.get("src", ""),
             "last_sync_date": fields.Datetime.now(),
             "stock_status": wc_product.get("stock_status", "unknown"),
         }
@@ -199,14 +204,14 @@ class WooProductSync(models.AbstractModel):
         """
         api = self.env["odoo.wp.sync.wc.api"]
 
-        if instance.pricelist_id:
+        if price_override and price_override > 0:
+            price = price_override
+        elif instance.pricelist_id:
             product_variant = product_tmpl.product_variant_id
             price = (
                 instance.pricelist_id._get_product_price(product_variant, 1.0)
                 or product_tmpl.list_price
             )
-        elif price_override and price_override > 0:
-            price = price_override
         else:
             price = product_tmpl.list_price
 
