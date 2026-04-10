@@ -223,6 +223,14 @@ class WooInstance(models.Model):
         help="Maximum number of retry attempts before giving up",
     )
 
+    # Company
+    company_id = fields.Many2one(
+        "res.company",
+        string="Company",
+        default=lambda self: self.env.company,
+        help="Company this instance belongs to",
+    )
+
     # NOTE: Sales fields → woo_instance_sales.py
     # NOTE: Warehouse fields → woo_instance_warehouse.py
 

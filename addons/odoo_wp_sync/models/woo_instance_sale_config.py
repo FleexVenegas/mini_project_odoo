@@ -59,8 +59,39 @@ class WooInstanceSales(models.Model):
     confirm_orders = fields.Boolean(
         string="Confirmar Pedidos",
         default=False,
-        help="Si está activo, los pedidos importados se confirmarán automáticamente",
+        help="Si está activo, se confirmarán los pedidos que se crean manualmente",
     )
+
+    # ── Creación Automática de Pedidos de Venta ────────────────────────────────
+    auto_create_sale_order = fields.Boolean(
+        string="Crear pedido automáticamente al sincronizar",
+        default=False,
+        help=(
+            "Si está activo, durante la sincronización se creará un pedido de venta "
+            "en Odoo para cada orden de WooCommerce cuyo estado coincida con los "
+            "configurados en 'Estados para creación automática'.\n\n"
+            "Si 'Confirmar Pedidos' también está activo, el pedido se confirmará "
+            "directamente (sale.order confirmado). De lo contrario, quedará como "
+            "cotización (borrador)."
+        ),
+    )
+
+
+
+    auto_create_sale_order_statuses = fields.Selection(
+        [
+            ("processing", "Procesando"),
+            ("completed", "Completado"),
+            ("on-hold", "En espera"),
+            ("pending", "Pendiente"),
+            ("refunded", "Reembolsado"),
+        ],
+        default="processing",
+        string="Estados para creación automática",
+        help="Selecciona el estado de las órdenes de "
+        "WooCommerce que deberían generar un pedido de venta en Odoo durante la sincronización.",
+    )
+
     taxes_included_price = fields.Boolean(
         string="Precios con Impuestos",
         default=False,

@@ -184,9 +184,28 @@
                                 </group>
                             </group>
 
+                            <group string="Pertinencia de Datos">
+                                <field name="company_id" string="Compañia"/>
+                            </group>
+
                             <group string="Comportamiento">
                                 <group>
-                                    <field name="confirm_orders" string="Confirmar pedidos automáticamente" widget="boolean_toggle"/>
+                                    <field name="confirm_orders" string="Confirmar automáticamente pedidos importados de WooCommerce" widget="boolean_toggle"/>
+                                </group>
+                            </group>
+
+                            <group string="Creación Automática de Pedidos">
+                                <group>
+                                    <field name="auto_create_sale_order" widget="boolean_toggle"/>
+                                    <field name="auto_create_sale_order_statuses" placeholder="processing,completed" invisible="not auto_create_sale_order"/>
+                                </group>
+                                <group invisible="not auto_create_sale_order">
+                                    <div class="alert alert-info" role="alert" colspan="2">
+                                        <i class="fa fa-info-circle me-1"/>
+                                        Al sincronizar, se creará un pedido de venta para cada orden cuyo estado coincida con los configurados.
+                                        Si <b>Confirmar pedidos automáticamente</b> está activo, el pedido se confirmará directamente;
+                                        de lo contrario, quedará como cotización.
+                                    </div>
                                 </group>
                             </group>
                         </page>

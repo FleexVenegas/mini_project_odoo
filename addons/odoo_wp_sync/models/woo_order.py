@@ -126,67 +126,59 @@ class OdooWpSync(models.Model):
 
     def _build_sync_params(self, instance, force_full=False):
         """
-        Build WooCommerce API query parameters based on instance settings
-        Implements incremental sync using modified_after when applicable
+        Build WooCommerce API query parameters based on instance settings.
 
-        :param instance: woo.instance record
-        :param force_full: Force full synchronization
-        :return: tuple (params dict, sync_type string)
+        Full sync   → returns (params_dict, "full")
+        Incremental → returns ([params_new, params_modified], "incremental")
+          - params_new      uses ``after``          (date_created_gmt, all WC versions)
+          - params_modified uses ``modified_after`` (date_modified_gmt, WC 5.5+)
+        The caller deduplicates the two result sets.
         """
-        from datetime import datetime, timedelta
+        from datetime import timedelta
 
-        params = {
+        base = {
             "per_page": instance.sync_order_limit or 100,
-            "orderby": "modified",  # Order by modification date for incremental
+            "orderby": "modified",
             "order": "desc",
         }
 
-        sync_type = "full"  # Default to full sync
-
-        # Determine if we should do incremental or full sync
-        should_do_full = force_full or instance._should_do_full_sync()
-
-        if should_do_full:
-            # Full sync: Use configured start date.
-            # Append 'Z' to indicate UTC to WooCommerce.
-            sync_type = "full"
-            if instance.sync_from_date:
-                params["after"] = f"{instance.sync_from_date}T00:00:00Z"
-        else:
-            # Incremental sync: Only orders modified since last sync
-            sync_type = "incremental"
-            if instance.last_sync_date:
-                # Add a small buffer (1 minute) to avoid missing orders on race conditions.
-                # Append 'Z' to declare UTC explicitly — WooCommerce otherwise interprets
-                # the timestamp as the store's local timezone, which causes 0 results when
-                # the store is behind UTC (e.g. UTC-6 Mexico).
-                last_sync_with_buffer = instance.last_sync_date - timedelta(minutes=1)
-                params["modified_after"] = (
-                    last_sync_with_buffer.strftime("%Y-%m-%dT%H:%M:%S") + "Z"
-                )
-                _logger.info(
-                    f"Incremental sync for {instance.name}: syncing orders modified after {last_sync_with_buffer} UTC"
-                )
-            else:
-                # Fallback to full sync if no previous sync date
-                sync_type = "full"
-                if instance.sync_from_date:
-                    params["after"] = f"{instance.sync_from_date}T00:00:00"
-
-        # Filter by order status
+        # Build status filter once and apply to every request
+        status_filter = {}
         if instance.sync_order_status and instance.sync_order_status != "all":
             if instance.sync_order_status == "custom":
-                # Use custom statuses from configuration
                 if instance.sync_custom_statuses:
                     statuses = [
                         s.strip() for s in instance.sync_custom_statuses.split(",")
                     ]
-                    params["status"] = ",".join(statuses)
+                    status_filter["status"] = ",".join(statuses)
             else:
-                # Use predefined status filter
-                params["status"] = instance.sync_order_status
+                status_filter["status"] = instance.sync_order_status
 
-        return params, sync_type
+        should_do_full = force_full or instance._should_do_full_sync()
+
+        if should_do_full or not instance.last_sync_date:
+            # Full sync — single request
+            params = {**base, **status_filter}
+            if instance.sync_from_date:
+                params["after"] = f"{instance.sync_from_date}T00:00:00Z"
+            return params, "full"
+
+        # Incremental sync — two requests to cover all WooCommerce versions:
+        #   A) ``after``          → NEW orders   (universally supported since WC REST v1)
+        #   B) ``modified_after`` → UPDATED orders (WC 5.5+; returns [] gracefully on older)
+        last_sync_with_buffer = instance.last_sync_date - timedelta(minutes=1)
+        ts = last_sync_with_buffer.strftime("%Y-%m-%dT%H:%M:%S") + "Z"
+
+        _logger.info(
+            "Incremental sync for '%s': fetching orders after %s UTC",
+            instance.name,
+            ts,
+        )
+
+        params_new = {**base, **status_filter, "after": ts}
+        params_modified = {**base, **status_filter, "modified_after": ts}
+
+        return [params_new, params_modified], "incremental"
 
     def action_sync(self):
         """
@@ -243,18 +235,48 @@ class OdooWpSync(models.Model):
             svc = self.env["woo.service"]
 
             # Build query parameters from instance settings
-            params, sync_type = self._build_sync_params(instance, force_full=force_full)
-
-            _logger.info(
-                f"Starting {sync_type} sync for {instance.name} with params: {params}"
+            params_result, sync_type = self._build_sync_params(
+                instance, force_full=force_full
             )
 
-            # Fetch orders from WooCommerce via service (handles pagination)
-            all_orders = svc.fetch_orders(instance, params)
+            _logger.info("Starting %s sync for %s", sync_type, instance.name)
 
-            _logger.info(f"Fetched {len(all_orders)} orders from {instance.name}")
+            # Fetch orders — incremental uses two requests (new + modified) for
+            # compatibility with all WooCommerce versions.
+            if sync_type == "incremental" and isinstance(params_result, list):
+                params_new, params_modified = params_result
+
+                # A: orders created after last sync (all WC versions)
+                new_orders = svc.fetch_orders(instance, params_new)
+                _logger.info(
+                    "Incremental A (after/new): %d orders from '%s'",
+                    len(new_orders),
+                    instance.name,
+                )
+
+                # B: orders modified after last sync (WC 5.5+; returns [] on older)
+                modified_orders = svc.fetch_orders(instance, params_modified)
+                _logger.info(
+                    "Incremental B (modified_after): %d orders from '%s'",
+                    len(modified_orders),
+                    instance.name,
+                )
+
+                # Deduplicate: B overwrites A so the most up-to-date data wins
+                merged = {o["id"]: o for o in new_orders}
+                merged.update({o["id"]: o for o in modified_orders})
+                all_orders = list(merged.values())
+            else:
+                all_orders = svc.fetch_orders(instance, params_result)
+
+            _logger.info(
+                "Fetched %d total orders from '%s'", len(all_orders), instance.name
+            )
 
             # Process all fetched orders
+            # Collect woo.order records that are candidates for auto sale order creation.
+            auto_create_candidates = []
+
             for order_data in all_orders:
                 order_id = order_data.get("id")
 
@@ -271,9 +293,51 @@ class OdooWpSync(models.Model):
                 if existing_order:
                     existing_order.write(vals)
                     updated_count += 1
+                    woo_record = existing_order
                 else:
-                    self.create(vals)
+                    woo_record = self.create(vals)
                     created_count += 1
+
+                # Queue for auto sale order creation if applicable
+                if instance.auto_create_sale_order and not woo_record.sale_order_id:
+                    auto_create_candidates.append(woo_record)
+
+            # Auto-create sale orders for qualifying WooCommerce orders
+            auto_create_stats = {"created": 0, "skipped": 0, "errors": 0}
+            if instance.auto_create_sale_order:
+                # Also pick up any existing records that were synced before
+                # auto-create was enabled and still don't have a sale order.
+                existing_without_so = self.search(
+                    [
+                        ("instance_id", "=", instance_id),
+                        ("sale_order_id", "=", False),
+                    ]
+                )
+                # Merge: use a dict keyed by id to avoid duplicates
+                candidates_map = {r.id: r for r in auto_create_candidates}
+                for r in existing_without_so:
+                    candidates_map.setdefault(r.id, r)
+                all_candidates = list(candidates_map.values())
+
+                if all_candidates:
+                    auto_create_stats = self._auto_create_sale_orders(
+                        instance, all_candidates
+                    )
+                _logger.info(
+                    "Auto-create enabled: %d candidates (sync: %d, backlog: %d), "
+                    "%d created, %d skipped, %d errors",
+                    len(all_candidates),
+                    len(auto_create_candidates),
+                    len(existing_without_so),
+                    auto_create_stats["created"],
+                    auto_create_stats["skipped"],
+                    auto_create_stats["errors"],
+                )
+            else:
+                _logger.info(
+                    "Auto-create sale orders is DISABLED for instance '%s'",
+                    instance.name,
+                )
 
             # Calculate sync duration
             duration = time.time() - start_time
@@ -313,10 +377,22 @@ class OdooWpSync(models.Model):
             filter_msg = f" ({', '.join(filter_info)})"
 
             # Prepare message
+            sale_order_line = ""
+            if instance.auto_create_sale_order:
+                sale_order_line = (
+                    f"\n🛒 Pedidos auto-creados: {auto_create_stats['created']} | "
+                    f"Omitidos: {auto_create_stats['skipped']} | "
+                    f"Errores: {auto_create_stats['errors']} "
+                    f"({len(all_candidates)} candidatos)"
+                )
+            else:
+                sale_order_line = "\n⚠️ Auto-creación de pedidos: DESACTIVADA (actívala en config. de instancia)"
+
             message = (
                 f"✅ Creadas: {created_count} | ✏️ Actualizadas: {updated_count} | "
                 f"📊 Total: {len(all_orders)} órdenes\n"
                 f"⏱️ Duración: {duration:.2f}s{filter_msg}"
+                f"{sale_order_line}"
             )
 
             # Show result to user
@@ -358,6 +434,68 @@ class OdooWpSync(models.Model):
                     "sticky": True,
                 },
             }
+
+    def _auto_create_sale_orders(self, instance, woo_records):
+        """
+        Create sale orders automatically for WooCommerce orders whose status
+        matches the configured ``auto_create_sale_order_statuses`` list.
+
+        Called from ``action_sync`` after importing/updating records.
+
+        :param instance: woo.instance record
+        :param woo_records: list of odoo.wp.sync records (no sale_order_id yet)
+        :returns: dict with keys ``created``, ``skipped``, ``errors``
+        """
+        # Parse the configured status list (comma-separated, strip whitespace)
+        raw_statuses = instance.auto_create_sale_order_statuses or "processing"
+        trigger_statuses = {s.strip() for s in raw_statuses.split(",") if s.strip()}
+
+        _logger.info(
+            "_auto_create_sale_orders: %d candidates, trigger statuses=%s",
+            len(woo_records),
+            trigger_statuses,
+        )
+
+        sale_order_helper = self.env["woo.sale.order.helper"]
+        created = skipped = errors = 0
+
+        for woo_record in woo_records:
+            _logger.info(
+                "  Order #%s status='%s' — in trigger_statuses: %s",
+                woo_record.order_number,
+                woo_record.status,
+                woo_record.status in trigger_statuses,
+            )
+            if woo_record.status not in trigger_statuses:
+                skipped += 1
+                continue
+
+            try:
+                result = sale_order_helper.create_sale_order_from_woo(woo_record)
+                if result.get("created"):
+                    created += 1
+                    _logger.info(
+                        "Auto-created sale order %s for WooCommerce order #%s",
+                        result["order"].name,
+                        woo_record.order_number,
+                    )
+                elif result.get("skipped"):
+                    skipped += 1
+                else:
+                    skipped += 1
+                    _logger.debug(
+                        "Sale order already existed (%s) for WooCommerce order #%s — skipped.",
+                        result["order"].name if result.get("order") else "N/A",
+                        woo_record.order_number,
+                    )
+            except Exception:
+                errors += 1
+                _logger.exception(
+                    "Auto sale order creation failed for WooCommerce order #%s",
+                    woo_record.order_number,
+                )
+
+        return {"created": created, "skipped": skipped, "errors": errors}
 
     def _prepare_order_vals(self, order_data):
         """Prepare order values from WooCommerce data"""

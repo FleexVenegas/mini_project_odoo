@@ -47,29 +47,63 @@ class WooSaleOrderHelper(models.AbstractModel):
 
         if existing:
             _logger.info(
-                f"Pedido existente encontrado: {existing.name} para WooCommerce Order {woo_order_record.order_number}"
+                "Pedido existente encontrado: %s para WooCommerce Order #%s",
+                existing.name,
+                woo_order_record.order_number,
             )
+            # Asegurar que el vínculo esté actualizado aunque el pedido ya existiera
+            if not woo_order_record.sale_order_id:
+                woo_order_record.sale_order_id = existing.id
             return {"order": existing, "created": False}
 
         # Buscar o crear cliente
         partner = self.env["woo.partner"].create_partner_from_woo_data(woo_order_record)
 
-        # Crear pedido de venta
-        order_vals = self._prepare_sale_order_vals(woo_order_record, partner)
+        # Crear pedido de venta.
+        # _prepare_sale_order_vals devuelve también si hubo productos sin SKU en Odoo.
+        order_vals, has_missing_products = self._prepare_sale_order_vals(
+            woo_order_record, partner
+        )
+
         order = SaleOrder.create(order_vals)
+
+        # Vincular el pedido de vuelta al registro de WooCommerce
+        woo_order_record.sale_order_id = order.id
 
         # utilizar secuencia si está configurada
         if not instance.use_sequence:
             prefix = instance.prefix_sequence or "WC-"
             order.name = f"{prefix}{order.name}"
 
-        # Confirmar pedido si la configuración lo indica y el pedido está en borrador
+        # Confirmar pedido SOLO si:
+        #   1. La instancia tiene confirm_orders = True
+        #   2. Todos los productos se resolvieron por SKU (ninguno faltante)
+        # Si algún SKU no se encontró, el pedido queda como cotización (borrador)
+        # para revisión manual.
         if instance.confirm_orders and order.state == "draft":
-            # TODO - manejar excepciones al confirmar (ej. stock, reglas de negocio)
-            order.action_confirm()
+            if has_missing_products:
+                _logger.info(
+                    "Pedido %s creado como COTIZACIÓN (borrador): uno o más productos "
+                    "no se encontraron por SKU en WooCommerce Order #%s. "
+                    "Revisa las notas del pedido.",
+                    order.name,
+                    woo_order_record.order_number,
+                )
+            else:
+                try:
+                    order.action_confirm()
+                except Exception:
+                    _logger.exception(
+                        "No se pudo confirmar el pedido %s para WooCommerce Order #%s. "
+                        "El pedido quedó como cotización (borrador).",
+                        order.name,
+                        woo_order_record.order_number,
+                    )
 
         _logger.info(
-            f"Pedido creado exitosamente: {order.name} para WooCommerce Order {woo_order_record.order_number}"
+            "Pedido creado exitosamente: %s para WooCommerce Order #%s",
+            order.name,
+            woo_order_record.order_number,
         )
 
         return {"order": order, "created": True}
@@ -115,14 +149,16 @@ class WooSaleOrderHelper(models.AbstractModel):
             )
 
             if not product:
+                missing_msg = (
+                    f"⚠️ SKU '{sku}' no encontrado en Odoo — "
+                    f"verifica el campo 'Referencia Interna' del producto."
+                )
                 _logger.warning(
-                    f"Producto con SKU '{sku}' no encontrado para WooCommerce Order "
-                    f"{woo_order_record.order_number}"
+                    "Producto con SKU '%s' no encontrado para WooCommerce Order #%s",
+                    sku,
+                    woo_order_record.order_number,
                 )
-                note_lines.append(
-                    f"Producto con SKU '{sku}' no encontrado. "
-                    f"Revisar línea del pedido en WooCommerce."
-                )
+                note_lines.append(missing_msg)
                 continue
 
             qty = item.get("quantity", 1) or 1
@@ -194,6 +230,7 @@ class WooSaleOrderHelper(models.AbstractModel):
             "user_id": instance.seller_id.id or False,
             "client_order_ref": woo_order_record.order_number,
             "note": "\n".join(note_lines),
+            "company_id": instance.company_id.id or self.env.company.id,
             "date_order": woo_order_record.date_created or False,
             "pricelist_id": instance.pricelist_id.id or False,
             "warehouse_id": instance.warehouse_id.id or False,
@@ -201,4 +238,5 @@ class WooSaleOrderHelper(models.AbstractModel):
             "order_line": order_lines,
         }
 
-        return order_vals
+        has_missing_products = bool(note_lines)
+        return order_vals, has_missing_products
