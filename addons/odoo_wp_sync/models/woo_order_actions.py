@@ -4,7 +4,7 @@ Acciones sobre pedidos de WooCommerce desde Odoo.
 Cada acción pública sigue la misma convención:
   - Acepta uno o varios registros (self puede ser un recordset).
   - Devuelve una notificación con resumen de éxitos/errores.
-  - Delega la llamada HTTP a odoo.wp.sync.wc.api._wp_request.
+  - Delega la llamada HTTP a woo.service.
 
 Agregar nuevas acciones aquí mantendrá odoo_wp_sync_models.py limpio.
 """
@@ -43,17 +43,14 @@ class WooOrderActions(models.Model):
         Returns:
             tuple(list[str], list[str]): (éxitos, errores)
         """
-        api = self.env["odoo.wp.sync.wc.api"]
+        svc = self.env["woo.service"]
         successes = []
         errors = []
 
         for order in self:
             try:
-                api._wp_request(
-                    endpoint=f"orders/{order.wc_order_id}",
-                    method="PUT",
-                    data={"status": new_status},
-                    instance=order.instance_id,
+                svc.update_order_status(
+                    order.instance_id, order.wc_order_id, new_status
                 )
                 order.status = new_status
                 successes.append(order.order_number or str(order.wc_order_id))

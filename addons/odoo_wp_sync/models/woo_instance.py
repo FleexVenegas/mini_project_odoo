@@ -1,6 +1,5 @@
 from odoo import models, fields, api, _
 from odoo.exceptions import UserError, ValidationError
-import requests
 import re
 import logging
 
@@ -280,67 +279,64 @@ class WooInstance(models.Model):
         """Test connection to WooCommerce API"""
         self.ensure_one()
 
-        try:
-            response = requests.get(
-                f"{self.wp_url}/wp-json/wc/v3/system_status",
-                auth=(self.consumer_key, self.consumer_secret),
-                timeout=10,
+        result = self.env["woo.service"].test_connection(self)
+
+        if result.get("success"):
+            self.write(
+                {
+                    "state": "connected",
+                    "last_connection_test": fields.Datetime.now(),
+                    "connection_message": "Connection successful",
+                }
             )
+            return {
+                "type": "ir.actions.client",
+                "tag": "display_notification",
+                "params": {
+                    "title": _("Connection Successful"),
+                    "message": _("Successfully connected to %s") % self.name,
+                    "type": "success",
+                    "sticky": False,
+                },
+            }
 
-            if response.status_code == 200:
-                self.write(
-                    {
-                        "state": "connected",
-                        "last_connection_test": fields.Datetime.now(),
-                        "connection_message": "Connection successful",
-                    }
-                )
+        error_type = result.get("error")
 
-                return {
-                    "type": "ir.actions.client",
-                    "tag": "display_notification",
-                    "params": {
-                        "title": _("Connection Successful"),
-                        "message": _("Successfully connected to %s") % self.name,
-                        "type": "success",
-                        "sticky": False,
-                    },
-                }
-            else:
-                error_msg = self._parse_error_response(response)
-                self.write(
-                    {
-                        "state": "error",
-                        "last_connection_test": fields.Datetime.now(),
-                        "connection_message": error_msg,
-                    }
-                )
-
-                return {
-                    "type": "ir.actions.client",
-                    "tag": "display_notification",
-                    "params": {
-                        "title": _("Connection Error"),
-                        "message": error_msg,
-                        "type": "danger",
-                        "sticky": True,
-                    },
-                }
-
-        except requests.exceptions.Timeout:
+        if error_type == "timeout":
             error_msg = _("Server timeout - took too long to respond")
             self._handle_connection_error(error_msg)
             return self._notification_error(_("Connection Timeout"), error_msg)
 
-        except requests.exceptions.ConnectionError:
+        if error_type == "connection":
             error_msg = _("Could not connect to server - check URL and network")
             self._handle_connection_error(error_msg)
             return self._notification_error(_("Connection Error"), error_msg)
 
-        except Exception as e:
-            error_msg = str(e)
+        if error_type == "unexpected":
+            error_msg = result.get("message", "Unknown error")
             self._handle_connection_error(error_msg)
             return self._notification_error(_("Unexpected Error"), error_msg)
+
+        # HTTP response received but not 200
+        response = result.get("response")
+        error_msg = self._parse_error_response(response)
+        self.write(
+            {
+                "state": "error",
+                "last_connection_test": fields.Datetime.now(),
+                "connection_message": error_msg,
+            }
+        )
+        return {
+            "type": "ir.actions.client",
+            "tag": "display_notification",
+            "params": {
+                "title": _("Connection Error"),
+                "message": error_msg,
+                "type": "danger",
+                "sticky": True,
+            },
+        }
 
     def _parse_error_response(self, response):
         """Parse error message from API response"""
@@ -550,7 +546,9 @@ class WooInstance(models.Model):
 
         return False
 
-    def _update_sync_statistics(self, created, updated, total, duration, error=None):
+    def _update_sync_statistics(
+        self, created, updated, total, duration, error=None, sync_type=None
+    ):
         """
         Update synchronization statistics
 
@@ -559,6 +557,7 @@ class WooInstance(models.Model):
         :param total: Total orders processed
         :param duration: Duration in seconds
         :param error: Error message if any
+        :param sync_type: 'full' or 'incremental' (determines if last_full_sync_date is updated)
         """
         self.ensure_one()
 
@@ -590,8 +589,11 @@ class WooInstance(models.Model):
             # Update total synced orders (only on success)
             vals["total_synced_orders"] = self.order_count
 
-        # Update last_full_sync_date if this was a full sync
-        if self._context.get("full_sync"):
+        # Update last_full_sync_date when this was a full sync.
+        # Check both the explicit sync_type parameter AND the legacy context flag
+        # so that action_full_sync() (which sets context) also works correctly.
+        is_full_sync = sync_type == "full" or self._context.get("full_sync")
+        if is_full_sync and not error:
             vals["last_full_sync_date"] = now
 
         self.write(vals)
@@ -703,6 +705,9 @@ class WooInstance(models.Model):
         Entry point for the cron job.
         Iterates all active, connected instances that have auto_sync=True
         and whose sync interval has elapsed, then triggers a sync for each.
+
+        Each instance runs inside its own savepoint to prevent one failure
+        from rolling back statistics already written for other instances.
         """
         instances = self.search(
             [
@@ -714,16 +719,55 @@ class WooInstance(models.Model):
 
         for instance in instances:
             if not instance._is_sync_due():
+                _logger.debug(
+                    "Auto sync skipped for instance '%s': interval not elapsed yet.",
+                    instance.name,
+                )
                 continue
 
+            # Skip instances that have hit the error ceiling and retry is disabled
+            if (
+                not instance.sync_retry_on_error
+                and instance.max_retry_attempts > 0
+                and instance.sync_error_count >= instance.max_retry_attempts
+            ):
+                _logger.warning(
+                    "Auto sync SKIPPED for instance '%s': %d consecutive errors "
+                    "(max_retry_attempts=%d, retry_on_error=False). "
+                    "Reset the instance statistics to re-enable automatic sync.",
+                    instance.name,
+                    instance.sync_error_count,
+                    instance.max_retry_attempts,
+                )
+                continue
+
+            # Determine now whether this run should be a full sync so we can pass
+            # the correct context to action_sync — _update_sync_statistics uses
+            # that context flag to update last_full_sync_date.
+            needs_full = instance._should_do_full_sync()
+            ctx = {
+                "default_instance_id": instance.id,
+                "full_sync": needs_full,
+            }
+
             try:
-                _logger.info("Auto sync starting for instance: %s", instance.name)
-                self.env["odoo.wp.sync"].with_context(
-                    default_instance_id=instance.id
-                ).action_sync()
-                _logger.info("Auto sync completed for instance: %s", instance.name)
+                # Use a savepoint so that a low-level DB error in this instance
+                # does not roll back statistics already committed for previous ones.
+                with self.env.cr.savepoint():
+                    _logger.info(
+                        "Auto sync starting for instance '%s' (type=%s).",
+                        instance.name,
+                        "full" if needs_full else "incremental",
+                    )
+                    self.env["odoo.wp.sync"].with_context(**ctx).action_sync()
+                    _logger.info(
+                        "Auto sync completed for instance '%s'.", instance.name
+                    )
             except Exception:
-                _logger.exception("Auto sync failed for instance: %s", instance.name)
+                _logger.exception(
+                    "Auto sync raised an unhandled exception for instance '%s'.",
+                    instance.name,
+                )
 
     def action_sync_products(self):
         """Abre el wizard de confirmación antes de importar productos."""

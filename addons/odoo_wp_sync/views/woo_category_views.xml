@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ── Action ─────────────────────────────────────────────────────────── -->
+    <record id="action_woo_category" model="ir.actions.act_window">
+        <field name="name">Categorías WooCommerce</field>
+        <field name="res_model">woo.category</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No hay categorías registradas todavía
+            </p>
+            <p>
+                Las categorías se crean automáticamente al sincronizar productos,
+                o puedes crearlas manualmente aquí para asignarlas a tus productos.
+            </p>
+        </field>
+    </record>
+
+    <!-- ── Tree ───────────────────────────────────────────────────────────── -->
+    <record id="view_woo_category_tree" model="ir.ui.view">
+        <field name="name">woo.category.tree</field>
+        <field name="model">woo.category</field>
+        <field name="arch" type="xml">
+            <tree string="Categorías WooCommerce" decoration-muted="not woo_id">
+                <field name="instance_id" string="Instancia" optional="show"/>
+                <field name="complete_name" string="Categoría"/>
+                <field name="slug" string="Slug" optional="show"/>
+                <field name="parent_id" string="Padre" optional="show"/>
+                <field name="woo_id" string="WC ID" optional="show"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- ── Form ───────────────────────────────────────────────────────────── -->
+    <record id="view_woo_category_form" model="ir.ui.view">
+        <field name="name">woo.category.form</field>
+        <field name="model">woo.category</field>
+        <field name="arch" type="xml">
+            <form string="Categoría WooCommerce">
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" placeholder="Nombre de la categoría"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group string="WooCommerce">
+                            <field name="instance_id"/>
+                            <field name="woo_id" string="ID en WooCommerce" readonly="1"/>
+                            <field name="slug" string="Slug"/>
+                        </group>
+                        <group string="Jerarquía">
+                            <field name="parent_id" options="{'no_create': True}"/>
+                            <field name="child_ids" string="Subcategorías" readonly="1"/>
+                        </group>
+                    </group>
+                    <group string="Ruta completa">
+                        <field name="complete_name" readonly="1" nolabel="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- ── Search ─────────────────────────────────────────────────────────── -->
+    <record id="view_woo_category_search" model="ir.ui.view">
+        <field name="name">woo.category.search</field>
+        <field name="model">woo.category</field>
+        <field name="arch" type="xml">
+            <search string="Buscar categorías">
+                <field name="name" string="Nombre"/>
+                <field name="slug" string="Slug"/>
+                <field name="instance_id" string="Instancia"/>
+                <separator/>
+                <filter name="root_only" string="Solo raíz" domain="[('parent_id', '=', False)]"/>
+                <filter name="with_woo_id" string="Sincronizadas" domain="[('woo_id', '!=', 0)]"/>
+                <group expand="0" string="Agrupar por">
+                    <filter name="group_instance" string="Instancia" context="{'group_by': 'instance_id'}"/>
+                    <filter name="group_parent" string="Padre" context="{'group_by': 'parent_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+
+</odoo>

@@ -10,9 +10,7 @@ múltiples instancias WooCommerce con el mismo catálogo de Odoo sin
 añadir campos extra al modelo core de producto.
 """
 
-import base64
 import logging
-import requests
 
 from odoo import models, fields, api, _
 from odoo.exceptions import UserError, ValidationError
@@ -149,6 +147,22 @@ class WooProduct(models.Model):
         store=False,
     )
 
+    # ── Categorías y marcas ────────────────────────────────────────────────────
+
+    woo_category_ids = fields.Many2many(
+        "woo.category",
+        string="Categorías WooCommerce",
+        domain="[('instance_id', '=', instance_id)]",
+        help="Categorías de producto en WooCommerce. "
+        "Respeta jerarquía padre/hijo. Solo se listan las de la instancia.",
+    )
+    woo_brand_ids = fields.Many2many(
+        "woo.brand",
+        string="Marcas WooCommerce",
+        domain="[('instance_id', '=', instance_id)]",
+        help="Marcas del producto en WooCommerce (requiere plugin de marcas en WC).",
+    )
+
     # ── Auditoría ──────────────────────────────────────────────────────────────
 
     last_sync_date = fields.Datetime(string="Última sincronización", readonly=True)
@@ -248,12 +262,26 @@ class WooProduct(models.Model):
 
     # ── Helpers ────────────────────────────────────────────────────────────────
 
-    def _upload_image_to_wp(self):
-        """Sube la imagen binaria al Media Library de WordPress.
+    def _build_categories_payload(self):
+        """
+        Devuelve la lista de categorías en el formato que espera la API de WooCommerce.
 
-        Usa la autenticación Basic con consumer_key:consumer_secret,
-        que funciona para el endpoint /wp-json/wp/v2/media cuando WC APIkeys
-        tienen permisos de escritura.
+        WooCommerce espera: ``[{"id": 157}, {"id": 89}]``
+        Solo se incluyen categorías que ya tienen ``woo_id`` asignado.
+        """
+        return [{"id": cat.woo_id} for cat in self.woo_category_ids if cat.woo_id]
+
+    def _build_brands_payload(self):
+        """
+        Devuelve la lista de marcas en el formato que espera la API de WooCommerce.
+
+        WooCommerce espera: ``[{"id": 121880}]``
+        Solo se incluyen marcas que ya tienen ``woo_id`` asignado.
+        """
+        return [{"id": brand.woo_id} for brand in self.woo_brand_ids if brand.woo_id]
+
+    def _upload_image_to_wp(self):
+        """Sube la imagen binaria al Media Library de WordPress vía woo.service.
 
         Returns:
             tuple(int|None, str): (media_id, src_url) o (None, '') si falla.
@@ -261,48 +289,11 @@ class WooProduct(models.Model):
         self.ensure_one()
         if not self.woo_image:
             return None, ""
-
-        image_data = base64.b64decode(self.woo_image)
-
-        # Detectar MIME por magic bytes
-        if image_data[:4] == b"\x89PNG":
-            mime, ext = "image/png", "png"
-        elif image_data[:2] == b"\xff\xd8":
-            mime, ext = "image/jpeg", "jpg"
-        elif image_data[:4] == b"GIF8":
-            mime, ext = "image/gif", "gif"
-        elif image_data[:4] == b"RIFF" and image_data[8:12] == b"WEBP":
-            mime, ext = "image/webp", "webp"
-        else:
-            mime, ext = "image/jpeg", "jpg"
-
-        filename = f"woo_product_{self.woo_id or 'new'}.{ext}"
-        config = self.env["odoo.wp.sync.wc.api"]._get_wp_config(self.instance_id)
-        url = f"{config['url']}/wp-json/wp/v2/media"
-
-        try:
-            response = requests.post(
-                url,
-                auth=(config["consumer_key"], config["consumer_secret"]),
-                headers={
-                    "Content-Disposition": f'attachment; filename="{filename}"',
-                    "Content-Type": mime,
-                },
-                data=image_data,
-                timeout=30,
-            )
-            if response.status_code in (200, 201):
-                media = response.json()
-                return media.get("id"), media.get("source_url", "")
-            _logger.warning(
-                "WP Media upload returned %s: %s",
-                response.status_code,
-                response.text[:300],
-            )
-        except Exception as exc:
-            _logger.warning("Error uploading image to WordPress: %s", str(exc))
-
-        return None, ""
+        return self.env["woo.service"].upload_image(
+            self.instance_id,
+            self.woo_image,
+            product_ref=self.woo_id or "new",
+        )
 
     # ── Acciones ───────────────────────────────────────────────────────────────
 
@@ -345,7 +336,7 @@ class WooProduct(models.Model):
         if not self.instance_id:
             raise UserError(_("Debes seleccionar una instancia WooCommerce."))
 
-        api = self.env["odoo.wp.sync.wc.api"]
+        svc = self.env["woo.service"]
 
         # Calcular precio: manual > pricelist de instancia > list_price
         price = self.woo_price_input
@@ -379,12 +370,17 @@ class WooProduct(models.Model):
         else:
             payload["images"] = []
 
-        wc_response = api._wp_request(
-            endpoint="products",
-            method="POST",
-            data=payload,
-            instance=self.instance_id,
-        )
+        # Categorías — respetando jerarquía padre/hijo de WooCommerce
+        categories_payload = self._build_categories_payload()
+        if categories_payload:
+            payload["categories"] = categories_payload
+
+        # Marcas — requiere plugin de marcas en WooCommerce
+        brands_payload = self._build_brands_payload()
+        if brands_payload:
+            payload["brands"] = brands_payload
+
+        wc_response = svc.create_product(self.instance_id, payload)
 
         if not wc_response or not wc_response.get("id"):
             raise UserError(_("No se recibió respuesta válida de WooCommerce."))
@@ -424,7 +420,7 @@ class WooProduct(models.Model):
     def action_update_stock_wc(self):
         """Envía nombre, stock_status, estado de publicación, precio e imagen a WooCommerce."""
         self.ensure_one()
-        api = self.env["odoo.wp.sync.wc.api"]
+        svc = self.env["woo.service"]
 
         payload = {
             "name": self.woo_name,
@@ -457,13 +453,18 @@ class WooProduct(models.Model):
         if self.woo_image_url_input:
             payload["images"] = [{"src": self.woo_image_url_input}]
 
+        # Categorías — respetando jerarquía padre/hijo de WooCommerce
+        categories_payload = self._build_categories_payload()
+        if categories_payload:
+            payload["categories"] = categories_payload
+
+        # Marcas — requiere plugin de marcas en WooCommerce
+        brands_payload = self._build_brands_payload()
+        if brands_payload:
+            payload["brands"] = brands_payload
+
         try:
-            wc_response = api._wp_request(
-                endpoint=f"products/{self.woo_id}",
-                method="PUT",
-                data=payload,
-                instance=self.instance_id,
-            )
+            wc_response = svc.update_product(self.instance_id, self.woo_id, payload)
         except Exception as e:
             return {
                 "type": "ir.actions.client",

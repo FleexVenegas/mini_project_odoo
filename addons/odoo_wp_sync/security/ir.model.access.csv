@@ -9,3 +9,6 @@ access_woo_bulk_publish_wizard,access_woo_bulk_publish_wizard,model_woo_bulk_pub
 access_confirmation_wizard,access_confirmation_wizard,model_confirmation_wizard,base.group_user,1,1,1,1
 access_woo_instance_user,access_woo_instance_user,model_woo_instance,base.group_user,1,0,0,0
 access_woo_instance_manager,access_woo_instance_manager,model_woo_instance,sales_team.group_sale_manager,1,1,1,1
+access_woo_category_user,access_woo_category_user,model_woo_category,base.group_user,1,1,1,1
+access_woo_brand_user,access_woo_brand_user,model_woo_brand,base.group_user,1,1,1,1
+access_woo_service,access_woo_service,model_woo_service,base.group_user,1,0,0,0

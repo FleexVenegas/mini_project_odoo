@@ -124,6 +124,16 @@
                         </group>
                     </group>
 
+                    <!-- ── Sección 4: Categorías y Marcas ────────────────────── -->
+                    <group>
+                        <group string="Categorías WooCommerce">
+                            <field name="woo_category_ids" widget="many2many_tags" options="{'no_create': True}" domain="[('instance_id', '=', instance_id)]" string="Categorías" help="Respeta la jerarquía padre/hijo de WooCommerce."/>
+                        </group>
+                        <group string="Marcas WooCommerce">
+                            <field name="woo_brand_ids" widget="many2many_tags" options="{'no_create': True}" domain="[('instance_id', '=', instance_id)]" string="Marcas" help="Requiere plugin de marcas instalado en WooCommerce."/>
+                        </group>
+                    </group>
+
                     <!-- ── Alertas ─────────────────────────────────────────────── -->
                     <div class="alert alert-info mt-2" role="status" invisible="not woo_id">
                         <i class="fa fa-info-circle me-1"/>

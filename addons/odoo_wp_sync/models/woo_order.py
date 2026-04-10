@@ -147,21 +147,25 @@ class OdooWpSync(models.Model):
         should_do_full = force_full or instance._should_do_full_sync()
 
         if should_do_full:
-            # Full sync: Use configured start date
+            # Full sync: Use configured start date.
+            # Append 'Z' to indicate UTC to WooCommerce.
             sync_type = "full"
             if instance.sync_from_date:
-                params["after"] = f"{instance.sync_from_date}T00:00:00"
+                params["after"] = f"{instance.sync_from_date}T00:00:00Z"
         else:
             # Incremental sync: Only orders modified since last sync
             sync_type = "incremental"
             if instance.last_sync_date:
-                # Add a small buffer (1 minute) to avoid missing orders
+                # Add a small buffer (1 minute) to avoid missing orders on race conditions.
+                # Append 'Z' to declare UTC explicitly — WooCommerce otherwise interprets
+                # the timestamp as the store's local timezone, which causes 0 results when
+                # the store is behind UTC (e.g. UTC-6 Mexico).
                 last_sync_with_buffer = instance.last_sync_date - timedelta(minutes=1)
-                params["modified_after"] = last_sync_with_buffer.strftime(
-                    "%Y-%m-%dT%H:%M:%S"
+                params["modified_after"] = (
+                    last_sync_with_buffer.strftime("%Y-%m-%dT%H:%M:%S") + "Z"
                 )
                 _logger.info(
-                    f"Incremental sync for {instance.name}: syncing orders modified after {last_sync_with_buffer}"
+                    f"Incremental sync for {instance.name}: syncing orders modified after {last_sync_with_buffer} UTC"
                 )
             else:
                 # Fallback to full sync if no previous sync date
@@ -197,6 +201,9 @@ class OdooWpSync(models.Model):
         created_count = 0
         updated_count = 0
         all_orders = []
+        sync_type = (
+            None  # set by _build_sync_params; used to update last_full_sync_date
+        )
 
         try:
             # Get instance from context or use default
@@ -233,42 +240,19 @@ class OdooWpSync(models.Model):
                     },
                 }
 
-            api = self.env["odoo.wp.sync.wc.api"]
+            svc = self.env["woo.service"]
 
             # Build query parameters from instance settings
             params, sync_type = self._build_sync_params(instance, force_full=force_full)
-
-            # Build endpoint with parameters
-            param_string = "&".join([f"{k}={v}" for k, v in params.items()])
-            endpoint = f"orders?{param_string}"
 
             _logger.info(
                 f"Starting {sync_type} sync for {instance.name} with params: {params}"
             )
 
-            # Fetch orders from WooCommerce with pagination
-            page = 1
-            max_pages = 100  # Increased safety limit for full syncs
+            # Fetch orders from WooCommerce via service (handles pagination)
+            all_orders = svc.fetch_orders(instance, params)
 
-            while page <= max_pages:
-                paginated_endpoint = f"{endpoint}&page={page}"
-                orders = api._wp_request(endpoint=paginated_endpoint, instance=instance)
-
-                if not orders:
-                    # No more orders to fetch
-                    break
-
-                all_orders.extend(orders)
-
-                # If we got less than per_page, we've reached the last page
-                if len(orders) < params["per_page"]:
-                    break
-
-                page += 1
-
-            _logger.info(
-                f"Fetched {len(all_orders)} orders from {instance.name} in {page} page(s)"
-            )
+            _logger.info(f"Fetched {len(all_orders)} orders from {instance.name}")
 
             # Process all fetched orders
             for order_data in all_orders:
@@ -301,6 +285,7 @@ class OdooWpSync(models.Model):
                 total=len(all_orders),
                 duration=duration,
                 error=None,
+                sync_type=sync_type,
             )
 
             # Build success message with details
@@ -358,6 +343,7 @@ class OdooWpSync(models.Model):
                     total=len(all_orders),
                     duration=duration,
                     error=error_msg,
+                    sync_type=sync_type,
                 )
 
             _logger.error(f"Error en sincronización: {error_msg}", exc_info=True)

@@ -15,8 +15,6 @@ from odoo.exceptions import UserError
 
 _logger = logging.getLogger(__name__)
 
-_WC_PAGE_SIZE = 100  # máximo permitido por la API de WooCommerce
-
 
 class WooProductSync(models.AbstractModel):
     _name = "woo.product.sync"
@@ -25,36 +23,8 @@ class WooProductSync(models.AbstractModel):
     # ── API privada ────────────────────────────────────────────────────────────
 
     def _fetch_wc_products(self, instance):
-        """
-        Obtiene todos los productos de WooCommerce para la instancia dada.
-        Maneja paginación automáticamente.
-
-        Returns:
-            list[dict]: Lista completa de productos WooCommerce.
-        """
-        api = self.env["odoo.wp.sync.wc.api"]
-        all_products = []
-        page = 1
-
-        while True:
-            endpoint = (
-                f"products?per_page={_WC_PAGE_SIZE}&page={page}"
-                f"&orderby=id&order=asc&status=any"
-            )
-            batch = api._wp_request(endpoint=endpoint, instance=instance)
-            if not batch:
-                break
-            all_products.extend(batch)
-            if len(batch) < _WC_PAGE_SIZE:
-                break
-            page += 1
-
-        _logger.info(
-            "Fetched %d products from WooCommerce instance '%s'",
-            len(all_products),
-            instance.name,
-        )
-        return all_products
+        """Delega al servicio HTTP centralizado."""
+        return self.env["woo.service"].fetch_products(instance)
 
     def _build_woo_product_vals(self, wc_product, instance):
         """Convierte un dict de WC en los vals para woo.product."""
@@ -69,7 +39,7 @@ class WooProductSync(models.AbstractModel):
         images = wc_product.get("images") or []
         first_image = images[0] if images else {}
 
-        return {
+        vals = {
             "instance_id": instance.id,
             "woo_id": wc_product["id"],
             "woo_name": wc_product.get("name", ""),
@@ -85,6 +55,61 @@ class WooProductSync(models.AbstractModel):
             "last_sync_date": fields.Datetime.now(),
             "stock_status": wc_product.get("stock_status", "unknown"),
         }
+
+        # ── Categorías ───────────────────────────────────────────────────────────
+        # WC las devuelve como [{"id": 157, "name": "...", "slug": "..."}]
+        # Las sincronizamos en woo.category respetando la instancia.
+        # El parent_id se resuelve si el padre ya existe en la BD;
+        # si no, queda None (se resolverrá al importar las categorías por separado).
+        WooCategory = self.env["woo.category"]
+        category_ids = []
+        for wc_cat in wc_product.get("categories", []):
+            cat_woo_id = wc_cat.get("id")
+            if not cat_woo_id:
+                continue
+            cat = WooCategory.search(
+                [("woo_id", "=", cat_woo_id), ("instance_id", "=", instance.id)],
+                limit=1,
+            )
+            if not cat:
+                cat = WooCategory.create(
+                    {
+                        "instance_id": instance.id,
+                        "woo_id": cat_woo_id,
+                        "name": wc_cat.get("name") or f"Category {cat_woo_id}",
+                        "slug": wc_cat.get("slug", ""),
+                    }
+                )
+            category_ids.append(cat.id)
+        if category_ids:
+            vals["woo_category_ids"] = [(6, 0, category_ids)]
+
+        # ── Marcas ──────────────────────────────────────────────────────────────
+        # WC las devuelve como [{"id": 121880, "name": "...", "slug": "..."}]
+        WooBrand = self.env["woo.brand"]
+        brand_ids = []
+        for wc_brand in wc_product.get("brands", []):
+            brand_woo_id = wc_brand.get("id")
+            if not brand_woo_id:
+                continue
+            brand = WooBrand.search(
+                [("woo_id", "=", brand_woo_id), ("instance_id", "=", instance.id)],
+                limit=1,
+            )
+            if not brand:
+                brand = WooBrand.create(
+                    {
+                        "instance_id": instance.id,
+                        "woo_id": brand_woo_id,
+                        "name": wc_brand.get("name") or f"Brand {brand_woo_id}",
+                        "slug": wc_brand.get("slug", ""),
+                    }
+                )
+            brand_ids.append(brand.id)
+        if brand_ids:
+            vals["woo_brand_ids"] = [(6, 0, brand_ids)]
+
+        return vals
 
     def _match_odoo_product(self, sku):
         """
@@ -202,7 +227,7 @@ class WooProductSync(models.AbstractModel):
             wc_status: "draft" | "publish" — estado inicial en WooCommerce.
             price_override: si > 0 sobreescribe el precio de lista del producto.
         """
-        api = self.env["odoo.wp.sync.wc.api"]
+        svc = self.env["woo.service"]
 
         if price_override and price_override > 0:
             price = price_override
@@ -231,10 +256,6 @@ class WooProductSync(models.AbstractModel):
             )
             payload["tax_status"] = "taxable"
 
-        # _logger.debug(f"product_tmpl: {product_tmpl}")
-
-        # raise UserError(f"payload {payload} instance {instance.name}")
-
         existing = self.env["woo.product"].search(
             [
                 ("product_tmpl_id", "=", product_tmpl.id),
@@ -243,12 +264,25 @@ class WooProductSync(models.AbstractModel):
             limit=1,
         )
 
+        # ── Categorías y marcas del mapeo woo.product existente ─────────────────
+        # Solo se agregan si el mapeo ya existe (tiene woo_category_ids / woo_brand_ids).
+        # En una creación nueva no hay mapping previo, así que se omiten.
+        if existing:
+            categories_payload = [
+                {"id": cat.woo_id} for cat in existing.woo_category_ids if cat.woo_id
+            ]
+            if categories_payload:
+                payload["categories"] = categories_payload
+
+            brands_payload = [
+                {"id": brand.woo_id} for brand in existing.woo_brand_ids if brand.woo_id
+            ]
+            if brands_payload:
+                payload["brands"] = brands_payload
+
         if existing and existing.woo_id:
             # Actualizar producto existente en WooCommerce
-            endpoint = f"products/{existing.woo_id}"
-            wc_response = api._wp_request(
-                endpoint=endpoint, method="PUT", data=payload, instance=instance
-            )
+            wc_response = svc.update_product(instance, existing.woo_id, payload)
             if wc_response:
                 existing.write(
                     {
@@ -266,9 +300,7 @@ class WooProductSync(models.AbstractModel):
             )
         else:
             # Crear producto nuevo en WooCommerce
-            wc_response = api._wp_request(
-                endpoint="products", method="POST", data=payload, instance=instance
-            )
+            wc_response = svc.create_product(instance, payload)
             if wc_response and wc_response.get("id"):
                 vals = self._build_woo_product_vals(wc_response, instance)
                 vals["product_tmpl_id"] = product_tmpl.id

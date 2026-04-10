@@ -1,3 +1,13 @@
+"""
+Modelo de línea de pedido para WooCommerce, vinculado a odoo.wp.sync (pedido) y 
+con campos específicos de WooCommerce como SKU, cantidad, precio, impuestos, etc. 
+Se ordena por secuencia para mantener el orden original del pedido. 
+El campo currency_id se calcula a partir de la moneda del pedido padre.
+
+Lo puedes encontrar cuando abres un pedido sincronizado (odoo.wp.sync) y 
+vas a la pestaña de líneas
+"""
+
 from odoo import models, fields, api
 
 

@@ -12,7 +12,7 @@
     Para agregar un nuevo menú filtrado:
       1. Copia uno de los bloques de abajo
       2. Cambia el id, name, res_model y domain
-      3. Agrega el menuitem en odoo_wp_menu.xml apuntando al nuevo id
+      3. Agrega el menuitem en woo_menu.xml apuntando al nuevo id
     ============================================================
     -->
 
