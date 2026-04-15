@@ -8,30 +8,30 @@
         <field name="arch" type="xml">
             <form string="WooCommerce Instance">
                 <header>
-                    <button name="action_test_connection" string="Probar Conexión" type="object" class="btn-primary" invisible="state == 'connected'"/>
-                    <button name="action_test_connection" string="Reconectar" type="object" class="btn-secondary" invisible="state != 'connected'"/>
+                    <button name="action_test_connection" string="Test Connection" type="object" class="btn-primary" invisible="state == 'connected'"/>
+                    <button name="action_test_connection" string="Reconnect" type="object" class="btn-secondary" invisible="state != 'connected'"/>
                     <field name="state" widget="statusbar" statusbar_visible="draft,connected"/>
                 </header>
                 <sheet>
-                    <widget name="web_ribbon" title="Archivado" bg_color="text-bg-danger" invisible="active"/>
+                    <widget name="web_ribbon" title="Archived" bg_color="text-bg-danger" invisible="active"/>
                     <field name="active" invisible="1"/>
 
                     <!-- Smart Buttons -->
                     <div class="oe_button_box" name="button_box">
                         <button name="action_view_orders" type="object" class="oe_stat_button" icon="fa-shopping-cart" invisible="state != 'connected'">
-                            <field name="order_count" widget="statinfo" string="Pedidos"/>
+                            <field name="order_count" widget="statinfo" string="Orders"/>
                         </button>
                         <button name="action_view_woo_products" type="object" class="oe_stat_button" icon="fa-cube" invisible="state != 'connected'">
-                            <field name="woo_product_count" widget="statinfo" string="Productos WC"/>
+                            <field name="woo_product_count" widget="statinfo" string="WC Products"/>
                         </button>
                         <button name="action_sync_products" type="object" class="oe_stat_button" icon="fa-refresh" invisible="state != 'connected'">
                             <div class="o_field_widget o_stat_info">
-                                <span class="o_stat_text">Sincronizar Productos</span>
+                                <span class="o_stat_text">Sync Products</span>
                             </div>
                         </button>
                         <button name="action_sync_orders" type="object" class="oe_stat_button" icon="fa-refresh" invisible="state != 'connected'">
                             <div class="o_field_widget o_stat_info">
-                                <span class="o_stat_text">Sincronizar Ordenes</span>
+                                <span class="o_stat_text">Sync Orders</span>
                             </div>
                         </button>
                     </div>
@@ -40,14 +40,14 @@
                     <div class="oe_title mb-3">
                         <h1 class="d-flex align-items-center gap-2">
                             <field name="color" widget="color_picker"/>
-                            <field name="name" placeholder="Nombre de la instancia" class="o_text_overflow"/>
+                            <field name="name" placeholder="Instance name" class="o_text_overflow"/>
                         </h1>
                     </div>
 
                     <!-- Connection fields -->
                     <group>
-                        <group string="Credenciales WooCommerce">
-                            <field name="wp_url" placeholder="https://mitienda.com" widget="url" readonly="state == 'connected'"/>
+                        <group string="WooCommerce Credentials">
+                            <field name="wp_url" placeholder="https://mystore.com" widget="url" readonly="state == 'connected'"/>
                             <field name="consumer_key" password="True" placeholder="ck_xxxxxxxxxxxxx" readonly="state == 'connected'"/>
                             <field name="consumer_secret" password="True" placeholder="cs_xxxxxxxxxxxxx" readonly="state == 'connected'"/>
                         </group>
@@ -59,11 +59,11 @@
                     <!-- Connection Status Alert -->
                     <div class="alert" role="alert" invisible="not last_connection_test" t-attf-class="alert-{{state == 'connected' and 'success' or (state == 'error' and 'danger' or 'info')}}">
                         <div class="d-flex align-items-center gap-2">
-                            <i t-attf-class="fa fa-lg {{state == 'connected' and 'fa-check-circle' or (state == 'error' and 'fa-times-circle' or 'fa-info-circle')}}" title="Estado de conexión"/>
+                            <i t-attf-class="fa fa-lg {{state == 'connected' and 'fa-check-circle' or (state == 'error' and 'fa-times-circle' or 'fa-info-circle')}}" title="Connection status"/>
                             <div>
                                 <field name="connection_message"/>
                                 <div class="small text-muted mt-1">
-                                    Última prueba: <field name="last_connection_test"/>
+                                    Last test: <field name="last_connection_test"/>
                                 </div>
                             </div>
                         </div>
@@ -71,43 +71,43 @@
 
                     <notebook>
 
-                        <!-- ── Guía de Inicio ─────────────────────────── -->
-                        <page string="Guía de Inicio" name="setup_guide" invisible="state == 'connected'">
+                        <!-- ── Getting Started ─────────────────────────── -->
+                        <page string="Getting Started" name="setup_guide" invisible="state == 'connected'">
                             <div class="p-3">
                                 <div class="alert alert-info" role="alert">
                                     <i class="fa fa-lightbulb-o me-2"/>
-                                    Sigue los pasos para conectar tu tienda WooCommerce.
+                                    Follow these steps to connect your WooCommerce store.
                                 </div>
                                 <div class="row g-3">
                                     <div class="col-md-6">
                                         <div class="border rounded p-3 bg-light">
                                             <h6>
-                                                <span class="badge bg-primary me-2">1</span>Accede a WooCommerce</h6>
-                                            <p class="mb-0 small">Ve a: <code>WooCommerce → Ajustes → Avanzado → API REST</code>
+                                                <span class="badge bg-primary me-2">1</span>Access WooCommerce</h6>
+                                            <p class="mb-0 small">Go to: <code>WooCommerce → Settings → Advanced → REST API</code>
                                             </p>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="border rounded p-3 bg-light">
                                             <h6>
-                                                <span class="badge bg-primary me-2">2</span>Genera una API Key</h6>
-                                            <p class="mb-0 small">Haz clic en <strong>Agregar clave</strong>, permisos: <code>Lectura/Escritura</code>
+                                                <span class="badge bg-primary me-2">2</span>Generate an API Key</h6>
+                                            <p class="mb-0 small">Click <strong>Add key</strong>, permissions: <code>Read/Write</code>
                                             </p>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="border rounded p-3 bg-light">
                                             <h6>
-                                                <span class="badge bg-primary me-2">3</span>Copia las credenciales</h6>
-                                            <p class="mb-0 small">Copia el <strong>Consumer Key</strong> y el <strong>Consumer Secret</strong>
+                                                <span class="badge bg-primary me-2">3</span>Copy the credentials</h6>
+                                            <p class="mb-0 small">Copy the <strong>Consumer Key</strong> and <strong>Consumer Secret</strong>
                                             </p>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="border rounded p-3 bg-light">
                                             <h6>
-                                                <span class="badge bg-primary me-2">4</span>Prueba la conexión</h6>
-                                            <p class="mb-0 small">Pega las credenciales arriba y haz clic en <strong>Probar Conexión</strong>
+                                                <span class="badge bg-primary me-2">4</span>Test the connection</h6>
+                                            <p class="mb-0 small">Paste the credentials above and click <strong>Test Connection</strong>
                                             </p>
                                         </div>
                                     </div>
@@ -115,9 +115,9 @@
                             </div>
                         </page>
 
-                        <!-- ── Sincronización ─────────────────────────── -->
-                        <page string="Sincronización" name="parameters" invisible="state != 'connected'">
-                            <group string="Configuración de Pedidos">
+                        <!-- ── Synchronization ─────────────────────────── -->
+                        <page string="Synchronization" name="parameters" invisible="state != 'connected'">
+                            <group string="Order Settings">
                                 <group>
                                     <field name="sync_order_limit" widget="integer"/>
                                     <field name="sync_from_date"/>
@@ -133,7 +133,7 @@
                             </group>
 
 
-                            <group string="Estrategia de Sincronización">
+                            <group string="Synchronization Strategy">
                                 <group>
                                     <field name="incremental_enabled" widget="boolean_toggle"/>
                                     <field name="full_sync_interval_days" invisible="not incremental_enabled"/>
@@ -143,7 +143,7 @@
                                 </group>
                             </group>
 
-                            <group string="Estadísticas" invisible="not last_sync_date">
+                            <group string="Statistics" invisible="not last_sync_date">
                                 <group>
                                     <field name="last_sync_date" readonly="1"/>
                                     <field name="last_full_sync_date" readonly="1"/>
@@ -157,44 +157,44 @@
                             </group>
                         </page>
 
-                        <!-- ── Ventas ─────────────────────────────────── -->
-                        <page string="Ventas" name="sales" invisible="state != 'connected'">
-                            <group string="Equipo Comercial">
+                        <!-- ── Sales ─────────────────────────────────── -->
+                        <page string="Sales" name="sales" invisible="state != 'connected'">
+                            <group string="Sales Team">
                                 <group>
-                                    <field name="seller_id" string="Vendedor"/>
-                                    <field name="sale_team_id" string="Equipo de Ventas"/>
-                                    <field name="client_id" string="Cliente por defecto"/>
+                                    <field name="seller_id" string="Salesperson"/>
+                                    <field name="sale_team_id" string="Sales Team"/>
+                                    <field name="client_id" string="Default Customer"/>
                                 </group>
                                 <group>
-                                    <field name="use_sequence" string="Usar Secuencia" widget="boolean_toggle"/>
+                                    <field name="use_sequence" string="Use Sequence" widget="boolean_toggle"/>
                                     <field name="prefix_sequence" invisible="use_sequence != False"/>
                                     <field name="sequence" invisible="use_sequence != True"/>
                                 </group>
                             </group>
 
-                            <group string="Precios y Pagos">
+                            <group string="Prices and Payments">
                                 <group>
-                                    <field name="pricelist_id" string="Lista de Precios"/>
-                                    <field name="payment_term_id" string="Términos de Pago"/>
-                                    <field name="wc_shipping" string="Incluir costo de envío" widget="boolean_toggle"/>
+                                    <field name="pricelist_id" string="Pricelist"/>
+                                    <field name="payment_term_id" string="Payment Terms"/>
+                                    <field name="wc_shipping" string="Include shipping cost" widget="boolean_toggle"/>
                                 </group>
                                 <group>
-                                    <field name="taxes_included_price" string="Precios con IVA incluido" widget="boolean_toggle"/>
-                                    <field name="tax_id" string="Impuesto" invisible="taxes_included_price != False"/>
+                                    <field name="taxes_included_price" string="Prices include VAT" widget="boolean_toggle"/>
+                                    <field name="tax_id" string="Tax" invisible="taxes_included_price != False"/>
                                 </group>
                             </group>
 
-                            <!-- <group string="Pertinencia de Datos">
-                                <field name="company_id" string="Compañia"/>
+                            <!-- <group string="Data Relevance">
+                                <field name="company_id" string="Company"/>
                             </group> -->
 
-                            <group string="Comportamiento">
+                            <group string="Behavior">
                                 <group>
-                                    <field name="confirm_orders" string="Confirmar pedidos manualmente" widget="boolean_toggle"/>
+                                    <field name="confirm_orders" string="Manually confirm orders" widget="boolean_toggle"/>
                                 </group>
                             </group>
 
-                            <group string="Creación Automática de Pedidos">
+                            <group string="Automatic Order Creation">
                                 <group>
                                     <field name="auto_create_sale_order" widget="boolean_toggle"/>
                                     <field name="auto_create_sale_order_statuses" placeholder="processing,completed" invisible="not auto_create_sale_order"/>
@@ -202,17 +202,17 @@
                                 <!-- <group invisible="not auto_create_sale_order">
                                     <div class="alert alert-info" role="alert" colspan="2">
                                         <i class="fa fa-info-circle me-1"/>
-                                        Al sincronizar, se creará un pedido de venta para cada orden cuyo estado coincida con los configurados.
-                                        Si <b>Confirmar pedidos automáticamente</b> está activo, el pedido se confirmará directamente;
-                                        de lo contrario, quedará como cotización.
+                                        On sync, a sale order will be created for each order whose status matches the configured ones.
+                                        If <b>Automatically confirm orders</b> is active, the order will be confirmed directly;
+                                        otherwise it will remain as a quotation.
                                     </div>
                                 </group> -->
                             </group>
                         </page>
 
-                        <!-- ── Almacén ────────────────────────────────── -->
-                        <page string="Almacén" name="warehouse" invisible="state != 'connected'">
-                            <group string="Configuración de Almacén">
+                        <!-- ── Warehouse ────────────────────────────── -->
+                        <page string="Warehouse" name="warehouse" invisible="state != 'connected'">
+                            <group string="Warehouse Settings">
                                 <group>
                                     <field name="warehouse_id"/>
                                 </group>
@@ -221,7 +221,7 @@
                                 </group>
                             </group>
 
-                            <group string="Inventario de productos">
+                            <group string="Product inventory">
                                 <group>
                                     <field name="manage_stock" widget="boolean_toggle"/>
                                     <!-- <field name="update_stock" widget="boolean_toggle" invisible="not manage_stock"/> -->
@@ -229,28 +229,28 @@
                             </group>
                         </page>
 
-                        <!-- ── Productos ──────────────────────────────── -->
-                        <page string="Productos" name="wc_product" invisible="state != 'connected'">
-                            <group string="Publicación de Productos">
+                        <!-- ── Products ──────────────────────────────── -->
+                        <page string="Products" name="wc_product" invisible="state != 'connected'">
+                            <group string="Product Publishing">
                                 <group>
                                     <field name="allow_create_products" widget="boolean_toggle"/>
                                     <field name="who_can_publish" widget="many2many_tags" invisible="not allow_create_products"/>
                                 </group>
                                 <group>
                                     <field name="include_taxes_wc_product_sync" widget="boolean_toggle" invisible="not allow_create_products"/>
-                                    <field name="taxes_product" string="Impuestos" invisible="not allow_create_products or not include_taxes_wc_product_sync"/>
+                                    <field name="taxes_product" string="Taxes" invisible="not allow_create_products or not include_taxes_wc_product_sync"/>
                                 </group>
                             </group>
                         </page>
 
-                        <!-- ── Cupones (próximamente) ─────────────────── -->
-                        <page string="Cupones" name="coupons" invisible="state != 'connected'">
+                        <!-- ── Coupons (coming soon) ─────────────────── -->
+                        <page string="Coupons" name="coupons" invisible="state != 'connected'">
                             <div class="p-4 text-center text-muted">
-                                <i class="fa fa-tag fa-3x mb-3" style="color: #d1d5db;" title="Cupones WooCommerce"/>
-                                <h5 style="color: #6b7280;">Cupones WooCommerce</h5>
+                                <i class="fa fa-tag fa-3x mb-3" style="color: #d1d5db;" title="WooCommerce Coupons"/>
+                                <h5 style="color: #6b7280;">WooCommerce Coupons</h5>
                                 <p class="small">
-                                    La sincronización de cupones estará disponible próximamente.<br/>
-                                    Podrás importar, crear y gestionar cupones desde esta instancia.
+                                    Coupon synchronization will be available soon.<br/>
+                                    You will be able to import, create and manage coupons from this instance.
                                 </p>
                             </div>
                         </page>

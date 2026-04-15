@@ -1,13 +1,13 @@
 """
-Modelo de marcas de WooCommerce.
+WooCommerce brands model.
 
-Compatible con los plugins más usados:
+Compatible with the most popular plugins:
   - Perfect WooCommerce Brands
-  - WooCommerce Brands (oficial)
+  - WooCommerce Brands (official)
   - YITH WooCommerce Brands
 
-El campo ``woo_id`` es el term_id de la marca en WooCommerce.
-El payload se envía como ``"brands": [{"id": 121880}]``.
+The ``woo_id`` field is the term_id of the brand in WooCommerce.
+The payload is sent as ``"brands": [{"id": 121880}]``.
 """
 
 from odoo import models, fields
@@ -20,7 +20,7 @@ class WooBrand(models.Model):
 
     instance_id = fields.Many2one(
         "woo.instance",
-        string="Instancia",
+        string="Instance",
         required=True,
         ondelete="cascade",
         index=True,
@@ -29,9 +29,9 @@ class WooBrand(models.Model):
         string="WooCommerce ID",
         index=True,
         default=0,
-        help="ID numérico de la marca en WooCommerce (0 = no sincronizada aún).",
+        help="Numeric ID of the brand in WooCommerce (0 = not yet synced).",
     )
-    name = fields.Char(string="Nombre", required=True)
+    name = fields.Char(string="Name", required=True)
     slug = fields.Char(
-        string="Slug", help="Identificador URL de la marca en WooCommerce."
+        string="Slug", help="URL identifier of the brand in WooCommerce."
     )

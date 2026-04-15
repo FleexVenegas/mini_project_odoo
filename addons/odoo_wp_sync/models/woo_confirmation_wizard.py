@@ -7,54 +7,55 @@ _logger = logging.getLogger(__name__)
 
 
 class ConfirmationWizard(models.TransientModel):
-    """Wizard genérico de confirmación que puede ejecutar cualquier método"""
+    """Generic confirmation wizard that can execute any method"""
 
     _name = "confirmation.wizard"
-    _description = "Wizard Genérico de Confirmación"
+    _description = "Generic Confirmation Wizard"
 
-    title = fields.Char(string="Título", default="Confirmación")
+    title = fields.Char(string="Title", default="Confirmation")
 
     description = fields.Html(
-        string="Descripción", default="¿Está seguro de continuar con esta acción?"
+        string="Description",
+        default="Are you sure you want to continue with this action?",
     )
 
     description_text = fields.Char(
-        string="Descripción Texto",
-        help="Texto plano que se convertirá automáticamente a HTML",
+        string="Description Text",
+        help="Plain text that will be automatically converted to HTML",
     )
 
-    model_name = fields.Char(string="Modelo", help="Nombre técnico del modelo")
+    model_name = fields.Char(string="Model", help="Technical name of the model")
 
-    method_name = fields.Char(string="Método", help="Nombre del método a ejecutar")
+    method_name = fields.Char(string="Method", help="Name of the method to execute")
 
     record_id = fields.Integer(
-        string="ID del Registro",
-        help="ID del registro sobre el cual ejecutar el método (opcional)",
+        string="Record ID",
+        help="ID of the record on which to execute the method (optional)",
     )
 
     record_ids = fields.Char(
-        string="IDs de Registros",
-        help="IDs de múltiples registros separados por comas (opcional)",
+        string="Record IDs",
+        help="IDs of multiple records separated by commas (optional)",
     )
 
     context_data = fields.Text(
-        string="Contexto adicional", help="Datos de contexto en formato JSON (opcional)"
+        string="Additional context", help="Context data in JSON format (optional)"
     )
 
     @staticmethod
     def _format_description(text):
         """
-        Convierte texto plano a HTML con formato básico
-        Detecta saltos de línea y los convierte en <br/>
+        Converts plain text to HTML with basic formatting.
+        Detects line breaks and converts them to <br/>.
         """
         if not text:
-            return "¿Está seguro de continuar con esta acción?"
+            return "Are you sure you want to continue with this action?"
 
-        # Si ya es HTML (contiene tags), devolverlo tal cual
+        # If it is already HTML (contains tags), return as-is
         if "<" in text and ">" in text:
             return text
 
-        # Convertir saltos de línea a <br/>
+        # Convert line breaks to <br/>
         text = text.replace("\n", "<br/>")
 
         return text
@@ -72,34 +73,34 @@ class ConfirmationWizard(models.TransientModel):
         dialog_size="medium",
     ):
         """
-        Método helper para crear fácilmente un wizard de confirmación
+        Helper method to easily create a confirmation wizard.
 
-        :param model_name: Nombre del modelo (ej: 'odoo.wp.sync')
-        :param method_name: Nombre del método a ejecutar (ej: 'action_sync')
-        :param title: Título del wizard (opcional)
-        :param description: Texto plano que se convertirá a HTML (opcional)
-        :param record_id: ID del registro específico (opcional, para un solo registro)
-        :param record_ids: Lista de IDs de registros (opcional, para múltiples registros)
-        :param context_data: Datos adicionales de contexto (opcional)
-        :param dialog_size: Tamaño del wizard: 'small', 'medium', 'large', 'extra-large' (default: 'medium')
-        :return: Action para abrir el wizard
+        :param model_name: Model name (e.g. 'odoo.wp.sync')
+        :param method_name: Method name to execute (e.g. 'action_sync')
+        :param title: Wizard title (optional)
+        :param description: Plain text that will be converted to HTML (optional)
+        :param record_id: ID of the specific record (optional, for a single record)
+        :param record_ids: List of record IDs (optional, for multiple records)
+        :param context_data: Additional context data (optional)
+        :param dialog_size: Wizard size: 'small', 'medium', 'large', 'extra-large' (default: 'medium')
+        :return: Action to open the wizard
         """
-        # Convertir texto plano a HTML con formato
+        # Convert plain text to formatted HTML
         description_html = self._format_description(
-            description or "¿Está seguro de continuar con esta acción?"
+            description or "Are you sure you want to continue with this action?"
         )
 
         vals = {
-            "title": title or "Confirmación",
+            "title": title or "Confirmation",
             "description": description_html,
             "model_name": model_name,
             "method_name": method_name,
             "context_data": context_data,
         }
 
-        # Agregar record_id o record_ids según corresponda
+        # Add record_id or record_ids as appropriate
         if record_ids:
-            # Convertir lista a string separado por comas
+            # Convert list to comma-separated string
             if isinstance(record_ids, list):
                 vals["record_ids"] = ",".join(map(str, record_ids))
             else:
@@ -109,7 +110,7 @@ class ConfirmationWizard(models.TransientModel):
 
         wizard = self.create(vals)
 
-        # Mapeo de tamaños
+        # Size mapping
         size_classes = {
             "small": "modal-sm",  # ~300px
             "medium": "modal-md",  # ~500px (default)
@@ -118,7 +119,7 @@ class ConfirmationWizard(models.TransientModel):
         }
 
         return {
-            "name": title or "Confirmación",
+            "name": title or "Confirmation",
             "type": "ir.actions.act_window",
             "res_model": "confirmation.wizard",
             "view_mode": "form",
@@ -128,19 +129,19 @@ class ConfirmationWizard(models.TransientModel):
         }
 
     def action_confirm(self):
-        """Ejecuta el método especificado cuando el usuario confirma"""
+        """Executes the specified method when the user confirms."""
         self.ensure_one()
 
         if not self.model_name or not self.method_name:
-            raise UserError(_("No se ha especificado el modelo o método a ejecutar."))
+            raise UserError(_("No model or method has been specified."))
 
         try:
-            # Obtener el modelo
+            # Get the model
             model = self.env[self.model_name]
 
-            # Determinar si hay registros específicos
+            # Determine if there are specific records
             if self.record_ids:
-                # Múltiples registros
+                # Multiple records
                 ids = [
                     int(id_str)
                     for id_str in self.record_ids.split(",")
@@ -148,24 +149,24 @@ class ConfirmationWizard(models.TransientModel):
                 ]
                 record = model.browse(ids)
                 if not record:
-                    raise UserError(_("Los registros especificados no existen."))
+                    raise UserError(_("The specified records do not exist."))
             elif self.record_id:
-                # Un solo registro
+                # Single record
                 record = model.browse(self.record_id)
                 if not record.exists():
-                    raise UserError(_("El registro especificado no existe."))
+                    raise UserError(_("The specified record does not exist."))
             else:
-                # Sin registro específico (método del modelo)
+                # No specific record (model method)
                 record = model
 
-            # Verificar que el método existe
+            # Verify the method exists
             if not hasattr(record, self.method_name):
                 raise UserError(
-                    _('El método "%s" no existe en el modelo "%s".')
+                    _('Method "%s" does not exist in model "%s".')
                     % (self.method_name, self.model_name)
                 )
 
-            # Preparar contexto adicional si existe
+            # Prepare additional context if it exists
             context = dict(self.env.context)
             if self.context_data:
                 import json
@@ -176,24 +177,24 @@ class ConfirmationWizard(models.TransientModel):
                 except:
                     pass
 
-            # Ejecutar el método
+            # Execute the method
             _logger.info(
-                f"Ejecutando método {self.method_name} en modelo {self.model_name} con {len(record) if hasattr(record, '__len__') else 1} registro(s)..."
+                f"Executing method {self.method_name} on model {self.model_name} with {len(record) if hasattr(record, '__len__') else 1} record(s)..."
             )
             method = getattr(record, self.method_name)
             result = method()
 
-            # Si el método retorna una acción, devolverla
+            # If the method returns an action, return it
             if isinstance(result, dict) and result.get("type"):
                 return result
 
-            # Si no, cerrar el wizard
+            # Otherwise, close the wizard
             return {"type": "ir.actions.act_window_close"}
 
         except Exception as e:
-            _logger.error(f"Error durante la ejecución: {str(e)}")
-            raise UserError(_("Error durante la ejecución: %s") % str(e))
+            _logger.error(f"Error during execution: {str(e)}")
+            raise UserError(_("Error during execution: %s") % str(e))
 
     def action_cancel(self):
-        """Cancela el wizard sin hacer cambios"""
+        """Cancels the wizard without making changes."""
         return {"type": "ir.actions.act_window_close"}

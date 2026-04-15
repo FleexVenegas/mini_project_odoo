@@ -1,8 +1,8 @@
 """
-Wizard para vincular manualmente un producto WooCommerce a un producto Odoo.
+Wizard to manually link a WooCommerce product to an Odoo product.
 
-El wizard se abre desde woo.product.action_link_manually() y permite
-seleccionar el product.template correcto y confirmar el vínculo.
+The wizard is opened from woo.product.action_link_manually() and allows
+selecting the correct product.template and confirming the link.
 """
 
 from odoo import models, fields
@@ -10,49 +10,49 @@ from odoo import models, fields
 
 class WooLinkWizard(models.TransientModel):
     _name = "woo.link.wizard"
-    _description = "Vincular producto WooCommerce a Odoo"
+    _description = "Link WooCommerce product to Odoo"
 
     woo_product_id = fields.Many2one(
         "woo.product",
-        string="Producto WooCommerce",
+        string="WooCommerce Product",
         required=True,
         readonly=True,
     )
     woo_name = fields.Char(
         related="woo_product_id.woo_name",
-        string="Nombre en WooCommerce",
+        string="Name in WooCommerce",
         readonly=True,
     )
     woo_sku = fields.Char(
         related="woo_product_id.woo_sku",
-        string="SKU en WooCommerce",
+        string="SKU in WooCommerce",
         readonly=True,
     )
     woo_price = fields.Float(
         related="woo_product_id.woo_price",
-        string="Precio en WooCommerce",
+        string="Price in WooCommerce",
         readonly=True,
     )
     product_tmpl_id = fields.Many2one(
         "product.template",
-        string="Producto en Odoo",
+        string="Product in Odoo",
         required=True,
         domain="[('sale_ok', '=', True)]",
-        help="Seleccione el producto de Odoo que corresponde a este producto de WooCommerce.",
+        help="Select the Odoo product that corresponds to this WooCommerce product.",
     )
 
     def action_link(self):
-        """Guarda el vínculo y cierra el wizard."""
+        """Saves the link and closes the wizard."""
         self.ensure_one()
         self.woo_product_id.product_tmpl_id = self.product_tmpl_id
         return {
             "type": "ir.actions.client",
             "tag": "display_notification",
             "params": {
-                "title": "Vinculado correctamente",
+                "title": "Linked successfully",
                 "message": (
-                    f"'{self.woo_product_id.woo_name}' ahora está vinculado "
-                    f"a '{self.product_tmpl_id.name}'."
+                    f"'{self.woo_product_id.woo_name}' is now linked "
+                    f"to '{self.product_tmpl_id.name}'."
                 ),
                 "type": "success",
                 "sticky": False,

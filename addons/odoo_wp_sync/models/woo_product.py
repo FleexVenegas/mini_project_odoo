@@ -1,13 +1,13 @@
 """
-Modelo de mapeo entre productos de Odoo y productos de WooCommerce.
+Mapping model between Odoo products and WooCommerce products.
 
-Una fila = un producto WooCommerce en una instancia concreta.
-Si product_tmpl_id está relleno → el producto está vinculado a Odoo.
-Si product_tmpl_id está vacío   → el producto existe en WC pero no en Odoo.
+One row = one WooCommerce product in a specific instance.
+If product_tmpl_id is set → the product is linked to Odoo.
+If product_tmpl_id is empty → the product exists in WC but not in Odoo.
 
-No se modifica product.template directamente: esto permite manejar
-múltiples instancias WooCommerce con el mismo catálogo de Odoo sin
-añadir campos extra al modelo core de producto.
+product.template is not modified directly: this allows handling
+multiple WooCommerce instances with the same Odoo catalog without
+adding extra fields to the core product model.
 """
 
 import logging
@@ -24,11 +24,11 @@ class WooProduct(models.Model):
     _order = "instance_id, woo_id"
     _rec_name = "woo_name"
 
-    # ── Identidad WooCommerce ──────────────────────────────────────────────────
+    # ── WooCommerce Identity ──────────────────────────────────────────────────
 
     instance_id = fields.Many2one(
         "woo.instance",
-        string="Instancia",
+        string="Instance",
         required=True,
         ondelete="cascade",
         index=True,
@@ -37,136 +37,135 @@ class WooProduct(models.Model):
         string="WooCommerce ID",
         index=True,
         default=0,
-        help="ID numérico del producto en WooCommerce (0 = aún no creado en WC)",
+        help="Numeric ID of the product in WooCommerce (0 = not yet created in WC)",
     )
-    woo_name = fields.Char(string="Nombre en WC")
-    woo_sku = fields.Char(string="SKU en WC", index=True)
+    woo_name = fields.Char(string="Name in WC")
+    woo_sku = fields.Char(string="SKU in WC", index=True)
     woo_status = fields.Selection(
         [
-            ("draft", "Borrador"),
-            ("pending", "Pendiente"),
-            ("publish", "Publicado"),
-            ("private", "Privado"),
+            ("draft", "Draft"),
+            ("pending", "Pending"),
+            ("publish", "Published"),
+            ("private", "Private"),
         ],
-        string="Estado en WC",
+        string="WC Status",
         default="draft",
     )
     woo_type = fields.Char(
-        string="Tipo en WC",
+        string="WC Type",
         default="simple",
-        help="Tipo de producto en WooCommerce: simple, variable, grouped, external",
+        help="WooCommerce product type: simple, variable, grouped, external",
     )
-    woo_price = fields.Float(string="Precio en WC", readonly=True, digits=(16, 4))
+    woo_price = fields.Float(string="WC Price", readonly=True, digits=(16, 4))
 
-    # ── Campos para creación manual en WC ─────────────────────────────────────
+    # ── Fields for manual creation in WC ─────────────────────────────────────
 
     woo_price_input = fields.Float(
-        string="Precio a publicar",
+        string="Publish price",
         digits=(16, 4),
-        help="Precio que se enviará a WooCommerce. Si se deja en 0 se usa la lista de precios de la instancia.",
+        help="Price to be sent to WooCommerce. If 0, the instance pricelist is used.",
     )
     pricelist_id = fields.Many2one(
         related="instance_id.pricelist_id",
-        string="Lista de precios (instancia)",
+        string="Pricelist (instance)",
         readonly=True,
     )
     pricelist_price = fields.Float(
-        string="Precio según lista",
+        string="Price per list",
         compute="_compute_pricelist_price",
         digits=(16, 4),
     )
-    woo_permalink = fields.Char(string="URL en WC", readonly=True)
+    woo_permalink = fields.Char(string="URL in WC", readonly=True)
 
     instance_manage_stock = fields.Boolean(
         related="instance_id.manage_stock",
-        string="Gestión de stock activa",
+        string="Active stock management",
         store=False,
     )
 
     woo_min_stock = fields.Float(
-        string="Stock mínimo",
+        string="Minimum stock",
         digits=(16, 0),
-        help="Cantidad mínima de stock antes de marcar agotado en WooCommerce.",
+        help="Minimum stock quantity before marking as out of stock in WooCommerce.",
     )
     woo_max_stock = fields.Float(
-        string="Stock máximo",
+        string="Maximum stock",
         digits=(16, 0),
-        help="Cantidad máxima de stock permitida en WooCommerce.",
+        help="Maximum stock quantity allowed in WooCommerce.",
     )
 
     stock_status = fields.Selection(
         [
-            ("instock", "En stock"),
-            ("outofstock", "Agotado"),
-            ("onbackorder", "Bajo pedido"),
+            ("instock", "In stock"),
+            ("outofstock", "Out of stock"),
+            ("onbackorder", "On backorder"),
         ],
-        string="Estado de stock",
-        help="Estado de disponibilidad que se mostrará en la tienda WooCommerce.",
+        string="Stock status",
+        help="Availability status shown in the WooCommerce store.",
     )
 
     stock_quantity = fields.Float(
-        string="Cantidad en stock", digits=(16, 0), help="Cantidad de stock disponible."
+        string="Quantity in stock", digits=(16, 0), help="Available stock quantity."
     )
 
-    # ── Vínculo con Odoo ───────────────────────────────────────────────────────
+    # ── Link with Odoo ───────────────────────────────────────────────────────
 
     product_tmpl_id = fields.Many2one(
         "product.template",
-        string="Producto en Odoo",
+        string="Product in Odoo",
         ondelete="set null",
         index=True,
-        help="Producto de Odoo vinculado a este registro de WooCommerce. "
-        "Vacío = sin vincular.",
+        help="Odoo product linked to this WooCommerce record. " "Empty = not linked.",
     )
     link_state = fields.Selection(
         [
-            ("linked", "Vinculado"),
-            ("unlinked", "Sin vincular"),
+            ("linked", "Linked"),
+            ("unlinked", "Unlinked"),
         ],
-        string="Estado de vínculo",
+        string="Link status",
         compute="_compute_link_state",
         store=True,
         index=True,
     )
 
-    # ── Imagen ────────────────────────────────────────────────────────────────
+    # ── Image ─────────────────────────────────────────────────────────────────
 
     woo_image = fields.Binary(
-        string="Imagen",
+        string="Image",
         attachment=True,
-        help="Imagen del producto. Legado: ya no se usa para mostrar ni sincronizar.",
+        help="Product image. Legacy: no longer used for display or sync.",
     )
     woo_image_src = fields.Char(
-        string="URL imagen en WC",
+        string="Image URL in WC",
         readonly=True,
-        help="URL de la imagen publicada actualmente en WooCommerce.",
+        help="URL of the image currently published in WooCommerce.",
     )
     woo_image_id = fields.Integer(
-        string="ID imagen en WC",
+        string="Image ID in WC",
         readonly=True,
-        help="ID del media en la biblioteca de WordPress.",
+        help="Media ID in the WordPress Media Library.",
     )
     woo_image_url_input = fields.Char(
-        string="Nueva URL de imagen",
-        help="Pega aquí la URL de la imagen que quieres enviar a WooCommerce. "
-        "WooCommerce la descargará directamente desde esa URL. "
-        "No se almacena imagen en Odoo.",
+        string="New image URL",
+        help="Paste here the URL of the image you want to send to WooCommerce. "
+        "WooCommerce will download it directly from that URL. "
+        "No image is stored in Odoo.",
     )
     woo_image_preview = fields.Html(
-        string="Imagen actual",
+        string="Current image",
         compute="_compute_woo_image_preview",
         sanitize=False,
         store=False,
     )
 
-    # ── Categorías y marcas ────────────────────────────────────────────────────
+    # ── Categories and brands ───────────────────────────────────────────────
 
     woo_category_ids = fields.Many2many(
         "woo.category",
-        string="Categorías WooCommerce",
+        string="WooCommerce Categories",
         domain="[('instance_id', '=', instance_id)]",
-        help="Categorías de producto en WooCommerce. "
-        "Respeta jerarquía padre/hijo. Solo se listan las de la instancia.",
+        help="WooCommerce product categories. "
+        "Respects parent/child hierarchy. Only those from the instance are listed.",
     )
     woo_brand_ids = fields.Many2many(
         "woo.brand",
@@ -175,22 +174,22 @@ class WooProduct(models.Model):
         help="Marcas del producto en WooCommerce (requiere plugin de marcas en WC).",
     )
 
-    # ── Auditoría ──────────────────────────────────────────────────────────────
+    # ── Audit ────────────────────────────────────────────────────────────────
 
-    last_sync_date = fields.Datetime(string="Última sincronización", readonly=True)
+    last_sync_date = fields.Datetime(string="Last sync", readonly=True)
 
     _sql_constraints = (
         []
-    )  # La unicidad se valida en Python para permitir woo_id=0 provisional
+    )  # Uniqueness is validated in Python to allow provisional woo_id=0
 
     def init(self):
-        """Elimina la restricción SQL legada para permitir múltiples registros pendientes (woo_id=0)."""
+        """Removes the legacy SQL constraint to allow multiple pending records (woo_id=0)."""
         super().init()
         self._cr.execute(
             "ALTER TABLE woo_product DROP CONSTRAINT IF EXISTS woo_product_woo_id_instance_unique"
         )
 
-    # ── Computed ───────────────────────────────────────────────────────────────
+    # ── Computed ────────────────────────────────────────────────────────────────
 
     @api.depends("product_tmpl_id")
     def _compute_link_state(self):
@@ -228,8 +227,8 @@ class WooProduct(models.Model):
             if rec.instance_id and rec.instance_id.state != "connected":
                 raise ValidationError(
                     _(
-                        "La instancia '%s' no está conectada. "
-                        "Completa la configuración y verifica la conexión antes de crear productos."
+                        "Instance '%s' is not connected. "
+                        "Complete the configuration and verify the connection before creating products."
                     )
                     % rec.instance_id.name
                 )
@@ -249,14 +248,14 @@ class WooProduct(models.Model):
                 if duplicate:
                     raise ValidationError(
                         _(
-                            "El producto WooCommerce (ID=%s) ya existe para la instancia '%s'."
+                            "WooCommerce product (ID=%s) already exists for instance '%s'."
                         )
                         % (rec.woo_id, rec.instance_id.name)
                     )
 
     @api.onchange("instance_id", "product_tmpl_id")
     def _onchange_prefill_from_template(self):
-        """Auto-completa nombre, SKU y precio cuando se selecciona el producto Odoo."""
+        """Auto-fills name, SKU and price when the Odoo product is selected."""
         if self.product_tmpl_id and not self.woo_id:
             if not self.woo_name:
                 self.woo_name = self.product_tmpl_id.name
@@ -276,27 +275,27 @@ class WooProduct(models.Model):
 
     def _build_categories_payload(self):
         """
-        Devuelve la lista de categorías en el formato que espera la API de WooCommerce.
+        Returns the list of categories in the format expected by the WooCommerce API.
 
-        WooCommerce espera: ``[{"id": 157}, {"id": 89}]``
-        Solo se incluyen categorías que ya tienen ``woo_id`` asignado.
+        WooCommerce expects: ``[{"id": 157}, {"id": 89}]``
+        Only categories that already have a ``woo_id`` are included.
         """
         return [{"id": cat.woo_id} for cat in self.woo_category_ids if cat.woo_id]
 
     def _build_brands_payload(self):
         """
-        Devuelve la lista de marcas en el formato que espera la API de WooCommerce.
+        Returns the list of brands in the format expected by the WooCommerce API.
 
-        WooCommerce espera: ``[{"id": 121880}]``
-        Solo se incluyen marcas que ya tienen ``woo_id`` asignado.
+        WooCommerce expects: ``[{"id": 121880}]``
+        Only brands that already have a ``woo_id`` are included.
         """
         return [{"id": brand.woo_id} for brand in self.woo_brand_ids if brand.woo_id]
 
     def _upload_image_to_wp(self):
-        """Sube la imagen binaria al Media Library de WordPress vía woo.service.
+        """Uploads the binary image to the WordPress Media Library via woo.service.
 
         Returns:
-            tuple(int|None, str): (media_id, src_url) o (None, '') si falla.
+            tuple(int|None, str): (media_id, src_url) or (None, '') if it fails.
         """
         self.ensure_one()
         if not self.woo_image:
@@ -307,15 +306,15 @@ class WooProduct(models.Model):
             product_ref=self.woo_id or "new",
         )
 
-    # ── Acciones ───────────────────────────────────────────────────────────────
+    # ── Actions ────────────────────────────────────────────────────────────────
 
     def action_link_manually(self):
-        """Abre wizard para vincular manualmente este registro a un producto Odoo."""
+        """Opens wizard to manually link this record to an Odoo product."""
         self.ensure_one()
         wizard = self.env["woo.link.wizard"].create({"woo_product_id": self.id})
         return {
             "type": "ir.actions.act_window",
-            "name": f"Vincular '{self.woo_name}' a producto Odoo",
+            "name": f"Link '{self.woo_name}' to Odoo product",
             "res_model": "woo.link.wizard",
             "res_id": wizard.id,
             "view_mode": "form",
@@ -323,34 +322,34 @@ class WooProduct(models.Model):
         }
 
     def action_unlink(self):
-        """Desvincula este registro de su producto Odoo."""
+        """Unlinks this record from its Odoo product."""
         self.product_tmpl_id = False
         return {
             "type": "ir.actions.client",
             "tag": "display_notification",
             "params": {
-                "title": "Desvinculado",
-                "message": f"'{self.woo_name}' ya no está vinculado a ningún producto Odoo.",
+                "title": "Unlinked",
+                "message": f"'{self.woo_name}' is no longer linked to any Odoo product.",
                 "type": "warning",
                 "sticky": False,
             },
         }
 
     def action_create_in_wc(self):
-        """Crea el producto en WooCommerce y guarda el woo_id retornado."""
+        """Creates the product in WooCommerce and saves the returned woo_id."""
         self.ensure_one()
         if self.woo_id:
             raise UserError(
-                _("Este producto ya existe en WooCommerce (ID: %s).") % self.woo_id
+                _("This product already exists in WooCommerce (ID: %s).") % self.woo_id
             )
         if not self.woo_name:
-            raise UserError(_("Debes ingresar el nombre del producto."))
+            raise UserError(_("You must enter the product name."))
         if not self.instance_id:
-            raise UserError(_("Debes seleccionar una instancia WooCommerce."))
+            raise UserError(_("You must select a WooCommerce instance."))
 
         svc = self.env["woo.service"]
 
-        # Calcular precio: manual > pricelist de instancia > list_price
+        # Calculate price: manual > instance pricelist > list_price
         price = self.woo_price_input
         if not price and self.product_tmpl_id:
             if self.instance_id.pricelist_id:
@@ -375,19 +374,19 @@ class WooProduct(models.Model):
             "description": description,
         }
 
-        # Enviar imagen por URL si se proporcionó (sin guardar binario en Odoo)
+        # Send image by URL if provided (without saving binary in Odoo)
         image_vals = {}
         if self.woo_image_url_input:
             payload["images"] = [{"src": self.woo_image_url_input}]
         else:
             payload["images"] = []
 
-        # Categorías — respetando jerarquía padre/hijo de WooCommerce
+        # Categories — respecting WooCommerce parent/child hierarchy
         categories_payload = self._build_categories_payload()
         if categories_payload:
             payload["categories"] = categories_payload
 
-        # Marcas — requiere plugin de marcas en WooCommerce
+        # Brands — requires brands plugin in WooCommerce
         brands_payload = self._build_brands_payload()
         if brands_payload:
             payload["brands"] = brands_payload
@@ -395,7 +394,7 @@ class WooProduct(models.Model):
         wc_response = svc.create_product(self.instance_id, payload)
 
         if not wc_response or not wc_response.get("id"):
-            raise UserError(_("No se recibió respuesta válida de WooCommerce."))
+            raise UserError(_("No valid response received from WooCommerce."))
 
         write_vals = {
             "woo_id": wc_response["id"],
@@ -408,18 +407,18 @@ class WooProduct(models.Model):
             "last_sync_date": fields.Datetime.now(),
         }
 
-        # Stock de WooCommerce
+        # WooCommerce stock
         if self.instance_manage_stock:
             write_vals["stock_quantity"] = wc_response.get("stock_quantity") or 0
             write_vals["min_quantity"] = wc_response.get("woo_min_stock") or 0
             write_vals["max_quantity"] = wc_response.get("woo_max_stock") or 0
 
-        # Capturar URL de imagen devuelta por WooCommerce (sin guardar binario)
+        # Capture image URL returned by WooCommerce (without saving binary)
         wc_images = wc_response.get("images", [])
         if wc_images:
             write_vals["woo_image_src"] = wc_images[0].get("src", "")
             write_vals["woo_image_id"] = wc_images[0].get("id", 0)
-        # Limpiar el campo de URL de entrada tras enviar
+        # Clear input URL field after sending
         if self.woo_image_url_input:
             write_vals["woo_image_url_input"] = False
         write_vals.update(image_vals)
@@ -428,8 +427,8 @@ class WooProduct(models.Model):
             "type": "ir.actions.client",
             "tag": "display_notification",
             "params": {
-                "title": _("Producto creado en WooCommerce"),
-                "message": _("'%s' creado con ID %s en '%s'.")
+                "title": _("Product created in WooCommerce"),
+                "message": _("'%s' created with ID %s in '%s'.")
                 % (self.woo_name, self.woo_id, self.instance_id.name),
                 "type": "success",
                 "sticky": False,
@@ -437,7 +436,7 @@ class WooProduct(models.Model):
         }
 
     def action_update_stock_wc(self):
-        """Envía nombre, stock_status, estado de publicación, precio e imagen a WooCommerce."""
+        """Sends name, stock_status, publish status, price and image to WooCommerce."""
         self.ensure_one()
         svc = self.env["woo.service"]
 
@@ -462,7 +461,7 @@ class WooProduct(models.Model):
         if self.instance_manage_stock and self.woo_status:
             payload["status"] = self.woo_status
 
-        # Calcular y enviar precio
+        # Calculate and send price
         price = self.woo_price_input
         if not price and self.product_tmpl_id:
             if self.instance_id.pricelist_id:
@@ -476,17 +475,17 @@ class WooProduct(models.Model):
         if price:
             payload["regular_price"] = str(round(price, 4))
 
-        # Enviar imagen por URL si se proporcionó (sin guardar binario en Odoo)
+        # Send image by URL if provided (without saving binary in Odoo)
         image_vals = {}
         if self.woo_image_url_input:
             payload["images"] = [{"src": self.woo_image_url_input}]
 
-        # Categorías — respetando jerarquía padre/hijo de WooCommerce
+        # Categories — respecting WooCommerce parent/child hierarchy
         categories_payload = self._build_categories_payload()
         if categories_payload:
             payload["categories"] = categories_payload
 
-        # Marcas — requiere plugin de marcas en WooCommerce
+        # Brands — requires brands plugin in WooCommerce
         brands_payload = self._build_brands_payload()
         if brands_payload:
             payload["brands"] = brands_payload
@@ -498,7 +497,7 @@ class WooProduct(models.Model):
                 "type": "ir.actions.client",
                 "tag": "display_notification",
                 "params": {
-                    "title": "Error al actualizar en WooCommerce",
+                    "title": "Error updating in WooCommerce",
                     "message": str(e),
                     "type": "danger",
                     "sticky": True,
@@ -508,7 +507,7 @@ class WooProduct(models.Model):
         vals = {"last_sync_date": fields.Datetime.now()}
         if price:
             vals["woo_price"] = price
-        # Capturar stock_quantity devuelto por WooCommerce
+        # Capture stock_quantity returned by WooCommerce
         if wc_response and isinstance(wc_response, dict):
             wc_qty = wc_response.get("stock_quantity")
             if wc_qty is not None:
@@ -517,7 +516,7 @@ class WooProduct(models.Model):
             if wc_stock_status:
                 vals["stock_status"] = wc_stock_status
         vals.update(image_vals)
-        # Capturar URL de imagen devuelta por WooCommerce
+        # Capture image URL returned by WooCommerce
         if wc_response and self.woo_image_url_input:
             wc_images = (
                 wc_response.get("images", []) if isinstance(wc_response, dict) else []
@@ -525,7 +524,7 @@ class WooProduct(models.Model):
             if wc_images:
                 vals["woo_image_src"] = wc_images[0].get("src", "")
                 vals["woo_image_id"] = wc_images[0].get("id", 0)
-        # Limpiar el campo de URL de entrada tras enviar
+        # Clear input URL field after sending
         if self.woo_image_url_input:
             vals["woo_image_url_input"] = False
         self.write(vals)
@@ -533,8 +532,8 @@ class WooProduct(models.Model):
             "type": "ir.actions.client",
             "tag": "display_notification",
             "params": {
-                "title": "Actualizado en WooCommerce",
-                "message": f"'{self.woo_name}' actualizado correctamente en '{self.instance_id.name}'.",
+                "title": "Updated in WooCommerce",
+                "message": f"'{self.woo_name}' updated successfully in '{self.instance_id.name}'.",
                 "type": "success",
                 "sticky": False,
                 "next": {"type": "ir.actions.act_window_close"},

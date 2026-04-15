@@ -21,31 +21,31 @@
 
                             <!-- ⋮ Dropdown menu (top-right) -->
                             <div class="o_dropdown_kanban dropdown" t-if="record.state.raw_value == 'connected'">
-                                <a role="button" class="dropdown-toggle o-no-caret btn" data-bs-toggle="dropdown" href="#" aria-label="Dropdown menu" title="Opciones">
+                                <a role="button" class="dropdown-toggle o-no-caret btn" data-bs-toggle="dropdown" href="#" aria-label="Dropdown menu" title="Options">
                                     <span class="fa fa-ellipsis-v"/>
                                 </a>
                                 <div class="dropdown-menu" data-bs-strategy="fixed" role="menu">
 
                                     <a role="menuitem" type="object" name="action_view_woo_products" class="dropdown-item">
                                         <i class="fa fa-cube me-2"/>
-Productos WC
+WC Products
                                     </a>
                                     <a role="menuitem" type="object" name="action_sync_orders" class="dropdown-item">
                                         <i class="fa fa-refresh me-2"/>
-Sincronizar órdenes
+Sync orders
                                     </a>
                                     <a role="menuitem" type="object" name="action_sync_products" class="dropdown-item">
                                         <i class="fa fa-download me-2"/>
-Sincronizar productos
+Sync products
                                     </a>
                                     <div class="dropdown-divider"/>
                                     <a role="menuitem" type="object" name="action_test_connection" class="dropdown-item">
                                         <i class="fa fa-plug me-2"/>
-Reconectar
+Reconnect
                                     </a>
                                     <a role="menuitem" type="edit" class="dropdown-item" groups="base.group_no_one">
                                         <i class="fa fa-cog me-2"/>
-                                        Configuración
+                                        Settings
                                     </a>
                                 </div>
                             </div>
@@ -57,7 +57,7 @@ Reconectar
                                     <!-- Status badge -->
                                     <div class="woo_card_header_row">
                                         <div class="woo_card_icon" t-attf-style="background: {{record.color.raw_value or '#6f42c1'}}18; color: {{record.color.raw_value or '#6f42c1'}};">
-                                            <i class="fa fa-shopping-bag" title="Instancia WooCommerce"/>
+                                            <i class="fa fa-shopping-bag" title="WooCommerce Instance"/>
                                         </div>
                                         <span t-attf-class="badge {{record.state.raw_value == 'connected' and 'text-bg-success' or (record.state.raw_value == 'error' and 'text-bg-danger' or 'text-bg-secondary')}} woo_state_badge">
                                             <t t-esc="record.state.value"/>

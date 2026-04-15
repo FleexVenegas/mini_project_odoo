@@ -1,10 +1,10 @@
 """
-Mixin para product.template que añade la integración con WooCommerce.
+Mixin for product.template that adds WooCommerce integration.
 
-Agrega:
-  - woo_mapping_ids  : listado de dónde está publicado este producto en WooCommerce.
-  - woo_published_count: número de instancias WC en las que está publicado.
-  - action_publish_to_woocommerce(): abre el wizard de publicación selectiva.
+Adds:
+  - woo_mapping_ids  : list of where this product is published in WooCommerce.
+  - woo_published_count: number of WC instances in which it is published.
+  - action_publish_to_woocommerce(): opens the selective publish wizard.
 """
 
 from odoo import models, fields, api
@@ -13,23 +13,23 @@ from odoo import models, fields, api
 class ProductTemplateWooMixin(models.Model):
     _inherit = "product.template"
 
-    # ── Relación inversa con los mapeos WooCommerce ────────────────────────────
+    # ── Inverse relation with WooCommerce mappings ──────────────────────────────
 
     woo_mapping_ids = fields.One2many(
         "woo.product",
         "product_tmpl_id",
-        string="Publicaciones en WooCommerce",
+        string="WooCommerce Publications",
         readonly=True,
     )
     woo_published_count = fields.Integer(
-        string="# Instancias WC",
+        string="# WC Instances",
         compute="_compute_woo_published_count",
-        help="Número de instancias WooCommerce en las que está publicado este producto.",
+        help="Number of WooCommerce instances in which this product is published.",
     )
     woo_allow_publish = fields.Boolean(
-        string="Publicación en WC habilitada",
+        string="WC publishing enabled",
         compute="_compute_woo_allow_publish",
-        help="True si al menos una instancia WooCommerce tiene 'Permitir creación de productos' activo.",
+        help="True if at least one WooCommerce instance has 'Allow product creation' active.",
     )
 
     # ── Computed ───────────────────────────────────────────────────────────────
@@ -41,10 +41,10 @@ class ProductTemplateWooMixin(models.Model):
 
     def _compute_woo_allow_publish(self):
         """
-        True si existe al menos una instancia con:
-          - allow_create_products activo
-          - El usuario actual en who_can_publish (si la lista no está vacía)
-        Si who_can_publish está vacío en todas las instancias activas → False.
+        True if there is at least one instance with:
+          - allow_create_products active
+          - the current user in who_can_publish (if the list is not empty)
+        If who_can_publish is empty in all active instances → False.
         """
         user = self.env.user
         has_access = bool(
@@ -59,14 +59,14 @@ class ProductTemplateWooMixin(models.Model):
         for tmpl in self:
             tmpl.woo_allow_publish = has_access
 
-    # ── Acciones ───────────────────────────────────────────────────────────────
+    # ── Actions ────────────────────────────────────────────────────────────────
 
     def action_publish_to_woocommerce(self):
-        """Abre el wizard para publicar este producto en una instancia WooCommerce."""
+        """Opens the wizard to publish this product to a WooCommerce instance."""
         self.ensure_one()
         return {
             "type": "ir.actions.act_window",
-            "name": "Publicar en WooCommerce",
+            "name": "Publish to WooCommerce",
             "res_model": "woo.publish.wizard",
             "view_mode": "form",
             "target": "new",

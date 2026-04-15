@@ -81,14 +81,14 @@ class WooInstance(models.Model):
         help="Number of completed orders from this instance",
     )
     woo_product_count = fields.Integer(
-        string="Productos WC",
+        string="WC Products",
         compute="_compute_statistics",
-        help="Número de productos importados desde esta instancia de WooCommerce",
+        help="Number of products imported from this WooCommerce instance",
     )
     woo_product_linked_count = fields.Integer(
-        string="Productos Vinculados",
+        string="Linked Products",
         compute="_compute_statistics",
-        help="Productos WooCommerce vinculados a un producto de Odoo",
+        help="WooCommerce products linked to an Odoo product",
     )
 
     # Technical
@@ -448,7 +448,7 @@ class WooInstance(models.Model):
         }
 
     def action_sync_orders(self):
-        """Abre el wizard de confirmación antes de importar productos."""
+        """Opens the confirmation wizard before syncing orders."""
 
         self.ensure_one()
 
@@ -457,8 +457,8 @@ class WooInstance(models.Model):
                 "type": "ir.actions.client",
                 "tag": "display_notification",
                 "params": {
-                    "title": _("No conectado"),
-                    "message": _("La instancia '%s' no está conectada.") % self.name,
+                    "title": _("Not connected"),
+                    "message": _("Instance '%s' is not connected.") % self.name,
                     "type": "warning",
                     "sticky": False,
                 },
@@ -467,11 +467,11 @@ class WooInstance(models.Model):
         return self.env["confirmation.wizard"].create_confirmation(
             model_name="woo.instance",
             method_name="_do_sync_orders",
-            title=_("Sincronizar órdenes desde WooCommerce?"),
+            title=_("Sync orders from WooCommerce?"),
             description=(
-                f"Esta acción sincronizará los pedidos de <b>{self.name}</b> "
-                "desde WooCommerce a Odoo. Se crearán/actualizarán pedidos "
-                "según la configuración de sincronización."
+                f"This action will sync orders from <b>{self.name}</b> "
+                "from WooCommerce into Odoo. Orders will be created/updated "
+                "according to the sync configuration."
             ),
             record_id=self.id,
         )
@@ -501,11 +501,11 @@ class WooInstance(models.Model):
             .action_sync()
         )
 
-        # Inyectar redirección a los pedidos de esta instancia tras la notificación
+        # Inject redirect to this instance's orders after the notification
         if result and result.get("type") == "ir.actions.client":
             result.setdefault("params", {})["next"] = {
                 "type": "ir.actions.act_window",
-                "name": _("Pedidos WooCommerce — %s") % self.name,
+                "name": _("WooCommerce Orders — %s") % self.name,
                 "res_model": "odoo.wp.sync",
                 "view_mode": "tree,form",
                 "views": [[False, "tree"], [False, "form"]],
@@ -821,7 +821,7 @@ class WooInstance(models.Model):
                 )
 
     def action_sync_products(self):
-        """Abre el wizard de confirmación antes de importar productos."""
+        """Opens the confirmation wizard before importing products."""
         self.ensure_one()
 
         if self.state != "connected":
@@ -830,7 +830,7 @@ class WooInstance(models.Model):
                 "tag": "display_notification",
                 "params": {
                     "title": _("No conectado"),
-                    "message": _("La instancia '%s' no está conectada.") % self.name,
+                    "message": _("Instance '%s' is not connected.") % self.name,
                     "type": "warning",
                     "sticky": False,
                 },
@@ -839,19 +839,19 @@ class WooInstance(models.Model):
         return self.env["confirmation.wizard"].create_confirmation(
             model_name="woo.instance",
             method_name="_do_sync_products",
-            title=_("Sincronizar productos desde WooCommerce?"),
+            title=_("Sync products from WooCommerce?"),
             description=(
-                f"Esta acción descargará todos los productos de <b>{self.name}</b> "
-                "desde WooCommerce y los vinculará automáticamente a los productos "
-                "de Odoo que coincidan por SKU.<br/><br/>"
-                "Los productos ya vinculados manualmente no serán sobreescritos."
+                f"This action will download all products from <b>{self.name}</b> "
+                "from WooCommerce and automatically link them to Odoo products "
+                "that match by SKU.<br/><br/>"
+                "Products already linked manually will not be overwritten."
             ),
             record_id=self.id,
             dialog_size="medium",
         )
 
     def _do_sync_products(self):
-        """Ejecuta la importación real de productos (llamado por el wizard de confirmación)."""
+        """Runs the actual product import (called by the confirmation wizard)."""
         self.ensure_one()
 
         try:
@@ -861,7 +861,7 @@ class WooInstance(models.Model):
                 "type": "ir.actions.client",
                 "tag": "display_notification",
                 "params": {
-                    "title": _("Error al importar productos"),
+                    "title": _("Error importing products"),
                     "message": str(e),
                     "type": "danger",
                     "sticky": True,
@@ -881,13 +881,13 @@ class WooInstance(models.Model):
             "type": "ir.actions.client",
             "tag": "display_notification",
             "params": {
-                "title": _("Importación completada"),
+                "title": _("Import completed"),
                 "message": message,
                 "type": "success" if not stats["errors"] else "warning",
                 "sticky": True,
                 "next": {
                     "type": "ir.actions.act_window",
-                    "name": _("Productos WooCommerce — %s") % self.name,
+                    "name": _("WooCommerce Products — %s") % self.name,
                     "res_model": "woo.product",
                     "view_mode": "tree,form",
                     "views": [[False, "tree"], [False, "form"]],

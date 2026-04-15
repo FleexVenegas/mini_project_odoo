@@ -1,6 +1,6 @@
 """
-Helper class para creación de pedidos de venta desde WooCommerce.
-Este archivo separa la lógica de negocio de creación de pedidos.
+Helper class for creating sale orders from WooCommerce.
+This file separates the business logic for order creation.
 """
 
 from odoo import models
@@ -13,8 +13,8 @@ _logger = logging.getLogger(__name__)
 
 class WooSaleOrderHelper(models.AbstractModel):
     """
-    Helper para manejar la creación de pedidos de venta desde WooCommerce.
-    Se usa como mixin/helper - no crea tabla en BD.
+    Helper for managing the creation of sale orders from WooCommerce.
+    Used as a mixin/helper - does not create a DB table.
     """
 
     _name = "woo.sale.order.helper"
@@ -30,11 +30,11 @@ class WooSaleOrderHelper(models.AbstractModel):
         Returns:
             dict: {
                 'order': sale.order - El pedido creado o existente,
-                'created': bool - True si fue creado, False si ya existía
+                'created': bool - True if created, False if it already existed
             }
 
         Raises:
-            Exception: Si hay error en la creación
+            Exception: If there is an error in creation
         """
 
         SaleOrder = self.env["sale.order"]
@@ -51,7 +51,7 @@ class WooSaleOrderHelper(models.AbstractModel):
                 existing.name,
                 woo_order_record.order_number,
             )
-            # Asegurar que el vínculo esté actualizado aunque el pedido ya existiera
+            # Ensure the link is updated even though the order already existed
             if not woo_order_record.sale_order_id:
                 woo_order_record.sale_order_id = existing.id
             return {"order": existing, "created": False}
@@ -60,7 +60,7 @@ class WooSaleOrderHelper(models.AbstractModel):
         partner = self.env["woo.partner"].create_partner_from_woo_data(woo_order_record)
 
         # Crear pedido de venta.
-        # _prepare_sale_order_vals devuelve también si hubo productos sin SKU en Odoo.
+        # _prepare_sale_order_vals also returns whether there were products without SKU in Odoo.
         order_vals, has_missing_products = self._prepare_sale_order_vals(
             woo_order_record, partner
         )
@@ -70,7 +70,7 @@ class WooSaleOrderHelper(models.AbstractModel):
         # Vincular el pedido de vuelta al registro de WooCommerce
         woo_order_record.sale_order_id = order.id
 
-        # utilizar secuencia si está configurada
+        # use sequence if configured
         if not instance.use_sequence:
             prefix = instance.prefix_sequence or "WC-"
             order.name = f"{prefix}{order.name}"
@@ -78,12 +78,12 @@ class WooSaleOrderHelper(models.AbstractModel):
         # Confirmar pedido SOLO si:
         #   1. La instancia tiene confirm_orders = True
         #   2. Todos los productos se resolvieron por SKU (ninguno faltante)
-        # Si algún SKU no se encontró, el pedido queda como cotización (borrador)
-        # para revisión manual.
+        # If any SKU was not found, the order stays as a quotation (draft)
+        # for manual review.
         if instance.confirm_orders and order.state == "draft":
             if has_missing_products:
                 _logger.info(
-                    "Pedido %s creado como COTIZACIÓN (borrador): uno o más productos "
+                    "Order %s created as QUOTATION (draft): one or more products "
                     "no se encontraron por SKU en WooCommerce Order #%s. "
                     "Revisa las notas del pedido.",
                     order.name,
@@ -95,7 +95,7 @@ class WooSaleOrderHelper(models.AbstractModel):
                 except Exception:
                     _logger.exception(
                         "No se pudo confirmar el pedido %s para WooCommerce Order #%s. "
-                        "El pedido quedó como cotización (borrador).",
+                        "The order remained as a quotation (draft).",
                         order.name,
                         woo_order_record.order_number,
                     )
@@ -174,10 +174,10 @@ class WooSaleOrderHelper(models.AbstractModel):
 
             if instance.taxes_included_price:
                 if not total_tax and not item_taxes:
-                    # Woo no desglosó IVA → precio directo sin impuesto
+                    # Woo did not break down VAT → direct price without tax
                     tax_id = [(5, 0, 0)]
                 elif item_taxes and total_tax:
-                    # Woo sí desglosó IVA → extraer base restando el impuesto
+                    # Woo broke down VAT → extract base by subtracting tax
                     price_unit = price_unit_raw - (total_tax / qty)
 
             order_lines.append(
@@ -204,7 +204,7 @@ class WooSaleOrderHelper(models.AbstractModel):
                 if not shipping_product:
                     shipping_product = self.env["product.product"].create(
                         {
-                            "name": "Costo de Envío WooCommerce",
+                            "name": "WooCommerce Shipping Cost",
                             "default_code": "WC-SHIPPING",
                             "type": "service",
                             "sale_ok": True,
@@ -219,7 +219,7 @@ class WooSaleOrderHelper(models.AbstractModel):
                             "product_id": shipping_product.id,
                             "product_uom_qty": 1,
                             "price_unit": shipping_cost,
-                            "name": f"Costo de Envío - {shipping_product.name}",
+                            "name": f"Shipping Cost - {shipping_product.name}",
                             "tax_id": [(5, 0, 0)],
                         },
                     )

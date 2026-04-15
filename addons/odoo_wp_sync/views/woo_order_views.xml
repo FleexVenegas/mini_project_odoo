@@ -7,25 +7,19 @@
         <field name="arch" type="xml">
             <tree string="WooCommerce Orders" default_order="date_created desc" multi_edit="1">
                 <header>
-                    <button name="action_open_create_sale_order_wizard" type="object" string="Crear Pedidos" class="btn-secondary" icon="fa-plus"/>
+                    <button name="action_open_create_sale_order_wizard" type="object" string="Create Orders" class="btn-secondary" icon="fa-plus"/>
                     <button name="action_wc_mark_processing" type="object" string="→ En Proceso"/>
                     <button name="action_wc_mark_completed" type="object" string="→ Completado"/>
                     <button name="action_wc_mark_on_hold" type="object" string="→ En Espera"/>
                     <button name="action_wc_mark_cancelled" type="object" string="→ Cancelar en WC"/>
                 </header>
                 <field name="instance_id" string="Instance" optional="show"/>
-                <field name="name" string="Pedido"/>
+                <field name="name" string="Order"/>
                 <field name="total" string="Total" widget="monetary" options="{'currency_field': 'currency'}"/>
-                <field name="currency" string="Moneda"/>
-                <field name="date_created" string="Fecha"/>
-                <field name="status" 
-                    string="Estado" 
-                    widget="badge" 
-                    decoration-info="status in ('pending', 'on-hold')" 
-                    decoration-success="status == 'completed'" 
-                    decoration-warning="status == 'processing'" 
-                    decoration-danger="status in ('cancelled', 'refunded', 'failed')"/>
-                <field name="sale_order_id" string="Pedido Odoo" readonly="1"/>
+                <field name="currency" string="Currency"/>
+                <field name="date_created" string="Date"/>
+                <field name="status" string="Status" widget="badge" decoration-info="status in ('pending', 'on-hold')" decoration-success="status == 'completed'" decoration-warning="status == 'processing'" decoration-danger="status in ('cancelled', 'refunded', 'failed')"/>
+                <field name="sale_order_id" string="Odoo Order" readonly="1"/>
             </tree>
         </field>
     </record>
@@ -37,14 +31,14 @@
         <field name="arch" type="xml">
             <form string="WooCommerce Order">
                 <header>
-                    <button name="action_open_create_sale_order_wizard" type="object" string="Crear Pedido en Odoo" class="btn-primary" invisible="sale_order_id" />
+                    <button name="action_open_create_sale_order_wizard" type="object" string="Create Odoo Order" class="btn-primary" invisible="sale_order_id" />
 
-                    <!-- Cambiar estado en WooCommerce -->
-                    <button name="action_wc_mark_processing" type="object" string="Marcar En Proceso" class="btn-secondary" invisible="status == 'processing'"/>
-                    <button name="action_wc_mark_completed" type="object" string="Marcar Completado" class="btn-secondary" invisible="status == 'completed'"/>
-                    <button name="action_wc_mark_on_hold" type="object" string="Poner En Espera" class="btn-secondary" invisible="status in ('on-hold', 'cancelled', 'refunded', 'failed')"/>
-                    <button name="action_wc_mark_cancelled" type="object" string="Cancelar en WC" class="btn-secondary" invisible="status in ('cancelled', 'refunded', 'failed')"/>
-                    <button name="action_wc_mark_refunded" type="object" string="Marcar Reembolsado" class="btn-secondary" invisible="status in ('refunded', 'cancelled', 'failed')"/>
+                    <!-- Change status in WooCommerce -->
+                    <button name="action_wc_mark_processing" type="object" string="Mark as Processing" class="btn-secondary" invisible="status == 'processing'"/>
+                    <button name="action_wc_mark_completed" type="object" string="Mark as Completed" class="btn-secondary" invisible="status == 'completed'"/>
+                    <button name="action_wc_mark_on_hold" type="object" string="Put On Hold" class="btn-secondary" invisible="status in ('on-hold', 'cancelled', 'refunded', 'failed')"/>
+                    <button name="action_wc_mark_cancelled" type="object" string="Cancel in WC" class="btn-secondary" invisible="status in ('cancelled', 'refunded', 'failed')"/>
+                    <button name="action_wc_mark_refunded" type="object" string="Mark as Refunded" class="btn-secondary" invisible="status in ('refunded', 'cancelled', 'failed')"/>
 
                     <field name="status" widget="statusbar" options="{'clickable': '0'}" statusbar_visible="pending,processing,completed"/>
                 </header>
@@ -53,7 +47,7 @@
                     <div name="button_box" class="oe_button_box">
                         <button name="action_open_sale_order" type="object" class="oe_stat_button" icon="fa-shopping-cart" invisible="not sale_order_id">
                             <div class="o_field_widget o_stat_info">
-                                <span class="o_stat_text">Ver Pedido</span>
+                                <span class="o_stat_text">View Order</span>
                                 <field name="sale_order_id" nolabel="1" readonly="1" no_open="0"/>
                             </div>
                         </button>
@@ -65,13 +59,13 @@
                             <div class="col-8">
                                 <label for="order_number" class="oe_edit_only"/>
                                 <h1 class="d-flex align-items-center">
-                                    <span class="me-2">Pedido</span>
-                                    <field name="order_number" readonly="1" class="text-break" placeholder="Número de pedido"/>
+                                    <span class="me-2">Order</span>
+                                    <field name="order_number" readonly="1" class="text-break" placeholder="Order number"/>
                                 </h1>
                             </div>
                             <div class="col-4 text-end">
                                 <div class="d-flex flex-column align-items-end">
-                                    <span class="text-muted" style="font-size: 14px;">Total del Pedido</span>
+                                    <span class="text-muted" style="font-size: 14px;">Order Total</span>
                                     <h1 class="mb-0" style="font-weight: bold; color: #000;">
                                         <field name="total" widget="monetary" options="{'currency_field': 'currency'}" readonly="1" nolabel="1"/>
                                         <field name="currency" invisible="1"/>
@@ -86,24 +80,24 @@
                         <group>
                             <group string="Instance &amp; Customer Info" class="mb-4">
                                 <field name="instance_id" readonly="1"/>
-                                <field name="customer_name" string="Nombre" readonly="1"/>
+                                <field name="customer_name" string="Name" readonly="1"/>
                                 <field name="customer_email" string="Email" widget="email" readonly="1"/>
-                                <field name="customer_phone" string="Teléfono" widget="phone" readonly="1"/>
+                                <field name="customer_phone" string="Phone" widget="phone" readonly="1"/>
                             </group>
-                            <group string="Detalles del Pedido" class="mb-4">
+                            <group string="Order Details" class="mb-4">
                                 <field name="wc_order_id" string="ID WooCommerce" readonly="1"/>
-                                <field name="date_created" string="Fecha de Creación" readonly="1"/>
-                                <field name="payment_method" string="Método de Pago" readonly="1"/>
-                                <field name="created_via" string="Origen" readonly="1"/>
+                                <field name="date_created" string="Creation Date" readonly="1"/>
+                                <field name="payment_method" string="Payment Method" readonly="1"/>
+                                <field name="created_via" string="Source" readonly="1"/>
                             </group>
                         </group>
                     </div>
 
                     <notebook>
                         <!-- Order Items -->
-                        <page string="Productos" name="items">
+                        <page string="Products" name="items">
                             <field name="line_ids" nolabel="1" readonly="1">
-                                <tree string="Líneas del Pedido" create="false" delete="false" edit="false" no_open="true">
+                                <tree string="Order Lines" create="false" delete="false" edit="false" no_open="true">
                                     <field name="name" string="Producto"/>
                                     <field name="sku" string="SKU"/>
                                     <field name="quantity" string="Cantidad"/>
@@ -117,16 +111,16 @@
                         </page>
 
                         <!-- Shipping Information -->
-                        <page string="Dirección de Envío" name="shipping">
+                        <page string="Shipping Address" name="shipping">
 
-                            <field name="shipping_address" nolabel="1" readonly="1" placeholder="La dirección de envío aparecerá aquí..." options="{'resizable': False}"/>
+                            <field name="shipping_address" nolabel="1" readonly="1" placeholder="The shipping address will appear here..." options="{'resizable': False}"/>
 
                         </page>
 
                         <!-- Technical Data -->
-                        <page string="Datos Técnicos" name="technical_data" groups="base.group_no_one">
+                        <page string="Technical Data" name="technical_data" groups="base.group_no_one">
                             <group>
-                                <field name="synced_date" string="Última Sincronización" readonly="1"/>
+                                <field name="synced_date" string="Last Sync" readonly="1"/>
                             </group>
                             <separator string="JSON Completo de WooCommerce"/>
                             <field name="raw_data" nolabel="1" readonly="1" widget="ace" options="{'language': 'json'}" placeholder="Datos en formato JSON..."/>
@@ -137,7 +131,7 @@
         </field>
     </record>
 
-    <!-- Vista de búsqueda (filtros y agrupación) -->
+    <!-- Search view (filters and grouping) -->
     <record id="view_odoo_wp_sync_search" model="ir.ui.view">
         <field name="name">odoo_wp_sync.search</field>
         <field name="model">odoo.wp.sync</field>
@@ -166,7 +160,7 @@
         </field>
     </record>
 
-    <!-- Acción -->
+    <!-- Action -->
     <record id="action_odoo_wp_sync" model="ir.actions.act_window">
         <field name="name">WooCommerce Orders</field>
         <field name="res_model">odoo.wp.sync</field>
@@ -177,15 +171,15 @@
                 No orders synchronized yet
             </p>
             <p>
-                Click on "Sincronizar Ahora" in the menu to import orders from WooCommerce.
+                Click on "Sync Now" in the menu to import orders from WooCommerce.
             </p>
         </field>
     </record>
 
 
-    <!-- Acción para abrir el wizard de confirmación de sincronización -->
+    <!-- Action to open the sync confirmation wizard -->
     <record id="action_server_woo_sync_wizard" model="ir.actions.server">
-        <field name="name">Sincronizar WooCommerce</field>
+        <field name="name">Sync WooCommerce</field>
         <field name="model_id" ref="model_odoo_wp_sync"/>
         <field name="state">code</field>
         <field name="code">
@@ -193,9 +187,9 @@ action = model.action_open_sync_wizard()
         </field>
     </record>
 
-    <!-- Acción de servidor para sincronización desde menú -->
+    <!-- Server action for sync from menu -->
     <record id="action_server_sync_woocommerce" model="ir.actions.server">
-        <field name="name">Sincronizar con WooCommerce</field>
+        <field name="name">Sync with WooCommerce</field>
         <field name="model_id" ref="model_odoo_wp_sync"/>
         <field name="state">code</field>
         <field name="code">

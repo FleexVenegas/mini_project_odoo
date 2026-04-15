@@ -1,13 +1,13 @@
 """
-Modelo de categorías de WooCommerce.
+WooCommerce categories model.
 
-Replica la estructura jerárquica que maneja WooCommerce:
-  - Cada categoría puede tener una categoría padre.
-  - El campo ``complete_name`` muestra la ruta completa: Padre / Hijo.
-  - El campo ``woo_id`` es el ID real en WooCommerce (0 = aún no existe).
+Replicates the hierarchical structure managed by WooCommerce:
+  - Each category can have a parent category.
+  - The ``complete_name`` field shows the full path: Parent / Child.
+  - The ``woo_id`` field is the real ID in WooCommerce (0 = not yet existing).
 
-Una misma categoría (mismo woo_id) puede existir en varias instancias;
-el campo ``instance_id`` la separa por tienda.
+The same category (same woo_id) can exist in multiple instances;
+the ``instance_id`` field separates it by store.
 """
 
 from odoo import models, fields, api
@@ -22,7 +22,7 @@ class WooCategory(models.Model):
 
     instance_id = fields.Many2one(
         "woo.instance",
-        string="Instancia",
+        string="Instance",
         required=True,
         ondelete="cascade",
         index=True,
@@ -31,36 +31,36 @@ class WooCategory(models.Model):
         string="WooCommerce ID",
         index=True,
         default=0,
-        help="ID numérico de la categoría en WooCommerce (0 = no sincronizada aún).",
+        help="Numeric ID of the category in WooCommerce (0 = not yet synced).",
     )
-    name = fields.Char(string="Nombre", required=True)
+    name = fields.Char(string="Name", required=True)
     slug = fields.Char(
-        string="Slug", help="Identificador URL de la categoría en WooCommerce."
+        string="Slug", help="URL identifier of the category in WooCommerce."
     )
 
-    # ── Jerarquía padre / hijo ────────────────────────────────────────────────
+    # ── Parent / child hierarchy ────────────────────────────────────────────────
 
     parent_id = fields.Many2one(
         "woo.category",
-        string="Categoría padre",
+        string="Parent category",
         index=True,
         ondelete="set null",
         domain="[('instance_id', '=', instance_id)]",
-        help="Categoría padre en WooCommerce. Respeta la jerarquía original.",
+        help="Parent category in WooCommerce. Respects the original hierarchy.",
     )
     child_ids = fields.One2many(
         "woo.category",
         "parent_id",
-        string="Subcategorías",
+        string="Subcategories",
     )
     parent_path = fields.Char(index=True, unaccent=False)
 
     complete_name = fields.Char(
-        string="Nombre completo",
+        string="Complete name",
         compute="_compute_complete_name",
         store=True,
         recursive=True,
-        help="Ruta completa: Padre / Hijo / Nieto",
+        help="Full path: Parent / Child / Grandchild",
     )
 
     @api.depends("name", "parent_id.complete_name")

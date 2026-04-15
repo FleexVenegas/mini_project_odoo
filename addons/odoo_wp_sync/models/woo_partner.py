@@ -10,18 +10,16 @@ class WooPartner(models.AbstractModel):
     @api.model
     def create_partner_from_woo_data(self, woo_order_record):
         """
-        Crea o actualiza un partner en Odoo a partir de los datos de WooCommerce.
-        Este método debe ser implementado por el modelo concreto que herede de este abstracto.
-        :param woo_order_record: Registro de odoo.wp.sync con los datos del partner de WooCommerce
-        :return: Registro del partner creado o actualizado en Odoo
+        Creates or updates a partner in Odoo from WooCommerce data.
+        This method must be implemented by the concrete model that inherits from this abstract one.
+        :param woo_order_record: odoo.wp.sync record with the WooCommerce partner data
+        :return: The created or updated partner record in Odoo
         """
 
-        # Usar el cliente por defecto de la instancia si está configurado
+        # Use the instance's default client if configured
         default_client = woo_order_record.instance_id.client_id
         if default_client:
-            _logger.debug(
-                f"Usando cliente por defecto de la instancia: {default_client.name}"
-            )
+            _logger.debug(f"Using instance default client: {default_client.name}")
             return default_client
 
         Partner = self.env["res.partner"]

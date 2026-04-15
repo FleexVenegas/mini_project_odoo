@@ -1,12 +1,12 @@
 """
-Acciones sobre pedidos de WooCommerce desde Odoo.
+Actions on WooCommerce orders from Odoo.
 
-Cada acción pública sigue la misma convención:
-  - Acepta uno o varios registros (self puede ser un recordset).
-  - Devuelve una notificación con resumen de éxitos/errores.
-  - Delega la llamada HTTP a woo.service.
+Each public action follows the same convention:
+  - Accepts one or several records (self can be a recordset).
+  - Returns a notification with a success/error summary.
+  - Delegates HTTP calls to woo.service.
 
-Agregar nuevas acciones aquí mantendrá odoo_wp_sync_models.py limpio.
+Add new actions here to keep odoo_wp_sync_models.py clean.
 """
 
 import logging
@@ -38,10 +38,10 @@ class WooOrderActions(models.Model):
 
     def _wc_update_order_status(self, new_status):
         """
-        Envía a WooCommerce el cambio de estado para cada pedido del recordset.
+        Sends the status change for each order in the recordset to WooCommerce.
 
         Returns:
-            tuple(list[str], list[str]): (éxitos, errores)
+            tuple(list[str], list[str]): (successes, errors)
         """
         svc = self.env["woo.service"]
         successes = []
@@ -72,32 +72,32 @@ class WooOrderActions(models.Model):
 
     @staticmethod
     def _build_status_notification(new_status, successes, errors):
-        """Construye el dict de notificación estándar."""
+        """Builds the standard notification dict."""
         label = _STATUS_LABELS.get(new_status, new_status)
         total = len(successes) + len(errors)
 
         if errors and not successes:
-            title = _("Error al actualizar estado")
+            title = _("Error updating status")
             notif_type = "danger"
             message = "\n".join(errors[:5])
             if len(errors) > 5:
-                message += f"\n… y {len(errors) - 5} error(es) más"
-            # Sin reload — nada cambió
+                message += f"\n… and {len(errors) - 5} more error(s)"
+            # No reload — nothing changed
             next_action = False
         elif errors:
-            title = _("Actualizado con advertencias")
+            title = _("Updated with warnings")
             notif_type = "warning"
             message = (
-                f"✅ {len(successes)} actualizado(s) a '{label}'\n"
-                f"❌ {len(errors)} error(es):\n" + "\n".join(errors[:3])
+                f"✅ {len(successes)} updated to '{label}'\n"
+                f"❌ {len(errors)} error(s):\n" + "\n".join(errors[:3])
             )
             next_action = {"type": "ir.actions.client", "tag": "reload"}
         else:
-            title = _("Estado actualizado")
+            title = _("Status updated")
             notif_type = "success"
             message = (
-                f"✅ {len(successes)} de {total} pedido(s) "
-                f"actualizado(s) a '{label}' en WooCommerce"
+                f"✅ {len(successes)} of {total} order(s) "
+                f"updated to '{label}' in WooCommerce"
             )
             next_action = {"type": "ir.actions.client", "tag": "reload"}
 
@@ -116,15 +116,15 @@ class WooOrderActions(models.Model):
             "params": params,
         }
 
-    # ── Acciones públicas de cambio de estado ──────────────────────────────────
+    # ── Public status-change actions ──────────────────────────────────────────────
 
     def action_wc_mark_completed(self):
-        """Marca el pedido como 'completed' en WooCommerce."""
+        """Marks the order as 'completed' in WooCommerce."""
         successes, errors = self._wc_update_order_status("completed")
         return self._build_status_notification("completed", successes, errors)
 
     def action_wc_mark_processing(self):
-        """Marca el pedido como 'processing' en WooCommerce."""
+        """Marks the order as 'processing' in WooCommerce."""
         successes, errors = self._wc_update_order_status("processing")
         return self._build_status_notification("processing", successes, errors)
 
@@ -149,17 +149,17 @@ class WooOrderActions(models.Model):
         return self._build_status_notification("refunded", successes, errors)
 
     # ── Otras acciones futuras ─────────────────────────────────────────────────
-    # Añadir aquí: notas de pedido, reenvío de correo, actualización de tracking, etc.
+    # Add here: order notes, email resend, tracking update, etc.
 
 
 class StockPickingWooSync(models.Model):
     """
-    Gancho en stock.picking para actualizar automáticamente el estado del
-    pedido en WooCommerce a 'completed' cuando se valida una entrega en Odoo.
+    Hook on stock.picking to automatically update the WooCommerce order status
+    to 'completed' when a delivery is validated in Odoo.
 
-    Sólo actúa cuando:
-      - El picking es de tipo salida ('outgoing').
-      - Está vinculado a un pedido de venta.
+    Only acts when:
+      - The picking is outgoing ('outgoing').
+      - Linked to a sale order.
       - Ese pedido de venta tiene un registro odoo.wp.sync asociado.
       - La instancia WooCommerce tiene update_order_status_wc = True.
     """
@@ -169,7 +169,7 @@ class StockPickingWooSync(models.Model):
     def _action_done(self):
         result = super()._action_done()
 
-        # Solo procesamos albaranes de salida que quedaron 'done'
+        # Only process outgoing deliveries that are 'done'
         outgoing_done = self.filtered(
             lambda p: p.state == "done"
             and p.picking_type_code == "outgoing"

@@ -4,50 +4,50 @@
         <field name="name">woo.publish.wizard.form</field>
         <field name="model">woo.publish.wizard</field>
         <field name="arch" type="xml">
-            <form string="Publicar en WooCommerce">
+            <form string="Publish to WooCommerce">
                 <sheet>
                     <div class="oe_title">
-                        <h1>Publicar producto en WooCommerce</h1>
+                        <h1>Publish product to WooCommerce</h1>
                         <p class="text-muted">
-                            Elija la instancia de destino y configure las opciones
-                            antes de enviar el producto.
+                            Choose the target instance and configure the options
+                            before sending the product.
                         </p>
                     </div>
 
-                    <group string="Producto seleccionado" col="2">
+                    <group string="Selected product" col="2">
                         <field name="product_tmpl_id" invisible="1"/>
                         <field name="product_name" readonly="1"/>
                         <field name="product_sku" readonly="1"/>
                         <field name="product_price" readonly="1" widget="monetary"/>
                     </group>
 
-                    <group string="Configuración de publicación" col="2">
-                        <field name="instance_id" options="{'no_create': True}" placeholder="Seleccionar instancia…"/>
-                        <field name="pricelist_id" readonly="1" string="Lista de precios (instancia)"/>
-                        <field name="pricelist_price" readonly="1" widget="monetary" string="Precio según lista"/>
+                    <group string="Publishing settings" col="2">
+                        <field name="instance_id" options="{'no_create': True}" placeholder="Select instance…"/>
+                        <field name="pricelist_id" readonly="1" string="Pricelist (instance)"/>
+                        <field name="pricelist_price" readonly="1" widget="monetary" string="Price per list"/>
                         <field name="wc_status" widget="radio"/>
-                        <field name="price_override" widget="monetary" placeholder="0 = usar precio de lista de precios"/>
+                        <field name="price_override" widget="monetary" placeholder="0 = use pricelist price"/>
                         <field name="include_taxes_product" invisible="1"/>
-                        <field name="taxes_product" readonly="1" widget="many2many_tags" string="Impuestos a aplicar" invisible="not include_taxes_product"/>
+                        <field name="taxes_product" readonly="1" widget="many2many_tags" string="Taxes to apply" invisible="not include_taxes_product"/>
                     </group>
 
-                    <group string="Descripción del producto">
+                    <group string="Product description">
 
                         <field name="description" />
                     </group>
 
                     <div class="alert alert-info" role="status">
                         <i class="fa fa-info-circle me-1"/>
-                        Si este producto ya existe en la instancia seleccionada,
-                        se actualizará en lugar de crear uno nuevo.<br/>
-                        El precio se tomará de la <strong>lista de precios configurada en la instancia</strong>
-                        (pestaña Sales). Si no hay lista configurada, se usa el precio de lista del producto.
-                        Puedes sobrescribir el precio manualmente en el campo anterior.
+                        If this product already exists in the selected instance,
+                        it will be updated instead of creating a new one.<br/>
+                        The price will be taken from the <strong>pricelist configured in the instance</strong>
+                        (Sales tab). If no pricelist is configured, the product list price is used.
+                        You can override the price manually in the field above.
                 </div>
             </sheet>
             <footer>
-                <button name="action_publish" string="Publicar en WooCommerce" type="object" class="btn-primary" data-hotkey="q"/>
-                <button string="Cancelar" class="btn-secondary" special="cancel"/>
+                <button name="action_publish" string="Publish to WooCommerce" type="object" class="btn-primary" data-hotkey="q"/>
+                <button string="Cancel" class="btn-secondary" special="cancel"/>
             </footer>
         </form>
     </field>

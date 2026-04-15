@@ -6,60 +6,60 @@ class WooInstanceWarehouse(models.Model):
     _inherit = "woo.instance"
     _description = "WooCommerce Instance - Warehouse Settings"
 
-    # ── Almacén ────────────────────────────────────────────────────────────────
+    # ── Warehouse ──────────────────────────────────────────────────────────────────────────
     warehouse_id = fields.Many2one(
         "stock.warehouse",
-        string="Almacén",
-        help="Almacén por defecto para los movimientos de stock de los pedidos sincronizados",
+        string="Warehouse",
+        help="Default warehouse for stock movements from synced orders",
     )
 
     manage_stock = fields.Boolean(
-        string="Administrar stock de productos",
+        string="Manage product stock",
         default=False,
-        help="Si está activo, permite gestionar la cantidad de stock de los productos WooCommerce directamente desde Odoo.",
+        help="If active, allows managing WooCommerce product stock quantities directly from Odoo.",
     )
 
     # update_stock = fields.Boolean(
-    #     string="Actualizar Stock",
+    #     string="Update Stock",
     #     default=False,
-    #     help="Si está activo, se actualizará el stock en WooCommerce al sincronizar los pedidos",
+    #     help="If active, stock will be updated in WooCommerce when syncing orders",
     # )
 
     update_order_status_wc = fields.Boolean(
-        string="Actualizar estado en WooCommerce",
+        string="Update order status in WooCommerce",
         default=False,
-        help="Si está activo, se actualizará el estado del pedido en WooCommerce al sincronizar (por ejemplo, a 'processing' o 'completed' según la configuración de estados)",
+        help="If active, the order status in WooCommerce will be updated during sync (e.g. to 'processing' or 'completed' based on status configuration)",
     )
 
     # min_stock_threshold = fields.Integer(
-    #     string="Umbral de stock mínimo",
+    #     string="Minimum stock threshold",
     #     default=0,
-    #     help="Cantidad mínima de stock para un producto. Si el stock disponible es igual o inferior a este umbral, se marcará como 'agotado' en WooCommerce (si 'Actualizar Stock' está activo).",
+    #     help="Minimum stock quantity for a product. If available stock is equal to or below this threshold, it will be marked as 'out of stock' in WooCommerce (if 'Update Stock' is active).",
     # )
 
     # max_stock_threshold = fields.Integer(
-    #     string="Umbral de stock máximo",
+    #     string="Maximum stock threshold",
     #     default=0,
-    #     help="Cantidad máxima de stock para un producto. Si el stock disponible es igual o superior a este umbral, se marcará como 'en stock' en WooCommerce (si 'Actualizar Stock' está activo).",
+    #     help="Maximum stock quantity for a product. If available stock is equal to or above this threshold, it will be marked as 'in stock' in WooCommerce (if 'Update Stock' is active).",
     # )
 
     # Utilizamos este archivo para los productos
     allow_create_products = fields.Boolean(
-        string="Permitir creación de productos",
+        string="Allow product creation",
         default=False,
-        help="Si está activo, se crearán productos de Odoo a WooCommerce",
+        help="If active, Odoo products can be created in WooCommerce",
     )
 
     who_can_publish = fields.Many2many(
         "res.users",
-        string="Permitir publicación",
-        help="Usuarios que pueden publicar productos en WooCommerce",
+        string="Allow publishing",
+        help="Users allowed to publish products in WooCommerce",
     )
 
     include_taxes_wc_product_sync = fields.Boolean(
-        string="Incluir impuestos en la creación de productos",
+        string="Include taxes when creating products",
         default=False,
-        help="Si está activo, se incluirán los impuestos en la creación de productos a WooCommerce",
+        help="If active, taxes will be included when creating products in WooCommerce",
     )
 
     taxes_product = fields.Many2many(
@@ -67,6 +67,6 @@ class WooInstanceWarehouse(models.Model):
         relation="woo_instance_taxes_product_rel",
         column1="instance_id",
         column2="tax_id",
-        string="Impuestos para productos",
-        help="Impuestos que se asignarán a los productos creados en WooCommerce (si 'Incluir impuestos en la creación de productos' está activo)",
+        string="Product taxes",
+        help="Taxes assigned to products created in WooCommerce (if 'Include taxes when creating products' is active)",
     )

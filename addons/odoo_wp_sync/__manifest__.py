@@ -27,7 +27,7 @@ Odoo WordPress Sync
     "data": [
         # Seguridad
         "security/ir.model.access.csv",
-        # Datos: cron de sincronización automática
+        # Data: automatic sync cron job
         "data/cron_data.xml",
         # woo.instance — action primero (el tree lo referencia con %(xmlid)d)
         "views/woo_instance_action.xml",
@@ -44,7 +44,7 @@ Odoo WordPress Sync
         "views/woo_order_views.xml",
         # Acciones filtradas por instancia activa (Ordenes, Productos, ...)
         "views/woo_instance_filtered_actions.xml",
-        # Menú principal
+        # Main menu
         "views/woo_menu.xml",
         # Wizards
         "views/wizards/woo_confirmation_wizard_views.xml",

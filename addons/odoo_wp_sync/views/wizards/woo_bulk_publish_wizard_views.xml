@@ -4,44 +4,44 @@
         <field name="name">woo.bulk.publish.wizard.form</field>
         <field name="model">woo.bulk.publish.wizard</field>
         <field name="arch" type="xml">
-            <form string="Publicar en WooCommerce">
+            <form string="Publish to WooCommerce">
                 <sheet>
                     <div class="oe_title">
-                        <h1>Publicación masiva en WooCommerce</h1>
+                        <h1>Bulk publish to WooCommerce</h1>
                         <p class="text-muted">
-                            Se publicarán todos los productos seleccionados
-                            en la instancia elegida.
+                            All selected products will be published
+                            to the chosen instance.
                         </p>
                     </div>
 
-                    <group string="Configuración" col="2">
-                        <field name="instance_id" options="{'no_create': True}" placeholder="Seleccionar instancia…"/>
+                    <group string="Settings" col="2">
+                        <field name="instance_id" options="{'no_create': True}" placeholder="Select instance…"/>
                         <field name="wc_status" widget="radio"/>
                         <field name="include_taxes_product" invisible="1"/>
-                        <field name="taxes_product" readonly="1" widget="many2many_tags" string="Impuestos a aplicar" invisible="not include_taxes_product"/>
+                        <field name="taxes_product" readonly="1" widget="many2many_tags" string="Taxes to apply" invisible="not include_taxes_product"/>
                     </group>
 
-                    <group string="Productos a publicar" col="1">
-                        <field name="product_count" readonly="1" string="Total de productos seleccionados"/>
+                    <group string="Products to publish" col="1">
+                        <field name="product_count" readonly="1" string="Total selected products"/>
                         <field name="product_tmpl_ids" readonly="1" nolabel="1">
                             <tree create="false" delete="false" editable="false">
                                 <field name="default_code" string="SKU" optional="show"/>
-                                <field name="name" string="Nombre"/>
-                                <field name="list_price" string="Precio" widget="monetary"/>
-                                <field name="woo_published_count" string="Instancias WC" optional="show"/>
+                                <field name="name" string="Name"/>
+                                <field name="list_price" string="Price" widget="monetary"/>
+                                <field name="woo_published_count" string="WC Instances" optional="show"/>
                             </tree>
                         </field>
                     </group>
 
                     <div class="alert alert-warning mt-2" role="status">
                         <i class="fa fa-exclamation-triangle me-1"/>
-                        Los productos que ya existen en la instancia seleccionada
-                        serán <strong>actualizados</strong>, no duplicados.
+                        Products that already exist in the selected instance
+                        will be <strong>updated</strong>, not duplicated.
                     </div>
                 </sheet>
                 <footer>
-                    <button name="action_bulk_publish" string="Publicar todos" type="object" class="btn-primary" data-hotkey="q"/>
-                    <button string="Cancelar" class="btn-secondary" special="cancel"/>
+                    <button name="action_bulk_publish" string="Publish all" type="object" class="btn-primary" data-hotkey="q"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
                 </footer>
             </form>
         </field>

@@ -1,10 +1,10 @@
 """
-Wizard para publicar selectivamente un producto Odoo en una instancia WooCommerce.
+Wizard to selectively publish an Odoo product to a WooCommerce instance.
 
-El usuario elige:
-  - La instancia WooCommerce de destino.
-  - El estado inicial (borrador / publicado).
-  - Opcionalmente sobreescribe el precio.
+The user chooses:
+  - The target WooCommerce instance.
+  - The initial status (draft / published).
+  - Optionally overrides the price.
 """
 
 from odoo import models, fields, api
@@ -13,68 +13,68 @@ from odoo.exceptions import UserError
 
 class WooPublishWizard(models.TransientModel):
     _name = "woo.publish.wizard"
-    _description = "Publicar producto en WooCommerce"
+    _description = "Publish product to WooCommerce"
 
     product_tmpl_id = fields.Many2one(
         "product.template",
-        string="Producto",
+        string="Product",
         required=True,
         readonly=True,
     )
     product_name = fields.Char(
         related="product_tmpl_id.name",
-        string="Nombre del producto",
+        string="Product name",
         readonly=True,
     )
     product_sku = fields.Char(
         related="product_tmpl_id.default_code",
-        string="Referencia interna (SKU)",
+        string="Internal reference (SKU)",
         readonly=True,
     )
     product_price = fields.Float(
         related="product_tmpl_id.list_price",
-        string="Precio de lista",
+        string="List price",
         readonly=True,
     )
     instance_id = fields.Many2one(
         "woo.instance",
-        string="Instancia WooCommerce",
+        string="WooCommerce Instance",
         required=True,
         domain="[('allow_create_products', '=', True), ('who_can_publish', 'in', [uid])]",
-        help="Solo instancias habilitadas y en las que tienes permiso de publicación.",
+        help="Only enabled instances where you have publishing permission.",
     )
     wc_status = fields.Selection(
         [
-            ("draft", "Borrador"),
-            ("publish", "Publicado"),
+            ("draft", "Draft"),
+            ("publish", "Published"),
         ],
-        string="Estado en WooCommerce",
+        string="WooCommerce Status",
         default="draft",
         required=True,
-        help="'Borrador' crea el producto en WC pero sin publicarlo en la tienda.",
+        help="'Draft' creates the product in WC without publishing it in the store.",
     )
     price_override = fields.Float(
-        string="Sobrescribir precio",
+        string="Override price",
         digits=(16, 4),
-        help="Deja en 0 para usar el precio de la lista de precios configurada en la instancia (o el precio de lista si no hay lista configurada).",
+        help="Leave at 0 to use the price from the pricelist configured in the instance (or the list price if no pricelist is configured).",
     )
     pricelist_id = fields.Many2one(
         related="instance_id.pricelist_id",
-        string="Lista de Precios (Instancia)",
+        string="Pricelist (Instance)",
         readonly=True,
     )
     include_taxes_product = fields.Boolean(
         related="instance_id.include_taxes_wc_product_sync",
-        string="Incluir impuestos",
+        string="Include taxes",
         readonly=True,
     )
     taxes_product = fields.Many2many(
         related="instance_id.taxes_product",
-        string="Impuestos para el producto",
+        string="Product taxes",
         readonly=True,
     )
     pricelist_price = fields.Float(
-        string="Precio según Lista",
+        string="Price per list",
         compute="_compute_pricelist_price",
         digits=(16, 4),
         readonly=True,
@@ -95,13 +95,13 @@ class WooPublishWizard(models.TransientModel):
                 )
 
     description = fields.Text(
-        string="Descripción",
+        string="Description",
         # related="product_tmpl_id.description_sale",
         # readonly=True,
     )
 
     def action_publish(self):
-        """Envía el producto a WooCommerce y cierra el wizard."""
+        """Sends the product to WooCommerce and closes the wizard."""
         self.ensure_one()
 
         self.env["woo.product.sync"].publish_to_wc(
@@ -115,10 +115,10 @@ class WooPublishWizard(models.TransientModel):
             "type": "ir.actions.client",
             "tag": "display_notification",
             "params": {
-                "title": "Publicado en WooCommerce",
+                "title": "Published to WooCommerce",
                 "message": (
-                    f"'{self.product_tmpl_id.name}' fue enviado a "
-                    f"'{self.instance_id.name}' como '{self.wc_status}'."
+                    f"'{self.product_tmpl_id.name}' was sent to "
+                    f"'{self.instance_id.name}' as '{self.wc_status}'."
                 ),
                 "type": "success",
                 "sticky": False,

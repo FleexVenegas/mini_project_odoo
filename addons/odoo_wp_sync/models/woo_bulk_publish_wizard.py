@@ -1,8 +1,8 @@
 """
-Wizard de publicación masiva de productos Odoo → WooCommerce.
+Bulk publish wizard for Odoo products → WooCommerce.
 
-Se abre desde la acción "Publicar en WooCommerce" en la vista árbol de
-product.template. Recibe los IDs seleccionados via active_ids en el contexto.
+Opened from the "Publish to WooCommerce" action in the product.template
+tree view. Receives the selected IDs via active_ids in the context.
 """
 
 import logging
@@ -13,43 +13,43 @@ _logger = logging.getLogger(__name__)
 
 class WooBulkPublishWizard(models.TransientModel):
     _name = "woo.bulk.publish.wizard"
-    _description = "Publicación masiva en WooCommerce"
+    _description = "Bulk publish to WooCommerce"
 
     product_tmpl_ids = fields.Many2many(
         "product.template",
-        string="Productos seleccionados",
+        string="Selected products",
         readonly=True,
     )
     product_count = fields.Integer(
-        string="Total de productos",
+        string="Total products",
         compute="_compute_product_count",
     )
     instance_id = fields.Many2one(
         "woo.instance",
-        string="Instancia WooCommerce",
+        string="WooCommerce Instance",
         required=True,
         domain="[('allow_create_products', '=', True), ('who_can_publish', 'in', [uid])]",
-        help="Solo instancias habilitadas y en las que tienes permiso de publicación.",
+        help="Only enabled instances where you have publishing permission.",
     )
     include_taxes_product = fields.Boolean(
         related="instance_id.include_taxes_wc_product_sync",
-        string="Incluir impuestos",
+        string="Include taxes",
         readonly=True,
     )
     taxes_product = fields.Many2many(
         related="instance_id.taxes_product",
-        string="Impuestos para el producto",
+        string="Product taxes",
         readonly=True,
     )
     wc_status = fields.Selection(
         [
-            ("draft", "Borrador"),
-            ("publish", "Publicado"),
+            ("draft", "Draft"),
+            ("publish", "Published"),
         ],
-        string="Estado en WooCommerce",
+        string="WooCommerce Status",
         default="draft",
         required=True,
-        help="Estado con el que se publicarán todos los productos en WooCommerce.",
+        help="Status with which all products will be published in WooCommerce.",
     )
 
     # ── Defaults ───────────────────────────────────────────────────────────────
@@ -69,10 +69,10 @@ class WooBulkPublishWizard(models.TransientModel):
         for wiz in self:
             wiz.product_count = len(wiz.product_tmpl_ids)
 
-    # ── Acción ─────────────────────────────────────────────────────────────────
+    # ── Action ────────────────────────────────────────────────────────────────
 
     def action_bulk_publish(self):
-        """Publica todos los productos seleccionados en la instancia elegida."""
+        """Publishes all selected products to the chosen instance."""
         self.ensure_one()
         sync = self.env["woo.product.sync"]
         success_count = 0
@@ -95,11 +95,11 @@ class WooBulkPublishWizard(models.TransientModel):
                 errors.append(f"• {tmpl.name}: {e}")
                 _logger.warning("Bulk publish error for '%s': %s", tmpl.name, e)
 
-        title = _("Publicación masiva completada")
+        title = _("Bulk publish completed")
         if errors:
             message = _(
-                "%(ok)d publicados correctamente en '%(instance)s'.\n"
-                "%(fail)d con errores:\n%(errors)s"
+                "%(ok)d published successfully in '%(instance)s'.\n"
+                "%(fail)d with errors:\n%(errors)s"
             ) % {
                 "ok": success_count,
                 "instance": self.instance_id.name,
@@ -109,7 +109,7 @@ class WooBulkPublishWizard(models.TransientModel):
             notif_type = "warning"
         else:
             message = _(
-                "%(ok)d producto(s) publicados correctamente en '%(instance)s'."
+                "%(ok)d product(s) published successfully in '%(instance)s'."
             ) % {"ok": success_count, "instance": self.instance_id.name}
             notif_type = "success"
 

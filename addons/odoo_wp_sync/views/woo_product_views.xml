@@ -3,17 +3,17 @@
 
     <!-- ── Action ─────────────────────────────────────────────────────────── -->
     <record id="action_woo_product" model="ir.actions.act_window">
-        <field name="name">Productos WooCommerce</field>
+        <field name="name">WooCommerce Products</field>
         <field name="res_model">woo.product</field>
         <field name="view_mode">tree,form</field>
         <field name="context">{}</field>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">
-                No hay productos importados todavía
+                No products imported yet
             </p>
             <p>
-                Ve a una instancia WooCommerce y haz clic en
-                <strong>Sincronizar Productos</strong> para importarlos.
+                Go to a WooCommerce instance and click
+                <strong>Sync Products</strong> to import them.
             </p>
         </field>
     </record>
@@ -23,16 +23,16 @@
         <field name="name">woo.product.tree</field>
         <field name="model">woo.product</field>
         <field name="arch" type="xml">
-            <tree string="Productos WooCommerce" default_order="instance_id, woo_id" decoration-muted="link_state == 'unlinked'" decoration-danger="stock_status == 'outofstock'">
-                <field name="instance_id" string="Instancia" optional="show"/>
+            <tree string="WooCommerce Products" default_order="instance_id, woo_id" decoration-muted="link_state == 'unlinked'" decoration-danger="stock_status == 'outofstock'">
+                <field name="instance_id" string="Instance" optional="show"/>
                 <field name="woo_sku" string="SKU" optional="show"/>
-                <field name="woo_name" string="Producto WC"/>
-                <field name="product_tmpl_id" string="Producto Odoo" optional="show"/>
-                <field name="woo_status" string="Publicación" widget="badge" decoration-success="woo_status == 'publish'" decoration-warning="woo_status == 'pending'" decoration-info="woo_status == 'draft'" decoration-muted="woo_status == 'private'"/>
+                <field name="woo_name" string="WC Product"/>
+                <field name="product_tmpl_id" string="Odoo Product" optional="show"/>
+                <field name="woo_status" string="Status" widget="badge" decoration-success="woo_status == 'publish'" decoration-warning="woo_status == 'pending'" decoration-info="woo_status == 'draft'" decoration-muted="woo_status == 'private'"/>
                 <field name="stock_status" string="Estado de stock" widget="badge" decoration-success="stock_status == 'instock'" decoration-warning="stock_status == 'onbackorder'" decoration-danger="stock_status == 'outofstock'"/>
                 <field name="woo_price" string="Precio" optional="show" widget="monetary"/>
-                <field name="link_state" string="Vínculo" widget="badge" decoration-success="link_state == 'linked'" decoration-warning="link_state == 'unlinked'"/>
-                <field name="last_sync_date" string="Últ. sincronización" optional="hide"/>
+                <field name="link_state" string="Link" widget="badge" decoration-success="link_state == 'linked'" decoration-warning="link_state == 'unlinked'"/>
+                <field name="last_sync_date" string="Last sync" optional="hide"/>
                 <!-- Campos auxiliares no visibles, requeridos por decorators -->
                 <field name="woo_id" optional="hide"/>
             </tree>
@@ -44,36 +44,36 @@
         <field name="name">woo.product.form</field>
         <field name="model">woo.product</field>
         <field name="arch" type="xml">
-            <form string="Producto WooCommerce">
+            <form string="WooCommerce Product">
                 <header>
-                    <button name="action_create_in_wc" string="Crear en WooCommerce" type="object" class="btn-primary" invisible="woo_id" confirm="¿Crear este producto en WooCommerce con los datos actuales?"/>
-                    <button name="action_update_stock_wc" string="Sincronizar con WooCommerce" type="object" class="btn-primary" invisible="not woo_id" confirm="¿Enviar nombre, estado, precio, stock e imagen a WooCommerce?"/>
+                    <button name="action_create_in_wc" string="Create in WooCommerce" type="object" class="btn-primary" invisible="woo_id" confirm="Create this product in WooCommerce with current data?"/>
+                    <button name="action_update_stock_wc" string="Sync with WooCommerce" type="object" class="btn-primary" invisible="not woo_id" confirm="Send name, status, price, stock and image to WooCommerce?"/>
                     <field name="woo_status" widget="statusbar" statusbar_visible="draft,pending,publish,private" options="{'clickable': '1'}"/>
                 </header>
                 <sheet>
 
                     <!-- ── Smart buttons ──────────────────────────────────────── -->
                     <div class="oe_button_box" name="button_box">
-                        <button name="action_link_manually" type="object" class="oe_stat_button" icon="fa-link" invisible="product_tmpl_id" title="Vincular a producto Odoo">
+                        <button name="action_link_manually" type="object" class="oe_stat_button" icon="fa-link" invisible="product_tmpl_id" title="Link to Odoo product">
                             <div class="o_field_widget o_stat_info">
-                                <span class="o_stat_text">Vincular</span>
+                                <span class="o_stat_text">Link</span>
                             </div>
                         </button>
-                        <button name="action_unlink" type="object" class="oe_stat_button" icon="fa-chain-broken" invisible="not product_tmpl_id" title="Desvincular de Odoo">
+                        <button name="action_unlink" type="object" class="oe_stat_button" icon="fa-chain-broken" invisible="not product_tmpl_id" title="Unlink from Odoo">
                             <div class="o_field_widget o_stat_info">
-                                <span class="o_stat_text">Desvincular</span>
+                                <span class="o_stat_text">Unlink</span>
                             </div>
                         </button>
                     </div>
 
-                    <!-- ── Cabecera: Imagen + Nombre + Badges ─────────────────── -->
+                    <!-- ── Header: Image + Name + Badges ────────────────── -->
                     <div class="d-flex align-items-start gap-4 mb-4">
                         <div class="flex-shrink-0" invisible="not woo_image_src">
                             <field name="woo_image_preview" nolabel="1"/>
                         </div>
                         <div class="oe_title flex-grow-1">
                             <h1>
-                                <field name="woo_name" placeholder="Nombre del producto"/>
+                                <field name="woo_name" placeholder="Product name"/>
                             </h1>
                             <div class="d-flex flex-wrap align-items-center gap-2 mt-2">
                                 <field name="link_state" widget="badge" decoration-success="link_state == 'linked'" decoration-warning="link_state == 'unlinked'"/>
@@ -85,66 +85,66 @@
                         </div>
                     </div>
 
-                    <!-- ── Sección 1: Identificación ──────────────────────────── -->
+                    <!-- ── Section 1: Identification ─────────────────────────── -->
                     <group>
                         <group string="WooCommerce">
                             <field name="instance_id" readonly="woo_id"/>
                             <field name="woo_sku"/>
                             <field name="woo_type" readonly="woo_id"/>
-                            <field name="woo_permalink" widget="url" string="Ver en tienda" readonly="1" invisible="not woo_permalink"/>
+                            <field name="woo_permalink" widget="url" string="View in store" readonly="1" invisible="not woo_permalink"/>
                         </group>
-                        <group string="Vínculo con Odoo">
+                        <group string="Link with Odoo">
                             <field name="product_tmpl_id" options="{'no_create': True}" domain="[('sale_ok', '=', True)]"/>
                             <field name="last_sync_date" readonly="1"/>
                         </group>
                     </group>
 
-                    <!-- ── Sección 2: Precio ───────────────────────────────────── -->
-                    <group string="Precio">
-                        <group string="Referencia">
-                            <field name="pricelist_id" readonly="1" string="Lista de precios activa"/>
-                            <field name="pricelist_price" readonly="1" widget="monetary" string="Precio según lista"/>
-                            <field name="woo_price" readonly="1" widget="monetary" string="Precio actual en WC" invisible="not woo_id"/>
+                    <!-- ── Section 2: Price ─────────────────────────────────── -->
+                    <group string="Price">
+                        <group string="Reference">
+                            <field name="pricelist_id" readonly="1" string="Active pricelist"/>
+                            <field name="pricelist_price" readonly="1" widget="monetary" string="Price per list"/>
+                            <field name="woo_price" readonly="1" widget="monetary" string="Current WC price" invisible="not woo_id"/>
                         </group>
-                        <group string="Precio a publicar">
-                            <field name="woo_price_input" widget="monetary" string="Precio manual" help="Dejar en 0 para usar el precio de la lista de precios de la instancia."/>
+                        <group string="Price to publish">
+                            <field name="woo_price_input" widget="monetary" string="Manual price" help="Leave at 0 to use the instance pricelist price."/>
                         </group>
                     </group>
 
-                    <!-- ── Sección 3: Stock e Imagen ──────────────────────────── -->
+                    <!-- ── Section 3: Stock and Image ────────────────────────── -->
                     <group>
-                        <group string="Control de stock">
+                        <group string="Stock control">
                             <field name="instance_manage_stock" invisible="1"/>
                             <field name="stock_status" widget="radio"/>
-                            <field name="stock_quantity" string="Cantidad en stock" invisible="not instance_manage_stock" help="Cantidad de stock a enviar a WooCommerce. Activa la gestión de stock automáticamente."/>
-                            <field name="woo_min_stock" string="Stock mínimo" invisible="not instance_manage_stock" help="Cantidad mínima antes de marcar el producto como agotado."/>
-                            <field name="woo_max_stock" string="Stock máximo" invisible="not instance_manage_stock" help="Cantidad máxima de stock a gestionar en WooCommerce."/>
+                            <field name="stock_quantity" string="Quantity in stock" invisible="not instance_manage_stock" help="Stock quantity to send to WooCommerce. Automatically enables stock management."/>
+                            <field name="woo_min_stock" string="Minimum stock" invisible="not instance_manage_stock" help="Minimum quantity before marking the product as out of stock."/>
+                            <field name="woo_max_stock" string="Maximum stock" invisible="not instance_manage_stock" help="Maximum stock quantity to manage in WooCommerce."/>
                         </group>
-                        <group string="Imagen">
-                            <field name="woo_image_src" readonly="1" widget="url" string="Imagen actual" invisible="not woo_image_src"/>
-                            <field name="woo_image_url_input" string="Nueva URL de imagen" placeholder="https://ejemplo.com/imagen.jpg" help="WooCommerce descargará la imagen desde esta URL. No se almacena en Odoo."/>
+                        <group string="Image">
+                            <field name="woo_image_src" readonly="1" widget="url" string="Current image" invisible="not woo_image_src"/>
+                            <field name="woo_image_url_input" string="New image URL" placeholder="https://example.com/image.jpg" help="WooCommerce will download the image from this URL. Not stored in Odoo."/>
                         </group>
                     </group>
 
-                    <!-- ── Sección 4: Categorías y Marcas ────────────────────── -->
+                    <!-- ── Section 4: Categories and Brands ──────────────────── -->
                     <group>
-                        <group string="Categorías WooCommerce">
-                            <field name="woo_category_ids" widget="many2many_tags" options="{'no_create': True}" domain="[('instance_id', '=', instance_id)]" string="Categorías" help="Respeta la jerarquía padre/hijo de WooCommerce."/>
+                        <group string="WooCommerce Categories">
+                            <field name="woo_category_ids" widget="many2many_tags" options="{'no_create': True}" domain="[('instance_id', '=', instance_id)]" string="Categories" help="Respects the parent/child hierarchy of WooCommerce."/>
                         </group>
-                        <group string="Marcas WooCommerce">
-                            <field name="woo_brand_ids" widget="many2many_tags" options="{'no_create': True}" domain="[('instance_id', '=', instance_id)]" string="Marcas" help="Requiere plugin de marcas instalado en WooCommerce."/>
+                        <group string="WooCommerce Brands">
+                            <field name="woo_brand_ids" widget="many2many_tags" options="{'no_create': True}" domain="[('instance_id', '=', instance_id)]" string="Brands" help="Requires the brands plugin installed in WooCommerce."/>
                         </group>
                     </group>
 
-                    <!-- ── Alertas ─────────────────────────────────────────────── -->
+                    <!-- ── Alerts ──────────────────────────────────────────── -->
                     <div class="alert alert-info mt-2" role="status" invisible="not woo_id">
                         <i class="fa fa-info-circle me-1"/>
-                        Modifica los valores y presiona <strong>Sincronizar con WooCommerce</strong> para aplicar los cambios.
+                        Modify the values and press <strong>Sync with WooCommerce</strong> to apply the changes.
                     </div>
                     <div class="alert alert-warning mt-2" role="status" invisible="woo_id">
                         <i class="fa fa-exclamation-triangle me-1"/>
-                        Completa los datos y pulsa <strong>Crear en WooCommerce</strong> para publicar el producto.
-                        El precio se tomará de la <strong>lista de precios de la instancia</strong>, salvo que indiques un precio manual.
+                        Complete the data and click <strong>Create in WooCommerce</strong> to publish the product.
+                        The price will be taken from the <strong>instance pricelist</strong>, unless you specify a manual price.
                     </div>
 
                 </sheet>
@@ -157,31 +157,31 @@
         <field name="name">woo.product.search</field>
         <field name="model">woo.product</field>
         <field name="arch" type="xml">
-            <search string="Buscar Productos WooCommerce">
-                <!-- Búsqueda rápida -->
-                <field name="woo_name" string="Nombre"/>
+            <search string="Search WooCommerce Products">
+                <!-- Quick search -->
+                <field name="woo_name" string="Name"/>
                 <field name="woo_sku" string="SKU"/>
-                <field name="product_tmpl_id" string="Producto Odoo"/>
-                <field name="instance_id" string="Instancia"/>
+                <field name="product_tmpl_id" string="Odoo Product"/>
+                <field name="instance_id" string="Instance"/>
 
-                <!-- Filtros de vínculo -->
-                <filter name="linked" string="Vinculados" domain="[('link_state','=','linked')]"/>
-                <filter name="unlinked" string="Sin vincular" domain="[('link_state','=','unlinked')]"/>
+                <!-- Link filters -->
+                <filter name="linked" string="Linked" domain="[('link_state','=','linked')]"/>
+                <filter name="unlinked" string="Unlinked" domain="[('link_state','=','unlinked')]"/>
                 <separator/>
-                <!-- Filtros de publicación -->
-                <filter name="published" string="Publicados" domain="[('woo_status','=','publish')]"/>
-                <filter name="draft" string="Borradores" domain="[('woo_status','=','draft')]"/>
+                <!-- Status filters -->
+                <filter name="published" string="Published" domain="[('woo_status','=','publish')]"/>
+                <filter name="draft" string="Drafts" domain="[('woo_status','=','draft')]"/>
                 <separator/>
-                <!-- Filtros de stock -->
-                <filter name="instock" string="En stock" domain="[('stock_status','=','instock')]"/>
-                <filter name="outofstock" string="Agotados" domain="[('stock_status','=','outofstock')]"/>
-                <filter name="onbackorder" string="Bajo pedido" domain="[('stock_status','=','onbackorder')]"/>
+                <!-- Stock filters -->
+                <filter name="instock" string="In stock" domain="[('stock_status','=','instock')]"/>
+                <filter name="outofstock" string="Out of stock" domain="[('stock_status','=','outofstock')]"/>
+                <filter name="onbackorder" string="On backorder" domain="[('stock_status','=','onbackorder')]"/>
 
-                <group expand="0" string="Agrupar por">
-                    <filter name="group_instance" string="Instancia" context="{'group_by': 'instance_id'}"/>
-                    <filter name="group_link" string="Vínculo" context="{'group_by': 'link_state'}"/>
-                    <filter name="group_status" string="Publicación" context="{'group_by': 'woo_status'}"/>
-                    <filter name="group_stock" string="Estado stock" context="{'group_by': 'stock_status'}"/>
+                <group expand="0" string="Group By">
+                    <filter name="group_instance" string="Instance" context="{'group_by': 'instance_id'}"/>
+                    <filter name="group_link" string="Link" context="{'group_by': 'link_state'}"/>
+                    <filter name="group_status" string="Status" context="{'group_by': 'woo_status'}"/>
+                    <filter name="group_stock" string="Stock status" context="{'group_by': 'stock_status'}"/>
                 </group>
             </search>
         </field>

@@ -81,7 +81,7 @@ class OdooWpSync(models.Model):
     line_ids = fields.One2many(
         "woo.order.line",
         "order_id",
-        string="Líneas del Pedido",
+        string="Order Lines",
         readonly=True,
     )
 
@@ -110,16 +110,15 @@ class OdooWpSync(models.Model):
                 record.name = f"Order #{record.wc_order_id}"
 
     def action_open_sync_wizard(self):
-        """Abre el wizard de confirmación para sincronizar con WooCommerce"""
+        """Opens the confirmation wizard to sync with WooCommerce"""
         confirmation_wizard = self.env["confirmation.wizard"]
 
-        # Ahora solo necesitas pasar texto plano
-        description = "Esta acción descargará todas las órdenes recientes desde WooCommerce y las importará en Odoo. Este proceso puede tardar unos minutos dependiendo de la cantidad de órdenes."
+        description = "This action will download all recent orders from WooCommerce and import them into Odoo. This process may take a few minutes depending on the number of orders."
 
         return confirmation_wizard.create_confirmation(
             model_name="odoo.wp.sync",
             method_name="action_sync",
-            title="¿Sincronizar con WooCommerce?",
+            title="Sync with WooCommerce?",
             description=description,
             dialog_size="medium",  # Opciones: 'small', 'medium', 'large', 'extra-large'
         )
@@ -386,12 +385,14 @@ class OdooWpSync(models.Model):
                     f"({len(all_candidates)} candidatos)"
                 )
             else:
-                sale_order_line = "\n⚠️ Auto-creación de pedidos: DESACTIVADA (actívala en config. de instancia)"
+                sale_order_line = (
+                    "\n⚠️ Auto-order creation: DISABLED (enable it in instance settings)"
+                )
 
             message = (
-                f"✅ Creadas: {created_count} | ✏️ Actualizadas: {updated_count} | "
-                f"📊 Total: {len(all_orders)} órdenes\n"
-                f"⏱️ Duración: {duration:.2f}s{filter_msg}"
+                f"✅ Created: {created_count} | ✏️ Updated: {updated_count} | "
+                f"📊 Total: {len(all_orders)} orders\n"
+                f"⏱️ Duration: {duration:.2f}s{filter_msg}"
                 f"{sale_order_line}"
             )
 
@@ -400,7 +401,7 @@ class OdooWpSync(models.Model):
                 "type": "ir.actions.client",
                 "tag": "display_notification",
                 "params": {
-                    "title": f"Sincronización exitosa - {instance.name}",
+                    "title": f"Sync successful - {instance.name}",
                     "message": message,
                     "type": "success",
                     "sticky": False,
@@ -422,13 +423,13 @@ class OdooWpSync(models.Model):
                     sync_type=sync_type,
                 )
 
-            _logger.error(f"Error en sincronización: {error_msg}", exc_info=True)
+            _logger.error(f"Sync error: {error_msg}", exc_info=True)
 
             return {
                 "type": "ir.actions.client",
                 "tag": "display_notification",
                 "params": {
-                    "title": "Error de sincronización",
+                    "title": "Synchronization Error",
                     "message": f"{error_msg}\n\nConsecutive errors: {instance.sync_error_count if instance else 0}",
                     "type": "danger",
                     "sticky": True,
@@ -578,20 +579,20 @@ class OdooWpSync(models.Model):
         }
 
     def action_open_create_sale_order_wizard(self):
-        """Abre el wizard de confirmación para crear pedidos en Odoo (soporta múltiples registros)"""
+        """Opens the confirmation wizard to create orders in Odoo (supports multiple records)"""
         confirmation_wizard = self.env["confirmation.wizard"]
 
-        # Validar que todas las instancias involucradas estén conectadas
+        # Validate that all involved instances are properly connected
         instances = self.mapped("instance_id")
         not_connected = instances.filtered(lambda i: i.state != "connected")
         if not_connected:
             names = ", ".join(not_connected.mapped("name"))
             raise UserError(
-                f"La(s) siguiente(s) instancia(s) no están conectadas correctamente: {names}.\n"
-                "Por favor, prueba la conexión desde la configuración de la instancia antes de continuar."
+                f"The following instance(s) are not properly connected: {names}.\n"
+                "Please test the connection from the instance settings before continuing."
             )
 
-        # Filtrar solo las órdenes que NO tienen pedido asociado
+        # Filter only orders that do NOT have a sale order linked
         orders_to_create = self.filtered(lambda o: not o.sale_order_id)
         orders_already_exist = self.filtered(lambda o: o.sale_order_id)
 
@@ -600,45 +601,45 @@ class OdooWpSync(models.Model):
                 "type": "ir.actions.client",
                 "tag": "display_notification",
                 "params": {
-                    "title": "Sin órdenes para crear",
-                    "message": f"Todas las órdenes seleccionadas ({len(self)}) ya tienen pedidos asociados.",
+                    "title": "No orders to create",
+                    "message": f"All selected orders ({len(self)}) already have sale orders linked.",
                     "type": "warning",
                     "sticky": False,
                 },
             }
 
-        # Preparar descripción según la cantidad
+        # Prepare description based on quantity
         if len(orders_to_create) == 1:
             order = orders_to_create
-            description = f"Se creará un pedido de venta en Odoo para la orden #{order.order_number} de {order.customer_name} por un total de {order.currency} {order.total}"
+            description = f"A sale order will be created in Odoo for order #{order.order_number} from {order.customer_name} totaling {order.currency} {order.total}"
         else:
             total_amount = sum(orders_to_create.mapped("total"))
             currency = orders_to_create[0].currency if orders_to_create else "USD"
 
-            description = f"Se crearán {len(orders_to_create)} pedidos de venta en Odoo por un total de {currency} {total_amount:.2f}"
+            description = f"{len(orders_to_create)} sale orders will be created in Odoo for a total of {currency} {total_amount:.2f}"
 
             if orders_already_exist:
-                description += f"\n\nNota: {len(orders_already_exist)} órdenes ya tienen pedidos asociados y serán omitidas."
+                description += f"\n\nNote: {len(orders_already_exist)} orders already have sale orders linked and will be skipped."
 
         # Pasar los IDs de los registros a procesar
         return confirmation_wizard.create_confirmation(
             model_name="odoo.wp.sync",
             method_name="action_create_sale_order",
-            record_ids=orders_to_create.ids,  # Usar record_ids para múltiples
-            title="¿Crear Pedido(s) en Odoo?",
+            record_ids=orders_to_create.ids,
+            title="Create Sale Order(s) in Odoo?",
             description=description,
             dialog_size="medium",
         )
 
     def action_create_sale_order(self):
         """
-        Crea órdenes de venta en Odoo a partir de los datos de WooCommerce.
-        Soporta procesamiento de múltiples registros.
-        Delega la lógica al helper woo.sale.order.helper.
+        Creates sale orders in Odoo from WooCommerce data.
+        Supports multiple record processing.
+        Delegates logic to the woo.sale.order.helper.
         """
         helper = self.env["woo.sale.order.helper"]
 
-        # Contadores para el resumen
+        # Summary counters
         created_count = 0
         linked_count = 0
         skipped_count = 0
@@ -648,7 +649,7 @@ class OdooWpSync(models.Model):
         created_orders = self.env["sale.order"]
 
         for woo_order in self:
-            # Saltar si ya tiene pedido asociado
+            # Skip if already has a linked sale order
             if woo_order.sale_order_id:
                 skipped_count += 1
                 continue
@@ -658,7 +659,7 @@ class OdooWpSync(models.Model):
                 order = result["order"]
                 was_created = result["created"]
 
-                # Guardar relación con el pedido
+                # Save the sale order link
                 woo_order.sale_order_id = order.id
 
                 if was_created:
@@ -669,9 +670,9 @@ class OdooWpSync(models.Model):
 
             except Exception as e:
                 error_count += 1
-                errors.append(f"Orden #{woo_order.order_number}: {str(e)}")
+                errors.append(f"Order #{woo_order.order_number}: {str(e)}")
                 _logger.error(
-                    f"Error al crear orden de venta para Woo Order ID {woo_order.wc_order_id}: {str(e)}",
+                    f"Error creating sale order for Woo Order ID {woo_order.wc_order_id}: {str(e)}",
                     exc_info=True,
                 )
 
@@ -680,38 +681,34 @@ class OdooWpSync(models.Model):
         message_parts = []
 
         if created_count > 0:
-            message_parts.append(f"✅ {created_count} pedido(s) creado(s)")
+            message_parts.append(f"✅ {created_count} order(s) created")
         if linked_count > 0:
-            message_parts.append(
-                f"🔗 {linked_count} pedido(s) vinculado(s) (ya existían)"
-            )
+            message_parts.append(f"🔗 {linked_count} order(s) linked (already existed)")
         if skipped_count > 0:
-            message_parts.append(f"⏭️ {skipped_count} omitido(s) (ya tenían pedidos)")
+            message_parts.append(f"⏭️ {skipped_count} skipped (already had orders)")
         if error_count > 0:
-            message_parts.append(f"❌ {error_count} error(es)")
+            message_parts.append(f"❌ {error_count} error(s)")
 
         message = "\n".join(message_parts)
 
-        # Agregar detalles de errores si existen
+        # Add error details if any
         if errors:
-            message += "\n\nErrores:\n" + "\n".join(
-                errors[:3]
-            )  # Mostrar máximo 3 errores
+            message += "\n\nErrors:\n" + "\n".join(errors[:3])  # Show maximum 3 errors
             if len(errors) > 3:
-                message += f"\n... y {len(errors) - 3} error(es) más"
+                message += f"\n... and {len(errors) - 3} more error(s)"
 
-        # Determinar tipo de notificación
+        # Determine notification type
         if error_count == total_processed:
             notification_type = "danger"
-            title = "Errores al crear pedidos"
+            title = "Errors creating orders"
         elif error_count > 0:
             notification_type = "warning"
-            title = "Pedidos creados con errores"
+            title = "Orders created with errors"
         else:
             notification_type = "success"
-            title = "Pedidos procesados exitosamente"
+            title = "Orders processed successfully"
 
-        # Si solo se creó un pedido, abrirlo automáticamente
+        # If only one order was created, open it automatically
         if created_count == 1 and len(created_orders) == 1:
             return {
                 "type": "ir.actions.client",
@@ -731,7 +728,7 @@ class OdooWpSync(models.Model):
                 },
             }
 
-        # Si se crearon múltiples pedidos, mostrar lista
+        # If multiple orders were created, show a list
         if created_count > 1:
             return {
                 "type": "ir.actions.client",
@@ -747,12 +744,12 @@ class OdooWpSync(models.Model):
                         "domain": [("id", "in", created_orders.ids)],
                         "views": [[False, "tree"], [False, "form"]],
                         "target": "current",
-                        "name": "Pedidos Creados",
+                        "name": "Created Orders",
                     },
                 },
             }
 
-        # Solo mostrar notificación
+        # Show notification only
         return {
             "type": "ir.actions.client",
             "tag": "display_notification",
@@ -769,8 +766,8 @@ class OdooWpSync(models.Model):
         for rec in self:
             if rec.instance_id and rec.instance_id.state != "connected":
                 raise ValidationError(
-                    "La instancia '%s' no está conectada. "
-                    "Completa la configuración y verifica la conexión antes de crear órdenes."
+                    "Instance '%s' is not connected. "
+                    "Complete the setup and verify the connection before creating orders."
                     % rec.instance_id.name
                 )
 

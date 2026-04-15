@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <!--
-        Cron único y compartido para la sincronización automática con WooCommerce.
+        Single shared cron for automatic synchronization with WooCommerce.
 
-        Funciona así:
-        - Se ejecuta cada 1 minuto (resolución mínima para respetar los intervalos de instancia).
-        - El método _run_scheduled_sync() itera las instancias con auto_sync=True
-          y sólo lanza la sincronización si el sync_interval de cada instancia ha expirado.
-        - El coste de cada tick es mínimo: si no hay instancias pendientes, termina en milisegundos.
-        - Activarlo/desactivarlo se controla desde la instancia (auto_sync toggle),
-          no modificando este registro.
+        How it works:
+        - Runs every 1 minute (minimum resolution to respect per-instance intervals).
+        - The _run_scheduled_sync() method iterates instances with auto_sync=True
+          and only triggers sync if the sync_interval of each instance has expired.
+        - Each tick cost is minimal: if no instances are pending, it finishes in milliseconds.
+        - Enabling/disabling is controlled from the instance (auto_sync toggle),
+          not by modifying this record.
     -->
     <record id="ir_cron_woo_auto_sync" model="ir.cron">
         <field name="name">WooCommerce: Auto Sync Instances</field>

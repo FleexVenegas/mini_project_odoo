@@ -2,23 +2,23 @@
 <odoo>
     <!--
     ============================================================
-    ACCIONES FILTRADAS POR INSTANCIA ACTIVA
+    ACTIONS FILTERED BY ACTIVE INSTANCE
     ============================================================
-    Cada server action aquí lee la instancia activa del usuario
-    (env.user.woo_active_instance_id) y filtra el modelo
-    correspondiente. Si no hay instancia seleccionada, muestra
-    un aviso pidiendo que seleccionen una.
+    Each server action here reads the user's active instance
+    (env.user.woo_active_instance_id) and filters the
+    corresponding model. If no instance is selected, it shows
+    a warning asking to select one.
 
-    Para agregar un nuevo menú filtrado:
-      1. Copia uno de los bloques de abajo
-      2. Cambia el id, name, res_model y domain
-      3. Agrega el menuitem en woo_menu.xml apuntando al nuevo id
+    To add a new filtered menu:
+      1. Copy one of the blocks below
+      2. Change the id, name, res_model and domain
+      3. Add the menuitem in woo_menu.xml pointing to the new id
     ============================================================
     -->
 
-    <!-- ── ÓRDENES ─────────────────────────────────────────── -->
+    <!-- ── ORDERS ──────────────────────────────────────────────── -->
     <record id="action_server_orders_by_instance" model="ir.actions.server">
-        <field name="name">Ordenes por Instancia</field>
+        <field name="name">Orders by Instance</field>
         <field name="model_id" ref="model_woo_instance"/>
         <field name="state">code</field>
         <field name="code">
@@ -28,8 +28,8 @@ if not instance:
         'type': 'ir.actions.client',
         'tag': 'display_notification',
         'params': {
-            'title': 'Sin instancia seleccionada',
-            'message': 'Por favor, selecciona una instancia desde el menú Instancias.',
+            'title': 'No instance selected',
+            'message': 'Please select an instance from the Instances menu.',
             'type': 'warning',
             'sticky': False,
         },
@@ -37,7 +37,7 @@ if not instance:
 else:
     action = {
         'type': 'ir.actions.act_window',
-        'name': 'Ordenes - %s' % instance.name,
+        'name': 'Orders - %s' % instance.name,
         'res_model': 'odoo.wp.sync',
         'view_mode': 'tree,form',
         'domain': [('instance_id', '=', instance.id)],
@@ -46,9 +46,9 @@ else:
         </field>
     </record>
 
-    <!-- ── PRODUCTOS WOOCOMMERCE ────────────────────────────── -->
+    <!-- ── WOOCOMMERCE PRODUCTS ────────────────────────────────────────── -->
     <record id="action_server_products_by_instance" model="ir.actions.server">
-        <field name="name">Productos por Instancia</field>
+        <field name="name">Products by Instance</field>
         <field name="model_id" ref="model_woo_instance"/>
         <field name="state">code</field>
         <field name="code">
@@ -58,8 +58,8 @@ if not instance:
         'type': 'ir.actions.client',
         'tag': 'display_notification',
         'params': {
-            'title': 'Sin instancia seleccionada',
-            'message': 'Por favor, selecciona una instancia desde el menú Instancias.',
+            'title': 'No instance selected',
+            'message': 'Please select an instance from the Instances menu.',
             'type': 'warning',
             'sticky': False,
         },
@@ -67,7 +67,7 @@ if not instance:
 else:
     action = {
         'type': 'ir.actions.act_window',
-        'name': 'Productos WooCommerce - %s' % instance.name,
+        'name': 'WooCommerce Products - %s' % instance.name,
         'res_model': 'woo.product',
         'view_mode': 'tree,form',
         'domain': [('instance_id', '=', instance.id)],
@@ -89,8 +89,8 @@ if not instance:
         'type': 'ir.actions.client',
         'tag': 'display_notification',
         'params': {
-            'title': 'Sin instancia seleccionada',
-            'message': 'Por favor, selecciona una instancia desde el menú Instancias.',
+            'title': 'No instance selected',
+            'message': 'Please select an instance from the Instances menu.',
             'type': 'warning',
             'sticky': False,
         },
@@ -98,8 +98,8 @@ if not instance:
 else:
     action = {
         'type': 'ir.actions.act_window',
-        'name': 'NOMBRE - %s' % instance.name,
-        'res_model': 'EL_MODELO_AQUI',
+        'name': 'NAME - %s' % instance.name,
+        'res_model': 'THE_MODEL_HERE',
         'view_mode': 'tree,form',
         'domain': [('instance_id', '=', instance.id)],
         'context': {'default_instance_id': instance.id},

@@ -1,10 +1,10 @@
 """
-Servicio HTTP centralizado para la integración con WooCommerce.
+Centralized HTTP service for WooCommerce integration.
 
-Toda comunicación HTTP con la API de WooCommerce (REST v3) y la API
-de WordPress (wp/v2/media) pasa por este servicio.  Los modelos de
-negocio (woo.product, odoo.wp.sync, etc.) NUNCA importan ni usan
-la librería ``requests`` directamente.
+All HTTP communication with the WooCommerce API (REST v3) and the
+WordPress API (wp/v2/media) goes through this service. Business models
+(woo.product, odoo.wp.sync, etc.) NEVER import or use the ``requests``
+library directly.
 """
 
 import base64
@@ -17,23 +17,23 @@ from odoo.exceptions import UserError
 
 _logger = logging.getLogger(__name__)
 
-_WC_PAGE_SIZE = 100  # máximo permitido por la API de WooCommerce
+_WC_PAGE_SIZE = 100  # maximum allowed by the WooCommerce API
 
 
 class WooService(models.AbstractModel):
     _name = "woo.service"
     _description = "WooCommerce HTTP Integration Service"
 
-    # ── Configuración ────────────────────────────────────────────────────────
+    # ── Configuration ────────────────────────────────────────────────────────────
 
     def _get_config(self, instance=None):
         """
-        Obtiene las credenciales de conexión a WooCommerce.
+        Gets the WooCommerce connection credentials.
 
-        Prioridad:
-          1. Instancia explícita (recomendado para multi-instancia).
-          2. Instancia por defecto.
-          3. Parámetros legacy de ir.config_parameter.
+        Priority:
+          1. Explicit instance (recommended for multi-instance).
+          2. Default instance.
+          3. Legacy ir.config_parameter parameters.
         """
         if instance:
             return instance.get_api_credentials()
@@ -42,7 +42,7 @@ class WooService(models.AbstractModel):
         if default_instance:
             return default_instance.get_api_credentials()
 
-        # Fallback: parámetros legacy (compatibilidad)
+        # Fallback: legacy parameters (compatibility)
         params = self.env["ir.config_parameter"].sudo()
         url = params.get_param("odoo_wp_sync.wp_url")
         ck = params.get_param("odoo_wp_sync.wp_ck")
@@ -57,29 +57,29 @@ class WooService(models.AbstractModel):
 
         raise UserError(
             _(
-                "No hay instancia WooCommerce configurada. "
-                "Crea una en Configuración → Instancias WooCommerce."
+                "No WooCommerce instance is configured. "
+                "Create one in Settings → WooCommerce Instances."
             )
         )
 
-    # ── HTTP genérico (WooCommerce REST v3) ──────────────────────────────────
+    # ── Generic HTTP (WooCommerce REST v3) ────────────────────────────────────────
 
     def _request(self, endpoint, method="GET", data=None, instance=None, timeout=15):
         """
-        Ejecuta una petición HTTP contra la WC REST API v3.
+        Executes an HTTP request against the WC REST API v3.
 
         Args:
-            endpoint: ruta relativa (ej. ``orders``, ``products/123``)
+            endpoint: relative path (e.g. ``orders``, ``products/123``)
             method: GET | POST | PUT | DELETE
-            data: payload dict (para POST/PUT)
-            instance: registro ``woo.instance`` (usa default si no se indica)
-            timeout: segundos de timeout (default 15)
+            data: payload dict (for POST/PUT)
+            instance: ``woo.instance`` record (uses default if not provided)
+            timeout: timeout in seconds (default 15)
 
         Returns:
-            dict | list: JSON de respuesta
+            dict | list: response JSON
 
         Raises:
-            Exception: errores de API o de conexión
+            Exception: API or connection errors
         """
         config = self._get_config(instance)
         url = f"{config['url']}/wp-json/wc/v3/{endpoint}"
@@ -99,28 +99,28 @@ class WooService(models.AbstractModel):
             # Parsear error
             try:
                 error = response.json()
-                message = error.get("message", "Error desconocido")
+                message = error.get("message", "Unknown error")
             except Exception:
                 message = response.text
 
             raise Exception(f"[{response.status_code}] {message}")
 
         except requests.exceptions.RequestException as e:
-            raise Exception(f"Error de conexión: {str(e)}")
+            raise Exception(f"Connection error: {str(e)}")
 
-    # ── Conexión ─────────────────────────────────────────────────────────────
+    # ── Connection ───────────────────────────────────────────────────────────────
 
     def test_connection(self, instance):
         """
-        Prueba la conexión con la API de WooCommerce.
+        Tests the connection with the WooCommerce API.
 
         Returns:
-            dict con claves:
+            dict with keys:
               - ``success``: bool
-              - ``status_code``: int (solo si hubo respuesta HTTP)
-              - ``response``: requests.Response (solo si hubo respuesta HTTP)
-              - ``error``: str tipo de error (``timeout``, ``connection``, ``unexpected``)
-              - ``message``: str detalle del error
+              - ``status_code``: int (only if there was an HTTP response)
+              - ``response``: requests.Response (only if there was an HTTP response)
+              - ``error``: str error type (``timeout``, ``connection``, ``unexpected``)
+              - ``message``: str error detail
         """
         try:
             response = requests.get(
@@ -144,15 +144,15 @@ class WooService(models.AbstractModel):
 
     def upload_image(self, instance, image_b64, product_ref="new"):
         """
-        Sube una imagen binaria (base64) al Media Library de WordPress.
+        Uploads a binary image (base64) to the WordPress Media Library.
 
         Args:
-            instance: registro ``woo.instance``
-            image_b64: contenido de la imagen codificado en base64
-            product_ref: referencia para el nombre del archivo (woo_id o ``new``)
+            instance: ``woo.instance`` record
+            image_b64: image content encoded in base64
+            product_ref: reference for the filename (woo_id or ``new``)
 
         Returns:
-            tuple(int|None, str): ``(media_id, src_url)`` o ``(None, '')`` si falla
+            tuple(int|None, str): ``(media_id, src_url)`` or ``(None, '')`` on failure
         """
         if not image_b64:
             return None, ""
@@ -202,7 +202,7 @@ class WooService(models.AbstractModel):
     # ── Productos ────────────────────────────────────────────────────────────
 
     def create_product(self, instance, payload):
-        """Crea un producto en WooCommerce (POST ``products``)."""
+        """Creates a product in WooCommerce (POST ``products``)."""
         return self._request(
             endpoint="products",
             method="POST",
@@ -211,7 +211,7 @@ class WooService(models.AbstractModel):
         )
 
     def update_product(self, instance, woo_id, payload):
-        """Actualiza un producto en WooCommerce (PUT ``products/{id}``)."""
+        """Updates a product in WooCommerce (PUT ``products/{id}``)."""
         return self._request(
             endpoint=f"products/{woo_id}",
             method="PUT",
@@ -221,10 +221,10 @@ class WooService(models.AbstractModel):
 
     def fetch_products(self, instance):
         """
-        Obtiene todos los productos de WooCommerce con paginación automática.
+        Fetches all WooCommerce products with automatic pagination.
 
         Returns:
-            list[dict]: lista completa de productos WooCommerce
+            list[dict]: complete list of WooCommerce products
         """
         all_products = []
         page = 1
@@ -249,18 +249,18 @@ class WooService(models.AbstractModel):
         )
         return all_products
 
-    # ── Pedidos ──────────────────────────────────────────────────────────────
+    # ── Orders ────────────────────────────────────────────────────────────────
 
     def fetch_orders(self, instance, params):
         """
-        Obtiene pedidos de WooCommerce con paginación automática.
+        Fetches WooCommerce orders with automatic pagination.
 
         Args:
-            instance: registro ``woo.instance``
-            params: dict con parámetros de query (``per_page``, ``status``, …)
+            instance: ``woo.instance`` record
+            params: dict with query parameters (``per_page``, ``status``, …)
 
         Returns:
-            list[dict]: lista de pedidos WooCommerce
+            list[dict]: list of WooCommerce orders
         """
         param_string = "&".join([f"{k}={v}" for k, v in params.items()])
         base_endpoint = f"orders?{param_string}"
@@ -288,15 +288,15 @@ class WooService(models.AbstractModel):
 
     def update_order_status(self, instance, wc_order_id, new_status):
         """
-        Actualiza el estado de un pedido en WooCommerce.
+        Updates the status of an order in WooCommerce.
 
         Args:
-            instance: registro ``woo.instance``
-            wc_order_id: ID del pedido en WooCommerce
-            new_status: nuevo estado (``pending``, ``processing``, ``completed``, …)
+            instance: ``woo.instance`` record
+            wc_order_id: WooCommerce order ID
+            new_status: new status (``pending``, ``processing``, ``completed``, …)
 
         Returns:
-            dict: respuesta JSON de WooCommerce
+            dict: WooCommerce JSON response
         """
         return self._request(
             endpoint=f"orders/{wc_order_id}",
@@ -305,15 +305,15 @@ class WooService(models.AbstractModel):
             instance=instance,
         )
 
-    # ── Categorías ───────────────────────────────────────────────────────────
+    # ── Categories ───────────────────────────────────────────────────────────────
 
     def fetch_categories(self, instance):
         """
-        Obtiene todas las categorías de WooCommerce con paginación automática.
+        Fetches all WooCommerce categories with automatic pagination.
 
         Returns:
-            list[dict]: lista completa de categorías WooCommerce
-              Cada item tiene: id, name, slug, parent (id del padre, 0 si raíz)
+            list[dict]: complete list of WooCommerce categories.
+              Each item has: id, name, slug, parent (parent id, 0 if root)
         """
         all_categories = []
         page = 1
@@ -337,23 +337,23 @@ class WooService(models.AbstractModel):
         )
         return all_categories
 
-    # ── Marcas ───────────────────────────────────────────────────────────────
+    # ── Brands ────────────────────────────────────────────────────────────────
 
     def fetch_brands(self, instance):
         """
-        Obtiene todas las marcas de WooCommerce con paginación automática.
+        Fetches all WooCommerce brands with automatic pagination.
 
-        Compatible con los endpoints más comunes:
+        Compatible with the most common endpoints:
           - ``/wc/v3/products/brands`` (Perfect WooCommerce Brands)
-          - ``/wc/v3/brands`` (WooCommerce Brands oficial)
+          - ``/wc/v3/brands`` (official WooCommerce Brands)
 
         Returns:
-            list[dict] | []: lista de marcas, o lista vacía si el plugin no está activo.
+            list[dict] | []: list of brands, or empty list if the plugin is not active.
         """
         all_brands = []
         page = 1
 
-        # Intentar con el endpoint más común (Perfect WooCommerce Brands / oficial)
+        # Try the most common endpoint (Perfect WooCommerce Brands / official)
         try:
             while True:
                 batch = self._request(
@@ -367,7 +367,7 @@ class WooService(models.AbstractModel):
                     break
                 page += 1
         except Exception:
-            # El plugin de marcas no está instalado o usa otro endpoint
+            # The brands plugin is not installed or uses a different endpoint
             _logger.info(
                 "No brand plugin found for instance '%s' (endpoint products/brands not available).",
                 instance.name,

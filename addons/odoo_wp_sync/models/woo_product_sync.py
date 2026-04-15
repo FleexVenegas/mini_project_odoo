@@ -1,12 +1,12 @@
 """
-Servicio de sincronización de productos WooCommerce → Odoo.
+WooCommerce → Odoo product synchronization service.
 
-Responsabilidades:
-  1. Obtener todos los productos de WooCommerce (con paginación).
-  2. Crear o actualizar registros woo.product.
-  3. Vincular automáticamente los que coincidan por SKU con product.template.
+Responsibilities:
+  1. Fetch all products from WooCommerce (with pagination).
+  2. Create or update woo.product records.
+  3. Automatically link those matching an Odoo product.template by SKU.
 
-No modifica product.template (solo lo lee para buscar coincidencias).
+Does not modify product.template (only reads it to find matches).
 """
 
 import logging
@@ -27,7 +27,7 @@ class WooProductSync(models.AbstractModel):
         return self.env["woo.service"].fetch_products(instance)
 
     def _build_woo_product_vals(self, wc_product, instance):
-        """Convierte un dict de WC en los vals para woo.product."""
+        """Converts a WC dict into vals for woo.product."""
         price = 0.0
         try:
             price = float(
@@ -57,11 +57,11 @@ class WooProductSync(models.AbstractModel):
             "stock_quantity": wc_product.get("stock_quantity") or 0,
         }
 
-        # ── Categorías ───────────────────────────────────────────────────────────
-        # WC las devuelve como [{"id": 157, "name": "...", "slug": "..."}]
-        # Las sincronizamos en woo.category respetando la instancia.
-        # El parent_id se resuelve si el padre ya existe en la BD;
-        # si no, queda None (se resolverrá al importar las categorías por separado).
+        # ── Categories ────────────────────────────────────────────────────────────
+        # WC returns them as [{"id": 157, "name": "...", "slug": "..."}]
+        # We sync them in woo.category respecting the instance.
+        # parent_id is resolved if the parent already exists in the DB;
+        # otherwise it remains None (resolved when importing categories separately).
         WooCategory = self.env["woo.category"]
         category_ids = []
         for wc_cat in wc_product.get("categories", []):
@@ -114,8 +114,8 @@ class WooProductSync(models.AbstractModel):
 
     def _match_odoo_product(self, sku):
         """
-        Busca un product.template por SKU (default_code).
-        Devuelve el registro o vacío.
+        Searches for a product.template by SKU (default_code).
+        Returns the record or empty set.
         """
         if not sku:
             return self.env["product.template"].browse()
@@ -132,15 +132,15 @@ class WooProductSync(models.AbstractModel):
             [("default_code", "=", sku)], limit=1
         )
 
-    # ── API pública ────────────────────────────────────────────────────────────
+    # ── Public API ──────────────────────────────────────────────────────────────
 
     def import_and_link(self, instance):
         """
-        Importa todos los productos de WooCommerce para la instancia
-        y los vincula automáticamente a los productos Odoo que coincidan por SKU.
+        Imports all WooCommerce products for the instance
+        and automatically links them to matching Odoo products by SKU.
 
         Returns:
-            dict: Estadísticas {created, updated, linked, unlinked, errors}
+            dict: Statistics {created, updated, linked, unlinked, errors}
         """
         stats = {"created": 0, "updated": 0, "linked": 0, "unlinked": 0, "errors": 0}
 
@@ -161,11 +161,11 @@ class WooProductSync(models.AbstractModel):
 
             vals = self._build_woo_product_vals(wc_product, instance)
 
-            # Buscar coincidencia en Odoo por SKU
+            # Search for a match in Odoo by SKU
             odoo_product = self._match_odoo_product(vals.get("woo_sku"))
             if odoo_product:
                 vals["product_tmpl_id"] = odoo_product.id
-            # Si ya existe y tiene vínculo manual, no lo sobreescribimos
+            # If it already exists and has a manual link, do not overwrite it
 
             try:
                 existing = WooProduct.search(
@@ -173,7 +173,7 @@ class WooProductSync(models.AbstractModel):
                     limit=1,
                 )
                 if existing:
-                    # Actualizar metadatos; si ya tiene vínculo manual, respetarlo
+                    # Update metadata; if it already has a manual link, preserve it
                     write_vals = dict(vals)
                     if existing.product_tmpl_id and not odoo_product:
                         write_vals.pop("product_tmpl_id", None)
@@ -217,16 +217,16 @@ class WooProductSync(models.AbstractModel):
         description="",
     ):
         """
-        Publica (o actualiza) un product.template en una instancia WooCommerce.
+        Publishes (or updates) a product.template to a WooCommerce instance.
 
-        Si ya existe un mapeo woo.product para esta combinación producto+instancia,
-        se usa PUT para actualizar. De lo contrario se usa POST para crear.
+        If a woo.product mapping already exists for this product+instance combination,
+        PUT is used to update. Otherwise POST is used to create.
 
         Args:
-            product_tmpl: record de product.template a publicar.
-            instance: record de woo.instance de destino.
-            wc_status: "draft" | "publish" — estado inicial en WooCommerce.
-            price_override: si > 0 sobreescribe el precio de lista del producto.
+            product_tmpl: product.template record to publish.
+            instance: target woo.instance record.
+            wc_status: "draft" | "publish" — initial status in WooCommerce.
+            price_override: if > 0, overrides the product's list price.
         """
         svc = self.env["woo.service"]
 
@@ -265,9 +265,9 @@ class WooProductSync(models.AbstractModel):
             limit=1,
         )
 
-        # ── Categorías y marcas del mapeo woo.product existente ─────────────────
-        # Solo se agregan si el mapeo ya existe (tiene woo_category_ids / woo_brand_ids).
-        # En una creación nueva no hay mapping previo, así que se omiten.
+        # ── Categories and brands from the existing woo.product mapping ───────────────────
+        # Only added if the mapping already exists (has woo_category_ids / woo_brand_ids).
+        # For a new creation there is no prior mapping, so they are omitted.
         if existing:
             categories_payload = [
                 {"id": cat.woo_id} for cat in existing.woo_category_ids if cat.woo_id
