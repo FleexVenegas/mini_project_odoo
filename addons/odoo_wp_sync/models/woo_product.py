@@ -70,6 +70,12 @@ class WooProduct(models.Model):
         string="Pricelist (instance)",
         readonly=True,
     )
+    currency_id = fields.Many2one(
+        "res.currency",
+        string="Currency",
+        compute="_compute_currency_id",
+        store=False,
+    )
     pricelist_price = fields.Float(
         string="Price per list",
         compute="_compute_pricelist_price",
@@ -198,6 +204,14 @@ class WooProduct(models.Model):
 
     # ── Computed ────────────────────────────────────────────────────────────────
 
+    @api.depends("instance_id.pricelist_id")
+    def _compute_currency_id(self):
+        for rec in self:
+            if rec.instance_id.pricelist_id:
+                rec.currency_id = rec.instance_id.pricelist_id.currency_id
+            else:
+                rec.currency_id = rec.env.company.currency_id
+
     @api.depends("product_tmpl_id")
     def _compute_link_state(self):
         for rec in self:
@@ -318,22 +332,21 @@ class WooProduct(models.Model):
     def write(self, vals):
         """
         Intercepts writes that change any of ``woo_status``, ``stock_status``
-        or ``woo_price_input`` and pushes the updated fields to WooCommerce for
-        every record that already exists there (woo_id != 0).
+        or ``woo_price_input`` and marks ``woo_pending_sync=True`` on records
+        that already exist in WooCommerce (woo_id != 0).
 
-        During a bulk Excel import (context ``import_file=True`` set by Odoo's
-        base_import module), the WC API call is SKIPPED and ``woo_pending_sync``
-        is flagged instead. This avoids:
-          - Hitting WooCommerce during test/dry-run imports (Odoo rolls back
-            the DB but the API call would already have been made).
-          - Browser connection timeouts caused by hundreds of sequential HTTP
-            calls during a large import.
-        After the import the user can select all pending records and use the
-        "Sync to WooCommerce" server action to send the changes in one pass.
+        The actual WC API call is NEVER triggered automatically from write().
+        Sync happens only through explicit user actions:
+          - "Sync with WooCommerce" button in the form (action_update_stock_wc)
+          - "↻ Sync to WC" server action in the tree (action_push_pending_to_wc)
 
-        Set ``skip_wc_sync=True`` in the context to bypass the WC push (used
-        internally by methods that build their own payloads, like
-        ``action_update_stock_wc``).
+        This prevents:
+          - WC calls during test/dry-run imports (Odoo rolls back the DB but
+            the API call would already have been sent).
+          - Timeout errors from hundreds of sequential HTTP calls during bulk imports.
+
+        Set ``skip_wc_sync=True`` in the context to bypass the pending flag
+        (used internally by sync methods that have already sent data to WC).
         """
         result = super().write(vals)
 
@@ -343,70 +356,9 @@ class WooProduct(models.Model):
         if self.env.context.get("skip_wc_sync"):
             return result
 
-        # ── During imports: flag and skip ────────────────────────────────────
-        if self.env.context.get("import_file"):
-            # Only flag records that actually exist in WooCommerce
-            to_flag = self.filtered(lambda r: r.woo_id and r.instance_id)
-            if to_flag:
-                to_flag.with_context(skip_wc_sync=True).write(
-                    {"woo_pending_sync": True}
-                )
-            return result
-
-        svc = self.env["woo.service"]
-
-        for rec in self:
-            if not rec.woo_id or not rec.instance_id:
-                continue
-
-            payload = {}
-
-            if "woo_status" in vals:
-                payload["status"] = vals["woo_status"]
-
-            if "stock_status" in vals:
-                payload["stock_status"] = vals["stock_status"]
-
-            if "woo_price_input" in vals:
-                price = vals["woo_price_input"]
-                # Fallback to pricelist / list_price if value is 0
-                if not price and rec.product_tmpl_id:
-                    if rec.instance_id.pricelist_id:
-                        product = rec.product_tmpl_id.product_variant_id
-                        price = (
-                            rec.instance_id.pricelist_id._get_product_price(
-                                product, 1.0
-                            )
-                            or rec.product_tmpl_id.list_price
-                        )
-                    else:
-                        price = rec.product_tmpl_id.list_price
-                if price:
-                    payload["regular_price"] = str(round(price, 4))
-
-            if not payload:
-                continue
-
-            try:
-                svc.update_product(rec.instance_id, rec.woo_id, payload)
-                rec.with_context(skip_wc_sync=True).write(
-                    {"last_sync_date": fields.Datetime.now(), "woo_pending_sync": False}
-                )
-                _logger.info(
-                    "WC sync payload %s for product '%s' (woo_id=%s, instance='%s')",
-                    list(payload.keys()),
-                    rec.woo_name,
-                    rec.woo_id,
-                    rec.instance_id.name,
-                )
-            except Exception as exc:
-                _logger.warning(
-                    "Could not sync fields %s to WooCommerce for product '%s' (woo_id=%s): %s",
-                    list(payload.keys()),
-                    rec.woo_name,
-                    rec.woo_id,
-                    exc,
-                )
+        to_flag = self.filtered(lambda r: r.woo_id and r.instance_id)
+        if to_flag:
+            to_flag.with_context(skip_wc_sync=True).write({"woo_pending_sync": True})
 
         return result
 
@@ -454,6 +406,7 @@ class WooProduct(models.Model):
         svc = self.env["woo.service"]
 
         # Calculate price: manual > instance pricelist > list_price
+        price_is_manual = bool(self.woo_price_input)
         price = self.woo_price_input
         if not price and self.product_tmpl_id:
             if self.instance_id.pricelist_id:
@@ -464,6 +417,23 @@ class WooProduct(models.Model):
                 )
             else:
                 price = self.product_tmpl_id.list_price
+
+        # Apply instance taxes only when price comes from the pricelist (not manual)
+        if (
+            not price_is_manual
+            and self.instance_id.include_taxes_wc_product_sync
+            and price
+        ):
+            tax = self.instance_id.taxes_product
+            if tax:
+                taxes_res = tax.compute_all(
+                    price,
+                    currency=self.currency_id,
+                    quantity=1.0,
+                    product=self.product_tmpl_id.product_variant_id,
+                    partner=None,
+                )
+                price = taxes_res["total_included"]
 
         description = ""
         if self.product_tmpl_id:
@@ -562,10 +532,13 @@ class WooProduct(models.Model):
         if self.instance_manage_stock and self.woo_max_stock:
             payload["manage_stock"] = True
             payload["max_quantity"] = int(self.woo_max_stock)
-        if self.instance_manage_stock and self.woo_status:
+
+        # woo_status (publish/draft/pending/private) is independent of stock management
+        if self.woo_status:
             payload["status"] = self.woo_status
 
         # Calculate and send price
+        price_is_manual = bool(self.woo_price_input)
         price = self.woo_price_input
         if not price and self.product_tmpl_id:
             if self.instance_id.pricelist_id:
@@ -576,6 +549,24 @@ class WooProduct(models.Model):
                 )
             else:
                 price = self.product_tmpl_id.list_price
+
+        # Apply instance taxes only when price comes from the pricelist (not manual)
+        if (
+            not price_is_manual
+            and self.instance_id.include_taxes_wc_product_sync
+            and price
+        ):
+            tax = self.instance_id.taxes_product
+            if tax:
+                taxes_res = tax.compute_all(
+                    price,
+                    currency=self.currency_id,
+                    quantity=1.0,
+                    product=self.product_tmpl_id.product_variant_id,
+                    partner=None,
+                )
+                price = taxes_res["total_included"]
+
         if price:
             payload["regular_price"] = str(round(price, 4))
 
@@ -608,7 +599,7 @@ class WooProduct(models.Model):
                 },
             }
 
-        vals = {"last_sync_date": fields.Datetime.now()}
+        vals = {"last_sync_date": fields.Datetime.now(), "woo_pending_sync": False}
         if price:
             vals["woo_price"] = price
         # Capture stock_quantity returned by WooCommerce
@@ -684,7 +675,9 @@ class WooProduct(models.Model):
         Real-time bus notifications are sent so the user receives feedback
         even if the connection drops before the action returns.
         """
-        to_sync = self.filtered(lambda r: r.woo_id and r.instance_id)
+        to_sync = self.filtered(
+            lambda r: r.woo_id and r.instance_id and r.woo_pending_sync
+        )
         total = len(to_sync)
 
         if not total:
@@ -782,11 +775,15 @@ class WooProduct(models.Model):
                 "%(ok)d synced correctly, %(failed)d still pending.\n"
                 "Use the 'Pending sync' filter and run 'Sync to WooCommerce' again to retry."
             ) % {"ok": ok, "failed": failed}
-            self._bus_notify("warning", _("WooCommerce sync — incomplete"), final_msg, sticky=True)
+            self._bus_notify(
+                "warning", _("WooCommerce sync — incomplete"), final_msg, sticky=True
+            )
             msg_type = "warning"
         else:
             final_msg = _("All %d product(s) synced to WooCommerce successfully.") % ok
-            self._bus_notify("success", _("WooCommerce sync — done ✓"), final_msg, sticky=True)
+            self._bus_notify(
+                "success", _("WooCommerce sync — done ✓"), final_msg, sticky=True
+            )
             msg_type = "success"
 
         # display_notification is shown when the browser IS still connected
@@ -800,4 +797,3 @@ class WooProduct(models.Model):
                 "sticky": bool(failed),
             },
         }
-
