@@ -391,6 +391,38 @@ class WooProduct(models.Model):
             },
         }
 
+    def action_confirm_create_in_wc(self):
+        """Opens the confirmation wizard before creating the product in WooCommerce."""
+        self.ensure_one()
+        return self.env["confirmation.wizard"].create_confirmation(
+            model_name="woo.product",
+            method_name="action_create_in_wc",
+            title=_("Create in WooCommerce"),
+            description=_(
+                "Are you sure you want to create <strong>%s</strong> in WooCommerce?<br/>"
+                "The current data (name, status, price, SKU, image, categories) will be sent."
+            )
+            % self.woo_name,
+            record_id=self.id,
+            dialog_size="small",
+        )
+
+    def action_confirm_update_stock_wc(self):
+        """Opens the confirmation wizard before syncing the product to WooCommerce."""
+        self.ensure_one()
+        return self.env["confirmation.wizard"].create_confirmation(
+            model_name="woo.product",
+            method_name="action_update_stock_wc",
+            title=_("Sync with WooCommerce"),
+            description=_(
+                "Are you sure you want to sync <strong>%s</strong> to WooCommerce?<br/>"
+                "Status, price, stock, image, categories and brands will be updated."
+            )
+            % self.woo_name,
+            record_id=self.id,
+            dialog_size="small",
+        )
+
     def action_create_in_wc(self):
         """Creates the product in WooCommerce and saves the returned woo_id."""
         self.ensure_one()

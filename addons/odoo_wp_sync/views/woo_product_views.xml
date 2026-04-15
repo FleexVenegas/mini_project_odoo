@@ -47,8 +47,8 @@
         <field name="arch" type="xml">
             <form string="WooCommerce Product">
                 <header>
-                    <button name="action_create_in_wc" string="Create in WooCommerce" type="object" class="btn-primary" invisible="woo_id" confirm="Create this product in WooCommerce with current data?"/>
-                    <button name="action_update_stock_wc" string="Sync with WooCommerce" type="object" class="btn-primary" invisible="not woo_id" confirm="Send name, status, price, stock and image to WooCommerce?"/>
+                    <button name="action_confirm_create_in_wc" string="Create in WooCommerce" type="object" class="btn-primary" invisible="woo_id"/>
+                    <button name="action_confirm_update_stock_wc" string="Sync with WooCommerce" type="object" class="btn-primary" invisible="not woo_id"/>
                     <field name="woo_status" widget="statusbar" statusbar_visible="draft,pending,publish,private" options="{'clickable': '1'}"/>
                 </header>
                 <sheet>
