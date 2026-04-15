@@ -28,10 +28,11 @@
                 <field name="woo_sku" string="SKU" optional="show"/>
                 <field name="woo_name" string="WC Product"/>
                 <field name="product_tmpl_id" string="Odoo Product" optional="show"/>
-                <field name="woo_status" string="Status" widget="badge" decoration-success="woo_status == 'publish'" decoration-warning="woo_status == 'pending'" decoration-info="woo_status == 'draft'" decoration-muted="woo_status == 'private'"/>
-                <field name="stock_status" string="Estado de stock" widget="badge" decoration-success="stock_status == 'instock'" decoration-warning="stock_status == 'onbackorder'" decoration-danger="stock_status == 'outofstock'"/>
-                <field name="woo_price" string="Precio" optional="show" widget="monetary"/>
+                <field name="woo_status" string="Visibility" widget="badge" decoration-success="woo_status == 'publish'" decoration-warning="woo_status == 'pending'" decoration-info="woo_status == 'draft'" decoration-muted="woo_status == 'private'"/>
+                <field name="stock_status" string="Stock Status" widget="badge" decoration-success="stock_status == 'instock'" decoration-warning="stock_status == 'onbackorder'" decoration-danger="stock_status == 'outofstock'"/>
+                <field name="woo_price" string="Price" optional="show" widget="monetary"/>
                 <field name="link_state" string="Link" widget="badge" decoration-success="link_state == 'linked'" decoration-warning="link_state == 'unlinked'"/>
+                <field name="woo_pending_sync" string="Sync Pending" widget="boolean" optional="show"/>
                 <field name="last_sync_date" string="Last sync" optional="hide"/>
                 <!-- Campos auxiliares no visibles, requeridos por decorators -->
                 <field name="woo_id" optional="hide"/>
@@ -172,6 +173,9 @@
                 <filter name="published" string="Published" domain="[('woo_status','=','publish')]"/>
                 <filter name="draft" string="Drafts" domain="[('woo_status','=','draft')]"/>
                 <separator/>
+                <!-- Pending sync filter -->
+                <filter name="pending_sync" string="Pending sync to WooCommerce" domain="[('woo_pending_sync','=',True)]"/>
+                <separator/>
                 <!-- Stock filters -->
                 <filter name="instock" string="In stock" domain="[('stock_status','=','instock')]"/>
                 <filter name="outofstock" string="Out of stock" domain="[('stock_status','=','outofstock')]"/>
@@ -185,6 +189,16 @@
                 </group>
             </search>
         </field>
+    </record>
+
+    <!-- ── Server action: Sync selected records to WooCommerce ────────────── -->
+    <record id="action_woo_product_push_to_wc" model="ir.actions.server">
+        <field name="name"> ↻ Sync to wc</field>
+        <field name="model_id" ref="odoo_wp_sync.model_woo_product"/>
+        <field name="binding_model_id" ref="odoo_wp_sync.model_woo_product"/>
+        <field name="binding_view_types">list</field>
+        <field name="state">code</field>
+        <field name="code">records.action_push_pending_to_wc()</field>
     </record>
 
 </odoo>

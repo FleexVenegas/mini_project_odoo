@@ -177,6 +177,13 @@ class WooProduct(models.Model):
     # ── Audit ────────────────────────────────────────────────────────────────
 
     last_sync_date = fields.Datetime(string="Last sync", readonly=True)
+    woo_pending_sync = fields.Boolean(
+        string="Pending sync",
+        default=False,
+        help="Marked automatically when a bulk import changes synchronized fields "
+        "(woo_status, stock_status, price) so they can be sent to WooCommerce "
+        "later using the 'Sync to WooCommerce' action.",
+    )
 
     _sql_constraints = (
         []
@@ -306,6 +313,103 @@ class WooProduct(models.Model):
             product_ref=self.woo_id or "new",
         )
 
+    # ── ORM overrides ─────────────────────────────────────────────────────────
+
+    def write(self, vals):
+        """
+        Intercepts writes that change any of ``woo_status``, ``stock_status``
+        or ``woo_price_input`` and pushes the updated fields to WooCommerce for
+        every record that already exists there (woo_id != 0).
+
+        During a bulk Excel import (context ``import_file=True`` set by Odoo's
+        base_import module), the WC API call is SKIPPED and ``woo_pending_sync``
+        is flagged instead. This avoids:
+          - Hitting WooCommerce during test/dry-run imports (Odoo rolls back
+            the DB but the API call would already have been made).
+          - Browser connection timeouts caused by hundreds of sequential HTTP
+            calls during a large import.
+        After the import the user can select all pending records and use the
+        "Sync to WooCommerce" server action to send the changes in one pass.
+
+        Set ``skip_wc_sync=True`` in the context to bypass the WC push (used
+        internally by methods that build their own payloads, like
+        ``action_update_stock_wc``).
+        """
+        result = super().write(vals)
+
+        _SYNC_FIELDS = {"woo_status", "stock_status", "woo_price_input"}
+        if not (_SYNC_FIELDS & set(vals)):
+            return result
+        if self.env.context.get("skip_wc_sync"):
+            return result
+
+        # ── During imports: flag and skip ────────────────────────────────────
+        if self.env.context.get("import_file"):
+            # Only flag records that actually exist in WooCommerce
+            to_flag = self.filtered(lambda r: r.woo_id and r.instance_id)
+            if to_flag:
+                to_flag.with_context(skip_wc_sync=True).write(
+                    {"woo_pending_sync": True}
+                )
+            return result
+
+        svc = self.env["woo.service"]
+
+        for rec in self:
+            if not rec.woo_id or not rec.instance_id:
+                continue
+
+            payload = {}
+
+            if "woo_status" in vals:
+                payload["status"] = vals["woo_status"]
+
+            if "stock_status" in vals:
+                payload["stock_status"] = vals["stock_status"]
+
+            if "woo_price_input" in vals:
+                price = vals["woo_price_input"]
+                # Fallback to pricelist / list_price if value is 0
+                if not price and rec.product_tmpl_id:
+                    if rec.instance_id.pricelist_id:
+                        product = rec.product_tmpl_id.product_variant_id
+                        price = (
+                            rec.instance_id.pricelist_id._get_product_price(
+                                product, 1.0
+                            )
+                            or rec.product_tmpl_id.list_price
+                        )
+                    else:
+                        price = rec.product_tmpl_id.list_price
+                if price:
+                    payload["regular_price"] = str(round(price, 4))
+
+            if not payload:
+                continue
+
+            try:
+                svc.update_product(rec.instance_id, rec.woo_id, payload)
+                rec.with_context(skip_wc_sync=True).write(
+                    {"last_sync_date": fields.Datetime.now(), "woo_pending_sync": False}
+                )
+                _logger.info(
+                    "WC sync payload %s for product '%s' (woo_id=%s, instance='%s')",
+                    list(payload.keys()),
+                    rec.woo_name,
+                    rec.woo_id,
+                    rec.instance_id.name,
+                )
+            except Exception as exc:
+                _logger.warning(
+                    "Could not sync fields %s to WooCommerce for product '%s' (woo_id=%s): %s",
+                    list(payload.keys()),
+                    rec.woo_name,
+                    rec.woo_id,
+                    exc,
+                )
+
+        return result
+
     # ── Actions ────────────────────────────────────────────────────────────────
 
     def action_link_manually(self):
@@ -422,7 +526,7 @@ class WooProduct(models.Model):
         if self.woo_image_url_input:
             write_vals["woo_image_url_input"] = False
         write_vals.update(image_vals)
-        self.write(write_vals)
+        self.with_context(skip_wc_sync=True).write(write_vals)
         return {
             "type": "ir.actions.client",
             "tag": "display_notification",
@@ -527,7 +631,7 @@ class WooProduct(models.Model):
         # Clear input URL field after sending
         if self.woo_image_url_input:
             vals["woo_image_url_input"] = False
-        self.write(vals)
+        self.with_context(skip_wc_sync=True).write(vals)
         return {
             "type": "ir.actions.client",
             "tag": "display_notification",
@@ -539,3 +643,161 @@ class WooProduct(models.Model):
                 "next": {"type": "ir.actions.act_window_close"},
             },
         }
+
+    def _bus_notify(self, msg_type, title, message, sticky=False):
+        """Sends a real-time notification to the current user via Odoo bus.
+
+        These notifications are delivered immediately (longpoll) regardless of
+        whether the final HTTP response is ever sent back to the browser.
+        That means the user sees progress even if the worker is killed by
+        Odoo's memory/CPU limiter before the action returns.
+        """
+        try:
+            self.env["bus.bus"]._sendone(
+                self.env.user.partner_id,
+                "simple_notification",
+                {
+                    "title": title,
+                    "message": message,
+                    "type": msg_type,
+                    "sticky": sticky,
+                },
+            )
+            self.env.cr.commit()
+        except Exception:
+            pass  # never break the sync loop over a notification failure
+
+    def action_push_pending_to_wc(self):
+        """
+        Bulk-syncs the current recordset to WooCommerce.
+
+        Called from the tree-view server action "Sync to WooCommerce".
+        Sends each record's current woo_status, stock_status and price in a
+        single PUT call per record. Records without a woo_id are skipped.
+
+        Progress is committed to the DB after each successful product so that
+        if the browser times out (Odoo worker keeps running), the records
+        already synced are permanently marked woo_pending_sync=False.
+        Records that fail keep woo_pending_sync=True and can be retried by
+        running the action again.
+
+        Real-time bus notifications are sent so the user receives feedback
+        even if the connection drops before the action returns.
+        """
+        to_sync = self.filtered(lambda r: r.woo_id and r.instance_id)
+        total = len(to_sync)
+
+        if not total:
+            return {
+                "type": "ir.actions.client",
+                "tag": "display_notification",
+                "params": {
+                    "title": _("WooCommerce sync"),
+                    "message": _("No products with a WooCommerce ID were selected."),
+                    "type": "warning",
+                    "sticky": False,
+                },
+            }
+
+        ok = 0
+        failed = 0
+        errors = []
+        svc = self.env["woo.service"]
+
+        # ── Start notification ────────────────────────────────────────────────
+        self._bus_notify(
+            "info",
+            _("WooCommerce sync"),
+            _("Starting sync of %d product(s)…") % total,
+        )
+
+        for rec in to_sync:
+            payload = {
+                "status": rec.woo_status or "draft",
+                "stock_status": rec.stock_status or "instock",
+            }
+
+            # Price: manual > pricelist > list_price
+            price = rec.woo_price_input
+            if not price and rec.product_tmpl_id:
+                if rec.instance_id.pricelist_id:
+                    product = rec.product_tmpl_id.product_variant_id
+                    price = (
+                        rec.instance_id.pricelist_id._get_product_price(product, 1.0)
+                        or rec.product_tmpl_id.list_price
+                    )
+                else:
+                    price = rec.product_tmpl_id.list_price
+            if price:
+                payload["regular_price"] = str(round(price, 4))
+
+            try:
+                svc.update_product(rec.instance_id, rec.woo_id, payload)
+                rec.with_context(skip_wc_sync=True).write(
+                    {
+                        "last_sync_date": fields.Datetime.now(),
+                        "woo_pending_sync": False,
+                    }
+                )
+                # Commit after each success: partial progress is persisted even
+                # if the worker is killed by Odoo's resource limiter.
+                self.env.cr.commit()
+                ok += 1
+                _logger.info(
+                    "Bulk WC sync OK: '%s' (woo_id=%s)", rec.woo_name, rec.woo_id
+                )
+
+                # ── Progress notification every 10 products ───────────────────
+                if ok % 10 == 0:
+                    remaining = total - ok - failed
+                    self._bus_notify(
+                        "info",
+                        _("WooCommerce sync in progress…"),
+                        _("%(ok)d/%(total)d synced — %(remaining)d remaining.")
+                        % {"ok": ok, "total": total, "remaining": remaining},
+                    )
+
+            except Exception as exc:
+                # Rollback only the failed write; continue with the next record.
+                self.env.cr.rollback()
+                failed += 1
+                errors.append(f"• {rec.woo_name}: {exc}")
+                _logger.warning(
+                    "Bulk WC sync error for '%s' (woo_id=%s): %s",
+                    rec.woo_name,
+                    rec.woo_id,
+                    exc,
+                )
+                # Notify immediately on each error so the user is aware
+                self._bus_notify(
+                    "warning",
+                    _("WooCommerce sync — error"),
+                    _("'%s' could not be synced: %s") % (rec.woo_name, exc),
+                    sticky=False,
+                )
+
+        # ── Final notification (delivered even if browser already disconnected)
+        if failed:
+            final_msg = _(
+                "%(ok)d synced correctly, %(failed)d still pending.\n"
+                "Use the 'Pending sync' filter and run 'Sync to WooCommerce' again to retry."
+            ) % {"ok": ok, "failed": failed}
+            self._bus_notify("warning", _("WooCommerce sync — incomplete"), final_msg, sticky=True)
+            msg_type = "warning"
+        else:
+            final_msg = _("All %d product(s) synced to WooCommerce successfully.") % ok
+            self._bus_notify("success", _("WooCommerce sync — done ✓"), final_msg, sticky=True)
+            msg_type = "success"
+
+        # display_notification is shown when the browser IS still connected
+        return {
+            "type": "ir.actions.client",
+            "tag": "display_notification",
+            "params": {
+                "title": _("WooCommerce sync"),
+                "message": final_msg,
+                "type": msg_type,
+                "sticky": bool(failed),
+            },
+        }
+
