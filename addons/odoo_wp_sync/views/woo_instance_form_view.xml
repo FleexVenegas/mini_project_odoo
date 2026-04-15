@@ -24,14 +24,14 @@
                         <button name="action_view_woo_products" type="object" class="oe_stat_button" icon="fa-cube" invisible="state != 'connected'">
                             <field name="woo_product_count" widget="statinfo" string="Productos WC"/>
                         </button>
-                        <button name="action_sync_products" type="object" class="oe_stat_button" icon="fa-download" invisible="state != 'connected'">
+                        <button name="action_sync_products" type="object" class="oe_stat_button" icon="fa-refresh" invisible="state != 'connected'">
                             <div class="o_field_widget o_stat_info">
-                                <span class="o_stat_text">Importar Productos</span>
+                                <span class="o_stat_text">Sincronizar Productos</span>
                             </div>
                         </button>
                         <button name="action_sync_orders" type="object" class="oe_stat_button" icon="fa-refresh" invisible="state != 'connected'">
                             <div class="o_field_widget o_stat_info">
-                                <span class="o_stat_text">Sincronizar Ahora</span>
+                                <span class="o_stat_text">Sincronizar Ordenes</span>
                             </div>
                         </button>
                     </div>
@@ -184,13 +184,13 @@
                                 </group>
                             </group>
 
-                            <group string="Pertinencia de Datos">
+                            <!-- <group string="Pertinencia de Datos">
                                 <field name="company_id" string="Compañia"/>
-                            </group>
+                            </group> -->
 
                             <group string="Comportamiento">
                                 <group>
-                                    <field name="confirm_orders" string="Confirmar automáticamente pedidos importados de WooCommerce" widget="boolean_toggle"/>
+                                    <field name="confirm_orders" string="Confirmar pedidos manualmente" widget="boolean_toggle"/>
                                 </group>
                             </group>
 
@@ -199,14 +199,14 @@
                                     <field name="auto_create_sale_order" widget="boolean_toggle"/>
                                     <field name="auto_create_sale_order_statuses" placeholder="processing,completed" invisible="not auto_create_sale_order"/>
                                 </group>
-                                <group invisible="not auto_create_sale_order">
+                                <!-- <group invisible="not auto_create_sale_order">
                                     <div class="alert alert-info" role="alert" colspan="2">
                                         <i class="fa fa-info-circle me-1"/>
                                         Al sincronizar, se creará un pedido de venta para cada orden cuyo estado coincida con los configurados.
                                         Si <b>Confirmar pedidos automáticamente</b> está activo, el pedido se confirmará directamente;
                                         de lo contrario, quedará como cotización.
                                     </div>
-                                </group>
+                                </group> -->
                             </group>
                         </page>
 
@@ -217,8 +217,14 @@
                                     <field name="warehouse_id"/>
                                 </group>
                                 <group>
-                                    <field name="update_stock" widget="boolean_toggle"/>
                                     <field name="update_order_status_wc" widget="boolean_toggle"/>
+                                </group>
+                            </group>
+
+                            <group string="Inventario de productos">
+                                <group>
+                                    <field name="manage_stock" widget="boolean_toggle"/>
+                                    <!-- <field name="update_stock" widget="boolean_toggle" invisible="not manage_stock"/> -->
                                 </group>
                             </group>
                         </page>

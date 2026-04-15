@@ -29,7 +29,7 @@
                 <field name="woo_name" string="Producto WC"/>
                 <field name="product_tmpl_id" string="Producto Odoo" optional="show"/>
                 <field name="woo_status" string="Publicación" widget="badge" decoration-success="woo_status == 'publish'" decoration-warning="woo_status == 'pending'" decoration-info="woo_status == 'draft'" decoration-muted="woo_status == 'private'"/>
-                <field name="stock_status" string="Stock" widget="badge" decoration-success="stock_status == 'instock'" decoration-warning="stock_status == 'onbackorder'" decoration-danger="stock_status == 'outofstock'"/>
+                <field name="stock_status" string="Estado de stock" widget="badge" decoration-success="stock_status == 'instock'" decoration-warning="stock_status == 'onbackorder'" decoration-danger="stock_status == 'outofstock'"/>
                 <field name="woo_price" string="Precio" optional="show" widget="monetary"/>
                 <field name="link_state" string="Vínculo" widget="badge" decoration-success="link_state == 'linked'" decoration-warning="link_state == 'unlinked'"/>
                 <field name="last_sync_date" string="Últ. sincronización" optional="hide"/>
@@ -114,9 +114,11 @@
                     <!-- ── Sección 3: Stock e Imagen ──────────────────────────── -->
                     <group>
                         <group string="Control de stock">
+                            <field name="instance_manage_stock" invisible="1"/>
                             <field name="stock_status" widget="radio"/>
-                            <field name="woo_min_stock" string="Stock mínimo" help="Cantidad mínima antes de marcar el producto como agotado."/>
-                            <field name="woo_max_stock" string="Stock máximo" help="Cantidad máxima de stock a gestionar en WooCommerce."/>
+                            <field name="stock_quantity" string="Cantidad en stock" invisible="not instance_manage_stock" help="Cantidad de stock a enviar a WooCommerce. Activa la gestión de stock automáticamente."/>
+                            <field name="woo_min_stock" string="Stock mínimo" invisible="not instance_manage_stock" help="Cantidad mínima antes de marcar el producto como agotado."/>
+                            <field name="woo_max_stock" string="Stock máximo" invisible="not instance_manage_stock" help="Cantidad máxima de stock a gestionar en WooCommerce."/>
                         </group>
                         <group string="Imagen">
                             <field name="woo_image_src" readonly="1" widget="url" string="Imagen actual" invisible="not woo_image_src"/>

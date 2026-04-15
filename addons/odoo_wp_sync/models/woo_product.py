@@ -76,6 +76,13 @@ class WooProduct(models.Model):
         digits=(16, 4),
     )
     woo_permalink = fields.Char(string="URL en WC", readonly=True)
+
+    instance_manage_stock = fields.Boolean(
+        related="instance_id.manage_stock",
+        string="Gestión de stock activa",
+        store=False,
+    )
+
     woo_min_stock = fields.Float(
         string="Stock mínimo",
         digits=(16, 0),
@@ -86,6 +93,7 @@ class WooProduct(models.Model):
         digits=(16, 0),
         help="Cantidad máxima de stock permitida en WooCommerce.",
     )
+
     stock_status = fields.Selection(
         [
             ("instock", "En stock"),
@@ -94,6 +102,10 @@ class WooProduct(models.Model):
         ],
         string="Estado de stock",
         help="Estado de disponibilidad que se mostrará en la tienda WooCommerce.",
+    )
+
+    stock_quantity = fields.Float(
+        string="Cantidad en stock", digits=(16, 0), help="Cantidad de stock disponible."
     )
 
     # ── Vínculo con Odoo ───────────────────────────────────────────────────────
@@ -395,6 +407,13 @@ class WooProduct(models.Model):
             "woo_permalink": wc_response.get("permalink", ""),
             "last_sync_date": fields.Datetime.now(),
         }
+
+        # Stock de WooCommerce
+        if self.instance_manage_stock:
+            write_vals["stock_quantity"] = wc_response.get("stock_quantity") or 0
+            write_vals["min_quantity"] = wc_response.get("woo_min_stock") or 0
+            write_vals["max_quantity"] = wc_response.get("woo_max_stock") or 0
+
         # Capturar URL de imagen devuelta por WooCommerce (sin guardar binario)
         wc_images = wc_response.get("images", [])
         if wc_images:
@@ -426,12 +445,21 @@ class WooProduct(models.Model):
             "name": self.woo_name,
             "stock_status": self.stock_status or "instock",
         }
-        if self.woo_min_stock:
+
+        if (
+            self.instance_manage_stock
+            and self.stock_quantity is not False
+            and self.stock_quantity >= 0
+        ):
+            payload["manage_stock"] = True
+            payload["stock_quantity"] = int(self.stock_quantity)
+
+        if self.instance_manage_stock and self.woo_min_stock:
             payload["min_quantity"] = int(self.woo_min_stock)
-        if self.woo_max_stock:
+        if self.instance_manage_stock and self.woo_max_stock:
             payload["manage_stock"] = True
             payload["max_quantity"] = int(self.woo_max_stock)
-        if self.woo_status:
+        if self.instance_manage_stock and self.woo_status:
             payload["status"] = self.woo_status
 
         # Calcular y enviar precio
@@ -480,6 +508,14 @@ class WooProduct(models.Model):
         vals = {"last_sync_date": fields.Datetime.now()}
         if price:
             vals["woo_price"] = price
+        # Capturar stock_quantity devuelto por WooCommerce
+        if wc_response and isinstance(wc_response, dict):
+            wc_qty = wc_response.get("stock_quantity")
+            if wc_qty is not None:
+                vals["stock_quantity"] = wc_qty
+            wc_stock_status = wc_response.get("stock_status")
+            if wc_stock_status:
+                vals["stock_status"] = wc_stock_status
         vals.update(image_vals)
         # Capturar URL de imagen devuelta por WooCommerce
         if wc_response and self.woo_image_url_input:

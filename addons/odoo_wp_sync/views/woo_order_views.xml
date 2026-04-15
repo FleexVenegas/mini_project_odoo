@@ -18,7 +18,13 @@
                 <field name="total" string="Total" widget="monetary" options="{'currency_field': 'currency'}"/>
                 <field name="currency" string="Moneda"/>
                 <field name="date_created" string="Fecha"/>
-                <field name="status" string="Estado" widget="badge" decoration-info="status in ('pending', 'on-hold')" decoration-success="status == 'completed'" decoration-warning="status == 'processing'" decoration-danger="status in ('cancelled', 'refunded', 'failed')"/>
+                <field name="status" 
+                    string="Estado" 
+                    widget="badge" 
+                    decoration-info="status in ('pending', 'on-hold')" 
+                    decoration-success="status == 'completed'" 
+                    decoration-warning="status == 'processing'" 
+                    decoration-danger="status in ('cancelled', 'refunded', 'failed')"/>
                 <field name="sale_order_id" string="Pedido Odoo" readonly="1"/>
             </tree>
         </field>

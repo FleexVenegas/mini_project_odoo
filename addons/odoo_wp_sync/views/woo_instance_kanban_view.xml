@@ -32,11 +32,11 @@ Productos WC
                                     </a>
                                     <a role="menuitem" type="object" name="action_sync_orders" class="dropdown-item">
                                         <i class="fa fa-refresh me-2"/>
-Sincronizar Pedidos
+Sincronizar órdenes
                                     </a>
                                     <a role="menuitem" type="object" name="action_sync_products" class="dropdown-item">
                                         <i class="fa fa-download me-2"/>
-Importar Productos
+Sincronizar productos
                                     </a>
                                     <div class="dropdown-divider"/>
                                     <a role="menuitem" type="object" name="action_test_connection" class="dropdown-item">

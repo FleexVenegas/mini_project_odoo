@@ -54,6 +54,7 @@ class WooProductSync(models.AbstractModel):
             "woo_image_src": first_image.get("src", ""),
             "last_sync_date": fields.Datetime.now(),
             "stock_status": wc_product.get("stock_status", "unknown"),
+            "stock_quantity": wc_product.get("stock_quantity") or 0,
         }
 
         # ── Categorías ───────────────────────────────────────────────────────────

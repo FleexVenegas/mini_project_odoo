@@ -581,6 +581,16 @@ class OdooWpSync(models.Model):
         """Abre el wizard de confirmación para crear pedidos en Odoo (soporta múltiples registros)"""
         confirmation_wizard = self.env["confirmation.wizard"]
 
+        # Validar que todas las instancias involucradas estén conectadas
+        instances = self.mapped("instance_id")
+        not_connected = instances.filtered(lambda i: i.state != "connected")
+        if not_connected:
+            names = ", ".join(not_connected.mapped("name"))
+            raise UserError(
+                f"La(s) siguiente(s) instancia(s) no están conectadas correctamente: {names}.\n"
+                "Por favor, prueba la conexión desde la configuración de la instancia antes de continuar."
+            )
+
         # Filtrar solo las órdenes que NO tienen pedido asociado
         orders_to_create = self.filtered(lambda o: not o.sale_order_id)
         orders_already_exist = self.filtered(lambda o: o.sale_order_id)
