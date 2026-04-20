@@ -24,6 +24,12 @@ class WooOrderLine(models.Model):
         index=True,
     )
     sequence = fields.Integer(default=10)
+    line_type = fields.Selection(
+        [("product", "Product"), ("shipping", "Shipping")],
+        string="Type",
+        default="product",
+        readonly=True,
+    )
     name = fields.Char(string="Product", readonly=True)
     sku = fields.Char(string="SKU", readonly=True)
     quantity = fields.Float(string="Quantity", digits=(16, 2), readonly=True)

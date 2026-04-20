@@ -97,7 +97,8 @@
                         <!-- Order Items -->
                         <page string="Products" name="items">
                             <field name="line_ids" nolabel="1" readonly="1">
-                                <tree string="Order Lines" create="false" delete="false" edit="false" no_open="true">
+                                <tree string="Order Lines" create="false" delete="false" edit="false" no_open="true" decoration-info="line_type == 'shipping'">
+                                    <field name="line_type" column_invisible="1"/>
                                     <field name="name" string="Producto"/>
                                     <field name="sku" string="SKU"/>
                                     <field name="quantity" string="Cantidad"/>

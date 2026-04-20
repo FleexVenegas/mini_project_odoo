@@ -177,3 +177,180 @@
         width: 100% !important;
     }
 }
+
+// ── WooCommerce Coupon Kanban ────────────────────────────────────────────────
+
+.woo_coupon_kanban {
+    .o_kanban_record {
+        padding: 0 5px;
+        margin-bottom: 10px;
+    }
+}
+
+.woo_coupon_card {
+    border-radius: 10px;
+    border: 1px solid #e5e7eb;
+    background: #fff;
+    position: relative;
+    cursor: pointer;
+    transition: box-shadow 0.25s ease, transform 0.25s ease;
+    overflow: hidden;
+
+    &:hover {
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.11);
+        transform: translateY(-2px);
+        z-index: 1;
+    }
+
+    &.woo_coupon_card--expired {
+        opacity: 0.65;
+
+        .woo_coupon_card__code {
+            text-decoration: line-through;
+            color: #9ca3af;
+        }
+    }
+
+    &.woo_coupon_card--pending {
+        border-color: #fbbf24;
+    }
+
+    // Barra de color superior
+    .woo_coupon_card__bar {
+        height: 4px;
+        width: 100%;
+        background: #d1d5db;
+
+        &.bar--percent {
+            background: #8b5cf6;
+        }
+
+        // purple
+        &.bar--fixed-cart {
+            background: #10b981;
+        }
+
+        // green
+        &.bar--fixed-product {
+            background: #f97316;
+        }
+
+        // orange
+    }
+
+    .woo_coupon_card__body {
+        padding: 12px 14px 10px;
+    }
+
+    // Header: código + badge sync
+    .woo_coupon_card__header {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        margin-bottom: 8px;
+    }
+
+    .woo_coupon_card__code {
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-size: 0.85rem;
+        font-weight: 600;
+        letter-spacing: 0.04em;
+        color: #1f2937;
+        flex: 1;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    // Icono de sync en el header
+    .woo_coupon_badge {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 22px;
+        height: 22px;
+        border-radius: 50%;
+        font-size: 0.7rem;
+        flex-shrink: 0;
+
+        &.woo_coupon_badge--success {
+            background: #d1fae5;
+            color: #059669;
+        }
+
+        &.woo_coupon_badge--warning {
+            background: #fef3c7;
+            color: #d97706;
+        }
+
+        &.woo_coupon_badge--muted {
+            background: #f3f4f6;
+            color: #9ca3af;
+        }
+    }
+
+    // Descuento grande
+    .woo_coupon_card__amount {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #111827;
+        line-height: 1.2;
+        margin-bottom: 8px;
+        display: flex;
+        align-items: baseline;
+        gap: 4px;
+    }
+
+    .woo_coupon_card__type {
+        font-size: 0.7rem;
+        font-weight: 500;
+        color: #6b7280;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+
+    // Pills de propiedades
+    .woo_coupon_card__pills {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 4px;
+        margin-bottom: 10px;
+        min-height: 20px;
+    }
+
+    .woo_coupon_pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 3px;
+        background: #f3f4f6;
+        color: #374151;
+        border-radius: 20px;
+        padding: 1px 8px;
+        font-size: 0.72rem;
+        font-weight: 500;
+
+        &.woo_coupon_pill--danger {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+    }
+
+    // Footer: usos + expiración
+    .woo_coupon_card__footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-top: 1px solid #f3f4f6;
+        padding-top: 8px;
+        font-size: 0.72rem;
+        color: #9ca3af;
+        gap: 6px;
+    }
+
+    .woo_coupon_card__usage,
+    .woo_coupon_card__expires {
+        display: inline-flex;
+        align-items: center;
+        gap: 3px;
+    }
+}

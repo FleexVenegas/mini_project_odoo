@@ -537,6 +537,7 @@ class OdooWpSync(models.Model):
                     0,
                     0,
                     {
+                        "line_type": "product",
                         "sku": line_data["sku"],
                         "name": line_data["name"],
                         "quantity": line_data["quantity"],
@@ -544,6 +545,34 @@ class OdooWpSync(models.Model):
                         "subtotal": line_data["subtotal"],
                         "total": line_data["total"],
                         "total_tax": line_data["total_tax"],
+                    },
+                )
+            )
+
+        # Add a shipping line if there is a shipping total
+        shipping_total = float(order_data.get("shipping_total", 0))
+        shipping_tax = float(order_data.get("shipping_tax", 0))
+        if shipping_total:
+            shipping_lines = order_data.get("shipping_lines", [])
+            shipping_method = (
+                shipping_lines[0].get("method_title", "Shipping")
+                if shipping_lines
+                else "Shipping"
+            )
+            line_ids_commands.append(
+                (
+                    0,
+                    0,
+                    {
+                        "line_type": "shipping",
+                        "name": shipping_method,
+                        "sku": "",
+                        "quantity": 1,
+                        "price": shipping_total,
+                        "subtotal": shipping_total,
+                        "total": shipping_total,
+                        "total_tax": shipping_tax,
+                        "sequence": 9999,
                     },
                 )
             )

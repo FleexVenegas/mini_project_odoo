@@ -2,7 +2,7 @@
 <odoo>
 
     <!-- Root Menu -->
-    <menuitem id="odoo_wp_sync_menu_root" name="OdooWpSync"/>
+    <menuitem id="odoo_wp_sync_menu_root" name="Odoo WordPress Sync"/>
 
     <!-- Instances -->
     <menuitem id="odoo_wp_sync__menu_instances" name="Instances" parent="odoo_wp_sync_menu_root" action="action_woo_instance" sequence="1"/>
@@ -10,6 +10,8 @@
     <menuitem id="odoo_wp_sync_orders_menu" name="Orders" parent="odoo_wp_sync_menu_root" action="action_server_orders_by_instance" sequence="2"/>
 
     <menuitem id="odoo_wp_sync_product_menu" name="Products" parent="odoo_wp_sync_menu_root" action="action_server_products_by_instance" sequence="3"/>
+
+    <menuitem id="menu_woo_coupon" name="Coupons" parent="odoo_wp_sync_menu_root" action="action_woo_coupon" sequence="10" />
 
     <menuitem id="menu_woo_category" name="Categories" parent="odoo_wp_sync_menu_root" action="action_woo_category" sequence="20" />
 

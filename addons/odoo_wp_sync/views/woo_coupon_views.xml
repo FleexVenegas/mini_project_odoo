@@ -1,0 +1,298 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ══════════════════════════════════════════════════════════════════════
+         ACTION
+    ══════════════════════════════════════════════════════════════════════ -->
+    <record id="action_woo_coupon" model="ir.actions.act_window">
+        <field name="name">WooCommerce Coupons</field>
+        <field name="res_model">woo.coupon</field>
+        <field name="view_mode">kanban,tree,form</field>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No coupons created yet
+            </p>
+            <p>
+                Create your first WooCommerce coupon to offer discounts to your customers.
+            </p>
+        </field>
+    </record>
+
+    <!-- ══════════════════════════════════════════════════════════════════════
+         SEARCH VIEW
+    ══════════════════════════════════════════════════════════════════════ -->
+    <record id="view_woo_coupon_search" model="ir.ui.view">
+        <field name="name">woo.coupon.search</field>
+        <field name="model">woo.coupon</field>
+        <field name="arch" type="xml">
+            <search string="Search Coupons">
+                <field name="code" string="Code"/>
+                <field name="description"/>
+                <field name="instance_id"/>
+                <separator/>
+                <filter name="filter_published" string="Published" domain="[('status', '=', 'publish')]"/>
+                <filter name="filter_draft" string="Draft" domain="[('status', '=', 'draft')]"/>
+                <separator/>
+                <filter name="filter_percent" string="Percentage" domain="[('discount_type', '=', 'percent')]"/>
+                <filter name="filter_fixed_cart" string="Fixed Cart" domain="[('discount_type', '=', 'fixed_cart')]"/>
+                <filter name="filter_fixed_product" string="Fixed Product" domain="[('discount_type', '=', 'fixed_product')]"/>
+                <separator/>
+                <filter name="filter_expired" string="Expired" domain="[('is_expired', '=', True)]"/>
+                <filter name="filter_active" string="Active" domain="[('is_expired', '=', False)]"/>
+                <separator/>
+                <filter name="filter_free_shipping" string="Free Shipping" domain="[('free_shipping', '=', True)]"/>
+                <group expand="0" string="Group By">
+                    <filter name="group_instance" string="Instance" context="{'group_by': 'instance_id'}"/>
+                    <filter name="group_status" string="Status" context="{'group_by': 'status'}"/>
+                    <filter name="group_discount_type" string="Discount Type" context="{'group_by': 'discount_type'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- ══════════════════════════════════════════════════════════════════════
+         KANBAN VIEW
+    ══════════════════════════════════════════════════════════════════════ -->
+    <record id="view_woo_coupon_kanban" model="ir.ui.view">
+        <field name="name">woo.coupon.kanban</field>
+        <field name="model">woo.coupon</field>
+        <field name="arch" type="xml">
+            <kanban class="woo_coupon_kanban" default_group_by="status">
+                <field name="code"/>
+                <field name="discount_type"/>
+                <field name="amount"/>
+                <field name="status"/>
+                <field name="display_discount"/>
+                <field name="is_expired"/>
+                <field name="date_expires"/>
+                <field name="usage_count"/>
+                <field name="usage_limit"/>
+                <field name="free_shipping"/>
+                <field name="minimum_amount"/>
+                <field name="individual_use"/>
+                <field name="woo_id"/>
+                <field name="pending_sync"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div t-attf-class="woo_coupon_card oe_kanban_global_click
+                            #{record.is_expired.raw_value ? ' woo_coupon_card--expired' : ''}
+                            #{record.pending_sync.raw_value ? ' woo_coupon_card--pending' : ''}">
+
+                            <!-- Barra de color superior según tipo de descuento -->
+                            <div t-attf-class="woo_coupon_card__bar
+                                #{record.discount_type.raw_value == 'percent' ? ' bar--percent' : ''}
+                                #{record.discount_type.raw_value == 'fixed_cart' ? ' bar--fixed-cart' : ''}
+                                #{record.discount_type.raw_value == 'fixed_product' ? ' bar--fixed-product' : ''}"/>
+
+                            <div class="woo_coupon_card__body">
+
+                                <!-- Código + icono de sync -->
+                                <div class="woo_coupon_card__header">
+                                    <span class="woo_coupon_card__code">
+                                        <field name="code"/>
+                                    </span>
+                                    <span t-if="record.pending_sync.raw_value" class="woo_coupon_badge woo_coupon_badge--warning" title="Changes not synced to WooCommerce">
+                                        <i class="fa fa-refresh" title="Pending sync"/>
+                                    </span>
+                                    <span t-elif="record.woo_id.raw_value" class="woo_coupon_badge woo_coupon_badge--success" title="Synced with WooCommerce">
+                                        <i class="fa fa-cloud" title="WC synced"/>
+                                    </span>
+                                    <span t-else="" class="woo_coupon_badge woo_coupon_badge--muted" title="Not yet synced to WooCommerce">
+                                        <i class="fa fa-cloud-upload" title="Not synced"/>
+                                    </span>
+                                </div>
+
+                                <!-- Descuento grande -->
+                                <div class="woo_coupon_card__amount">
+                                    <field name="display_discount"/>
+                                    <span class="woo_coupon_card__type">
+                                        <t t-if="record.discount_type.raw_value == 'percent'">% off</t>
+                                        <t t-elif="record.discount_type.raw_value == 'fixed_cart'">cart</t>
+                                        <t t-else="">product</t>
+                                    </span>
+                                </div>
+
+                                <!-- Pills de propiedades activas -->
+                                <div class="woo_coupon_card__pills">
+                                    <span t-if="record.is_expired.raw_value" class="woo_coupon_pill woo_coupon_pill--danger" title="Expired">
+                                        <i class="fa fa-clock-o" title="Expired"/>
+ Expired
+                                    </span>
+                                    <span t-if="record.free_shipping.raw_value" class="woo_coupon_pill" title="Free Shipping">
+                                        <i class="fa fa-truck" title="Free Shipping"/>
+                                    </span>
+                                    <span t-if="record.individual_use.raw_value" class="woo_coupon_pill" title="Individual use only">
+                                        <i class="fa fa-user" title="Individual use"/>
+                                    </span>
+                                    <span t-if="record.minimum_amount.raw_value" class="woo_coupon_pill" title="Minimum spend">
+                                        Min $<field name="minimum_amount"/>
+                                    </span>
+                                </div>
+
+                                <!-- Footer: usos + expiración -->
+                                <div class="woo_coupon_card__footer">
+                                    <span t-if="record.usage_limit.raw_value" class="woo_coupon_card__usage">
+                                        <i class="fa fa-bar-chart me-1" title="Usage"/>
+                                        <field name="usage_count"/>
+/                                        <field name="usage_limit"/>
+                                    </span>
+                                    <span t-elif="record.usage_count.raw_value" class="woo_coupon_card__usage">
+                                        <i class="fa fa-bar-chart me-1" title="Usage"/>
+                                        <field name="usage_count"/>
+ uses
+                                    </span>
+                                    <span t-if="record.date_expires.raw_value" t-attf-class="woo_coupon_card__expires #{record.is_expired.raw_value ? 'text-danger' : ''}">
+                                        <i class="fa fa-calendar me-1" title="Expires"/>
+                                        <field name="date_expires" options="{&quot;date_only&quot;: true}"/>
+                                    </span>
+                                </div>
+
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- ══════════════════════════════════════════════════════════════════════
+         TREE VIEW
+    ══════════════════════════════════════════════════════════════════════ -->
+    <record id="view_woo_coupon_tree" model="ir.ui.view">
+        <field name="name">woo.coupon.tree</field>
+        <field name="model">woo.coupon</field>
+        <field name="arch" type="xml">
+            <tree string="WooCommerce Coupons" default_order="code" decoration-danger="is_expired == True" decoration-muted="status == 'draft'" decoration-warning="pending_sync == True">
+                <field name="code" string="Code"/>
+                <field name="pending_sync" string="Pending" widget="boolean" optional="show"/>
+                <field name="instance_id" string="Instance" optional="show"/>
+                <field name="discount_type" string="Type" widget="badge" decoration-info="discount_type == 'percent'" decoration-success="discount_type == 'fixed_cart'" decoration-warning="discount_type == 'fixed_product'"/>
+                <field name="display_discount" string="Discount"/>
+                <field name="status" string="Status" widget="badge" decoration-success="status == 'publish'" decoration-muted="status == 'draft'" decoration-warning="status == 'pending'" decoration-info="status == 'private'"/>
+                <field name="minimum_amount" string="Min. Spend" optional="show"/>
+                <field name="usage_count" string="Used" optional="show"/>
+                <field name="usage_limit" string="Limit" optional="show"/>
+                <field name="date_expires" string="Expires" optional="show"/>
+                <field name="free_shipping" string="Free Ship" widget="boolean" optional="hide"/>
+                <field name="individual_use" string="Individual" widget="boolean" optional="hide"/>
+                <field name="last_sync_date" string="Last Sync" optional="hide"/>
+                <field name="is_expired" column_invisible="True"/>
+                <field name="woo_id" optional="hide"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- ══════════════════════════════════════════════════════════════════════
+         FORM VIEW
+    ══════════════════════════════════════════════════════════════════════ -->
+    <record id="view_woo_coupon_form" model="ir.ui.view">
+        <field name="name">woo.coupon.form</field>
+        <field name="model">woo.coupon</field>
+        <field name="arch" type="xml">
+            <form string="WooCommerce Coupon">
+                <field name="pending_sync" invisible="1"/>
+                <header>
+                    <button name="action_sync_to_woocommerce" string="Sync to WooCommerce" type="object" class="btn-primary" icon="fa-cloud-upload"/>
+                    <button name="action_confirm_delete_from_woocommerce" string="Delete from WooCommerce" type="object" class="btn-secondary" icon="fa-trash" invisible="not woo_id"/>
+                    <field name="status" widget="statusbar" statusbar_visible="draft,pending,publish,private" options="{'clickable': '1'}"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button class="oe_stat_button" icon="fa-bar-chart" disabled="1">
+                            <div class="o_stat_info">
+                                <field name="usage_count" class="o_stat_value"/>
+                                <span class="o_stat_text">Uses</span>
+                            </div>
+                        </button>
+                    </div>
+
+                    <widget name="web_ribbon" title="Expired" bg_color="text-bg-danger" invisible="not is_expired"/>
+                    <widget name="web_ribbon" title="Pending Sync" bg_color="text-bg-warning" invisible="not pending_sync"/>
+
+                    <div class="oe_title">
+                        <label for="code"/>
+                        <h1>
+                            <field name="code" placeholder="e.g. SUMMER20" required="1"/>
+                        </h1>
+                    </div>
+
+                    <group>
+                        <group string="Discount">
+                            <field name="discount_type"/>
+                            <field name="amount"/>
+                            <field name="display_discount" string="Preview" readonly="1"/>
+                        </group>
+                        <group string="WooCommerce">
+                            <field name="instance_id" required="1"/>
+                            <field name="woo_id" readonly="1" invisible="not woo_id"/>
+                            <field name="last_sync_date" readonly="1"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page string="Usage Restrictions" name="restrictions">
+                            <group>
+                                <group string="Order Requirements">
+                                    <field name="minimum_amount"/>
+                                    <field name="maximum_amount"/>
+                                    <field name="individual_use"/>
+                                    <field name="exclude_sale_items"/>
+                                </group>
+                                <group string="Usage Limits">
+                                    <field name="usage_limit" help="Leave empty or 0 for unlimited"/>
+                                    <field name="usage_limit_per_user" help="Leave empty or 0 for unlimited"/>
+                                    <field name="usage_count" readonly="1"/>
+                                </group>
+                            </group>
+                        </page>
+
+                        <page string="Products" name="products">
+                            <group>
+                                <group string="Include Products">
+                                    <field name="product_ids" widget="many2many_tags" domain="[('instance_id', '=', instance_id)]" options="{'no_create': True}" colspan="2"/>
+                                    <field name="product_category_ids" widget="many2many_tags" domain="[('instance_id', '=', instance_id)]" options="{'no_create': True}" colspan="2"/>
+                                </group>
+                                <group string="Exclude Products">
+                                    <field name="excluded_product_ids" widget="many2many_tags" domain="[('instance_id', '=', instance_id)]" options="{'no_create': True}" colspan="2"/>
+                                    <field name="excluded_category_ids" widget="many2many_tags" domain="[('instance_id', '=', instance_id)]" options="{'no_create': True}" colspan="2"/>
+                                </group>
+                            </group>
+                        </page>
+
+                        <page string="Dates &amp; Shipping" name="dates_shipping">
+                            <group>
+                                <group string="Validity Period">
+                                    <field name="date_start"/>
+                                    <field name="date_expires"/>
+                                    <field name="is_expired" readonly="1" widget="boolean_toggle"/>
+                                </group>
+                                <group string="Shipping">
+                                    <field name="free_shipping"/>
+                                </group>
+                            </group>
+                        </page>
+
+                        <page string="Advanced" name="advanced">
+                            <group>
+                                <group string="Coupon Availability">
+                                    <field name="availability_ids" widget="many2many_tags" options="{'no_create': True, 'no_open': True}" colspan="2"/>
+                                    <field name="auto_coupon"/>
+                                </group>
+                                <group string="Tax &amp; Restrictions">
+                                    <field name="apply_before_tax"/>
+                                    <field name="enable_category_restriction"/>
+                                </group>
+                            </group>
+                        </page>
+
+                        <page string="Description" name="description">
+                            <field name="description" placeholder="Internal notes about this coupon..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+</odoo>

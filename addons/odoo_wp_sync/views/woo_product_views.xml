@@ -74,7 +74,7 @@
                         </div>
                         <div class="oe_title flex-grow-1">
                             <h1>
-                                <field name="woo_name" placeholder="Product name"/>
+                                <field name="woo_name" placeholder="Product name" required="1"/>
                             </h1>
                             <div class="d-flex flex-wrap align-items-center gap-2 mt-2">
                                 <field name="link_state" widget="badge" decoration-success="link_state == 'linked'" decoration-warning="link_state == 'unlinked'"/>
@@ -90,12 +90,12 @@
                     <group>
                         <group string="WooCommerce">
                             <field name="instance_id" readonly="woo_id"/>
-                            <field name="woo_sku"/>
+                            <field name="woo_sku" required="1"/>
                             <field name="woo_type" readonly="woo_id"/>
                             <field name="woo_permalink" widget="url" string="View in store" readonly="1" invisible="not woo_permalink"/>
                         </group>
                         <group string="Link with Odoo">
-                            <field name="product_tmpl_id" options="{'no_create': True}" domain="[('sale_ok', '=', True)]"/>
+                            <field name="product_tmpl_id" options="{'no_create': True}" domain="[('sale_ok', '=', True)]" />
                             <field name="last_sync_date" readonly="1"/>
                         </group>
                     </group>
@@ -116,7 +116,7 @@
                     <group>
                         <group string="Stock control">
                             <field name="instance_manage_stock" invisible="1"/>
-                            <field name="stock_status" widget="radio"/>
+                            <field name="stock_status" widget="radio" required="1"/>
                             <field name="stock_quantity" string="Quantity in stock" invisible="not instance_manage_stock" help="Stock quantity to send to WooCommerce. Automatically enables stock management."/>
                             <field name="woo_min_stock" string="Minimum stock" invisible="not instance_manage_stock" help="Minimum quantity before marking the product as out of stock."/>
                             <field name="woo_max_stock" string="Maximum stock" invisible="not instance_manage_stock" help="Maximum stock quantity to manage in WooCommerce."/>
@@ -130,10 +130,10 @@
                     <!-- ── Section 4: Categories and Brands ──────────────────── -->
                     <group>
                         <group string="WooCommerce Categories">
-                            <field name="woo_category_ids" widget="many2many_tags" options="{'no_create': True}" domain="[('instance_id', '=', instance_id)]" string="Categories" help="Respects the parent/child hierarchy of WooCommerce."/>
+                            <field name="woo_category_ids" widget="many2many_tags" options="{'no_create': True}" domain="[('instance_id', '=', instance_id)]" string="Categories" help="Respects the parent/child hierarchy of WooCommerce." required="1"/>
                         </group>
                         <group string="WooCommerce Brands">
-                            <field name="woo_brand_ids" widget="many2many_tags" options="{'no_create': True}" domain="[('instance_id', '=', instance_id)]" string="Brands" help="Requires the brands plugin installed in WooCommerce."/>
+                            <field name="woo_brand_ids" widget="many2many_tags" options="{'no_create': True}" domain="[('instance_id', '=', instance_id)]" string="Brands" help="Requires the brands plugin installed in WooCommerce." required="1"/>
                         </group>
                     </group>
 

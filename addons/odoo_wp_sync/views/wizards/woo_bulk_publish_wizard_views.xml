@@ -23,12 +23,14 @@
 
                     <group string="Products to publish" col="1">
                         <field name="product_count" readonly="1" string="Total selected products"/>
-                        <field name="product_tmpl_ids" readonly="1" nolabel="1">
+                        <field name="line_ids" nolabel="1">
                             <tree create="false" delete="false" editable="false">
                                 <field name="default_code" string="SKU" optional="show"/>
-                                <field name="name" string="Name"/>
-                                <field name="list_price" string="Price" widget="monetary"/>
-                                <field name="woo_published_count" string="WC Instances" optional="show"/>
+                                <field name="name" string="Producto"/>
+                                <field name="base_price" string="Precio base" widget="monetary" options="{'currency_field': 'currency_id'}" optional="show"/>
+                                <field name="pricelist_price" string="Precio lista" widget="monetary" options="{'currency_field': 'currency_id'}" optional="show"/>
+                                <field name="woo_price" string="Precio WC (c/IVA)" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                <field name="currency_id" column_invisible="1"/>
                             </tree>
                         </field>
                     </group>

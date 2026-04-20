@@ -29,6 +29,7 @@ Odoo WordPress Sync
         "security/ir.model.access.csv",
         # Data: automatic sync cron job
         "data/cron_data.xml",
+        "data/woo_coupon_location_data.xml",
         # woo.instance — action primero (el tree lo referencia con %(xmlid)d)
         "views/woo_instance_action.xml",
         "views/woo_instance_list_view.xml",
@@ -42,6 +43,8 @@ Odoo WordPress Sync
         "views/woo_brand_views.xml",
         # Ordenes WooCommerce (odoo.wp.sync)
         "views/woo_order_views.xml",
+        # Cupones WooCommerce
+        "views/woo_coupon_views.xml",
         # Acciones filtradas por instancia activa (Ordenes, Productos, ...)
         "views/woo_instance_filtered_actions.xml",
         # Main menu
@@ -50,7 +53,7 @@ Odoo WordPress Sync
         "views/wizards/woo_confirmation_wizard_views.xml",
         "views/wizards/woo_link_wizard_views.xml",
         "views/wizards/woo_publish_wizard_views.xml",
-        "views/wizards/woo_bulk_publish_wizard_views.xml",
+        # "views/wizards/woo_bulk_publish_wizard_views.xml",
         # Herencia producto
         "views/woo_product_template_views.xml",
     ],

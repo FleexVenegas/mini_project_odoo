@@ -230,7 +230,9 @@ class WooProductSync(models.AbstractModel):
         """
         svc = self.env["woo.service"]
 
-        if price_override and price_override > 0:
+        # ── Price: manual override > pricelist > list_price ───────────────────
+        price_is_manual = bool(price_override and price_override > 0)
+        if price_is_manual:
             price = price_override
         elif instance.pricelist_id:
             product_variant = product_tmpl.product_variant_id
@@ -240,6 +242,27 @@ class WooProductSync(models.AbstractModel):
             )
         else:
             price = product_tmpl.list_price
+
+        # ── IVA: apply only when price comes from pricelist (not manual) ──────
+        if (
+            not price_is_manual
+            and instance.include_taxes_wc_product_sync
+            and instance.taxes_product
+            and price
+        ):
+            currency = (
+                instance.pricelist_id.currency_id
+                if instance.pricelist_id
+                else instance.company_id.currency_id or self.env.company.currency_id
+            )
+            taxes_res = instance.taxes_product.compute_all(
+                price,
+                currency=currency,
+                quantity=1.0,
+                product=product_tmpl.product_variant_id,
+                partner=None,
+            )
+            price = taxes_res["total_included"]
 
         payload = {
             "name": product_tmpl.name,

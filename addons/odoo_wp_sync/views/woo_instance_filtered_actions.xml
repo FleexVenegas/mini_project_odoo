@@ -67,7 +67,7 @@ if not instance:
 else:
     action = {
         'type': 'ir.actions.act_window',
-        'name': 'WooCommerce Products - %s' % instance.name,
+        'name': 'Products - %s' % instance.name,
         'res_model': 'woo.product',
         'view_mode': 'tree,form',
         'domain': [('instance_id', '=', instance.id)],
