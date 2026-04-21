@@ -9,13 +9,15 @@
 
     <menuitem id="odoo_wp_sync_orders_menu" name="Orders" parent="odoo_wp_sync_menu_root" action="action_server_orders_by_instance" sequence="2"/>
 
-    <menuitem id="odoo_wp_sync_product_menu" name="Products" parent="odoo_wp_sync_menu_root" action="action_server_products_by_instance" sequence="3"/>
+    <menuitem id="odoo_wp_sync_product_menu" name="Products" parent="odoo_wp_sync_menu_root" sequence="3"/>
 
-    <menuitem id="menu_woo_coupon" name="Coupons" parent="odoo_wp_sync_menu_root" action="action_woo_coupon" sequence="10" />
+    <menuitem id="odoo_wp_sync_product_sub_menu" name="Products" parent="odoo_wp_sync_product_menu" action="action_server_products_by_instance" sequence="5"/>
 
-    <menuitem id="menu_woo_category" name="Categories" parent="odoo_wp_sync_menu_root" action="action_woo_category" sequence="20" />
+    <menuitem id="menu_woo_coupon" name="Coupons" parent="odoo_wp_sync_menu_root" action="action_server_coupons_by_instance" sequence="10" />
 
-    <menuitem id="menu_woo_brand" name="Brands" parent="odoo_wp_sync_menu_root" action="action_woo_brand" sequence="21" />
+    <menuitem id="menu_woo_category" name="Categories" parent="odoo_wp_sync_product_menu" action="action_server_categories_by_instance" sequence="20" />
+
+    <menuitem id="menu_woo_brand" name="Brands" parent="odoo_wp_sync_product_menu" action="action_server_brands_by_instance" sequence="21" />
 
 
 </odoo>

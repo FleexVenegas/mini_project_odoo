@@ -234,6 +234,49 @@ class WooInstance(models.Model):
     # NOTE: Sales fields → woo_instance_sales.py
     # NOTE: Warehouse fields → woo_instance_warehouse.py
 
+    # ── Coupon Sync Settings ─────────────────────────────────────────────────
+
+    coupon_sync_status = fields.Selection(
+        [
+            ("any", "All Statuses"),
+            ("publish", "Published"),
+            ("draft", "Draft"),
+            ("pending", "Pending Review"),
+            ("private", "Private"),
+        ],
+        string="Coupon Status",
+        default="any",
+        help="Which coupon statuses to import from WooCommerce",
+    )
+    coupon_sync_expiry = fields.Selection(
+        [
+            ("all", "All Coupons"),
+            ("active", "Active Only (not expired)"),
+            ("expired", "Expired Only"),
+        ],
+        string="Coupon Expiry",
+        default="all",
+        help="Filter imported coupons by expiry date",
+    )
+    coupon_sync_mode = fields.Selection(
+        [
+            ("incremental", "Incremental (only new/changed)"),
+            ("full", "Full (all coupons)"),
+        ],
+        string="Coupon Sync Mode",
+        default="incremental",
+        help="Incremental: only fetch coupons modified since the last sync.\n"
+        "Full: fetch all coupons regardless of modification date.",
+    )
+    coupon_last_sync_date = fields.Datetime(
+        string="Last Coupon Sync",
+        readonly=True,
+    )
+    coupon_count = fields.Integer(
+        string="Coupons",
+        compute="_compute_statistics",
+    )
+
     _sql_constraints = [
         (
             "name_unique",
@@ -257,6 +300,7 @@ class WooInstance(models.Model):
             record.woo_product_linked_count = self.env["woo.product"].search_count(
                 domain_base + [("link_state", "=", "linked")]
             )
+            record.coupon_count = self.env["woo.coupon"].search_count(domain_base)
 
     @api.constrains("wp_url")
     def _check_wp_url(self):
@@ -421,6 +465,18 @@ class WooInstance(models.Model):
             "context": {"default_instance_id": self.id},
         }
 
+    def action_view_coupons(self):
+        """Open coupons related to this instance"""
+        self.ensure_one()
+        return {
+            "type": "ir.actions.act_window",
+            "name": _("Coupons - %s") % self.name,
+            "res_model": "woo.coupon",
+            "view_mode": "kanban,tree,form",
+            "domain": [("instance_id", "=", self.id)],
+            "context": {"default_instance_id": self.id},
+        }
+
     def action_view_pending_orders(self):
         """Open pending orders for this instance"""
         self.ensure_one()
@@ -515,6 +571,191 @@ class WooInstance(models.Model):
             }
 
         return result
+
+    def action_sync_coupons(self):
+        """Opens the confirmation wizard before importing coupons from WooCommerce."""
+        self.ensure_one()
+        if self.state != "connected":
+            return {
+                "type": "ir.actions.client",
+                "tag": "display_notification",
+                "params": {
+                    "title": _("Not connected"),
+                    "message": _("Instance '%s' is not connected.") % self.name,
+                    "type": "warning",
+                    "sticky": False,
+                },
+            }
+
+        status_label = dict(self._fields["coupon_sync_status"].selection).get(
+            self.coupon_sync_status, self.coupon_sync_status
+        )
+        expiry_label = dict(self._fields["coupon_sync_expiry"].selection).get(
+            self.coupon_sync_expiry, self.coupon_sync_expiry
+        )
+        mode_label = dict(self._fields["coupon_sync_mode"].selection).get(
+            self.coupon_sync_mode, self.coupon_sync_mode
+        )
+
+        # Build incremental range description
+        if self.coupon_sync_mode == "incremental" and self.coupon_last_sync_date:
+            since_str = self.coupon_last_sync_date.strftime("%Y-%m-%d %H:%M")
+            mode_detail = f"{mode_label} &mdash; changes since <b>{since_str}</b>"
+        elif self.coupon_sync_mode == "incremental":
+            mode_detail = (
+                f"{mode_label} &mdash; <i>no previous sync, will fetch all</i>"
+            )
+        else:
+            mode_detail = mode_label
+
+        return self.env["confirmation.wizard"].create_confirmation(
+            model_name="woo.instance",
+            method_name="_do_sync_coupons",
+            title=_("Import Coupons from WooCommerce?"),
+            description=_(
+                "This will import coupons from <b>%(instance)s</b>.<br/>"
+                "<br/>"
+                "<b>Mode:</b> %(mode)s<br/>"
+                "<b>Status filter:</b> %(status)s<br/>"
+                "<b>Expiry filter:</b> %(expiry)s<br/>"
+                "<br/>"
+                "Existing coupons (matched by WooCommerce ID) will be updated."
+            )
+            % {
+                "instance": self.name,
+                "mode": mode_detail,
+                "status": status_label,
+                "expiry": expiry_label,
+            },
+            record_id=self.id,
+            dialog_size="small",
+        )
+
+    def _do_sync_coupons(self):
+        """Import coupons from WooCommerce into Odoo."""
+        from datetime import datetime, timezone
+
+        self.ensure_one()
+
+        if self.state != "connected":
+            return {
+                "type": "ir.actions.client",
+                "tag": "display_notification",
+                "params": {
+                    "title": _("Cannot Sync"),
+                    "message": _("Instance %s is not connected.") % self.name,
+                    "type": "warning",
+                    "sticky": False,
+                },
+            }
+
+        # Build modified_after for incremental sync
+        modified_after = None
+        if self.coupon_sync_mode == "incremental" and self.coupon_last_sync_date:
+            # WC expects ISO-8601 UTC — format: 2025-01-15T10:30:00
+            modified_after = self.coupon_last_sync_date.strftime("%Y-%m-%dT%H:%M:%S")
+
+        wc_coupons = self.env["woo.service"].fetch_coupons(
+            self, status=self.coupon_sync_status, modified_after=modified_after
+        )
+
+        # Apply expiry filter (WC API has no native filter for this)
+        now = datetime.now(timezone.utc)
+
+        def _parse_wc_dt(exp_str):
+            """Parse a WC GMT datetime string to a timezone-aware UTC datetime."""
+            if not exp_str:
+                return None
+            exp_str = exp_str.strip()
+            # Replace "Z" with "+00:00" so fromisoformat handles it
+            if exp_str.endswith("Z"):
+                exp_str = exp_str[:-1] + "+00:00"
+            dt = datetime.fromisoformat(exp_str)
+            # If WC returned a naive datetime, treat it as UTC
+            if dt.tzinfo is None:
+                dt = dt.replace(tzinfo=timezone.utc)
+            return dt
+
+        if self.coupon_sync_expiry == "active":
+
+            def _is_active(c):
+                exp_dt = _parse_wc_dt(c.get("date_expires_gmt"))
+                if exp_dt is None:
+                    return True
+                try:
+                    return exp_dt > now
+                except TypeError:
+                    return True
+
+            wc_coupons = [c for c in wc_coupons if _is_active(c)]
+
+        elif self.coupon_sync_expiry == "expired":
+
+            def _is_expired(c):
+                exp_dt = _parse_wc_dt(c.get("date_expires_gmt"))
+                if exp_dt is None:
+                    return False
+                try:
+                    return exp_dt < now
+                except TypeError:
+                    return False
+
+            wc_coupons = [c for c in wc_coupons if _is_expired(c)]
+
+        created = updated = 0
+        WooCoupon = self.env["woo.coupon"]
+
+        for wc in wc_coupons:
+            existing = WooCoupon.search(
+                [("instance_id", "=", self.id), ("woo_id", "=", wc.get("id"))],
+                limit=1,
+            )
+            WooCoupon.from_woo_data(self, wc)
+            if existing:
+                updated += 1
+            else:
+                created += 1
+
+        self.write({"coupon_last_sync_date": fields.Datetime.now()})
+
+        total = created + updated
+        _logger.info(
+            "Coupon sync complete for '%s': %d total (%d created, %d updated)",
+            self.name,
+            total,
+            created,
+            updated,
+        )
+
+        return {
+            "type": "ir.actions.client",
+            "tag": "display_notification",
+            "params": {
+                "title": _("Coupons Imported"),
+                "message": _(
+                    "%(total)d coupons imported from %(instance)s "
+                    "(%(created)d new, %(updated)d updated)."
+                )
+                % {
+                    "total": total,
+                    "instance": self.name,
+                    "created": created,
+                    "updated": updated,
+                },
+                "type": "success",
+                "sticky": False,
+                "next": {
+                    "type": "ir.actions.act_window",
+                    "name": _("WooCommerce Coupons — %s") % self.name,
+                    "res_model": "woo.coupon",
+                    "view_mode": "kanban,tree,form",
+                    "views": [[False, "kanban"], [False, "tree"], [False, "form"]],
+                    "domain": [("instance_id", "=", self.id)],
+                    "context": {"default_instance_id": self.id},
+                    "target": "current",
+                },
+            },
+        }
 
     def get_api_credentials(self):
         """Return API credentials for this instance"""

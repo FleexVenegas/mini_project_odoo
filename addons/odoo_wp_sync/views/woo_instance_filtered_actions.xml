@@ -76,10 +76,9 @@ else:
         </field>
     </record>
 
-    <!--
-    ── PLANTILLA PARA NUEVAS SECCIONES ────────────────────────
-    <record id="action_server_NOMBRE_by_instance" model="ir.actions.server">
-        <field name="name">NOMBRE por Instancia</field>
+    
+    <record id="action_server_coupons_by_instance" model="ir.actions.server">
+        <field name="name">Coupons by Instance</field>
         <field name="model_id" ref="model_woo_instance"/>
         <field name="state">code</field>
         <field name="code">
@@ -98,14 +97,70 @@ if not instance:
 else:
     action = {
         'type': 'ir.actions.act_window',
-        'name': 'NAME - %s' % instance.name,
-        'res_model': 'THE_MODEL_HERE',
+        'name': 'Coupons - %s' % instance.name,
+        'res_model': 'woo.coupon',
+        'view_mode': 'kanban,tree,form',
+        'domain': [('instance_id', '=', instance.id)],
+        'context': {'default_instance_id': instance.id},
+    }
+        </field>
+    </record>
+    <record id="action_server_categories_by_instance" model="ir.actions.server">
+        <field name="name">Categories by Instance</field>
+        <field name="model_id" ref="model_woo_instance"/>
+        <field name="state">code</field>
+        <field name="code">
+instance = env.user.woo_active_instance_id
+if not instance:
+    action = {
+        'type': 'ir.actions.client',
+        'tag': 'display_notification',
+        'params': {
+            'title': 'No instance selected',
+            'message': 'Please select an instance from the Instances menu.',
+            'type': 'warning',
+            'sticky': False,
+        },
+    }
+else:
+    action = {
+        'type': 'ir.actions.act_window',
+        'name': 'Categories - %s' % instance.name,
+        'res_model': 'woo.category',
         'view_mode': 'tree,form',
         'domain': [('instance_id', '=', instance.id)],
         'context': {'default_instance_id': instance.id},
     }
         </field>
     </record>
-    -->
+    <record id="action_server_brands_by_instance" model="ir.actions.server">
+        <field name="name">Brands by Instance</field>
+        <field name="model_id" ref="model_woo_instance"/>
+        <field name="state">code</field>
+        <field name="code">
+instance = env.user.woo_active_instance_id
+if not instance:
+    action = {
+        'type': 'ir.actions.client',
+        'tag': 'display_notification',
+        'params': {
+            'title': 'No instance selected',
+            'message': 'Please select an instance from the Instances menu.',
+            'type': 'warning',
+            'sticky': False,
+        },
+    }
+else:
+    action = {
+        'type': 'ir.actions.act_window',
+        'name': 'Brands - %s' % instance.name,
+        'res_model': 'woo.brand',
+        'view_mode': 'tree,form',
+        'domain': [('instance_id', '=', instance.id)],
+        'context': {'default_instance_id': instance.id},
+    }
+        </field>
+    </record>
+   
 
 </odoo>

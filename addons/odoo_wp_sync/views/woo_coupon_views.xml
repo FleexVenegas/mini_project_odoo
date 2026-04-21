@@ -42,6 +42,8 @@
                 <filter name="filter_active" string="Active" domain="[('is_expired', '=', False)]"/>
                 <separator/>
                 <filter name="filter_free_shipping" string="Free Shipping" domain="[('free_shipping', '=', True)]"/>
+                <separator/>
+                <filter name="filter_archived" string="Archived" domain="[('active', '=', False)]"/>
                 <group expand="0" string="Group By">
                     <filter name="group_instance" string="Instance" context="{'group_by': 'instance_id'}"/>
                     <filter name="group_status" string="Status" context="{'group_by': 'status'}"/>
@@ -58,7 +60,7 @@
         <field name="name">woo.coupon.kanban</field>
         <field name="model">woo.coupon</field>
         <field name="arch" type="xml">
-            <kanban class="woo_coupon_kanban" default_group_by="status">
+            <kanban class="woo_coupon_kanban">
                 <field name="code"/>
                 <field name="discount_type"/>
                 <field name="amount"/>
@@ -163,8 +165,9 @@
         <field name="name">woo.coupon.tree</field>
         <field name="model">woo.coupon</field>
         <field name="arch" type="xml">
-            <tree string="WooCommerce Coupons" default_order="code" decoration-danger="is_expired == True" decoration-muted="status == 'draft'" decoration-warning="pending_sync == True">
+            <tree string="WooCommerce Coupons" default_order="code" decoration-danger="is_expired == True" decoration-muted="active == False or status == 'draft'" decoration-warning="pending_sync == True">
                 <field name="code" string="Code"/>
+                <field name="active" column_invisible="True"/>
                 <field name="pending_sync" string="Pending" widget="boolean" optional="show"/>
                 <field name="instance_id" string="Instance" optional="show"/>
                 <field name="discount_type" string="Type" widget="badge" decoration-info="discount_type == 'percent'" decoration-success="discount_type == 'fixed_cart'" decoration-warning="discount_type == 'fixed_product'"/>
@@ -207,6 +210,7 @@
                         </button>
                     </div>
 
+                    <widget name="web_ribbon" title="Archived" bg_color="text-bg-secondary" invisible="active"/>
                     <widget name="web_ribbon" title="Expired" bg_color="text-bg-danger" invisible="not is_expired"/>
                     <widget name="web_ribbon" title="Pending Sync" bg_color="text-bg-warning" invisible="not pending_sync"/>
 
@@ -227,6 +231,7 @@
                             <field name="instance_id" required="1"/>
                             <field name="woo_id" readonly="1" invisible="not woo_id"/>
                             <field name="last_sync_date" readonly="1"/>
+                            <field name="active" widget="boolean_toggle" string="Active (not archived)"/>
                         </group>
                     </group>
 

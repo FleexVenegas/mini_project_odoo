@@ -21,6 +21,11 @@
                         <button name="action_view_orders" type="object" class="oe_stat_button" icon="fa-shopping-cart" invisible="state != 'connected'">
                             <field name="order_count" widget="statinfo" string="Orders"/>
                         </button>
+                        <button name="action_sync_orders" type="object" class="oe_stat_button" icon="fa-refresh" invisible="state != 'connected'">
+                            <div class="o_field_widget o_stat_info">
+                                <span class="o_stat_text">Sync Orders</span>
+                            </div>
+                        </button>
                         <button name="action_view_woo_products" type="object" class="oe_stat_button" icon="fa-cube" invisible="state != 'connected'">
                             <field name="woo_product_count" widget="statinfo" string="WC Products"/>
                         </button>
@@ -29,9 +34,13 @@
                                 <span class="o_stat_text">Sync Products</span>
                             </div>
                         </button>
-                        <button name="action_sync_orders" type="object" class="oe_stat_button" icon="fa-refresh" invisible="state != 'connected'">
+                        <button name="action_view_coupons" type="object" class="oe_stat_button" icon="fa-tag" invisible="state != 'connected'">
+                            <field name="coupon_count" widget="statinfo" string="Coupons"/>
+                        </button>
+
+                        <button name="action_sync_coupons" type="object" class="oe_stat_button" icon="fa-refresh" invisible="state != 'connected'">
                             <div class="o_field_widget o_stat_info">
-                                <span class="o_stat_text">Sync Orders</span>
+                                <span class="o_stat_text">Sync Coupons</span>
                             </div>
                         </button>
                     </div>
@@ -243,18 +252,36 @@
                             </group>
                         </page>
 
-                        <!-- ── Coupons (coming soon) ─────────────────── -->
+                        <!-- ── Coupons ───────────────────────────────── -->
                         <page string="Coupons" name="coupons" invisible="state != 'connected'">
-                            <div class="p-4 text-center text-muted">
-                                <i class="fa fa-tag fa-3x mb-3" style="color: #d1d5db;" title="WooCommerce Coupons"/>
-                                <h5 style="color: #6b7280;">WooCommerce Coupons</h5>
-                                <p class="small">
-                                    Coupon synchronization will be available soon.<br/>
-                                    You will be able to import, create and manage coupons from this instance.
-                                </p>
-                            </div>
-                        </page>
+                            <group string="Sync Settings">
+                                <group>
+                                    <field name="coupon_sync_mode" widget="radio"/>
+                                </group>
+                                <group>
+                                    <field name="coupon_last_sync_date" readonly="1" invisible="coupon_sync_mode != 'incremental'" string="Incremental since"/>
+                                </group>
+                            </group>
 
+                            <group string="Import Filters">
+                                <group>
+                                    <field name="coupon_sync_status"/>
+                                </group>
+                                <group>
+                                    <field name="coupon_sync_expiry"/>
+                                </group>
+                            </group>
+                            <group string="Statistics" invisible="not coupon_last_sync_date">
+                                <group>
+                                    <div class="d-flex align-items-center justify-content-between mb-3">
+                                        <div class="text-muted small">
+                                            <i class="fa fa-clock-o me-1" title="Last sync"/>
+                                         Last sync: <field name="coupon_last_sync_date" readonly="1"/>
+                                        </div>
+                                    </div>
+                                </group>
+                            </group>
+                        </page>
                     </notebook>
                 </sheet>
                 <chatter/>

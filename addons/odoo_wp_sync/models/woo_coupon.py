@@ -9,7 +9,7 @@ import json
 from datetime import datetime
 
 from odoo import models, fields, api, _
-from odoo.exceptions import UserError
+from odoo.exceptions import UserError, ValidationError
 
 _logger = logging.getLogger(__name__)
 
@@ -67,6 +67,8 @@ class WooCoupon(models.Model):
             ("percent", "Percentage Discount"),
             ("fixed_cart", "Fixed Cart Discount"),
             ("fixed_product", "Fixed Product Discount"),
+            ("smart_coupon", "Smart Coupon (Store Credit)"),
+            ("other", "Other / Custom"),
         ],
         string="Discount Type",
         default="fixed_cart",
@@ -205,7 +207,14 @@ class WooCoupon(models.Model):
         default=False,
         help="Enable product category restriction for this coupon",
     )
+    # ── Archive / Active ────────────────────────────────────────────────────
 
+    active = fields.Boolean(
+        string="Active",
+        default=True,
+        index=True,
+        help="Uncheck to archive this coupon (soft delete). Archived coupons are hidden by default.",
+    )
     # ── Sync Info ─────────────────────────────────────────────────────────────
 
     last_sync_date = fields.Datetime(
@@ -233,13 +242,29 @@ class WooCoupon(models.Model):
 
     # ── SQL Constraints ───────────────────────────────────────────────────────
 
-    _sql_constraints = [
-        (
-            "unique_code_per_instance",
-            "UNIQUE(instance_id, code)",
-            "Coupon code must be unique per instance!",
-        ),
-    ]
+    # NOTE: No SQL unique constraint here because archived (active=False) coupons
+    # must be allowed to share a code with a new active coupon after re-creation.
+    # Uniqueness is enforced at the Python level only among active records.
+    _sql_constraints = []
+
+    @api.constrains("instance_id", "code", "active")
+    def _check_unique_code_per_instance(self):
+        for rec in self:
+            if not rec.active:
+                continue
+            duplicate = self.search(
+                [
+                    ("instance_id", "=", rec.instance_id.id),
+                    ("code", "=", rec.code),
+                    ("active", "=", True),
+                    ("id", "!=", rec.id),
+                ],
+                limit=1,
+            )
+            if duplicate:
+                raise ValidationError(
+                    _("Coupon code '%s' already exists for this instance!") % rec.code
+                )
 
     # ── ORM Overrides ──────────────────────────────────────────────────────────
 
@@ -410,11 +435,32 @@ class WooCoupon(models.Model):
 
         return data
 
+    # Known WooCommerce discount types (including third-party plugins)
+    _KNOWN_DISCOUNT_TYPES = {
+        "percent",
+        "fixed_cart",
+        "fixed_product",
+        "smart_coupon",
+        "other",
+    }
+
+    @classmethod
+    def _safe_discount_type(cls, wc_type):
+        """Return the WC discount type if it is in our selection, else 'other'."""
+        return wc_type if wc_type in cls._KNOWN_DISCOUNT_TYPES else "other"
+
     @api.model
     def from_woo_data(self, instance, data):
-        """Create or update coupon from WooCommerce API data."""
+        """Create or update coupon from WooCommerce API data.
+
+        If WooCommerce marks the coupon as 'trash', the Odoo record is archived
+        (soft-deleted) instead of updated or created.
+        """
         woo_id = data.get("id")
-        coupon = self.search(
+        wc_status = data.get("status", "")
+
+        # Locate existing record regardless of active state
+        coupon = self.with_context(active_test=False).search(
             [
                 ("instance_id", "=", instance.id),
                 ("woo_id", "=", woo_id),
@@ -422,13 +468,25 @@ class WooCoupon(models.Model):
             limit=1,
         )
 
+        # WooCommerce signals deletion via status=trash — archive and stop
+        if wc_status == "trash":
+            if coupon:
+                coupon.action_archive_from_woocommerce()
+                _logger.info(
+                    "Coupon woo_id=%s received status 'trash' from WooCommerce; archived in Odoo.",
+                    woo_id,
+                )
+            return coupon or self.browse()
+
         vals = {
             "instance_id": instance.id,
             "woo_id": woo_id,
             "code": data.get("code", ""),
             "description": data.get("description", ""),
             "status": data.get("status", "publish"),
-            "discount_type": data.get("discount_type", "fixed_cart"),
+            "discount_type": self._safe_discount_type(
+                data.get("discount_type", "fixed_cart")
+            ),
             "amount": float(data.get("amount", 0)),
             "individual_use": data.get("individual_use", False),
             "exclude_sale_items": data.get("exclude_sale_items", False),
@@ -496,9 +554,11 @@ class WooCoupon(models.Model):
                 pass
 
         if coupon:
-            coupon.write(vals)
+            # If the record was archived but now WC sends it as active, reactivate it
+            vals["active"] = True
+            coupon.with_context(skip_pending_sync=True).write(vals)
         else:
-            coupon = self.create(vals)
+            coupon = self.with_context(skip_pending_sync=True).create(vals)
 
         # Process meta data
         meta_data = data.get("meta_data", [])
@@ -513,11 +573,7 @@ class WooCoupon(models.Model):
         service = self.env["woo.service"]
         data = self.to_woo_data()
 
-        # raise UserError(
-        #     f"Payload {data} for coupon '{self.code}' (ID: {self.id}) is ready to be sent to WooCommerce. "
-        # )
         if self.woo_id:
-
             result = service._request(
                 f"coupons/{self.woo_id}",
                 method="PUT",
@@ -547,6 +603,47 @@ class WooCoupon(models.Model):
                 "next": {"type": "ir.actions.client", "tag": "reload"},
             },
         }
+
+    @api.constrains("instance_id")
+    def _check_instance_connected(self):
+        for rec in self:
+            if rec.instance_id and rec.instance_id.state != "connected":
+                raise ValidationError(
+                    _(
+                        "Instance '%s' is not connected. "
+                        "Complete the configuration and verify the connection before creating coupons."
+                    )
+                    % rec.instance_id.name
+                )
+
+    def action_archive_from_woocommerce(self, woo_id=None):
+        """Archive (soft-delete) a coupon when WooCommerce reports it as deleted.
+
+        Can be called with a woo_id integer to locate and archive the record,
+        or called directly on a recordset.
+        """
+        if woo_id:
+            coupon = self.search(
+                [("woo_id", "=", woo_id), ("active", "in", [True, False])],
+                limit=1,
+            )
+            if not coupon:
+                _logger.info(
+                    "archive_from_woocommerce: coupon woo_id=%s not found in Odoo, nothing to archive.",
+                    woo_id,
+                )
+                return
+        else:
+            coupon = self
+
+        coupon.with_context(skip_pending_sync=True).write(
+            {"active": False, "pending_sync": False}
+        )
+        _logger.info(
+            "Coupon '%s' (woo_id=%s) archived in Odoo after WooCommerce deletion.",
+            coupon.mapped("code"),
+            coupon.mapped("woo_id"),
+        )
 
     def action_confirm_delete_from_woocommerce(self):
         """Open confirmation wizard before deleting coupon from WooCommerce."""
@@ -589,15 +686,24 @@ class WooCoupon(models.Model):
                 e,
             )
 
+        # Soft-delete: archive in Odoo instead of unlinking
         self.with_context(skip_pending_sync=True).write(
-            {"woo_id": False, "pending_sync": False}
+            {"active": False, "pending_sync": False}
+        )
+        _logger.info(
+            "Coupon '%s' (woo_id=%s) deleted from WooCommerce and archived in Odoo.",
+            self.code,
+            self.woo_id,
         )
         return {
             "type": "ir.actions.client",
             "tag": "display_notification",
             "params": {
-                "title": _("Deleted"),
-                "message": _("Coupon removed from WooCommerce"),
+                "title": _("Deleted & Archived"),
+                "message": _(
+                    "Coupon '%s' was removed from WooCommerce and archived in Odoo."
+                )
+                % self.code,
                 "type": "success",
                 "next": {"type": "ir.actions.client", "tag": "reload"},
             },

@@ -1,6 +1,6 @@
 /config
 /.env
-
+/archives
 # macOS
 .DS_Store
 ._*

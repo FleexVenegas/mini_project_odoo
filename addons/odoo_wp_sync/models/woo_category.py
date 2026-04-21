@@ -10,7 +10,8 @@ The same category (same woo_id) can exist in multiple instances;
 the ``instance_id`` field separates it by store.
 """
 
-from odoo import models, fields, api
+from odoo import models, fields, api, _
+from odoo.exceptions import ValidationError
 
 
 class WooCategory(models.Model):
@@ -70,3 +71,15 @@ class WooCategory(models.Model):
                 cat.complete_name = f"{cat.parent_id.complete_name} / {cat.name}"
             else:
                 cat.complete_name = cat.name
+
+    @api.constrains("instance_id")
+    def _check_instance_connected(self):
+        for rec in self:
+            if rec.instance_id and rec.instance_id.state != "connected":
+                raise ValidationError(
+                    _(
+                        "Instance '%s' is not connected. "
+                        "Complete the configuration and verify the connection before creating categories."
+                    )
+                    % rec.instance_id.name
+                )

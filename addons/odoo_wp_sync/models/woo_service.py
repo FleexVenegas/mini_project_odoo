@@ -249,6 +249,44 @@ class WooService(models.AbstractModel):
         )
         return all_products
 
+    def fetch_coupons(self, instance, status="any", modified_after=None):
+        """
+        Fetches WooCommerce coupons with automatic pagination.
+
+        Args:
+            instance: ``woo.instance`` record
+            status: WC status filter — 'any', 'publish', 'draft', 'pending', 'private'
+            modified_after: ISO-8601 datetime string. When provided only coupons
+                modified after this date are returned (incremental sync).
+
+        Returns:
+            list[dict]: list of WooCommerce coupons
+        """
+        all_coupons = []
+        page = 1
+        extra = f"&after={modified_after}" if modified_after else ""
+
+        while True:
+            endpoint = (
+                f"coupons?per_page={_WC_PAGE_SIZE}&page={page}"
+                f"&orderby=modified&order=asc&status={status}{extra}"
+            )
+            batch = self._request(endpoint=endpoint, instance=instance)
+            if not batch:
+                break
+            all_coupons.extend(batch)
+            if len(batch) < _WC_PAGE_SIZE:
+                break
+            page += 1
+
+        _logger.info(
+            "Fetched %d coupons from WooCommerce instance '%s'%s",
+            len(all_coupons),
+            instance.name,
+            f" (modified after {modified_after})" if modified_after else "",
+        )
+        return all_coupons
+
     # ── Orders ────────────────────────────────────────────────────────────────
 
     def fetch_orders(self, instance, params):
