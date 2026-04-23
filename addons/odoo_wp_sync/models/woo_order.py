@@ -516,6 +516,8 @@ class OdooWpSync(models.Model):
                 f"{shipping.get('country', '')}"
             )
 
+        # shipping_adress_json = order_data.get("shipping") or {}
+
         # Order items
         order_lines = []
         line_ids_commands = [(5, 0, 0)]  # Clear existing lines on update
@@ -598,18 +600,32 @@ class OdooWpSync(models.Model):
             "discount_total": float(order_data.get("discount_total", 0)),
             "total": float(order_data.get("total", 0)),
             "currency": order_data.get("currency", "USD"),
-            "shipping_address": shipping_address.strip(),
+            # "shipping_address": shipping_address.strip(),
             "payment_method": order_data.get("payment_method_title", ""),
             "created_via": order_data.get("created_via", ""),
             "order_lines": json.dumps(order_lines),
             "line_ids": line_ids_commands,
             "raw_data": json.dumps(order_data, indent=2),
             "synced_date": fields.Datetime.now(),
+            "shipping_address": json.dumps(order_data.get("shipping", {}), indent=2),
         }
+
+    BLOCKED_STATUSES = {"failed", "refunded", "cancelled"}
 
     def action_open_create_sale_order_wizard(self):
         """Opens the confirmation wizard to create orders in Odoo (supports multiple records)"""
         confirmation_wizard = self.env["confirmation.wizard"]
+
+        # Block orders in terminal/invalid states
+        blocked_orders = self.filtered(lambda o: o.status in self.BLOCKED_STATUSES)
+        if blocked_orders:
+            blocked_numbers = ", ".join(blocked_orders.mapped("order_number"))
+            blocked_label = ", ".join(sorted(self.BLOCKED_STATUSES))
+            raise UserError(
+                f"The following order(s) cannot be processed because their status is {blocked_label}:\n"
+                f"{blocked_numbers}\n\n"
+                "Only orders that are not failed, refunded, or cancelled can be converted to Odoo orders."
+            )
 
         # Validate that all involved instances are properly connected
         instances = self.mapped("instance_id")
@@ -681,6 +697,15 @@ class OdooWpSync(models.Model):
             # Skip if already has a linked sale order
             if woo_order.sale_order_id:
                 skipped_count += 1
+                continue
+
+            # Block creation for terminal/invalid statuses
+            if woo_order.status in self.BLOCKED_STATUSES:
+                error_count += 1
+                errors.append(
+                    f"Order #{woo_order.order_number}: cannot create sale order "
+                    f"because the WooCommerce status is '{woo_order.status}'."
+                )
                 continue
 
             try:

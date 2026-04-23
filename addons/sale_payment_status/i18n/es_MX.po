@@ -33,6 +33,11 @@ msgid "Paid"
 msgstr "Pagado"
 
 #. module: sale_payment_status
+#: model:ir.model.fields.selection,name:sale_payment_status.selection__sale_order__payment_status_manual__overdue
+msgid "Overdue"
+msgstr "Atrasada"
+
+#. module: sale_payment_status
 #: model:ir.model.fields.selection,name:sale_payment_status.selection__sale_order__payment_status_manual__pending
 msgid "Pending"
 msgstr "Pendiente"

@@ -31,7 +31,7 @@
         <field name="arch" type="xml">
             <form string="WooCommerce Order">
                 <header>
-                    <button name="action_open_create_sale_order_wizard" type="object" string="Create Odoo Order" class="btn-primary" invisible="sale_order_id" />
+                    <button name="action_open_create_sale_order_wizard" type="object" string="Create Odoo Order" class="btn-primary" invisible="sale_order_id or status in ('failed', 'refunded', 'cancelled')" />
 
                     <!-- Change status in WooCommerce -->
                     <button name="action_wc_mark_processing" type="object" string="Mark as Processing" class="btn-secondary" invisible="status == 'processing'"/>
