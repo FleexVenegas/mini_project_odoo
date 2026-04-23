@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ============================================================
+         Category
+    ============================================================ -->
+    <record id="module_category_woo_sync" model="ir.module.category">
+        <field name="name">WooCommerce Sync</field>
+        <field name="description">Manage access to the WooCommerce Sync module.</field>
+        <field name="sequence">100</field>
+    </record>
+
+    <!-- ============================================================
+         Groups
+    ============================================================ -->
+
+    <!-- User: can view orders, products, coupons and create Odoo orders -->
+    <record id="group_woo_user" model="res.groups">
+        <field name="name">User</field>
+        <field name="category_id" ref="module_category_woo_sync"/>
+        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+    </record>
+
+    <!-- Manager: full access including instance configuration.
+         Automatically granted to Sales Managers. -->
+    <record id="group_woo_manager" model="res.groups">
+        <field name="name">Manager</field>
+        <field name="category_id" ref="module_category_woo_sync"/>
+        <field name="implied_ids" eval="[(4, ref('group_woo_user'))]"/>
+        <field name="users" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
+    </record>
+
+</odoo>

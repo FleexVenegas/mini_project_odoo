@@ -26,6 +26,7 @@ Odoo WordPress Sync
     ],
     "data": [
         # Seguridad
+        "security/security.xml",
         "security/ir.model.access.csv",
         # Data: automatic sync cron job
         "data/cron_data.xml",

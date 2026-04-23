@@ -2,10 +2,10 @@
 <odoo>
 
     <!-- Root Menu -->
-    <menuitem id="odoo_wp_sync_menu_root" name="Odoo WordPress Sync" web_icon="odoo_wp_sync,static/description/icon.png"/>
+    <menuitem id="odoo_wp_sync_menu_root" name="Odoo WordPress Sync" web_icon="odoo_wp_sync,static/description/icon.png" groups="odoo_wp_sync.group_woo_user"/>
 
-    <!-- Instances -->
-    <menuitem id="odoo_wp_sync__menu_instances" name="Instances" parent="odoo_wp_sync_menu_root" action="action_woo_instance" sequence="1"/>
+    <!-- Instances (Manager only) -->
+    <menuitem id="odoo_wp_sync__menu_instances" name="Instances" parent="odoo_wp_sync_menu_root" action="action_woo_instance" sequence="1" groups="odoo_wp_sync.group_woo_manager"/>
 
     <menuitem id="odoo_wp_sync_orders_menu" name="Orders" parent="odoo_wp_sync_menu_root" action="action_server_orders_by_instance" sequence="2"/>
 
