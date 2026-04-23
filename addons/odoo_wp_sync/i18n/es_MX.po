@@ -4334,3 +4334,77 @@ msgstr "→ En Espera"
 #: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_odoo_wp_sync_tree
 msgid "→ En Proceso"
 msgstr "→ En Proceso"
+
+#. module: odoo_wp_sync
+#: code:addons/odoo_wp_sync/models/woo_sale_order.py:0
+#, python-format
+msgid "The instance '%s' does not have a warehouse configured.\nPlease go to WooCommerce › Instances, open this instance, and fill in the 'Warehouse' field before creating orders."
+msgstr "La instancia '%s' no tiene un almacén configurado.\nVe a WooCommerce › Instancias, abre esta instancia y completa el campo 'Almacén' antes de crear órdenes."
+
+#. module: odoo_wp_sync
+#: code:addons/odoo_wp_sync/models/woo_order.py:0
+msgid "Sync with WooCommerce?"
+msgstr "¿Sincronizar con WooCommerce?"
+
+#. module: odoo_wp_sync
+#: code:addons/odoo_wp_sync/models/woo_order.py:0
+msgid "This action will download all recent orders from WooCommerce and import them into Odoo. This process may take a few minutes depending on the number of orders."
+msgstr "Esta acción descargará las órdenes recientes de WooCommerce y las importará a Odoo. Este proceso puede tardar algunos minutos dependiendo del número de órdenes."
+
+#. module: odoo_wp_sync
+#: code:addons/odoo_wp_sync/models/woo_order.py:0
+msgid "Create Sale Order(s) in Odoo?"
+msgstr "¿Crear orden(es) de venta en Odoo?"
+
+#. module: odoo_wp_sync
+#: code:addons/odoo_wp_sync/models/woo_order.py:0
+msgid "No orders to create"
+msgstr "Sin órdenes que crear"
+
+#. module: odoo_wp_sync
+#: code:addons/odoo_wp_sync/models/woo_order.py:0
+#, python-format
+msgid "All selected orders (%d) already have sale orders linked."
+msgstr "Todas las órdenes seleccionadas (%d) ya tienen órdenes de venta vinculadas."
+
+#. module: odoo_wp_sync
+#: code:addons/odoo_wp_sync/models/woo_order.py:0
+#, python-format
+msgid "A sale order will be created in Odoo for order #%s from %s totaling %s %s"
+msgstr "Se creará una orden de venta en Odoo para la orden #%s de %s por un total de %s %s"
+
+#. module: odoo_wp_sync
+#: code:addons/odoo_wp_sync/models/woo_order.py:0
+#, python-format
+msgid "%d sale orders will be created in Odoo for a total of %s %.2f"
+msgstr "Se crearán %d órdenes de venta en Odoo por un total de %s %.2f"
+
+#. module: odoo_wp_sync
+#: code:addons/odoo_wp_sync/models/woo_order.py:0
+#, python-format
+msgid "\n\nNote: %d orders already have sale orders linked and will be skipped."
+msgstr "\n\nNota: %d órdenes ya tienen órdenes de venta vinculadas y serán omitidas."
+
+#. module: odoo_wp_sync
+#: code:addons/odoo_wp_sync/models/woo_order.py:0
+#, python-format
+msgid "The following order(s) cannot be processed because their status is %s:\n%s\n\nOnly orders that are not failed, refunded, or cancelled can be converted to Odoo orders."
+msgstr "La(s) siguiente(s) orden(es) no pueden procesarse porque su estado es %s:\n%s\n\nSolo se pueden convertir a órdenes de Odoo las órdenes que no estén fallidas, reembolsadas o canceladas."
+
+#. module: odoo_wp_sync
+#: code:addons/odoo_wp_sync/models/woo_order.py:0
+#, python-format
+msgid "The following instance(s) are not properly connected: %s.\nPlease test the connection from the instance settings before continuing."
+msgstr "La(s) siguiente(s) instancia(s) no están correctamente conectadas: %s.\nPor favor, prueba la conexión desde la configuración de la instancia antes de continuar."
+
+#. module: odoo_wp_sync
+#: code:addons/odoo_wp_sync/models/woo_instance.py:0
+#, python-format
+msgid "This action will sync orders from <b>%s</b> from WooCommerce into Odoo. Orders will be created/updated according to the sync configuration."
+msgstr "Esta acción sincronizará las órdenes de <b>%s</b> desde WooCommerce a Odoo. Las órdenes se crearán/actualizarán según la configuración de sincronización."
+
+#. module: odoo_wp_sync
+#: code:addons/odoo_wp_sync/models/woo_instance.py:0
+#, python-format
+msgid "This action will download all products from <b>%s</b> from WooCommerce and automatically link them to Odoo products that match by SKU.<br/><br/>Products already linked manually will not be overwritten."
+msgstr "Esta acción descargará todos los productos de <b>%s</b> desde WooCommerce y los vinculará automáticamente a los productos de Odoo que coincidan por SKU.<br/><br/>Los productos ya vinculados manualmente no serán sobreescritos."

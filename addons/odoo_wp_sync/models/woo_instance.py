@@ -524,11 +524,12 @@ class WooInstance(models.Model):
             model_name="woo.instance",
             method_name="_do_sync_orders",
             title=_("Sync orders from WooCommerce?"),
-            description=(
-                f"This action will sync orders from <b>{self.name}</b> "
+            description=_(
+                "This action will sync orders from <b>%s</b> "
                 "from WooCommerce into Odoo. Orders will be created/updated "
                 "according to the sync configuration."
-            ),
+            )
+            % self.name,
             record_id=self.id,
         )
 
@@ -1081,12 +1082,13 @@ class WooInstance(models.Model):
             model_name="woo.instance",
             method_name="_do_sync_products",
             title=_("Sync products from WooCommerce?"),
-            description=(
-                f"This action will download all products from <b>{self.name}</b> "
+            description=_(
+                "This action will download all products from <b>%s</b> "
                 "from WooCommerce and automatically link them to Odoo products "
                 "that match by SKU.<br/><br/>"
                 "Products already linked manually will not be overwritten."
-            ),
+            )
+            % self.name,
             record_id=self.id,
             dialog_size="medium",
         )

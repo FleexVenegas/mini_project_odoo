@@ -1,4 +1,4 @@
-from odoo import models, fields, api
+from odoo import _, models, fields, api
 import json
 import logging
 from datetime import datetime
@@ -113,12 +113,14 @@ class OdooWpSync(models.Model):
         """Opens the confirmation wizard to sync with WooCommerce"""
         confirmation_wizard = self.env["confirmation.wizard"]
 
-        description = "This action will download all recent orders from WooCommerce and import them into Odoo. This process may take a few minutes depending on the number of orders."
+        description = _(
+            "This action will download all recent orders from WooCommerce and import them into Odoo. This process may take a few minutes depending on the number of orders."
+        )
 
         return confirmation_wizard.create_confirmation(
             model_name="odoo.wp.sync",
             method_name="action_sync",
-            title="Sync with WooCommerce?",
+            title=_("Sync with WooCommerce?"),
             description=description,
             dialog_size="medium",  # Opciones: 'small', 'medium', 'large', 'extra-large'
         )
@@ -622,9 +624,10 @@ class OdooWpSync(models.Model):
             blocked_numbers = ", ".join(blocked_orders.mapped("order_number"))
             blocked_label = ", ".join(sorted(self.BLOCKED_STATUSES))
             raise UserError(
-                f"The following order(s) cannot be processed because their status is {blocked_label}:\n"
-                f"{blocked_numbers}\n\n"
-                "Only orders that are not failed, refunded, or cancelled can be converted to Odoo orders."
+                _(
+                    "The following order(s) cannot be processed because their status is %s:\n%s\n\nOnly orders that are not failed, refunded, or cancelled can be converted to Odoo orders."
+                )
+                % (blocked_label, blocked_numbers)
             )
 
         # Validate that all involved instances are properly connected
@@ -633,8 +636,10 @@ class OdooWpSync(models.Model):
         if not_connected:
             names = ", ".join(not_connected.mapped("name"))
             raise UserError(
-                f"The following instance(s) are not properly connected: {names}.\n"
-                "Please test the connection from the instance settings before continuing."
+                _(
+                    "The following instance(s) are not properly connected: %s.\nPlease test the connection from the instance settings before continuing."
+                )
+                % names
             )
 
         # Filter only orders that do NOT have a sale order linked
@@ -646,8 +651,11 @@ class OdooWpSync(models.Model):
                 "type": "ir.actions.client",
                 "tag": "display_notification",
                 "params": {
-                    "title": "No orders to create",
-                    "message": f"All selected orders ({len(self)}) already have sale orders linked.",
+                    "title": _("No orders to create"),
+                    "message": _(
+                        "All selected orders (%d) already have sale orders linked."
+                    )
+                    % len(self),
                     "type": "warning",
                     "sticky": False,
                 },
@@ -656,22 +664,28 @@ class OdooWpSync(models.Model):
         # Prepare description based on quantity
         if len(orders_to_create) == 1:
             order = orders_to_create
-            description = f"A sale order will be created in Odoo for order #{order.order_number} from {order.customer_name} totaling {order.currency} {order.total}"
+            description = _(
+                "A sale order will be created in Odoo for order #%s from %s totaling %s %s"
+            ) % (order.order_number, order.customer_name, order.currency, order.total)
         else:
             total_amount = sum(orders_to_create.mapped("total"))
             currency = orders_to_create[0].currency if orders_to_create else "USD"
 
-            description = f"{len(orders_to_create)} sale orders will be created in Odoo for a total of {currency} {total_amount:.2f}"
+            description = _(
+                "%d sale orders will be created in Odoo for a total of %s %.2f"
+            ) % (len(orders_to_create), currency, total_amount)
 
             if orders_already_exist:
-                description += f"\n\nNote: {len(orders_already_exist)} orders already have sale orders linked and will be skipped."
+                description += _(
+                    "\n\nNote: %d orders already have sale orders linked and will be skipped."
+                ) % len(orders_already_exist)
 
         # Pasar los IDs de los registros a procesar
         return confirmation_wizard.create_confirmation(
             model_name="odoo.wp.sync",
             method_name="action_create_sale_order",
             record_ids=orders_to_create.ids,
-            title="Create Sale Order(s) in Odoo?",
+            title=_("Create Sale Order(s) in Odoo?"),
             description=description,
             dialog_size="medium",
         )

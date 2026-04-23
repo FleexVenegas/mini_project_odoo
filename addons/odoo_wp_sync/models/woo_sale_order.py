@@ -3,7 +3,8 @@ Helper class for creating sale orders from WooCommerce.
 This file separates the business logic for order creation.
 """
 
-from odoo import models
+from odoo import _, models
+from odoo.exceptions import UserError
 import logging
 import json
 
@@ -55,6 +56,15 @@ class WooSaleOrderHelper(models.AbstractModel):
             if not woo_order_record.sale_order_id:
                 woo_order_record.sale_order_id = existing.id
             return {"order": existing, "created": False}
+
+        # Validate warehouse is configured on the instance
+        if not instance.warehouse_id:
+            raise UserError(
+                _(
+                    "The instance '%s' does not have a warehouse configured.\nPlease go to WooCommerce \u203a Instances, open this instance, and fill in the 'Warehouse' field before creating orders."
+                )
+                % instance.name
+            )
 
         # Find or create customer
         partner = self.env["woo.partner"].create_partner_from_woo_data(woo_order_record)
