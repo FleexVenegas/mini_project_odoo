@@ -215,6 +215,18 @@ class WooCoupon(models.Model):
         index=True,
         help="Uncheck to archive this coupon (soft delete). Archived coupons are hidden by default.",
     )
+    woo_delete_status = fields.Selection(
+        [
+            ("none", "Active in WooCommerce"),
+            ("trash", "In Trash"),
+            ("deleted", "Permanently Deleted"),
+        ],
+        string="WC Delete Status",
+        default="none",
+        index=True,
+        help="Tracks whether this coupon has been sent to WooCommerce trash or permanently deleted.",
+    )
+
     # ── Sync Info ─────────────────────────────────────────────────────────────
 
     last_sync_date = fields.Datetime(
@@ -397,7 +409,7 @@ class WooCoupon(models.Model):
             self.excluded_category_ids
         )
 
-        # Meta data: construido desde los campos del modelo, no desde JSON
+        # Meta data: built from model fields, not from JSON
         meta_data = []
         locations = ",".join(loc.code for loc in self.availability_ids)
         meta_data.append(
@@ -471,9 +483,15 @@ class WooCoupon(models.Model):
         # WooCommerce signals deletion via status=trash — archive and stop
         if wc_status == "trash":
             if coupon:
-                coupon.action_archive_from_woocommerce()
+                coupon.with_context(skip_pending_sync=True).write(
+                    {
+                        "active": False,
+                        "woo_delete_status": "trash",
+                        "pending_sync": False,
+                    }
+                )
                 _logger.info(
-                    "Coupon woo_id=%s received status 'trash' from WooCommerce; archived in Odoo.",
+                    "Coupon woo_id=%s received status 'trash' from WooCommerce; sent to Odoo trash.",
                     woo_id,
                 )
             return coupon or self.browse()
@@ -521,7 +539,7 @@ class WooCoupon(models.Model):
             )
             vals["excluded_product_ids"] = [(6, 0, excluded.ids)]
 
-        # Relacionar categorías incluidas por woo_id
+        # Link included categories by woo_id
         wc_category_ids = data.get("product_categories", [])
         if wc_category_ids:
             categories = self.env["woo.category"].search(
@@ -532,7 +550,7 @@ class WooCoupon(models.Model):
             )
             vals["product_category_ids"] = [(6, 0, categories.ids)]
 
-        # Relacionar categorías excluidas por woo_id
+        # Link excluded categories by woo_id
         wc_excluded_cats = data.get("excluded_product_categories", [])
         if wc_excluded_cats:
             excluded_cats = self.env["woo.category"].search(
@@ -595,12 +613,12 @@ class WooCoupon(models.Model):
         )
         return {
             "type": "ir.actions.client",
-            "tag": "display_notification",
+            "tag": "delayed_view_reload",
             "params": {
                 "title": _("Success"),
                 "message": _("Coupon synced to WooCommerce"),
                 "type": "success",
-                "next": {"type": "ir.actions.client", "tag": "reload"},
+                "delay": 4000,
             },
         }
 
@@ -616,15 +634,15 @@ class WooCoupon(models.Model):
                     % rec.instance_id.name
                 )
 
-    def action_archive_from_woocommerce(self, woo_id=None):
-        """Archive (soft-delete) a coupon when WooCommerce reports it as deleted.
+    def action_archive_from_woocommerce(self, woo_id=None, woo_delete_status="trash"):
+        """Archive a coupon in Odoo when WooCommerce reports a deletion or trash event.
 
-        Can be called with a woo_id integer to locate and archive the record,
-        or called directly on a recordset.
+        woo_delete_status: 'trash' (moved to WC trash) or 'deleted' (permanently gone).
+        Can be called with a woo_id integer to locate the record, or on a recordset.
         """
         if woo_id:
-            coupon = self.search(
-                [("woo_id", "=", woo_id), ("active", "in", [True, False])],
+            coupon = self.with_context(active_test=False).search(
+                [("woo_id", "=", woo_id)],
                 limit=1,
             )
             if not coupon:
@@ -637,13 +655,125 @@ class WooCoupon(models.Model):
             coupon = self
 
         coupon.with_context(skip_pending_sync=True).write(
-            {"active": False, "pending_sync": False}
+            {
+                "active": False,
+                "pending_sync": False,
+                "woo_delete_status": woo_delete_status,
+            }
         )
         _logger.info(
-            "Coupon '%s' (woo_id=%s) archived in Odoo after WooCommerce deletion.",
+            "Coupon '%s' (woo_id=%s) archived in Odoo (woo_delete_status=%s).",
             coupon.mapped("code"),
             coupon.mapped("woo_id"),
+            woo_delete_status,
         )
+
+    def action_confirm_trash_in_woocommerce(self):
+        """Open confirmation wizard before sending coupon to WooCommerce trash."""
+        self.ensure_one()
+        if not self.woo_id:
+            raise UserError(_("This coupon has not been synced to WooCommerce yet."))
+        return self.env["confirmation.wizard"].create_confirmation(
+            model_name="woo.coupon",
+            method_name="action_trash_in_woocommerce",
+            title=_("Send to WooCommerce Trash"),
+            description=_(
+                "Are you sure you want to send coupon <strong>%s</strong> "
+                "to the WooCommerce trash?<br/>"
+                "The coupon will be archived in Odoo. You can restore it later."
+            )
+            % self.code,
+            record_id=self.id,
+            dialog_size="small",
+        )
+
+    def action_trash_in_woocommerce(self):
+        """Move coupon to WooCommerce trash (called by confirmation wizard)."""
+        self.ensure_one()
+        if not self.woo_id:
+            raise UserError(_("This coupon has not been synced to WooCommerce yet."))
+
+        try:
+            self.env["woo.service"]._request(
+                f"coupons/{self.woo_id}",
+                method="PUT",
+                data={"status": "trash"},
+                instance=self.instance_id,
+            )
+        except Exception as e:
+            _logger.warning(
+                "WooCommerce returned an error while trashing coupon %s (woo_id=%s): %s",
+                self.code,
+                self.woo_id,
+                e,
+            )
+
+        self.with_context(skip_pending_sync=True).write(
+            {"active": False, "woo_delete_status": "trash", "pending_sync": False}
+        )
+        _logger.info(
+            "Coupon '%s' (woo_id=%s) sent to WooCommerce trash and archived in Odoo.",
+            self.code,
+            self.woo_id,
+        )
+        return {
+            "type": "ir.actions.client",
+            "tag": "delayed_view_reload",
+            "params": {
+                "title": _("Sent to Trash"),
+                "message": _(
+                    "Coupon '%s' was moved to the WooCommerce trash and archived in Odoo."
+                )
+                % self.code,
+                "type": "warning",
+                "delay": 4000,
+            },
+        }
+
+    def action_restore_from_woocommerce(self):
+        """Restore coupon from WooCommerce trash back to published."""
+        self.ensure_one()
+        if not self.woo_id:
+            raise UserError(_("This coupon has not been synced to WooCommerce yet."))
+
+        try:
+            self.env["woo.service"]._request(
+                f"coupons/{self.woo_id}",
+                method="PUT",
+                data={"status": "publish"},
+                instance=self.instance_id,
+            )
+        except Exception as e:
+            raise UserError(
+                _("Could not restore coupon from WooCommerce trash: %s") % str(e)
+            ) from e
+
+        self.with_context(skip_pending_sync=True).write(
+            {
+                "active": True,
+                "woo_delete_status": "none",
+                "status": "publish",
+                "pending_sync": False,
+            }
+        )
+        _logger.info(
+            "Coupon '%s' (woo_id=%s) restored from WooCommerce trash.",
+            self.code,
+            self.woo_id,
+        )
+        return {
+            "type": "ir.actions.client",
+            "tag": "delayed_view_reload",
+            "params": {
+                "title": _("Restored"),
+                "message": _(
+                    "Coupon '%s' was restored from the WooCommerce trash and is now active."
+                )
+                % self.code,
+                "type": "success",
+                "delay": 4000,
+            },
+        }
 
     def action_confirm_delete_from_woocommerce(self):
         """Open confirmation wizard before deleting coupon from WooCommerce."""
@@ -653,10 +783,11 @@ class WooCoupon(models.Model):
         return self.env["confirmation.wizard"].create_confirmation(
             model_name="woo.coupon",
             method_name="action_delete_from_woocommerce",
-            title=_("Delete from WooCommerce"),
+            title=_("Permanently Delete from WooCommerce"),
             description=_(
-                "Are you sure you want to delete coupon <strong>%s</strong> from WooCommerce?<br/>"
-                "This action cannot be undone. The coupon record in Odoo will be kept."
+                "Are you sure you want to <strong>permanently delete</strong> coupon "
+                "<strong>%s</strong> from WooCommerce?<br/>"
+                "This action cannot be undone. The coupon will be archived in Odoo."
             )
             % self.code,
             record_id=self.id,
@@ -686,25 +817,25 @@ class WooCoupon(models.Model):
                 e,
             )
 
-        # Soft-delete: archive in Odoo instead of unlinking
+        # Mark as permanently deleted and archive in Odoo
         self.with_context(skip_pending_sync=True).write(
-            {"active": False, "pending_sync": False}
+            {"active": False, "pending_sync": False, "woo_delete_status": "deleted"}
         )
         _logger.info(
-            "Coupon '%s' (woo_id=%s) deleted from WooCommerce and archived in Odoo.",
+            "Coupon '%s' (woo_id=%s) permanently deleted from WooCommerce and archived in Odoo.",
             self.code,
             self.woo_id,
         )
         return {
             "type": "ir.actions.client",
-            "tag": "display_notification",
+            "tag": "delayed_view_reload",
             "params": {
-                "title": _("Deleted & Archived"),
+                "title": _("Permanently Deleted"),
                 "message": _(
-                    "Coupon '%s' was removed from WooCommerce and archived in Odoo."
+                    "Coupon '%s' was permanently deleted from WooCommerce and archived in Odoo."
                 )
                 % self.code,
                 "type": "success",
-                "next": {"type": "ir.actions.client", "tag": "reload"},
+                "delay": 4000,
             },
         }

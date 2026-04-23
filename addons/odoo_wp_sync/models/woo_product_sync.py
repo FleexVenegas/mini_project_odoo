@@ -85,8 +85,8 @@ class WooProductSync(models.AbstractModel):
         if category_ids:
             vals["woo_category_ids"] = [(6, 0, category_ids)]
 
-        # ── Marcas ──────────────────────────────────────────────────────────────
-        # WC las devuelve como [{"id": 121880, "name": "...", "slug": "..."}]
+        # ── Brands ──────────────────────────────────────────────────────────────
+        # WC returns them as [{"id": 121880, "name": "...", "slug": "..."}]
         WooBrand = self.env["woo.brand"]
         brand_ids = []
         for wc_brand in wc_product.get("brands", []):
@@ -305,7 +305,7 @@ class WooProductSync(models.AbstractModel):
                 payload["brands"] = brands_payload
 
         if existing and existing.woo_id:
-            # Actualizar producto existente en WooCommerce
+            # Update existing product in WooCommerce
             wc_response = svc.update_product(instance, existing.woo_id, payload)
             if wc_response:
                 existing.write(
@@ -323,7 +323,7 @@ class WooProductSync(models.AbstractModel):
                 instance.name,
             )
         else:
-            # Crear producto nuevo en WooCommerce
+            # Create new product in WooCommerce
             wc_response = svc.create_product(instance, payload)
             if wc_response and wc_response.get("id"):
                 vals = self._build_woo_product_vals(wc_response, instance)

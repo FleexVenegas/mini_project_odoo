@@ -43,7 +43,16 @@ class WooInstanceWarehouse(models.Model):
     #     help="Maximum stock quantity for a product. If available stock is equal to or above this threshold, it will be marked as 'in stock' in WooCommerce (if 'Update Stock' is active).",
     # )
 
-    # Utilizamos este archivo para los productos
+    picking_policy = fields.Selection(
+        selection=[
+            ("direct", "As soon as possible"),
+            ("one", "When all products are ready"),
+        ],
+        default="one",
+        help="Determines when the order should be marked as ready for delivery: 'As soon as possible' will create a delivery as soon as any product is available, while 'When all products are ready' will wait until all products in the order are available before creating the delivery.",
+    )
+
+    # We use this file for products
     allow_create_products = fields.Boolean(
         string="Allow product creation",
         default=False,

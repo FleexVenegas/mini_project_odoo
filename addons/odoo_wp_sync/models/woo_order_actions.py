@@ -14,22 +14,22 @@ from odoo import models, _
 
 _logger = logging.getLogger(__name__)
 
-# Etiquetas legibles para el resumen de notificaciones
+# Human-readable labels for notification summaries
 _STATUS_LABELS = {
-    "pending": "Pago Pendiente",
-    "processing": "En Proceso",
-    "on-hold": "En Espera",
-    "completed": "Completado",
-    "cancelled": "Cancelado",
-    "refunded": "Reembolsado",
-    "failed": "Fallido",
+    "pending": "Pending Payment",
+    "processing": "Processing",
+    "on-hold": "On Hold",
+    "completed": "Completed",
+    "cancelled": "Cancelled",
+    "refunded": "Refunded",
+    "failed": "Failed",
 }
 
 
 class WooOrderActions(models.Model):
     """
-    Mixin de acciones remotas sobre pedidos de WooCommerce.
-    Se mezcla directamente en odoo.wp.sync mediante _inherit.
+    Mixin for remote actions on WooCommerce orders.
+    Mixed directly into odoo.wp.sync via _inherit.
     """
 
     _inherit = "odoo.wp.sync"
@@ -129,26 +129,26 @@ class WooOrderActions(models.Model):
         return self._build_status_notification("processing", successes, errors)
 
     def action_wc_mark_cancelled(self):
-        """Marca el pedido como 'cancelled' en WooCommerce."""
+        """Marks the order as 'cancelled' in WooCommerce."""
         successes, errors = self._wc_update_order_status("cancelled")
         return self._build_status_notification("cancelled", successes, errors)
 
     def action_wc_mark_on_hold(self):
-        """Marca el pedido como 'on-hold' en WooCommerce."""
+        """Marks the order as 'on-hold' in WooCommerce."""
         successes, errors = self._wc_update_order_status("on-hold")
         return self._build_status_notification("on-hold", successes, errors)
 
     def action_wc_mark_pending(self):
-        """Marca el pedido como 'pending' en WooCommerce."""
+        """Marks the order as 'pending' in WooCommerce."""
         successes, errors = self._wc_update_order_status("pending")
         return self._build_status_notification("pending", successes, errors)
 
     def action_wc_mark_refunded(self):
-        """Marca el pedido como 'refunded' en WooCommerce."""
+        """Marks the order as 'refunded' in WooCommerce."""
         successes, errors = self._wc_update_order_status("refunded")
         return self._build_status_notification("refunded", successes, errors)
 
-    # ── Otras acciones futuras ─────────────────────────────────────────────────
+    # ── Future actions ─────────────────────────────────────────────────────────
     # Add here: order notes, email resend, tracking update, etc.
 
 
@@ -160,8 +160,8 @@ class StockPickingWooSync(models.Model):
     Only acts when:
       - The picking is outgoing ('outgoing').
       - Linked to a sale order.
-      - Ese pedido de venta tiene un registro odoo.wp.sync asociado.
-      - La instancia WooCommerce tiene update_order_status_wc = True.
+      - That sale order has an associated odoo.wp.sync record.
+      - The WooCommerce instance has update_order_status_wc = True.
     """
 
     _inherit = "stock.picking"

@@ -21,27 +21,46 @@ class WooPartner(models.AbstractModel):
         if default_client:
             _logger.debug(f"Using instance default client: {default_client.name}")
             return default_client
+        
+        _logger.error(
+            f"Data {woo_order_record}: No default client configured"
+        )
 
         Partner = self.env["res.partner"]
 
-        # Buscar por email si existe
+        # Search by email if it exists
         if woo_order_record.customer_email:
             partner = Partner.search(
                 [("email", "=", woo_order_record.customer_email)], limit=1
             )
             if partner:
-                _logger.debug(f"Cliente encontrado por email: {partner.name}")
+                _logger.debug(f"Customer found by email: {partner.name}")
                 return partner
 
-        # Crear nuevo cliente
+        # Create new customer
+
+
+        # TODO Implement logic to extract the partner's name from the order data, as WooCommerce does not provide a separate field for the customer's name. For now, we will use the email or a default name if the email is not available.
+
         partner_vals = {
-            "name": woo_order_record.customer_name or "Cliente WooCommerce",
+            "name": woo_order_record.customer_name or "WooCommerce Customer",
             "email": woo_order_record.customer_email,
             "phone": woo_order_record.customer_phone,
-            "comment": f"Cliente importado desde WooCommerce - Order {woo_order_record.order_number}",
+            "street": woo_order_record.address_1,
+            "street2": woo_order_record.address_2,
+            "city": woo_order_record.city,
+            "state_id": self.env["res.country.state"].search(
+                [("code", "=", woo_order_record.state)], limit=1
+            ).id
+            if woo_order_record.state else None,
+            "zip": woo_order_record.postcode,
+            "country_id": self.env["res.country"].search(
+                [("code", "=", woo_order_record.country)], limit=1
+            ).id if woo_order_record.country else None,
+            "comment": f"Customer imported from WooCommerce - Order {woo_order_record.order_number}",
         }
 
         partner = Partner.create(partner_vals)
-        _logger.info(f"Nuevo cliente creado: {partner.name}")
+        _logger.info(f"New customer created: {partner.name}")
 
         return partner

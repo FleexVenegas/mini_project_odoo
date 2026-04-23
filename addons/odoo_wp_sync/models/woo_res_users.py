@@ -1,8 +1,7 @@
 """
-Modelo de usuario extendido para WooCommerce, con un campo Many2one 
-que apunta a la instancia activa (woo.instance) seleccionada por el usuario.
+Extended user model for WooCommerce, with a Many2one field
+that points to the active instance (woo.instance) selected by the user.
 """
-
 
 from odoo import models, fields
 

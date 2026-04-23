@@ -13,7 +13,7 @@ Odoo WordPress Sync
     """,
     "author": "Diego Venegas - Depsistemas",
     "icon": "/odoo_wp_sync/static/description/icon.png",
-    "website": "https://tusitio.com",
+    "website": "",
     "category": "Sales",
     "license": "LGPL-3",
     "depends": [
@@ -59,7 +59,7 @@ Odoo WordPress Sync
     ],
     "assets": {
         "web.assets_backend": [
-            # "odoo_wp_sync/static/src/js/script.js",
+            "odoo_wp_sync/static/src/js/script.js",
             "odoo_wp_sync/static/src/scss/styles.scss",
         ]
     },

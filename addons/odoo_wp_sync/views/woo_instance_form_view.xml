@@ -190,6 +190,7 @@
                                 <group>
                                     <field name="taxes_included_price" string="Prices include VAT" widget="boolean_toggle"/>
                                     <field name="tax_id" string="Tax" invisible="taxes_included_price != False"/>
+                                    <field name="picking_policy" string="Delivery Policy"/>
                                 </group>
                             </group>
 

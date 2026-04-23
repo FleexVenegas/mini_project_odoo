@@ -1,0 +1,4336 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* odoo_wp_sync
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 17.0-20250123\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-04-22 23:16+0000\n"
+"PO-Revision-Date: 2026-04-22 23:16+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: odoo_wp_sync
+#: model:ir.actions.server,name:odoo_wp_sync.action_woo_product_push_to_wc
+msgid " ↻ Sync to wc"
+msgstr " ↻ Sincronizar con WC"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_product_product__woo_published_count
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_product_template__woo_published_count
+msgid "# WC Instances"
+msgstr "# Instancias WC"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_coupon_kanban
+msgid "% off"
+msgstr "% de descuento"
+
+#. module: odoo_wp_sync
+#. odoo-python
+#: code:addons/odoo_wp_sync/models/woo_bulk_publish_wizard.py:0
+#, python-format
+msgid "%(ok)d product(s) published successfully in '%(instance)s'."
+msgstr "%(ok)d producto(s) publicado(s) exitosamente en '%(instance)s'."
+
+#. module: odoo_wp_sync
+#. odoo-python
+#: code:addons/odoo_wp_sync/models/woo_bulk_publish_wizard.py:0
+#, python-format
+msgid ""
+"%(ok)d published successfully in '%(instance)s'.\n"
+"%(fail)d with errors:\n"
+"%(errors)s"
+msgstr ""
+"%(ok)d publicado(s) exitosamente en '%(instance)s'.\n"
+"%(fail)d con errores:\n"
+"%(errors)s"
+
+#. module: odoo_wp_sync
+#. odoo-python
+#: code:addons/odoo_wp_sync/models/woo_product.py:0
+#, python-format
+msgid ""
+"%(ok)d synced correctly, %(failed)d still pending.\n"
+"Use the 'Pending sync' filter and run 'Sync to WooCommerce' again to retry."
+msgstr ""
+"%(ok)d sincronizado(s) correctamente, %(failed)d aún pendiente(s).\n"
+"Use el filtro 'Sincronización pendiente' y ejecute 'Sincronizar con WooCommerce' nuevamente para reintentar."
+
+#. module: odoo_wp_sync
+#. odoo-python
+#: code:addons/odoo_wp_sync/models/woo_product.py:0
+#, python-format
+msgid "%(ok)d/%(total)d synced — %(remaining)d remaining."
+msgstr "%(ok)d/%(total)d sincronizado(s) — %(remaining)d restante(s)."
+
+#. module: odoo_wp_sync
+#. odoo-python
+#: code:addons/odoo_wp_sync/models/woo_instance.py:0
+#, python-format
+msgid ""
+"%(total)d coupons imported from %(instance)s (%(created)d new, %(updated)d "
+"updated)."
+msgstr "%(total)d cupones importados de %(instance)s (%(created)d nuevos, %(updated)d actualizados)."
+
+#. module: odoo_wp_sync
+#. odoo-python
+#: code:addons/odoo_wp_sync/models/woo_product.py:0
+#, python-format
+msgid "'%s' could not be synced: %s"
+msgstr "'%s' no pudo sincronizarse: %s"
+
+#. module: odoo_wp_sync
+#. odoo-python
+#: code:addons/odoo_wp_sync/models/woo_product.py:0
+#, python-format
+msgid "'%s' created with ID %s in '%s'."
+msgstr "'%s' creado con ID %s en '%s'."
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,help:odoo_wp_sync.field_woo_publish_wizard__wc_status
+msgid "'Draft' creates the product in WC without publishing it in the store."
+msgstr "'Borrador' crea el producto en WC sin publicarlo en la tienda."
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_publish_wizard_form
+msgid "0 = use pricelist price"
+msgstr "0 = usar precio de lista de precios"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_coupon_kanban
+msgid "<i class=\"fa fa-bar-chart me-1\" title=\"Usage\"/>"
+msgstr "<i class=\"fa fa-bar-chart me-1\" title=\"Uso\"/>"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_coupon_kanban
+msgid "<i class=\"fa fa-calendar me-1\" title=\"Expires\"/>"
+msgstr "<i class=\"fa fa-calendar me-1\" title=\"Vence\"/>"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_instance_form
+msgid ""
+"<i class=\"fa fa-clock-o me-1\" title=\"Last sync\"/>\n"
+"                                         Last sync:"
+msgstr ""
+"<i class=\"fa fa-clock-o me-1\" title=\"Última sincronización\"/>\n"
+"                                         Última sincronización:"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_coupon_kanban
+msgid ""
+"<i class=\"fa fa-clock-o\" title=\"Expired\"/>\n"
+" Expired"
+msgstr ""
+"<i class=\"fa fa-clock-o\" title=\"Vencido\"/>\n"
+" Vencido"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_coupon_kanban
+msgid "<i class=\"fa fa-cloud\" title=\"WC synced\"/>"
+msgstr "<i class=\"fa fa-cloud\" title=\"Sincronizado con WC\"/>"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_coupon_kanban
+msgid "<i class=\"fa fa-cloud-upload\" title=\"Not synced\"/>"
+msgstr "<i class=\"fa fa-cloud-upload\" title=\"No sincronizado\"/>"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_instance_kanban
+msgid ""
+"<i class=\"fa fa-cog me-2\"/>\n"
+"                                        Settings"
+msgstr ""
+"<i class=\"fa fa-cog me-2\"/>\n"
+"                                        Configuración"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_instance_kanban
+msgid ""
+"<i class=\"fa fa-cube me-2\"/>\n"
+"                                        Products"
+msgstr ""
+"<i class=\"fa fa-cube me-2\"/>\n"
+"                                        Productos"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_product_form
+msgid ""
+"<i class=\"fa fa-exclamation-triangle me-1\"/>\n"
+"                        Complete the data and click <strong>Create in WooCommerce</strong> to publish the product.\n"
+"                        The price will be taken from the <strong>instance pricelist</strong>, unless you specify a manual price."
+msgstr ""
+"<i class=\"fa fa-exclamation-triangle me-1\"/>\n"
+"                        Complete los datos y haga clic en <strong>Crear en WooCommerce</strong> para publicar el producto.\n"
+"                        El precio se tomará de la <strong>lista de precios de la instancia</strong>, a menos que especifique un precio manual."
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_publish_wizard_form
+msgid ""
+"<i class=\"fa fa-info-circle me-1\"/>\n"
+"                        If this product already exists in the selected instance,\n"
+"                        it will be updated instead of creating a new one.<br/>\n"
+"                        The price will be taken from the <strong>pricelist configured in the instance</strong>\n"
+"                        (Sales tab). If no pricelist is configured, the product list price is used.\n"
+"                        You can override the price manually in the field above."
+msgstr ""
+"<i class=\"fa fa-info-circle me-1\"/>\n"
+"                        Si este producto ya existe en la instancia seleccionada,\n"
+"                        se actualizará en lugar de crear uno nuevo.<br/>\n"
+"                        El precio se tomará de la <strong>lista de precios configurada en la instancia</strong>\n"
+"                        (pestaña Ventas). Si no hay lista de precios configurada, se usa el precio de lista del producto.\n"
+"                        Puede sobreescribir el precio manualmente en el campo de arriba."
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_product_form
+msgid ""
+"<i class=\"fa fa-info-circle me-1\"/>\n"
+"                        Modify the values and press <strong>Sync with WooCommerce</strong> to apply the changes."
+msgstr ""
+"<i class=\"fa fa-info-circle me-1\"/>\n"
+"                        Modifique los valores y presione <strong>Sincronizar con WooCommerce</strong> para aplicar los cambios."
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_instance_form
+msgid ""
+"<i class=\"fa fa-lightbulb-o me-2\"/>\n"
+"                                    Follow these steps to connect your WooCommerce store."
+msgstr ""
+"<i class=\"fa fa-lightbulb-o me-2\"/>\n"
+"                                    Siga estos pasos para conectar su tienda WooCommerce."
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_instance_kanban
+msgid ""
+"<i class=\"fa fa-plug me-2\"/>\n"
+"                                        Reconnect"
+msgstr ""
+"<i class=\"fa fa-plug me-2\"/>\n"
+"                                        Reconectar"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_confirmation_wizard_form
+msgid "<i class=\"fa fa-question-circle\" title=\"Confirmation\"/>"
+msgstr "<i class=\"fa fa-question-circle\" title=\"Confirmación\"/>"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_instance_kanban
+msgid ""
+"<i class=\"fa fa-refresh me-2\"/>\n"
+"                                        Sync orders"
+msgstr ""
+"<i class=\"fa fa-refresh me-2\"/>\n"
+"                                        Sincronizar pedidos"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_instance_kanban
+msgid ""
+"<i class=\"fa fa-refresh me-2\"/>\n"
+"                                        Sync products"
+msgstr ""
+"<i class=\"fa fa-refresh me-2\"/>\n"
+"                                        Sincronizar productos"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_coupon_kanban
+msgid "<i class=\"fa fa-refresh\" title=\"Pending sync\"/>"
+msgstr "<i class=\"fa fa-refresh\" title=\"Sincronización pendiente\"/>"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_instance_kanban
+msgid "<i class=\"fa fa-shopping-bag\" title=\"WooCommerce Instance\"/>"
+msgstr "<i class=\"fa fa-shopping-bag\" title=\"Instancia WooCommerce\"/>"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_instance_kanban
+msgid ""
+"<i class=\"fa fa-ticket me-2\"/>\n"
+"                                        Coupons"
+msgstr ""
+"<i class=\"fa fa-ticket me-2\"/>\n"
+"                                        Cupones"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_coupon_kanban
+msgid ""
+"<i class=\"fa fa-times-circle\"/>\n"
+" Permanently Deleted"
+msgstr ""
+"<i class=\"fa fa-times-circle\"/>\n"
+" Eliminado permanentemente"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_coupon_kanban
+msgid ""
+"<i class=\"fa fa-trash-o\"/>\n"
+" In Trash"
+msgstr ""
+"<i class=\"fa fa-trash-o\"/>\n"
+" En la papelera"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_coupon_kanban
+msgid "<i class=\"fa fa-truck\" title=\"Free Shipping\"/>"
+msgstr "<i class=\"fa fa-truck\" title=\"Envío gratuito\"/>"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_coupon_kanban
+msgid "<i class=\"fa fa-user\" title=\"Individual use\"/>"
+msgstr "<i class=\"fa fa-user\" title=\"Uso individual\"/>"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_instance_form
+msgid "<span class=\"badge bg-primary me-2\">1</span>Access WooCommerce"
+msgstr "<span class=\"badge bg-primary me-2\">1</span>Acceder a WooCommerce"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_instance_form
+msgid "<span class=\"badge bg-primary me-2\">2</span>Generate an API Key"
+msgstr "<span class=\"badge bg-primary me-2\">2</span>Generar una clave API"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_instance_form
+msgid "<span class=\"badge bg-primary me-2\">3</span>Copy the credentials"
+msgstr "<span class=\"badge bg-primary me-2\">3</span>Copiar las credenciales"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_instance_form
+msgid "<span class=\"badge bg-primary me-2\">4</span>Test the connection"
+msgstr "<span class=\"badge bg-primary me-2\">4</span>Probar la conexión"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_odoo_wp_sync_form
+msgid "<span class=\"me-2\">Order</span>"
+msgstr "<span class=\"me-2\">Pedido</span>"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_product_form
+msgid "<span class=\"o_stat_text\">Link</span>"
+msgstr "<span class=\"o_stat_text\">Vincular</span>"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_instance_form
+msgid "<span class=\"o_stat_text\">Sync Coupons</span>"
+msgstr "<span class=\"o_stat_text\">Sincronizar cupones</span>"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_instance_form
+msgid "<span class=\"o_stat_text\">Sync Orders</span>"
+msgstr "<span class=\"o_stat_text\">Sincronizar pedidos</span>"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_instance_form
+msgid "<span class=\"o_stat_text\">Sync Products</span>"
+msgstr "<span class=\"o_stat_text\">Sincronizar productos</span>"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_product_form
+msgid "<span class=\"o_stat_text\">Unlink</span>"
+msgstr "<span class=\"o_stat_text\">Desvincular</span>"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_coupon_form
+msgid "<span class=\"o_stat_text\">Uses</span>"
+msgstr "<span class=\"o_stat_text\">Usos</span>"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_odoo_wp_sync_form
+msgid "<span class=\"o_stat_text\">View Order</span>"
+msgstr "<span class=\"o_stat_text\">Ver pedido</span>"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_odoo_wp_sync_form
+msgid "<span class=\"text-muted\" style=\"font-size: 14px;\">Order Total</span>"
+msgstr "<span class=\"text-muted\" style=\"font-size: 14px;\">Total del pedido</span>"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_instance_kanban
+msgid "<span class=\"woo_stat_label\">Pedidos</span>"
+msgstr "<span class=\"woo_stat_label\">Pedidos</span>"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_instance_kanban
+msgid "<span class=\"woo_stat_label\">Productos</span>"
+msgstr "<span class=\"woo_stat_label\">Productos</span>"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,help:odoo_wp_sync.field_woo_coupon__pending_sync
+msgid "A change was made in Odoo and has not been synced to WooCommerce yet"
+msgstr "Se realizó un cambio en Odoo que aún no se ha sincronizado con WooCommerce"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_instance__message_needaction
+msgid "Action Needed"
+msgstr "Acción requerida"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_coupon__active
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_instance__active
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_coupon_search
+msgid "Active"
+msgstr "Activo"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_coupon_form
+msgid "Active (not archived)"
+msgstr "Activo (no archivado)"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields.selection,name:odoo_wp_sync.selection__woo_instance__coupon_sync_expiry__active
+msgid "Active Only (not expired)"
+msgstr "Solo activos (no vencidos)"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_res_users__woo_active_instance_id
+msgid "Active WooCommerce Instance"
+msgstr "Instancia WooCommerce activa"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields.selection,name:odoo_wp_sync.selection__woo_coupon__woo_delete_status__none
+msgid "Active in WooCommerce"
+msgstr "Activo en WooCommerce"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_product_form
+msgid "Active pricelist"
+msgstr "Lista de precios activa"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_product__instance_manage_stock
+msgid "Active stock management"
+msgstr "Gestión de stock activa"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_instance__activity_ids
+msgid "Activities"
+msgstr "Actividades"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_instance__activity_exception_decoration
+msgid "Activity Exception Decoration"
+msgstr "Decoración de excepción de actividad"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_instance__activity_state
+msgid "Activity State"
+msgstr "Estado de actividad"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_instance__activity_type_icon
+msgid "Activity Type Icon"
+msgstr "Ícono de tipo de actividad"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,help:odoo_wp_sync.field_woo_coupon__meta_data_json
+msgid "Additional WooCommerce meta data as JSON"
+msgstr "Metadatos adicionales de WooCommerce en JSON"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_confirmation_wizard__context_data
+msgid "Additional context"
+msgstr "Contexto adicional"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_coupon_form
+msgid "Advanced"
+msgstr "Avanzado"
+
+#. module: odoo_wp_sync
+#. odoo-python
+#: code:addons/odoo_wp_sync/models/woo_product.py:0
+#, python-format
+msgid "All %d product(s) synced to WooCommerce successfully."
+msgstr "Todos los %d producto(s) sincronizados con WooCommerce exitosamente."
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields.selection,name:odoo_wp_sync.selection__woo_instance__coupon_sync_expiry__all
+msgid "All Coupons"
+msgstr "Todos los cupones"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields.selection,name:odoo_wp_sync.selection__woo_instance__sync_order_status__all
+msgid "All Orders"
+msgstr "Todos los pedidos"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields.selection,name:odoo_wp_sync.selection__woo_instance__coupon_sync_status__any
+msgid "All Statuses"
+msgstr "Todos los estados"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_instance__allow_create_products
+msgid "Allow product creation"
+msgstr "Permitir creación de productos"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_instance__who_can_publish
+msgid "Allow publishing"
+msgstr "Permitir publicación"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_coupon__amount
+msgid "Amount"
+msgstr "Importe"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_coupon__apply_before_tax
+msgid "Apply Before Tax"
+msgstr "Aplicar antes de impuestos"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,help:odoo_wp_sync.field_woo_coupon__apply_before_tax
+msgid "Apply discount before tax calculation"
+msgstr "Aplicar descuento antes del cálculo de impuestos"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_coupon_form
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_coupon_search
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_instance_form
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_instance_search
+msgid "Archived"
+msgstr "Archivado"
+
+#. module: odoo_wp_sync
+#. odoo-python
+#: code:addons/odoo_wp_sync/models/woo_coupon.py:0
+#, python-format
+msgid ""
+"Are you sure you want to <strong>permanently delete</strong> coupon "
+"<strong>%s</strong> from WooCommerce?<br/>This action cannot be undone. The "
+"coupon will be archived in Odoo."
+msgstr "¿Está seguro de que desea <strong>eliminar permanentemente</strong> el cupón <strong>%s</strong> de WooCommerce?<br/>Esta acción no se puede deshacer. El cupón se archivará en Odoo."
+
+#. module: odoo_wp_sync
+#. odoo-python
+#: code:addons/odoo_wp_sync/models/woo_product.py:0
+#, python-format
+msgid ""
+"Are you sure you want to create <strong>%s</strong> in WooCommerce?<br/>The "
+"current data (name, status, price, SKU, image, categories) will be sent."
+msgstr "¿Está seguro de que desea crear <strong>%s</strong> en WooCommerce?<br/>Se enviarán los datos actuales (nombre, estado, precio, SKU, imagen, categorías)."
+
+#. module: odoo_wp_sync
+#. odoo-python
+#: code:addons/odoo_wp_sync/models/woo_coupon.py:0
+#, python-format
+msgid ""
+"Are you sure you want to send coupon <strong>%s</strong> to the WooCommerce "
+"trash?<br/>The coupon will be archived in Odoo. You can restore it later."
+msgstr "¿Está seguro de que desea enviar el cupón <strong>%s</strong> a la papelera de WooCommerce?<br/>El cupón se archivará en Odoo. Puede restaurarlo más tarde."
+
+#. module: odoo_wp_sync
+#. odoo-python
+#: code:addons/odoo_wp_sync/models/woo_product.py:0
+#, python-format
+msgid ""
+"Are you sure you want to sync <strong>%s</strong> to "
+"WooCommerce?<br/>Status, price, stock, image, categories and brands will be "
+"updated."
+msgstr "¿Está seguro de que desea sincronizar <strong>%s</strong> con WooCommerce?<br/>Se actualizarán el estado, precio, stock, imagen, categorías y marcas."
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields.selection,name:odoo_wp_sync.selection__woo_instance__picking_policy__direct
+msgid "As soon as possible"
+msgstr "Tan pronto como sea posible"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_instance__message_attachment_count
+msgid "Attachment Count"
+msgstr "Cantidad de adjuntos"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_coupon__auto_coupon
+msgid "Auto Apply Coupon"
+msgstr "Aplicar cupón automáticamente"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_instance__auto_sync
+msgid "Auto Sync"
+msgstr "Sincronización automática"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_instance_form
+msgid "Automatic Order Creation"
+msgstr "Creación automática de pedidos"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,help:odoo_wp_sync.field_woo_coupon__auto_coupon
+msgid "Automatically apply this coupon when conditions are met"
+msgstr "Aplicar este cupón automáticamente cuando se cumplan las condiciones"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_instance__auto_create_sale_order
+msgid "Automatically create order on sync"
+msgstr "Crear pedido automáticamente al sincronizar"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,help:odoo_wp_sync.field_woo_instance__full_sync_interval_days
+msgid "Automatically do a full sync every X days (0 = never)"
+msgstr "Realizar una sincronización completa cada X días automáticamente (0 = nunca)"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,help:odoo_wp_sync.field_woo_instance__sync_retry_on_error
+msgid "Automatically retry synchronization after errors"
+msgstr "Reintentar sincronización automáticamente después de errores"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,help:odoo_wp_sync.field_woo_product__stock_status
+msgid "Availability status shown in the WooCommerce store."
+msgstr "Estado de disponibilidad mostrado en la tienda WooCommerce."
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_coupon__availability_ids
+msgid "Available At"
+msgstr "Disponible en"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,help:odoo_wp_sync.field_woo_product__stock_quantity
+msgid "Available stock quantity."
+msgstr "Cantidad de stock disponible."
+
+#. module: odoo_wp_sync
+#. odoo-javascript
+#: code:addons/odoo_wp_sync/static/src/js/script.js:0
+#, python-format
+msgid "Aviso"
+msgstr "Aviso"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,help:odoo_wp_sync.field_woo_instance__wp_url
+msgid "Base URL of your WordPress site (e.g., https://mystore.com)"
+msgstr "URL base de su sitio WordPress (ej., https://mitienda.com)"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_instance_form
+msgid "Behavior"
+msgstr "Comportamiento"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_brand_tree
+msgid "Brand"
+msgstr "Marca"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_brand_form
+msgid "Brand name"
+msgstr "Nombre de marca"
+
+#. module: odoo_wp_sync
+#: model:ir.ui.menu,name:odoo_wp_sync.menu_woo_brand
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_product_form
+msgid "Brands"
+msgstr "Marcas"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.actions.act_window,help:odoo_wp_sync.action_woo_brand
+msgid ""
+"Brands are created automatically when syncing products,\n"
+"                or you can create them manually to assign them to your products.\n"
+"                Requires a brands plugin installed in WooCommerce."
+msgstr ""
+"Las marcas se crean automáticamente al sincronizar productos,\n"
+"                o puede crearlas manualmente para asignarlas a sus productos.\n"
+"                Requiere un plugin de marcas instalado en WooCommerce."
+
+#. module: odoo_wp_sync
+#: model:ir.actions.server,name:odoo_wp_sync.action_server_brands_by_instance
+msgid "Brands by Instance"
+msgstr "Marcas por instancia"
+
+#. module: odoo_wp_sync
+#. odoo-python
+#: code:addons/odoo_wp_sync/models/woo_bulk_publish_wizard.py:0
+#, python-format
+msgid "Bulk publish completed"
+msgstr "Publicación masiva completada"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_confirmation_wizard_form
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_link_wizard_form
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_publish_wizard_form
+msgid "Cancel"
+msgstr "Cancelar"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_odoo_wp_sync_form
+msgid "Cancel in WC"
+msgstr "Cancelar en WC"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields.selection,name:odoo_wp_sync.selection__odoo_wp_sync__status__cancelled
+msgid "Cancelled"
+msgstr "Cancelado"
+
+#. module: odoo_wp_sync
+#. odoo-python
+#: code:addons/odoo_wp_sync/models/woo_instance.py:0
+#: code:addons/odoo_wp_sync/models/woo_instance.py:0
+#: code:addons/odoo_wp_sync/models/woo_instance.py:0
+#, python-format
+msgid "Cannot Sync"
+msgstr "No se puede sincronizar"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_odoo_wp_sync_form
+msgid "Cantidad"
+msgstr "Cantidad"
+
+#. module: odoo_wp_sync
+#: model:woo.coupon.location,name:odoo_wp_sync.coupon_location_cart
+msgid "Cart"
+msgstr "Carrito"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_coupon__product_category_ids
+#: model:ir.ui.menu,name:odoo_wp_sync.menu_woo_category
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_product_form
+msgid "Categories"
+msgstr "Categorías"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.actions.act_window,help:odoo_wp_sync.action_woo_category
+msgid ""
+"Categories are created automatically when syncing products,\n"
+"                or you can create them manually here to assign them to your products."
+msgstr ""
+"Las categorías se crean automáticamente al sincronizar productos,\n"
+"                o puede crearlas manualmente aquí para asignarlas a sus productos."
+
+#. module: odoo_wp_sync
+#: model:ir.actions.server,name:odoo_wp_sync.action_server_categories_by_instance
+msgid "Categories by Instance"
+msgstr "Categorías por instancia"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_category_tree
+msgid "Category"
+msgstr "Categoría"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_category_form
+msgid "Category name"
+msgstr "Nombre de categoría"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_coupon_kanban
+msgid "Changes not synced to WooCommerce"
+msgstr "Cambios no sincronizados con WooCommerce"
+
+#. module: odoo_wp_sync
+#: model:woo.coupon.location,name:odoo_wp_sync.coupon_location_checkout
+msgid "Checkout"
+msgstr "Finalizar compra"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_publish_wizard_form
+msgid ""
+"Choose the target instance and configure the options\n"
+"                            before sending the product."
+msgstr ""
+"Elija la instancia destino y configure las opciones\n"
+"                            antes de enviar el producto."
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_instance_form
+msgid "Click <strong>Add key</strong>, permissions: <code>Read/Write</code>"
+msgstr "Haga clic en <strong>Agregar clave</strong>, permisos: <code>Lectura/Escritura</code>"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.actions.act_window,help:odoo_wp_sync.action_odoo_wp_sync
+msgid "Click on \"Sync Now\" in the menu to import orders from WooCommerce."
+msgstr "Haga clic en \"Sincronizar ahora\" en el menú para importar pedidos de WooCommerce."
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_coupon_location__code
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_coupon_search
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_coupon_tree
+msgid "Code"
+msgstr "Código"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_instance__color
+msgid "Color Index"
+msgstr "Índice de color"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,help:odoo_wp_sync.field_woo_instance__sync_custom_statuses
+msgid ""
+"Comma-separated list of statuses (e.g., pending, processing, completed, on-"
+"hold, cancelled, refunded, failed) to sync when 'Custom Selection' is chosen"
+msgstr "Lista de estados separados por comas (ej., pending, processing, completed, on-hold, cancelled, refunded, failed) para sincronizar cuando se elige 'Selección personalizada'"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_odoo_wp_sync__company_id
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_instance__company_id
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_instance_search
+msgid "Company"
+msgstr "Empresa"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_category__complete_name
+msgid "Complete name"
+msgstr "Nombre completo"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields.selection,name:odoo_wp_sync.selection__odoo_wp_sync__status__completed
+#: model:ir.model.fields.selection,name:odoo_wp_sync.selection__woo_instance__auto_create_sale_order_statuses__completed
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_odoo_wp_sync_search
+msgid "Completed"
+msgstr "Completado"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields.selection,name:odoo_wp_sync.selection__woo_instance__sync_order_status__completed
+msgid "Completed Only"
+msgstr "Solo completados"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_instance__completed_order_count
+msgid "Completed Orders"
+msgstr "Pedidos completados"
+
+#. module: odoo_wp_sync
+#. odoo-python
+#: code:addons/odoo_wp_sync/models/woo_instance.py:0
+#, python-format
+msgid "Completed Orders - %s"
+msgstr "Pedidos completados - %s"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_confirmation_wizard_form
+msgid "Confirm"
+msgstr "Confirmar"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_instance__confirm_orders
+msgid "Confirm Orders"
+msgstr "Confirmar pedidos"
+
+#. module: odoo_wp_sync
+#: model:ir.actions.act_window,name:odoo_wp_sync.action_confirmation_wizard
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_confirmation_wizard_form
+msgid "Confirmation"
+msgstr "Confirmación"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.actions.act_window,help:odoo_wp_sync.action_woo_instance
+msgid ""
+"Connect multiple WooCommerce stores to sync products and orders.<br>\n"
+"                Each instance represents a separate WooCommerce installation."
+msgstr ""
+"Conecte múltiples tiendas WooCommerce para sincronizar productos y pedidos.<br>\n"
+"                Cada instancia representa una instalación de WooCommerce independiente."
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields.selection,name:odoo_wp_sync.selection__woo_instance__state__connected
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_instance_search
+msgid "Connected"
+msgstr "Conectado"
+
+#. module: odoo_wp_sync
+#. odoo-python
+#: code:addons/odoo_wp_sync/models/woo_instance.py:0
+#: code:addons/odoo_wp_sync/models/woo_instance.py:0
+#: model:ir.model.fields.selection,name:odoo_wp_sync.selection__woo_instance__state__error
+#, python-format
+msgid "Connection Error"
+msgstr "Error de conexión"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_instance__connection_message
+msgid "Connection Message"
+msgstr "Mensaje de conexión"
+
+#. module: odoo_wp_sync
+#. odoo-python
+#: code:addons/odoo_wp_sync/models/woo_instance.py:0
+#, python-format
+msgid "Connection Successful"
+msgstr "Conexión exitosa"
+
+#. module: odoo_wp_sync
+#. odoo-python
+#: code:addons/odoo_wp_sync/models/woo_instance.py:0
+#, python-format
+msgid "Connection Timeout"
+msgstr "Tiempo de espera agotado"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_instance_form
+msgid "Connection status"
+msgstr "Estado de conexión"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,help:odoo_wp_sync.field_woo_instance__state
+msgid "Connection status of this instance"
+msgstr "Estado de conexión de esta instancia"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,help:odoo_wp_sync.field_woo_instance__sync_error_count
+msgid "Consecutive synchronization errors"
+msgstr "Errores de sincronización consecutivos"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_instance__consumer_key
+msgid "Consumer Key"
+msgstr "Clave del consumidor"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_instance__consumer_secret
+msgid "Consumer Secret"
+msgstr "Secreto del consumidor"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,help:odoo_wp_sync.field_confirmation_wizard__context_data
+msgid "Context data in JSON format (optional)"
+msgstr "Datos de contexto en formato JSON (opcional)"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_instance_form
+msgid ""
+"Copy the <strong>Consumer Key</strong> and <strong>Consumer Secret</strong>"
+msgstr "Copie la <strong>Clave del consumidor</strong> y el <strong>Secreto del consumidor</strong>"
+
+#. module: odoo_wp_sync
+#. odoo-python
+#: code:addons/odoo_wp_sync/models/woo_instance.py:0
+#, python-format
+msgid "Could not connect to server - check URL and network"
+msgstr "No se pudo conectar al servidor — verifique la URL y la red"
+
+#. module: odoo_wp_sync
+#. odoo-python
+#: code:addons/odoo_wp_sync/models/woo_coupon.py:0
+#, python-format
+msgid "Could not restore coupon from WooCommerce trash: %s"
+msgstr "No se pudo restaurar el cupón desde la papelera de WooCommerce: %s"
+
+#. module: odoo_wp_sync
+#. odoo-python
+#: code:addons/odoo_wp_sync/models/woo_coupon.py:0
+#, python-format
+msgid "Coupon '%s' was moved to the WooCommerce trash and archived in Odoo."
+msgstr "El cupón '%s' fue enviado a la papelera de WooCommerce y archivado en Odoo."
+
+#. module: odoo_wp_sync
+#. odoo-python
+#: code:addons/odoo_wp_sync/models/woo_coupon.py:0
+#, python-format
+msgid ""
+"Coupon '%s' was permanently deleted from WooCommerce and archived in Odoo."
+msgstr "El cupón '%s' fue eliminado permanentemente de WooCommerce y archivado en Odoo."
+
+#. module: odoo_wp_sync
+#. odoo-python
+#: code:addons/odoo_wp_sync/models/woo_coupon.py:0
+#, python-format
+msgid "Coupon '%s' was restored from the WooCommerce trash and is now active."
+msgstr "El cupón '%s' fue restaurado de la papelera de WooCommerce y ahora está activo."
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_coupon_form
+msgid "Coupon Availability"
+msgstr "Disponibilidad del cupón"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_coupon__code
+msgid "Coupon Code"
+msgstr "Código de cupón"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_instance__coupon_sync_expiry
+msgid "Coupon Expiry"
+msgstr "Vencimiento del cupón"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_instance__coupon_sync_status
+msgid "Coupon Status"
+msgstr "Estado del cupón"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_instance__coupon_sync_mode
+msgid "Coupon Sync Mode"
+msgstr "Modo de sincronización de cupones"
+
+#. module: odoo_wp_sync
+#. odoo-python
+#: code:addons/odoo_wp_sync/models/woo_coupon.py:0
+#, python-format
+msgid "Coupon code '%s' already exists for this instance!"
+msgstr "¡El código de cupón '%s' ya existe para esta instancia!"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,help:odoo_wp_sync.field_woo_coupon__description
+msgid "Coupon description for internal reference"
+msgstr "Descripción del cupón para referencia interna"
+
+#. module: odoo_wp_sync
+#. odoo-python
+#: code:addons/odoo_wp_sync/models/woo_coupon.py:0
+#, python-format
+msgid "Coupon synced to WooCommerce"
+msgstr "Cupón sincronizado con WooCommerce"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_instance__coupon_count
+#: model:ir.ui.menu,name:odoo_wp_sync.menu_woo_coupon
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_instance_form
+msgid "Coupons"
+msgstr "Cupones"
+
+#. module: odoo_wp_sync
+#. odoo-python
+#: code:addons/odoo_wp_sync/models/woo_instance.py:0
+#, python-format
+msgid "Coupons - %s"
+msgstr "Cupones - %s"
+
+#. module: odoo_wp_sync
+#. odoo-python
+#: code:addons/odoo_wp_sync/models/woo_instance.py:0
+#, python-format
+msgid "Coupons Imported"
+msgstr "Cupones importados"
+
+#. module: odoo_wp_sync
+#: model:ir.actions.server,name:odoo_wp_sync.action_server_coupons_by_instance
+msgid "Coupons by Instance"
+msgstr "Cupones por instancia"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_odoo_wp_sync_form
+msgid "Create Odoo Order"
+msgstr "Crear pedido en Odoo"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_odoo_wp_sync_tree
+msgid "Create Orders"
+msgstr "Crear pedidos"
+
+#. module: odoo_wp_sync
+#. odoo-python
+#: code:addons/odoo_wp_sync/models/woo_product.py:0
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_product_form
+#, python-format
+msgid "Create in WooCommerce"
+msgstr "Crear en WooCommerce"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.actions.act_window,help:odoo_wp_sync.action_woo_instance
+msgid "Create your first WooCommerce Instance"
+msgstr "Cree su primera instancia de WooCommerce"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.actions.act_window,help:odoo_wp_sync.action_woo_coupon
+msgid ""
+"Create your first WooCommerce coupon to offer discounts to your customers."
+msgstr "Cree su primer cupón de WooCommerce para ofrecer descuentos a sus clientes."
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_confirmation_wizard__create_uid
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_odoo_wp_sync__create_uid
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_brand__create_uid
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_category__create_uid
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_coupon__create_uid
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_coupon_location__create_uid
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_instance__create_uid
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_link_wizard__create_uid
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_order_line__create_uid
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_product__create_uid
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_publish_wizard__create_uid
+msgid "Created by"
+msgstr "Creado por"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_confirmation_wizard__create_date
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_odoo_wp_sync__create_date
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_brand__create_date
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_category__create_date
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_coupon__create_date
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_coupon_location__create_date
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_instance__create_date
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_link_wizard__create_date
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_order_line__create_date
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_product__create_date
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_publish_wizard__create_date
+msgid "Created on"
+msgstr "Creado en"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_odoo_wp_sync_form
+msgid "Creation Date"
+msgstr "Fecha de creación"
+
+#. module: odoo_wp_sync
+#. odoo-python
+#: code:addons/odoo_wp_sync/models/woo_instance.py:0
+#, python-format
+msgid "Cupones WooCommerce — %s"
+msgstr "Cupones WooCommerce — %s"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_odoo_wp_sync__currency
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_order_line__currency_id
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_product__currency_id
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_odoo_wp_sync_tree
+msgid "Currency"
+msgstr "Moneda"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_product_form
+msgid "Current WC price"
+msgstr "Precio actual en WC"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_product__woo_image_preview
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_product_form
+msgid "Current image"
+msgstr "Imagen actual"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields.selection,name:odoo_wp_sync.selection__woo_instance__sync_order_status__custom
+msgid "Custom Selection"
+msgstr "Selección personalizada"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_instance__sync_custom_statuses
+msgid "Custom Statuses"
+msgstr "Estados personalizados"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_odoo_wp_sync__customer_email
+msgid "Customer Email"
+msgstr "Correo del cliente"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_odoo_wp_sync__customer_name
+msgid "Customer Name"
+msgstr "Nombre del cliente"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_odoo_wp_sync_search
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_odoo_wp_sync_tree
+msgid "Date"
+msgstr "Fecha"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_odoo_wp_sync__date_created
+msgid "Date Created"
+msgstr "Fecha de creación"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,help:odoo_wp_sync.field_woo_instance__last_full_sync_date
+msgid "Date of last complete synchronization"
+msgstr "Fecha de la última sincronización completa"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,help:odoo_wp_sync.field_woo_instance__last_sync_date
+msgid "Date of last incremental synchronization"
+msgstr "Fecha de la última sincronización incremental"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_coupon_form
+msgid "Dates & Shipping"
+msgstr "Fechas y envío"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_odoo_wp_sync_form
+msgid "Datos en formato JSON..."
+msgstr "Datos en formato JSON..."
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_instance__client_id
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_instance_form
+msgid "Default Customer"
+msgstr "Cliente predeterminado"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,help:odoo_wp_sync.field_woo_instance__warehouse_id
+msgid "Default warehouse for stock movements from synced orders"
+msgstr "Almacén predeterminado para movimientos de stock de pedidos sincronizados"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_coupon_form
+msgid "Delete Permanently"
+msgstr "Eliminar permanentemente"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_instance_form
+msgid "Delivery Policy"
+msgstr "Política de entrega"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_confirmation_wizard__description
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_coupon__description
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_publish_wizard__description
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_coupon_form
+msgid "Description"
+msgstr "Descripción"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_confirmation_wizard__description_text
+msgid "Description Text"
+msgstr "Texto de descripción"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,help:odoo_wp_sync.field_woo_instance__picking_policy
+msgid ""
+"Determines when the order should be marked as ready for delivery: 'As soon "
+"as possible' will create a delivery as soon as any product is available, "
+"while 'When all products are ready' will wait until all products in the "
+"order are available before creating the delivery."
+msgstr "Determina cuándo el pedido debe marcarse como listo para entrega: 'Tan pronto como sea posible' creará una entrega en cuanto cualquier producto esté disponible, mientras que 'Cuando todos los productos estén listos' esperará hasta que todos los productos del pedido estén disponibles."
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_coupon_form
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_coupon_tree
+msgid "Discount"
+msgstr "Descuento"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_coupon__display_discount
+msgid "Discount Display"
+msgstr "Visualización del descuento"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_odoo_wp_sync__discount_total
+msgid "Discount Total"
+msgstr "Total de descuento"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_coupon__discount_type
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_coupon_search
+msgid "Discount Type"
+msgstr "Tipo de descuento"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_confirmation_wizard__display_name
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_odoo_wp_sync__display_name
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_brand__display_name
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_category__display_name
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_coupon__display_name
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_coupon_location__display_name
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_instance__display_name
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_link_wizard__display_name
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_order_line__display_name
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_product__display_name
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_publish_wizard__display_name
+msgid "Display Name"
+msgstr "Nombre a mostrar"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields.selection,name:odoo_wp_sync.selection__woo_coupon__status__draft
+#: model:ir.model.fields.selection,name:odoo_wp_sync.selection__woo_instance__coupon_sync_status__draft
+#: model:ir.model.fields.selection,name:odoo_wp_sync.selection__woo_instance__state__draft
+#: model:ir.model.fields.selection,name:odoo_wp_sync.selection__woo_product__woo_status__draft
+#: model:ir.model.fields.selection,name:odoo_wp_sync.selection__woo_publish_wizard__wc_status__draft
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_coupon_search
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_instance_search
+msgid "Draft"
+msgstr "Borrador"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_product_search
+msgid "Drafts"
+msgstr "Borradores"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_instance_kanban
+msgid "Dropdown menu"
+msgstr "Menú desplegable"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,help:odoo_wp_sync.field_woo_instance__sync_duration
+msgid "Duration of last synchronization in seconds"
+msgstr "Duración de la última sincronización en segundos"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_odoo_wp_sync_form
+msgid "Email"
+msgstr "Correo electrónico"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_coupon__enable_category_restriction
+msgid "Enable Category Restriction"
+msgstr "Habilitar restricción por categoría"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_instance__incremental_enabled
+msgid "Enable Incremental Sync"
+msgstr "Habilitar sincronización incremental"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,help:odoo_wp_sync.field_woo_instance__auto_sync
+msgid "Enable automatic synchronization via the scheduled cron job"
+msgstr "Habilitar sincronización automática mediante el trabajo programado"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,help:odoo_wp_sync.field_woo_coupon__enable_category_restriction
+msgid "Enable product category restriction for this coupon"
+msgstr "Habilitar restricción de categoría de producto para este cupón"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_instance_search
+msgid "Error"
+msgstr "Error"
+
+#. module: odoo_wp_sync
+#. odoo-python
+#: code:addons/odoo_wp_sync/models/woo_confirmation_wizard.py:0
+#, python-format
+msgid "Error during execution: %s"
+msgstr "Error durante la ejecución: %s"
+
+#. module: odoo_wp_sync
+#. odoo-python
+#: code:addons/odoo_wp_sync/models/woo_instance.py:0
+#, python-format
+msgid "Error importing products"
+msgstr "Error al importar productos"
+
+#. module: odoo_wp_sync
+#. odoo-python
+#: code:addons/odoo_wp_sync/models/woo_order_actions.py:0
+#, python-format
+msgid "Error updating status"
+msgstr "Error al actualizar estado"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,help:odoo_wp_sync.field_woo_instance__next_auto_sync_date
+msgid "Estimated date/time of next automatic synchronization"
+msgstr "Fecha/hora estimada de la próxima sincronización automática"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_coupon_form
+msgid "Exclude Products"
+msgstr "Excluir productos"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_coupon__exclude_sale_items
+msgid "Exclude Sale Items"
+msgstr "Excluir artículos en oferta"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_coupon__excluded_category_ids
+msgid "Excluded Categories"
+msgstr "Categorías excluidas"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_coupon__excluded_product_ids
+msgid "Excluded Products"
+msgstr "Productos excluidos"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_coupon_form
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_coupon_kanban
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_coupon_search
+msgid "Expired"
+msgstr "Vencido"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields.selection,name:odoo_wp_sync.selection__woo_instance__coupon_sync_expiry__expired
+msgid "Expired Only"
+msgstr "Solo vencidos"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_coupon_tree
+msgid "Expires"
+msgstr "Vence"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_coupon__date_expires
+msgid "Expiry Date"
+msgstr "Fecha de vencimiento"
+
+#. module: odoo_wp_sync
+#: model:ir.model,name:odoo_wp_sync.model_sale_order
+msgid "Extend Sale Order to confirm multiple quotations"
+msgstr "Orden de venta"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields.selection,name:odoo_wp_sync.selection__odoo_wp_sync__status__failed
+msgid "Failed"
+msgstr "Fallido"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,help:odoo_wp_sync.field_woo_instance__coupon_sync_expiry
+msgid "Filter imported coupons by expiry date"
+msgstr "Filtrar cupones importados por fecha de vencimiento"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_coupon_search
+msgid "Fixed Cart"
+msgstr "Carrito fijo"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields.selection,name:odoo_wp_sync.selection__woo_coupon__discount_type__fixed_cart
+msgid "Fixed Cart Discount"
+msgstr "Descuento fijo en carrito"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_coupon_search
+msgid "Fixed Product"
+msgstr "Producto fijo"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields.selection,name:odoo_wp_sync.selection__woo_coupon__discount_type__fixed_product
+msgid "Fixed Product Discount"
+msgstr "Descuento fijo en producto"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_instance__message_follower_ids
+msgid "Followers"
+msgstr "Seguidores"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_instance__message_partner_ids
+msgid "Followers (Partners)"
+msgstr "Seguidores (contactos)"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,help:odoo_wp_sync.field_woo_instance__activity_type_icon
+msgid "Font awesome icon e.g. fa-tasks"
+msgstr "Ícono Font Awesome, ej. fa-tasks"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_coupon_tree
+msgid "Free Ship"
+msgstr "Envío gratis"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_coupon__free_shipping
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_coupon_kanban
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_coupon_search
+msgid "Free Shipping"
+msgstr "Envío gratuito"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields.selection,name:odoo_wp_sync.selection__woo_instance__sync_mode__full
+msgid "Full (All orders)"
+msgstr "Completo (todos los pedidos)"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields.selection,name:odoo_wp_sync.selection__woo_instance__coupon_sync_mode__full
+msgid "Full (all coupons)"
+msgstr "Completo (todos los cupones)"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_instance__full_sync_interval_days
+msgid "Full Sync Interval (Days)"
+msgstr "Intervalo de sincronización completa (días)"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_category_form
+msgid "Full path"
+msgstr "Ruta completa"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,help:odoo_wp_sync.field_woo_category__complete_name
+msgid "Full path: Parent / Child / Grandchild"
+msgstr "Ruta completa: Padre / Hijo / Nieto"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_instance_form
+msgid "General"
+msgstr "General"
+
+#. module: odoo_wp_sync
+#: model:ir.model,name:odoo_wp_sync.model_confirmation_wizard
+msgid "Generic Confirmation Wizard"
+msgstr "Asistente de confirmación genérico"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_instance_form
+msgid "Getting Started"
+msgstr "Primeros pasos"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.actions.act_window,help:odoo_wp_sync.action_woo_product
+msgid ""
+"Go to a WooCommerce instance and click\n"
+"                <strong>Sync Products</strong> to import them."
+msgstr ""
+"Vaya a una instancia de WooCommerce y haga clic en\n"
+"                <strong>Sincronizar productos</strong> para importarlos."
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_instance_form
+msgid "Go to: <code>WooCommerce → Settings → Advanced → REST API</code>"
+msgstr "Vaya a: <code>WooCommerce → Ajustes → Avanzado → API REST</code>"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_odoo_wp_sync_search
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_brand_search
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_category_search
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_coupon_search
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_instance_search
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_product_search
+msgid "Group By"
+msgstr "Agrupar por"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_instance__has_message
+msgid "Has Message"
+msgstr "Tiene mensaje"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_category_form
+msgid "Hierarchy"
+msgstr "Jerarquía"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,help:odoo_wp_sync.field_woo_coupon__usage_limit_per_user
+msgid ""
+"How many times this coupon can be used by a single user (0 = unlimited)"
+msgstr "Cuántas veces puede usar este cupón un solo usuario (0 = ilimitado)"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,help:odoo_wp_sync.field_woo_coupon__usage_limit
+msgid "How many times this coupon can be used in total (0 = unlimited)"
+msgstr "Cuántas veces puede usarse este cupón en total (0 = ilimitado)"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_confirmation_wizard__id
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_odoo_wp_sync__id
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_brand__id
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_category__id
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_coupon__id
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_coupon_location__id
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_instance__id
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_link_wizard__id
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_order_line__id
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_product__id
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_publish_wizard__id
+msgid "ID"
+msgstr "ID"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_odoo_wp_sync_form
+msgid "ID WooCommerce"
+msgstr "ID WooCommerce"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,help:odoo_wp_sync.field_confirmation_wizard__record_id
+msgid "ID of the record on which to execute the method (optional)"
+msgstr "ID del registro sobre el que se ejecutará el método (opcional)"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,help:odoo_wp_sync.field_confirmation_wizard__record_ids
+msgid "IDs of multiple records separated by commas (optional)"
+msgstr "IDs de múltiples registros separados por comas (opcional)"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_instance__activity_exception_icon
+msgid "Icon"
+msgstr "Ícono"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,help:odoo_wp_sync.field_woo_instance__activity_exception_icon
+msgid "Icon to indicate an exception activity."
+msgstr "Ícono para indicar una actividad de excepción."
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,help:odoo_wp_sync.field_woo_instance__allow_create_products
+msgid "If active, Odoo products can be created in WooCommerce"
+msgstr "Si está activo, se pueden crear productos de Odoo en WooCommerce"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,help:odoo_wp_sync.field_woo_instance__manage_stock
+#: model:ir.model.fields,help:odoo_wp_sync.field_woo_product__instance_manage_stock
+msgid ""
+"If active, allows managing WooCommerce product stock quantities directly "
+"from Odoo."
+msgstr "Si está activo, permite gestionar las cantidades de stock de productos de WooCommerce directamente desde Odoo."
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,help:odoo_wp_sync.field_woo_instance__auto_create_sale_order
+msgid ""
+"If active, during synchronization a sale order will be created in Odoo for each WooCommerce order whose status matches the ones configured in 'Statuses for automatic creation'.\n"
+"\n"
+"If 'Confirm Orders' is also active, the order will be confirmed immediately (confirmed sale.order). Otherwise it will remain as a quotation (draft)."
+msgstr ""
+"Si está activo, durante la sincronización se creará un pedido de venta en Odoo por cada pedido de WooCommerce cuyo estado coincida con los configurados en 'Estados para creación automática'.\n"
+"\n"
+"Si 'Confirmar pedidos' también está activo, el pedido se confirmará inmediatamente (sale.order confirmado). De lo contrario, quedará como cotización (borrador)."
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,help:odoo_wp_sync.field_woo_instance__confirm_orders
+msgid "If active, manually created orders will be automatically confirmed"
+msgstr "Si está activo, los pedidos creados manualmente se confirmarán automáticamente"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,help:odoo_wp_sync.field_woo_instance__taxes_included_price
+msgid "If active, prices for imported orders will include taxes"
+msgstr "Si está activo, los precios de los pedidos importados incluirán impuestos"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,help:odoo_wp_sync.field_woo_instance__include_taxes_wc_product_sync
+#: model:ir.model.fields,help:odoo_wp_sync.field_woo_publish_wizard__include_taxes_product
+msgid ""
+"If active, taxes will be included when creating products in WooCommerce"
+msgstr "Si está activo, se incluirán impuestos al crear productos en WooCommerce"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,help:odoo_wp_sync.field_woo_instance__use_sequence
+msgid "If active, the Odoo sequence will be used for orders"
+msgstr "Si está activo, se usará la secuencia de Odoo para los pedidos"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,help:odoo_wp_sync.field_woo_instance__wc_shipping
+msgid ""
+"If active, the WooCommerce shipping cost will be imported as order lines in "
+"Odoo."
+msgstr "Si está activo, el costo de envío de WooCommerce se importará como líneas de pedido en Odoo."
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,help:odoo_wp_sync.field_woo_instance__update_order_status_wc
+msgid ""
+"If active, the order status in WooCommerce will be updated during sync (e.g."
+" to 'processing' or 'completed' based on status configuration)"
+msgstr "Si está activo, el estado del pedido en WooCommerce se actualizará durante la sincronización (ej., a 'processing' o 'completed' según la configuración de estado)"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,help:odoo_wp_sync.field_woo_instance__message_needaction
+msgid "If checked, new messages require your attention."
+msgstr "Si está marcado, nuevos mensajes requieren su atención."
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,help:odoo_wp_sync.field_woo_instance__message_has_error
+#: model:ir.model.fields,help:odoo_wp_sync.field_woo_instance__message_has_sms_error
+msgid "If checked, some messages have a delivery error."
+msgstr "Si está marcado, algunos mensajes tienen un error de envío."
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,help:odoo_wp_sync.field_woo_coupon__individual_use
+msgid "If true, this coupon cannot be used in conjunction with other coupons"
+msgstr "Si es verdadero, este cupón no puede usarse junto con otros cupones"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,help:odoo_wp_sync.field_woo_coupon__free_shipping
+msgid "If true, this coupon grants free shipping"
+msgstr "Si es verdadero, este cupón otorga envío gratuito"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,help:odoo_wp_sync.field_woo_coupon__exclude_sale_items
+msgid "If true, this coupon will not apply to items on sale"
+msgstr "Si es verdadero, este cupón no se aplicará a artículos en oferta"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,help:odoo_wp_sync.field_woo_instance__active
+msgid "If unchecked, this instance will be hidden"
+msgstr "Si no está marcado, esta instancia estará oculta"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_product__woo_image
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_product_form
+msgid "Image"
+msgstr "Imagen"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_product__woo_image_id
+msgid "Image ID in WC"
+msgstr "ID de imagen en WC"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_product__woo_image_src
+msgid "Image URL in WC"
+msgstr "URL de imagen en WC"
+
+#. module: odoo_wp_sync
+#. odoo-python
+#: code:addons/odoo_wp_sync/models/woo_instance.py:0
+#, python-format
+msgid "Import Coupons from WooCommerce?"
+msgstr "¿Importar cupones de WooCommerce?"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_instance_form
+msgid "Import Filters"
+msgstr "Filtros de importación"
+
+#. module: odoo_wp_sync
+#. odoo-python
+#: code:addons/odoo_wp_sync/models/woo_instance.py:0
+#, python-format
+msgid "Import completed"
+msgstr "Importación completada"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_odoo_wp_sync_form
+msgid "Impuesto"
+msgstr "Impuesto"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields.selection,name:odoo_wp_sync.selection__woo_coupon__woo_delete_status__trash
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_coupon_form
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_coupon_search
+msgid "In Trash"
+msgstr "En la papelera"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_coupon_kanban
+msgid "In WooCommerce Trash"
+msgstr "En la papelera de WooCommerce"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields.selection,name:odoo_wp_sync.selection__woo_product__stock_status__instock
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_product_search
+msgid "In stock"
+msgstr "En stock"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_coupon_form
+msgid "Include Products"
+msgstr "Incluir productos"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_instance_form
+msgid "Include shipping cost"
+msgstr "Incluir costo de envío"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_instance__wc_shipping
+msgid "Include shipping cost in orders"
+msgstr "Incluir costo de envío en pedidos"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_publish_wizard__include_taxes_product
+msgid "Include taxes"
+msgstr "Incluir impuestos"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_instance__include_taxes_wc_product_sync
+msgid "Include taxes when creating products"
+msgstr "Incluir impuestos al crear productos"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields.selection,name:odoo_wp_sync.selection__woo_instance__sync_mode__incremental
+msgid "Incremental (Only changes)"
+msgstr "Incremental (solo cambios)"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields.selection,name:odoo_wp_sync.selection__woo_instance__coupon_sync_mode__incremental
+msgid "Incremental (only new/changed)"
+msgstr "Incremental (solo nuevos/modificados)"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_instance_form
+msgid "Incremental since"
+msgstr "Incremental desde"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,help:odoo_wp_sync.field_woo_instance__sync_mode
+msgid ""
+"Incremental: Only new/modified orders. Full: All orders within date range"
+msgstr "Incremental: solo pedidos nuevos/modificados. Completo: todos los pedidos en el rango de fechas"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,help:odoo_wp_sync.field_woo_instance__coupon_sync_mode
+msgid ""
+"Incremental: only fetch coupons modified since the last sync.\n"
+"Full: fetch all coupons regardless of modification date."
+msgstr ""
+"Incremental: solo obtener cupones modificados desde la última sincronización.\n"
+"Completo: obtener todos los cupones independientemente de la fecha de modificación."
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_coupon_tree
+msgid "Individual"
+msgstr "Individual"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_coupon__individual_use
+msgid "Individual Use Only"
+msgstr "Solo uso individual"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_coupon_kanban
+msgid "Individual use only"
+msgstr "Solo uso individual"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_brand__instance_id
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_category__instance_id
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_coupon__instance_id
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_product__instance_id
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_odoo_wp_sync_search
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_odoo_wp_sync_tree
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_brand_search
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_brand_tree
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_category_search
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_category_tree
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_coupon_search
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_coupon_tree
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_instance_search
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_instance_tree
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_product_search
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_product_tree
+msgid "Instance"
+msgstr "Instancia"
+
+#. module: odoo_wp_sync
+#. odoo-python
+#: code:addons/odoo_wp_sync/models/woo_instance.py:0
+#, python-format
+msgid "Instance %s is not connected."
+msgstr "La instancia %s no está conectada."
+
+#. module: odoo_wp_sync
+#. odoo-python
+#: code:addons/odoo_wp_sync/models/woo_instance.py:0
+#: code:addons/odoo_wp_sync/models/woo_instance.py:0
+#, python-format
+msgid "Instance %s is not connected. Please test connection first."
+msgstr "La instancia %s no está conectada. Por favor, pruebe la conexión primero."
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_odoo_wp_sync_form
+msgid "Instance & Customer Info"
+msgstr "Instancia e información del cliente"
+
+#. module: odoo_wp_sync
+#. odoo-python
+#: code:addons/odoo_wp_sync/models/woo_instance.py:0
+#: code:addons/odoo_wp_sync/models/woo_instance.py:0
+#: code:addons/odoo_wp_sync/models/woo_instance.py:0
+#, python-format
+msgid "Instance '%s' is not connected."
+msgstr "La instancia '%s' no está conectada."
+
+#. module: odoo_wp_sync
+#. odoo-python
+#: code:addons/odoo_wp_sync/models/woo_brand.py:0
+#, python-format
+msgid ""
+"Instance '%s' is not connected. Complete the configuration and verify the "
+"connection before creating brands."
+msgstr "La instancia '%s' no está conectada. Complete la configuración y verifique la conexión antes de crear marcas."
+
+#. module: odoo_wp_sync
+#. odoo-python
+#: code:addons/odoo_wp_sync/models/woo_category.py:0
+#, python-format
+msgid ""
+"Instance '%s' is not connected. Complete the configuration and verify the "
+"connection before creating categories."
+msgstr "La instancia '%s' no está conectada. Complete la configuración y verifique la conexión antes de crear categorías."
+
+#. module: odoo_wp_sync
+#. odoo-python
+#: code:addons/odoo_wp_sync/models/woo_coupon.py:0
+#, python-format
+msgid ""
+"Instance '%s' is not connected. Complete the configuration and verify the "
+"connection before creating coupons."
+msgstr "La instancia '%s' no está conectada. Complete la configuración y verifique la conexión antes de crear cupones."
+
+#. module: odoo_wp_sync
+#. odoo-python
+#: code:addons/odoo_wp_sync/models/woo_product.py:0
+#, python-format
+msgid ""
+"Instance '%s' is not connected. Complete the configuration and verify the "
+"connection before creating products."
+msgstr "La instancia '%s' no está conectada. Complete la configuración y verifique la conexión antes de crear productos."
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_instance__name
+msgid "Instance Name"
+msgstr "Nombre de instancia"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_instance_form
+msgid "Instance name"
+msgstr "Nombre de instancia"
+
+#. module: odoo_wp_sync
+#: model:ir.model.constraint,message:odoo_wp_sync.constraint_woo_instance_name_unique
+msgid "Instance name must be unique per company!"
+msgstr "¡El nombre de la instancia debe ser único por empresa!"
+
+#. module: odoo_wp_sync
+#: model:ir.ui.menu,name:odoo_wp_sync.odoo_wp_sync__menu_instances
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_product_template_inherit_woo
+msgid "Instances"
+msgstr "Instancias"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_coupon_form
+msgid "Internal notes about this coupon..."
+msgstr "Notas internas sobre este cupón..."
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_publish_wizard__product_sku
+msgid "Internal reference (SKU)"
+msgstr "Referencia interna (SKU)"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_coupon__is_expired
+msgid "Is Expired"
+msgstr "Está vencido"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_instance__message_is_follower
+msgid "Is Follower"
+msgstr "Es seguidor"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_odoo_wp_sync_form
+msgid "JSON Completo de WooCommerce"
+msgstr "JSON completo de WooCommerce"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_instance__last_connection_test
+msgid "Last Connection Test"
+msgstr "Última prueba de conexión"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_instance__coupon_last_sync_date
+msgid "Last Coupon Sync"
+msgstr "Última sincronización de cupones"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_instance__last_full_sync_date
+msgid "Last Full Sync Date"
+msgstr "Fecha de última sincronización completa"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_coupon__last_sync_date
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_odoo_wp_sync_form
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_coupon_tree
+msgid "Last Sync"
+msgstr "Última sincronización"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_instance__last_sync_created
+msgid "Last Sync Created"
+msgstr "Creados en última sincronización"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_instance__last_sync_date
+msgid "Last Sync Date"
+msgstr "Fecha de última sincronización"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_instance__sync_duration
+msgid "Last Sync Duration (s)"
+msgstr "Duración de última sincronización (s)"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_instance__last_sync_error
+msgid "Last Sync Error"
+msgstr "Error de última sincronización"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_instance__last_sync_order_count
+msgid "Last Sync Orders"
+msgstr "Pedidos de última sincronización"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_instance__last_sync_updated
+msgid "Last Sync Updated"
+msgstr "Actualizados en última sincronización"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_odoo_wp_sync__synced_date
+msgid "Last Synced"
+msgstr "Última sincronización"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_confirmation_wizard__write_uid
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_odoo_wp_sync__write_uid
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_brand__write_uid
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_category__write_uid
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_coupon__write_uid
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_coupon_location__write_uid
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_instance__write_uid
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_link_wizard__write_uid
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_order_line__write_uid
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_product__write_uid
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_publish_wizard__write_uid
+msgid "Last Updated by"
+msgstr "Última actualización por"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_confirmation_wizard__write_date
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_odoo_wp_sync__write_date
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_brand__write_date
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_category__write_date
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_coupon__write_date
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_coupon_location__write_date
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_instance__write_date
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_link_wizard__write_date
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_order_line__write_date
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_product__write_date
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_publish_wizard__write_date
+msgid "Last Updated on"
+msgstr "Última actualización el"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,help:odoo_wp_sync.field_res_users__woo_active_instance_id
+msgid "Last WooCommerce instance selected by this user"
+msgstr "Última instancia WooCommerce seleccionada por este usuario"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_product__last_sync_date
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_product_tree
+msgid "Last sync"
+msgstr "Última sincronización"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,help:odoo_wp_sync.field_woo_instance__last_sync_error
+msgid "Last synchronization error message"
+msgstr "Mensaje de error de la última sincronización"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_instance_form
+msgid "Last test:"
+msgstr "Última prueba:"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,help:odoo_wp_sync.field_woo_coupon__last_sync_date
+msgid "Last time this coupon was synced with WooCommerce"
+msgstr "Última vez que este cupón fue sincronizado con WooCommerce"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_product_form
+msgid "Leave at 0 to use the instance pricelist price."
+msgstr "Deje en 0 para usar el precio de la lista de precios de la instancia."
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,help:odoo_wp_sync.field_woo_publish_wizard__price_override
+msgid ""
+"Leave at 0 to use the price from the pricelist configured in the instance "
+"(or the list price if no pricelist is configured)."
+msgstr "Deje en 0 para usar el precio de la lista de precios configurada en la instancia (o el precio de lista si no hay lista configurada)."
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_coupon_form
+msgid "Leave empty or 0 for unlimited"
+msgstr "Deje vacío o en 0 para ilimitado"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_coupon_tree
+msgid "Limit"
+msgstr "Límite"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_link_wizard_form
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_product_search
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_product_tree
+msgid "Link"
+msgstr "Vincular"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_link_wizard_form
+msgid "Link WooCommerce Product"
+msgstr "Vincular producto WooCommerce"
+
+#. module: odoo_wp_sync
+#: model:ir.model,name:odoo_wp_sync.model_woo_link_wizard
+msgid "Link WooCommerce product to Odoo"
+msgstr "Vincular producto WooCommerce con Odoo"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_link_wizard_form
+msgid "Link product to Odoo"
+msgstr "Vincular producto con Odoo"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_product__link_state
+msgid "Link status"
+msgstr "Estado del vínculo"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_product_form
+msgid "Link to Odoo product"
+msgstr "Vincular con producto de Odoo"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_product_form
+msgid "Link with Odoo"
+msgstr "Vincular con Odoo"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields.selection,name:odoo_wp_sync.selection__woo_product__link_state__linked
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_product_search
+msgid "Linked"
+msgstr "Vinculado"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_instance__woo_product_linked_count
+msgid "Linked Products"
+msgstr "Productos vinculados"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_publish_wizard__product_price
+msgid "List price"
+msgstr "Precio de lista"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_instance__manage_stock
+msgid "Manage product stock"
+msgstr "Gestionar stock del producto"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_product_form
+msgid "Manual price"
+msgstr "Precio manual"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_instance_form
+msgid "Manually confirm orders"
+msgstr "Confirmar pedidos manualmente"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_product__woo_brand_ids
+msgid "Marcas WooCommerce"
+msgstr "Marcas WooCommerce"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,help:odoo_wp_sync.field_woo_product__woo_brand_ids
+msgid "Marcas del producto en WooCommerce (requiere plugin de marcas en WC)."
+msgstr "Marcas del producto en WooCommerce (requiere plugin de marcas en WC)."
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_odoo_wp_sync_form
+msgid "Mark as Completed"
+msgstr "Marcar como completado"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_odoo_wp_sync_form
+msgid "Mark as Processing"
+msgstr "Marcar como en proceso"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_odoo_wp_sync_form
+msgid "Mark as Refunded"
+msgstr "Marcar como reembolsado"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,help:odoo_wp_sync.field_woo_product__woo_pending_sync
+msgid ""
+"Marked automatically when a bulk import changes synchronized fields "
+"(woo_status, stock_status, price) so they can be sent to WooCommerce later "
+"using the 'Sync to WooCommerce' action."
+msgstr "Marcado automáticamente cuando una importación masiva modifica campos sincronizados (woo_status, stock_status, price) para que puedan enviarse a WooCommerce posteriormente con la acción 'Sincronizar con WooCommerce'."
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_instance__max_retry_attempts
+msgid "Max Retry Attempts"
+msgstr "Máximo de reintentos"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_coupon__maximum_amount
+msgid "Maximum Spend"
+msgstr "Gasto máximo"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,help:odoo_wp_sync.field_woo_instance__sync_order_limit
+msgid "Maximum number of orders to sync per execution"
+msgstr "Número máximo de pedidos a sincronizar por ejecución"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,help:odoo_wp_sync.field_woo_instance__max_retry_attempts
+msgid "Maximum number of retry attempts before giving up"
+msgstr "Número máximo de reintentos antes de rendirse"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,help:odoo_wp_sync.field_woo_coupon__maximum_amount
+msgid "Maximum order total allowed to use this coupon"
+msgstr "Total máximo del pedido permitido para usar este cupón"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_product__woo_max_stock
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_product_form
+msgid "Maximum stock"
+msgstr "Stock máximo"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,help:odoo_wp_sync.field_woo_product__woo_max_stock
+msgid "Maximum stock quantity allowed in WooCommerce."
+msgstr "Cantidad máxima de stock permitida en WooCommerce."
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_product_form
+msgid "Maximum stock quantity to manage in WooCommerce."
+msgstr "Cantidad máxima de stock a gestionar en WooCommerce."
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,help:odoo_wp_sync.field_woo_product__woo_image_id
+msgid "Media ID in the WordPress Media Library."
+msgstr "ID de medio en la biblioteca de medios de WordPress."
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_instance__message_has_error
+msgid "Message Delivery error"
+msgstr "Error de entrega de mensaje"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_instance__message_ids
+msgid "Messages"
+msgstr "Mensajes"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_coupon__meta_data_json
+msgid "Meta Data (JSON)"
+msgstr "Metadatos (JSON)"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_confirmation_wizard__method_name
+msgid "Method"
+msgstr "Método"
+
+#. module: odoo_wp_sync
+#. odoo-python
+#: code:addons/odoo_wp_sync/models/woo_confirmation_wizard.py:0
+#, python-format
+msgid "Method \"%s\" does not exist in model \"%s\"."
+msgstr "El método \"%s\" no existe en el modelo \"%s\"."
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_coupon_kanban
+msgid "Min $"
+msgstr "Mín $"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_coupon_tree
+msgid "Min. Spend"
+msgstr "Gasto mín."
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_coupon__minimum_amount
+msgid "Minimum Spend"
+msgstr "Gasto mínimo"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,help:odoo_wp_sync.field_woo_instance__sync_interval
+msgid "Minimum minutes between automatic syncs for this instance"
+msgstr "Minutos mínimos entre sincronizaciones automáticas para esta instancia"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,help:odoo_wp_sync.field_woo_coupon__minimum_amount
+msgid "Minimum order total required to use this coupon"
+msgstr "Total mínimo del pedido requerido para usar este cupón"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_product_form
+msgid "Minimum quantity before marking the product as out of stock."
+msgstr "Cantidad mínima antes de marcar el producto como sin stock."
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_coupon_kanban
+msgid "Minimum spend"
+msgstr "Gasto mínimo"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_product__woo_min_stock
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_product_form
+msgid "Minimum stock"
+msgstr "Stock mínimo"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,help:odoo_wp_sync.field_woo_product__woo_min_stock
+msgid "Minimum stock quantity before marking as out of stock in WooCommerce."
+msgstr "Cantidad mínima de stock antes de marcar como sin stock en WooCommerce."
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_confirmation_wizard__model_name
+msgid "Model"
+msgstr "Modelo"
+
+#. module: odoo_wp_sync
+#: model:woo.coupon.location,name:odoo_wp_sync.coupon_location_my_account
+msgid "My Account"
+msgstr "Mi cuenta"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_instance__my_activity_date_deadline
+msgid "My Activity Deadline"
+msgstr "Fecha límite de mi actividad"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_odoo_wp_sync__name
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_brand__name
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_category__name
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_coupon_location__name
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_odoo_wp_sync_form
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_brand_search
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_category_search
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_product_search
+msgid "Name"
+msgstr "Nombre"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_product__woo_name
+msgid "Name in WC"
+msgstr "Nombre en WC"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_link_wizard__woo_name
+msgid "Name in WooCommerce"
+msgstr "Nombre en WooCommerce"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,help:odoo_wp_sync.field_confirmation_wizard__method_name
+msgid "Name of the method to execute"
+msgstr "Nombre del método a ejecutar"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_product__woo_image_url_input
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_product_form
+msgid "New image URL"
+msgstr "Nueva URL de imagen"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_instance__activity_date_deadline
+msgid "Next Activity Deadline"
+msgstr "Fecha límite de próxima actividad"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_instance__activity_summary
+msgid "Next Activity Summary"
+msgstr "Resumen de próxima actividad"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_instance__activity_type_id
+msgid "Next Activity Type"
+msgstr "Tipo de próxima actividad"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_instance__next_auto_sync_date
+msgid "Next Sync"
+msgstr "Próxima sincronización"
+
+#. module: odoo_wp_sync
+#. odoo-python
+#: code:addons/odoo_wp_sync/models/woo_service.py:0
+#, python-format
+msgid ""
+"No WooCommerce instance is configured. Create one in Settings → WooCommerce "
+"Instances."
+msgstr "No hay ninguna instancia de WooCommerce configurada. Cree una en Configuración → Instancias WooCommerce."
+
+#. module: odoo_wp_sync
+#: model_terms:ir.actions.act_window,help:odoo_wp_sync.action_woo_brand
+msgid "No brands registered yet"
+msgstr "Sin marcas registradas aún"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.actions.act_window,help:odoo_wp_sync.action_woo_category
+msgid "No categories registered yet"
+msgstr "Sin categorías registradas aún"
+
+#. module: odoo_wp_sync
+#. odoo-python
+#: code:addons/odoo_wp_sync/models/woo_instance.py:0
+#, python-format
+msgid "No conectado"
+msgstr "No conectado"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.actions.act_window,help:odoo_wp_sync.action_woo_coupon
+msgid "No coupons created yet"
+msgstr "Sin cupones creados aún"
+
+#. module: odoo_wp_sync
+#. odoo-python
+#: code:addons/odoo_wp_sync/models/woo_confirmation_wizard.py:0
+#, python-format
+msgid "No model or method has been specified."
+msgstr "No se ha especificado ningún modelo o método."
+
+#. module: odoo_wp_sync
+#: model_terms:ir.actions.act_window,help:odoo_wp_sync.action_odoo_wp_sync
+msgid "No orders synchronized yet"
+msgstr "Sin pedidos sincronizados aún"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.actions.act_window,help:odoo_wp_sync.action_woo_product
+msgid "No products imported yet"
+msgstr "Sin productos importados aún"
+
+#. module: odoo_wp_sync
+#. odoo-python
+#: code:addons/odoo_wp_sync/models/woo_product.py:0
+#, python-format
+msgid "No products with a WooCommerce ID were selected."
+msgstr "No se seleccionaron productos con ID de WooCommerce."
+
+#. module: odoo_wp_sync
+#. odoo-python
+#: code:addons/odoo_wp_sync/models/woo_product.py:0
+#, python-format
+msgid "No valid response received from WooCommerce."
+msgstr "No se recibió una respuesta válida de WooCommerce."
+
+#. module: odoo_wp_sync
+#. odoo-python
+#: code:addons/odoo_wp_sync/models/woo_instance.py:0
+#: code:addons/odoo_wp_sync/models/woo_instance.py:0
+#, python-format
+msgid "Not connected"
+msgstr "No conectado"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_coupon_kanban
+msgid "Not yet synced to WooCommerce"
+msgstr "Aún no sincronizado con WooCommerce"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_instance__message_needaction_counter
+msgid "Number of Actions"
+msgstr "Número de acciones"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,help:odoo_wp_sync.field_product_product__woo_published_count
+#: model:ir.model.fields,help:odoo_wp_sync.field_product_template__woo_published_count
+msgid "Number of WooCommerce instances in which this product is published."
+msgstr "Número de instancias de WooCommerce en las que este producto está publicado."
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,help:odoo_wp_sync.field_woo_instance__completed_order_count
+msgid "Number of completed orders from this instance"
+msgstr "Número de pedidos completados de esta instancia"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_instance__message_has_error_counter
+msgid "Number of errors"
+msgstr "Número de errores"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,help:odoo_wp_sync.field_woo_instance__message_needaction_counter
+msgid "Number of messages requiring action"
+msgstr "Número de mensajes que requieren acción"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,help:odoo_wp_sync.field_woo_instance__message_has_error_counter
+msgid "Number of messages with delivery error"
+msgstr "Número de mensajes con error de entrega"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,help:odoo_wp_sync.field_woo_instance__last_sync_order_count
+msgid "Number of orders processed in last sync"
+msgstr "Número de pedidos procesados en la última sincronización"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,help:odoo_wp_sync.field_woo_instance__pending_order_count
+msgid "Number of pending orders from this instance"
+msgstr "Número de pedidos pendientes de esta instancia"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,help:odoo_wp_sync.field_woo_instance__woo_product_count
+msgid "Number of products imported from this WooCommerce instance"
+msgstr "Número de productos importados de esta instancia de WooCommerce"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,help:odoo_wp_sync.field_woo_instance__order_count
+msgid "Number of synced orders from this instance"
+msgstr "Número de pedidos sincronizados de esta instancia"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,help:odoo_wp_sync.field_woo_coupon__usage_count
+msgid "Number of times this coupon has been used"
+msgstr "Número de veces que este cupón ha sido usado"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,help:odoo_wp_sync.field_woo_brand__woo_id
+msgid "Numeric ID of the brand in WooCommerce (0 = not yet synced)."
+msgstr "ID numérico de la marca en WooCommerce (0 = aún no sincronizado)."
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,help:odoo_wp_sync.field_woo_category__woo_id
+msgid "Numeric ID of the category in WooCommerce (0 = not yet synced)."
+msgstr "ID numérico de la categoría en WooCommerce (0 = aún no sincronizado)."
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,help:odoo_wp_sync.field_woo_coupon__woo_id
+msgid "Numeric ID of the coupon in WooCommerce (0 = not yet created in WC)"
+msgstr "ID numérico del cupón en WooCommerce (0 = aún no creado en WC)"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,help:odoo_wp_sync.field_woo_product__woo_id
+msgid "Numeric ID of the product in WooCommerce (0 = not yet created in WC)"
+msgstr "ID numérico del producto en WooCommerce (0 = aún no creado en WC)"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_odoo_wp_sync_tree
+msgid "Odoo Order"
+msgstr "Pedido Odoo"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_product_search
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_product_tree
+msgid "Odoo Product"
+msgstr "Producto Odoo"
+
+#. module: odoo_wp_sync
+#: model:ir.ui.menu,name:odoo_wp_sync.odoo_wp_sync_menu_root
+msgid "Odoo WordPress Sync"
+msgstr "Odoo WordPress Sync"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,help:odoo_wp_sync.field_woo_product__product_tmpl_id
+msgid "Odoo product linked to this WooCommerce record. Empty = not linked."
+msgstr "Producto de Odoo vinculado a este registro de WooCommerce. Vacío = no vinculado."
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields.selection,name:odoo_wp_sync.selection__odoo_wp_sync__status__on-hold
+#: model:ir.model.fields.selection,name:odoo_wp_sync.selection__woo_instance__auto_create_sale_order_statuses__on-hold
+msgid "On Hold"
+msgstr "En espera"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields.selection,name:odoo_wp_sync.selection__woo_product__stock_status__onbackorder
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_product_search
+msgid "On backorder"
+msgstr "En pedido pendiente"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,help:odoo_wp_sync.field_woo_publish_wizard__instance_id
+msgid "Only enabled instances where you have publishing permission."
+msgstr "Solo instancias habilitadas donde tiene permiso de publicación."
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_instance_tree
+msgid "Open"
+msgstr "Abrir"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_instance_kanban
+msgid "Options"
+msgstr "Opciones"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_order_line__order_id
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_odoo_wp_sync_tree
+msgid "Order"
+msgstr "Pedido"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_odoo_wp_sync_form
+msgid "Order Details"
+msgstr "Detalles del pedido"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_odoo_wp_sync__items_info
+msgid "Order Items"
+msgstr "Artículos del pedido"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_odoo_wp_sync__line_ids
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_odoo_wp_sync_form
+msgid "Order Lines"
+msgstr "Líneas de pedido"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_odoo_wp_sync__order_lines
+msgid "Order Lines JSON"
+msgstr "JSON de líneas de pedido"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_odoo_wp_sync__order_number
+msgid "Order Number"
+msgstr "Número de pedido"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_coupon_form
+msgid "Order Requirements"
+msgstr "Requisitos del pedido"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_instance_form
+msgid "Order Settings"
+msgstr "Configuración de pedidos"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_instance__sync_order_status
+msgid "Order Status Filter"
+msgstr "Filtro de estado del pedido"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_odoo_wp_sync_form
+msgid "Order number"
+msgstr "Número de pedido"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,help:odoo_wp_sync.field_odoo_wp_sync__created_via
+msgid "Order source (checkout, admin, etc.)"
+msgstr "Origen del pedido (caja, admin, etc.)"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_instance__order_count
+#: model:ir.ui.menu,name:odoo_wp_sync.odoo_wp_sync_orders_menu
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_instance_form
+msgid "Orders"
+msgstr "Pedidos"
+
+#. module: odoo_wp_sync
+#. odoo-python
+#: code:addons/odoo_wp_sync/models/woo_instance.py:0
+#: code:addons/odoo_wp_sync/models/woo_instance.py:0
+#, python-format
+msgid "Orders - %s"
+msgstr "Pedidos - %s"
+
+#. module: odoo_wp_sync
+#: model:ir.actions.server,name:odoo_wp_sync.action_server_orders_by_instance
+msgid "Orders by Instance"
+msgstr "Pedidos por instancia"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,help:odoo_wp_sync.field_woo_instance__last_sync_created
+msgid "Orders created in last sync"
+msgstr "Pedidos creados en la última sincronización"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_instance__sync_order_limit
+msgid "Orders per Sync"
+msgstr "Pedidos por sincronización"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,help:odoo_wp_sync.field_woo_instance__last_sync_updated
+msgid "Orders updated in last sync"
+msgstr "Pedidos actualizados en la última sincronización"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_odoo_wp_sync__created_via
+msgid "Origin"
+msgstr "Origen"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields.selection,name:odoo_wp_sync.selection__woo_coupon__discount_type__other
+msgid "Other / Custom"
+msgstr "Otro / Personalizado"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields.selection,name:odoo_wp_sync.selection__woo_product__stock_status__outofstock
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_product_search
+msgid "Out of stock"
+msgstr "Sin stock"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_publish_wizard__price_override
+msgid "Override price"
+msgstr "Sobreescribir precio"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_category_search
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_category_tree
+msgid "Parent"
+msgstr "Padre"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_category__parent_path
+msgid "Parent Path"
+msgstr "Ruta del padre"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_category__parent_id
+msgid "Parent category"
+msgstr "Categoría padre"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,help:odoo_wp_sync.field_woo_category__parent_id
+msgid "Parent category in WooCommerce. Respects the original hierarchy."
+msgstr "Categoría padre en WooCommerce. Respeta la jerarquía original."
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,help:odoo_wp_sync.field_woo_product__woo_image_url_input
+msgid ""
+"Paste here the URL of the image you want to send to WooCommerce. WooCommerce"
+" will download it directly from that URL. No image is stored in Odoo."
+msgstr "Pegue aquí la URL de la imagen que desea enviar a WooCommerce. WooCommerce la descargará directamente desde esa URL. No se almacena ninguna imagen en Odoo."
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_instance_form
+msgid "Paste the credentials above and click <strong>Test Connection</strong>"
+msgstr "Pegue las credenciales anteriores y haga clic en <strong>Probar conexión</strong>"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_odoo_wp_sync__payment_method
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_odoo_wp_sync_form
+msgid "Payment Method"
+msgstr "Método de pago"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_instance__payment_term_id
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_instance_form
+msgid "Payment Terms"
+msgstr "Términos de pago"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,help:odoo_wp_sync.field_woo_instance__payment_term_id
+msgid "Payment terms assigned to orders imported from this instance"
+msgstr "Términos de pago asignados a los pedidos importados de esta instancia"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields.selection,name:odoo_wp_sync.selection__woo_coupon__status__pending
+#: model:ir.model.fields.selection,name:odoo_wp_sync.selection__woo_instance__auto_create_sale_order_statuses__pending
+#: model:ir.model.fields.selection,name:odoo_wp_sync.selection__woo_product__woo_status__pending
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_odoo_wp_sync_search
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_coupon_tree
+msgid "Pending"
+msgstr "Pendiente"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields.selection,name:odoo_wp_sync.selection__woo_instance__sync_order_status__pending
+msgid "Pending Only"
+msgstr "Solo pendientes"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_instance__pending_order_count
+msgid "Pending Orders"
+msgstr "Pedidos pendientes"
+
+#. module: odoo_wp_sync
+#. odoo-python
+#: code:addons/odoo_wp_sync/models/woo_instance.py:0
+#, python-format
+msgid "Pending Orders - %s"
+msgstr "Pedidos pendientes - %s"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields.selection,name:odoo_wp_sync.selection__odoo_wp_sync__status__pending
+msgid "Pending Payment"
+msgstr "Pago pendiente"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields.selection,name:odoo_wp_sync.selection__woo_instance__coupon_sync_status__pending
+msgid "Pending Review"
+msgstr "Pendiente de revisión"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_coupon__pending_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_coupon_form
+msgid "Pending Sync"
+msgstr "Sincronización pendiente"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_product__woo_pending_sync
+msgid "Pending sync"
+msgstr "Sincronización pendiente"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_product_search
+msgid "Pending sync to WooCommerce"
+msgstr "Sincronización pendiente con WooCommerce"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_coupon_search
+msgid "Percentage"
+msgstr "Porcentaje"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields.selection,name:odoo_wp_sync.selection__woo_coupon__discount_type__percent
+msgid "Percentage Discount"
+msgstr "Descuento porcentual"
+
+#. module: odoo_wp_sync
+#. odoo-python
+#: code:addons/odoo_wp_sync/models/woo_coupon.py:0
+#, python-format
+msgid "Permanently Delete from WooCommerce"
+msgstr "Eliminar permanentemente de WooCommerce"
+
+#. module: odoo_wp_sync
+#. odoo-python
+#: code:addons/odoo_wp_sync/models/woo_coupon.py:0
+#: model:ir.model.fields.selection,name:odoo_wp_sync.selection__woo_coupon__woo_delete_status__deleted
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_coupon_form
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_coupon_search
+#, python-format
+msgid "Permanently Deleted"
+msgstr "Eliminado permanentemente"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_coupon_kanban
+msgid "Permanently Deleted from WooCommerce"
+msgstr "Eliminado permanentemente de WooCommerce"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_odoo_wp_sync__customer_phone
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_odoo_wp_sync_form
+msgid "Phone"
+msgstr "Teléfono"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_instance__picking_policy
+msgid "Picking Policy"
+msgstr "Política de albarán"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,help:odoo_wp_sync.field_confirmation_wizard__description_text
+msgid "Plain text that will be automatically converted to HTML"
+msgstr "Texto plano que se convertirá automáticamente a HTML"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_odoo_wp_sync_form
+msgid "Precio Unit."
+msgstr "Precio Unit."
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,help:odoo_wp_sync.field_woo_instance__prefix_sequence
+msgid "Prefix for imported order sequences (if using sequence)"
+msgstr "Prefijo para las secuencias de pedidos importados (si se usa secuencia)"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_coupon_form
+msgid "Preview"
+msgstr "Vista previa"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_product_form
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_product_tree
+msgid "Price"
+msgstr "Precio"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,help:odoo_wp_sync.field_woo_publish_wizard__product_price
+msgid "Price at which the product is sold to customers."
+msgstr "Precio al que se vende el producto a los clientes."
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_link_wizard__woo_price
+msgid "Price in WooCommerce"
+msgstr "Precio en WooCommerce"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_product__pricelist_price
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_publish_wizard__pricelist_price
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_product_form
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_publish_wizard_form
+msgid "Price per list"
+msgstr "Precio por lista"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,help:odoo_wp_sync.field_woo_product__woo_price_input
+msgid "Price to be sent to WooCommerce. If 0, the instance pricelist is used."
+msgstr "Precio a enviar a WooCommerce. Si es 0, se usa la lista de precios de la instancia."
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_product_form
+msgid "Price to publish"
+msgstr "Precio a publicar"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_instance__pricelist_id
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_instance_form
+msgid "Pricelist"
+msgstr "Lista de precios"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_publish_wizard__pricelist_id
+msgid "Pricelist (Instance)"
+msgstr "Lista de precios (instancia)"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_product__pricelist_id
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_publish_wizard_form
+msgid "Pricelist (instance)"
+msgstr "Lista de precios (instancia)"
+
+#. module: odoo_wp_sync
+#: model:ir.model,name:odoo_wp_sync.model_product_pricelist_item
+msgid "Pricelist Rule"
+msgstr "Regla de la lista de precios"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,help:odoo_wp_sync.field_woo_instance__pricelist_id
+#: model:ir.model.fields,help:odoo_wp_sync.field_woo_product__pricelist_id
+#: model:ir.model.fields,help:odoo_wp_sync.field_woo_publish_wizard__pricelist_id
+msgid "Pricelist assigned to orders imported from this instance"
+msgstr "Lista de precios asignada a los pedidos importados de esta instancia"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_instance_form
+msgid "Prices and Payments"
+msgstr "Precios y pagos"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_instance_form
+msgid "Prices include VAT"
+msgstr "Los precios incluyen IVA"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields.selection,name:odoo_wp_sync.selection__woo_coupon__status__private
+#: model:ir.model.fields.selection,name:odoo_wp_sync.selection__woo_instance__coupon_sync_status__private
+#: model:ir.model.fields.selection,name:odoo_wp_sync.selection__woo_product__woo_status__private
+msgid "Private"
+msgstr "Privado"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields.selection,name:odoo_wp_sync.selection__odoo_wp_sync__status__processing
+#: model:ir.model.fields.selection,name:odoo_wp_sync.selection__woo_instance__auto_create_sale_order_statuses__processing
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_odoo_wp_sync_search
+msgid "Processing"
+msgstr "En proceso"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields.selection,name:odoo_wp_sync.selection__woo_instance__sync_order_status__processing
+msgid "Processing Only"
+msgstr "Solo en proceso"
+
+#. module: odoo_wp_sync
+#: model:ir.model,name:odoo_wp_sync.model_product_template
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_order_line__name
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_publish_wizard__product_tmpl_id
+#: model:ir.model.fields.selection,name:odoo_wp_sync.selection__woo_order_line__line_type__product
+msgid "Product"
+msgstr "Producto"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_instance_form
+msgid "Product Publishing"
+msgstr "Publicación de productos"
+
+#. module: odoo_wp_sync
+#. odoo-python
+#: code:addons/odoo_wp_sync/models/woo_product.py:0
+#, python-format
+msgid "Product created in WooCommerce"
+msgstr "Producto creado en WooCommerce"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_publish_wizard_form
+msgid "Product description"
+msgstr "Descripción del producto"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,help:odoo_wp_sync.field_woo_product__woo_image
+msgid "Product image. Legacy: no longer used for display or sync."
+msgstr "Imagen del producto. Heredado: ya no se usa para visualización o sincronización."
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_link_wizard__product_tmpl_id
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_product__product_tmpl_id
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_link_wizard_form
+msgid "Product in Odoo"
+msgstr "Producto en Odoo"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_instance_form
+msgid "Product inventory"
+msgstr "Inventario del producto"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_publish_wizard__product_name
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_product_form
+msgid "Product name"
+msgstr "Nombre del producto"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_instance__taxes_product
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_publish_wizard__taxes_product
+msgid "Product taxes"
+msgstr "Impuestos del producto"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_odoo_wp_sync_form
+msgid "Producto"
+msgstr "Producto"
+
+#. module: odoo_wp_sync
+#. odoo-python
+#: code:addons/odoo_wp_sync/models/woo_instance.py:0
+#, python-format
+msgid "Productos WooCommerce — %s"
+msgstr "Productos WooCommerce — %s"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_coupon__product_ids
+#: model:ir.ui.menu,name:odoo_wp_sync.odoo_wp_sync_product_menu
+#: model:ir.ui.menu,name:odoo_wp_sync.odoo_wp_sync_product_sub_menu
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_odoo_wp_sync_form
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_coupon_form
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_instance_form
+msgid "Products"
+msgstr "Productos"
+
+#. module: odoo_wp_sync
+#: model:ir.actions.server,name:odoo_wp_sync.action_server_products_by_instance
+msgid "Products by Instance"
+msgstr "Productos por instancia"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_product__woo_price_input
+msgid "Publish price"
+msgstr "Precio de publicación"
+
+#. module: odoo_wp_sync
+#: model:ir.model,name:odoo_wp_sync.model_woo_publish_wizard
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_publish_wizard_form
+msgid "Publish product to WooCommerce"
+msgstr "Publicar producto en WooCommerce"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_publish_wizard_form
+msgid "Publish to WooCommerce"
+msgstr "Publicar en WooCommerce"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_product_template_inherit_woo
+msgid "Publish to instance…"
+msgstr "Publicar en instancia…"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields.selection,name:odoo_wp_sync.selection__woo_coupon__status__publish
+#: model:ir.model.fields.selection,name:odoo_wp_sync.selection__woo_instance__coupon_sync_status__publish
+#: model:ir.model.fields.selection,name:odoo_wp_sync.selection__woo_product__woo_status__publish
+#: model:ir.model.fields.selection,name:odoo_wp_sync.selection__woo_publish_wizard__wc_status__publish
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_coupon_search
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_product_search
+msgid "Published"
+msgstr "Publicado"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_publish_wizard_form
+msgid "Publishing settings"
+msgstr "Configuración de publicación"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_odoo_wp_sync_form
+msgid "Put On Hold"
+msgstr "Poner en espera"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_order_line__quantity
+msgid "Quantity"
+msgstr "Cantidad"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_product__stock_quantity
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_product_form
+msgid "Quantity in stock"
+msgstr "Cantidad en stock"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_instance__rating_ids
+msgid "Ratings"
+msgstr "Calificaciones"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_odoo_wp_sync__raw_data
+msgid "Raw JSON Data"
+msgstr "Datos JSON sin procesar"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_instance_form
+msgid "Reconnect"
+msgstr "Reconectar"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_confirmation_wizard__record_id
+msgid "Record ID"
+msgstr "ID de registro"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_confirmation_wizard__record_ids
+msgid "Record IDs"
+msgstr "IDs de registros"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_product_form
+msgid "Reference"
+msgstr "Referencia"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields.selection,name:odoo_wp_sync.selection__odoo_wp_sync__status__refunded
+#: model:ir.model.fields.selection,name:odoo_wp_sync.selection__woo_instance__auto_create_sale_order_statuses__refunded
+msgid "Refunded"
+msgstr "Reembolsado"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_product_form
+msgid "Requires the brands plugin installed in WooCommerce."
+msgstr "Requiere el plugin de marcas instalado en WooCommerce."
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_product_form
+msgid "Respects the parent/child hierarchy of WooCommerce."
+msgstr "Respeta la jerarquía padre/hijo de WooCommerce."
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_instance__activity_user_id
+msgid "Responsible User"
+msgstr "Usuario responsable"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_coupon_form
+msgid "Restore from Trash"
+msgstr "Restaurar de la papelera"
+
+#. module: odoo_wp_sync
+#. odoo-python
+#: code:addons/odoo_wp_sync/models/woo_coupon.py:0
+#, python-format
+msgid "Restored"
+msgstr "Restaurado"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_instance__sync_retry_on_error
+msgid "Retry on Error"
+msgstr "Reintentar en caso de error"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_category_search
+msgid "Root only"
+msgstr "Solo raíz"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_order_line__sku
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_odoo_wp_sync_form
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_product_search
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_product_tree
+msgid "SKU"
+msgstr "SKU"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_product__woo_sku
+msgid "SKU in WC"
+msgstr "SKU en WC"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_link_wizard__woo_sku
+msgid "SKU in WooCommerce"
+msgstr "SKU en WooCommerce"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_instance__message_has_sms_error
+msgid "SMS Delivery error"
+msgstr "Error de entrega SMS"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_odoo_wp_sync__sale_order_id
+msgid "Sale Order"
+msgstr "Pedido de venta"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_instance_form
+msgid "Sales"
+msgstr "Ventas"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_instance__sale_team_id
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_instance_form
+msgid "Sales Team"
+msgstr "Equipo de ventas"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,help:odoo_wp_sync.field_woo_instance__sale_team_id
+msgid "Sales team assigned to orders imported from this instance"
+msgstr "Equipo de ventas asignado a los pedidos importados de esta instancia"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_instance__seller_id
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_instance_form
+msgid "Salesperson"
+msgstr "Vendedor"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,help:odoo_wp_sync.field_woo_instance__seller_id
+msgid "Salesperson assigned to orders imported from this instance"
+msgstr "Vendedor asignado a los pedidos importados de esta instancia"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_brand_search
+msgid "Search Brands"
+msgstr "Buscar marcas"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_category_search
+msgid "Search Categories"
+msgstr "Buscar categorías"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_coupon_search
+msgid "Search Coupons"
+msgstr "Buscar cupones"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_odoo_wp_sync_search
+msgid "Search Orders"
+msgstr "Buscar pedidos"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_product_search
+msgid "Search WooCommerce Products"
+msgstr "Buscar productos WooCommerce"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_link_wizard_form
+msgid "Search by name or internal reference…"
+msgstr "Buscar por nombre o referencia interna…"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_publish_wizard_form
+msgid "Select instance…"
+msgstr "Seleccionar instancia…"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_link_wizard_form
+msgid ""
+"Select the Odoo product that corresponds to this\n"
+"                            WooCommerce product and confirm the link."
+msgstr ""
+"Seleccione el producto de Odoo que corresponde a este\n"
+"                            producto de WooCommerce y confirme el vínculo."
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,help:odoo_wp_sync.field_woo_link_wizard__product_tmpl_id
+msgid "Select the Odoo product that corresponds to this WooCommerce product."
+msgstr "Seleccione el producto de Odoo que corresponde a este producto de WooCommerce."
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,help:odoo_wp_sync.field_woo_instance__auto_create_sale_order_statuses
+msgid ""
+"Select the WooCommerce order status that should generate a sale order in "
+"Odoo during synchronization."
+msgstr "Seleccione el estado del pedido de WooCommerce que debe generar un pedido de venta en Odoo durante la sincronización."
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_publish_wizard_form
+msgid "Selected product"
+msgstr "Producto seleccionado"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_coupon_form
+msgid "Send to Trash"
+msgstr "Enviar a la papelera"
+
+#. module: odoo_wp_sync
+#. odoo-python
+#: code:addons/odoo_wp_sync/models/woo_coupon.py:0
+#, python-format
+msgid "Send to WooCommerce Trash"
+msgstr "Enviar a la papelera de WooCommerce"
+
+#. module: odoo_wp_sync
+#. odoo-python
+#: code:addons/odoo_wp_sync/models/woo_coupon.py:0
+#, python-format
+msgid "Sent to Trash"
+msgstr "Enviado a la papelera"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_coupon_location__sequence
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_instance__sequence
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_order_line__sequence
+msgid "Sequence"
+msgstr "Secuencia"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_instance__prefix_sequence
+msgid "Sequence Prefix"
+msgstr "Prefijo de secuencia"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,help:odoo_wp_sync.field_woo_instance__sequence
+msgid "Sequence used to generate unique WooCommerce IDs for orders"
+msgstr "Secuencia utilizada para generar IDs únicos de WooCommerce para pedidos"
+
+#. module: odoo_wp_sync
+#. odoo-python
+#: code:addons/odoo_wp_sync/models/woo_instance.py:0
+#, python-format
+msgid "Server timeout - took too long to respond"
+msgstr "Tiempo de espera del servidor agotado — tardó demasiado en responder"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_instance_tree
+msgid "Settings"
+msgstr "Configuración"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields.selection,name:odoo_wp_sync.selection__woo_order_line__line_type__shipping
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_coupon_form
+msgid "Shipping"
+msgstr "Envío"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_odoo_wp_sync__shipping_address
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_odoo_wp_sync_form
+msgid "Shipping Address"
+msgstr "Dirección de envío"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_odoo_wp_sync__shipping_total
+msgid "Shipping Total"
+msgstr "Total de envío"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_brand__slug
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_category__slug
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_brand_form
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_brand_search
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_brand_tree
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_category_form
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_category_search
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_category_tree
+msgid "Slug"
+msgstr "Slug"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields.selection,name:odoo_wp_sync.selection__woo_coupon__discount_type__smart_coupon
+msgid "Smart Coupon (Store Credit)"
+msgstr "Cupón inteligente (crédito en tienda)"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_odoo_wp_sync_form
+msgid "Source"
+msgstr "Origen"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,help:odoo_wp_sync.field_woo_instance__client_id
+msgid ""
+"Specific customer to assign to orders imported from this instance (if the "
+"order customer is not found)"
+msgstr "Cliente específico a asignar a los pedidos importados de esta instancia (si no se encuentra el cliente del pedido)"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_coupon__date_start
+msgid "Start Date"
+msgstr "Fecha de inicio"
+
+#. module: odoo_wp_sync
+#. odoo-python
+#: code:addons/odoo_wp_sync/models/woo_product.py:0
+#, python-format
+msgid "Starting sync of %d product(s)…"
+msgstr "Iniciando sincronización de %d producto(s)…"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_instance_form
+msgid "Statistics"
+msgstr "Estadísticas"
+
+#. module: odoo_wp_sync
+#. odoo-python
+#: code:addons/odoo_wp_sync/models/woo_instance.py:0
+#, python-format
+msgid "Statistics Reset"
+msgstr "Estadísticas reiniciadas"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_odoo_wp_sync__status
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_coupon__status
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_instance__state
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_odoo_wp_sync_search
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_odoo_wp_sync_tree
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_coupon_search
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_coupon_tree
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_instance_search
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_product_search
+msgid "Status"
+msgstr "Estado"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,help:odoo_wp_sync.field_woo_instance__activity_state
+msgid ""
+"Status based on activities\n"
+"Overdue: Due date is already passed\n"
+"Today: Activity date is today\n"
+"Planned: Future activities."
+msgstr ""
+"Estado basado en actividades\n"
+"Vencido: la fecha límite ya pasó\n"
+"Hoy: la fecha de actividad es hoy\n"
+"Planificado: actividades futuras."
+
+#. module: odoo_wp_sync
+#. odoo-python
+#: code:addons/odoo_wp_sync/models/woo_order_actions.py:0
+#, python-format
+msgid "Status updated"
+msgstr "Estado actualizado"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_instance__auto_create_sale_order_statuses
+msgid "Statuses for automatic creation"
+msgstr "Estados para creación automática"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_product_tree
+msgid "Stock Status"
+msgstr "Estado de stock"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_product_form
+msgid "Stock control"
+msgstr "Control de stock"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_product_form
+msgid ""
+"Stock quantity to send to WooCommerce. Automatically enables stock "
+"management."
+msgstr "Cantidad de stock a enviar a WooCommerce. Habilita automáticamente la gestión de stock."
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_product__stock_status
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_product_search
+msgid "Stock status"
+msgstr "Estado de stock"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_category__child_ids
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_category_form
+msgid "Subcategories"
+msgstr "Subcategorías"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_order_line__subtotal
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_odoo_wp_sync_form
+msgid "Subtotal"
+msgstr "Subtotal"
+
+#. module: odoo_wp_sync
+#. odoo-python
+#: code:addons/odoo_wp_sync/models/woo_coupon.py:0
+#, python-format
+msgid "Success"
+msgstr "Éxito"
+
+#. module: odoo_wp_sync
+#. odoo-python
+#: code:addons/odoo_wp_sync/models/woo_instance.py:0
+#, python-format
+msgid "Successfully connected to %s"
+msgstr "Conectado exitosamente a %s"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_instance__sync_error_count
+msgid "Sync Error Count"
+msgstr "Cantidad de errores de sincronización"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_instance__sync_from_date
+msgid "Sync From Date"
+msgstr "Sincronizar desde fecha"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_instance__sync_interval
+msgid "Sync Interval (minutes)"
+msgstr "Intervalo de sincronización (minutos)"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_instance__sync_mode
+msgid "Sync Mode"
+msgstr "Modo de sincronización"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_instance_tree
+msgid "Sync Orders"
+msgstr "Sincronizar pedidos"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_product_tree
+msgid "Sync Pending"
+msgstr "Sincronización pendiente"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_instance_form
+msgid "Sync Settings"
+msgstr "Configuración de sincronización"
+
+#. module: odoo_wp_sync
+#: model:ir.actions.server,name:odoo_wp_sync.action_server_woo_sync_wizard
+msgid "Sync WooCommerce"
+msgstr "Sincronizar WooCommerce"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,help:odoo_wp_sync.field_woo_instance__sync_on_order_update
+msgid "Sync changes when orders are modified in WooCommerce"
+msgstr "Sincronizar cambios cuando se modifican pedidos en WooCommerce"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_instance__sync_on_order_update
+msgid "Sync on Order Update"
+msgstr "Sincronizar al actualizar pedido"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,help:odoo_wp_sync.field_woo_instance__sync_from_date
+msgid ""
+"Sync orders created from this date onwards. Leave empty to sync all orders."
+msgstr "Sincronizar pedidos creados desde esta fecha en adelante. Deje vacío para sincronizar todos los pedidos."
+
+#. module: odoo_wp_sync
+#. odoo-python
+#: code:addons/odoo_wp_sync/models/woo_instance.py:0
+#, python-format
+msgid "Sync orders from WooCommerce?"
+msgstr "¿Sincronizar pedidos de WooCommerce?"
+
+#. module: odoo_wp_sync
+#. odoo-python
+#: code:addons/odoo_wp_sync/models/woo_instance.py:0
+#, python-format
+msgid "Sync products from WooCommerce?"
+msgstr "¿Sincronizar productos de WooCommerce?"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_coupon_form
+msgid "Sync to WooCommerce"
+msgstr "Sincronizar con WooCommerce"
+
+#. module: odoo_wp_sync
+#. odoo-python
+#: code:addons/odoo_wp_sync/models/woo_product.py:0
+#: model:ir.actions.server,name:odoo_wp_sync.action_server_sync_woocommerce
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_product_form
+#, python-format
+msgid "Sync with WooCommerce"
+msgstr "Sincronizar con WooCommerce"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_brand_search
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_category_search
+msgid "Synced"
+msgstr "Sincronizado"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_coupon_kanban
+msgid "Synced with WooCommerce"
+msgstr "Sincronizado con WooCommerce"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_instance_form
+msgid "Synchronization"
+msgstr "Sincronización"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_instance_form
+msgid "Synchronization Strategy"
+msgstr "Estrategia de sincronización"
+
+#. module: odoo_wp_sync
+#. odoo-python
+#: code:addons/odoo_wp_sync/models/woo_instance.py:0
+#, python-format
+msgid "Synchronization statistics have been reset"
+msgstr "Las estadísticas de sincronización han sido reiniciadas"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_order_line__total_tax
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_instance_form
+msgid "Tax"
+msgstr "Impuesto"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_coupon_form
+msgid "Tax & Restrictions"
+msgstr "Impuestos y restricciones"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_instance__taxes_included_price
+msgid "Tax-Inclusive Prices"
+msgstr "Precios con impuestos incluidos"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_instance__tax_id
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_instance_form
+msgid "Taxes"
+msgstr "Impuestos"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,help:odoo_wp_sync.field_woo_instance__tax_id
+msgid ""
+"Taxes applicable to orders imported from this instance (if not specified in "
+"WooCommerce, these are applied by default)"
+msgstr "Impuestos aplicables a los pedidos importados de esta instancia (si no se especifican en WooCommerce, se aplican por defecto)"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,help:odoo_wp_sync.field_woo_instance__taxes_product
+#: model:ir.model.fields,help:odoo_wp_sync.field_woo_publish_wizard__taxes_product
+msgid ""
+"Taxes assigned to products created in WooCommerce (if 'Include taxes when "
+"creating products' is active)"
+msgstr "Impuestos asignados a los productos creados en WooCommerce (si 'Incluir impuestos al crear productos' está activo)"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_publish_wizard_form
+msgid "Taxes to apply"
+msgstr "Impuestos a aplicar"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_odoo_wp_sync_form
+msgid "Technical Data"
+msgstr "Datos técnicos"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,help:odoo_wp_sync.field_confirmation_wizard__model_name
+msgid "Technical name of the model"
+msgstr "Nombre técnico del modelo"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_instance_form
+msgid "Test Connection"
+msgstr "Probar conexión"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,help:odoo_wp_sync.field_woo_coupon__amount
+msgid ""
+"The amount of discount. Should always be a positive number. For percentage "
+"discounts, enter a number without the % symbol."
+msgstr "El importe del descuento. Siempre debe ser un número positivo. Para descuentos porcentuales, ingrese un número sin el símbolo %."
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,help:odoo_wp_sync.field_woo_coupon__date_start
+msgid "The date the coupon becomes active"
+msgstr "La fecha en que el cupón se activa"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,help:odoo_wp_sync.field_woo_coupon__date_expires
+msgid "The date the coupon expires. Leave empty for no expiry."
+msgstr "La fecha de vencimiento del cupón. Deje vacío para sin vencimiento."
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_odoo_wp_sync_form
+msgid "The shipping address will appear here..."
+msgstr "La dirección de envío aparecerá aquí..."
+
+#. module: odoo_wp_sync
+#. odoo-python
+#: code:addons/odoo_wp_sync/models/woo_confirmation_wizard.py:0
+#, python-format
+msgid "The specified record does not exist."
+msgstr "El registro especificado no existe."
+
+#. module: odoo_wp_sync
+#. odoo-python
+#: code:addons/odoo_wp_sync/models/woo_confirmation_wizard.py:0
+#, python-format
+msgid "The specified records do not exist."
+msgstr "Los registros especificados no existen."
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,help:odoo_wp_sync.field_woo_coupon__code
+msgid "The unique coupon code customers will enter"
+msgstr "El código de cupón único que los clientes ingresarán"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_odoo_wp_sync_search
+msgid "This Week"
+msgstr "Esta semana"
+
+#. module: odoo_wp_sync
+#. odoo-python
+#: code:addons/odoo_wp_sync/models/woo_coupon.py:0
+#: code:addons/odoo_wp_sync/models/woo_coupon.py:0
+#: code:addons/odoo_wp_sync/models/woo_coupon.py:0
+#: code:addons/odoo_wp_sync/models/woo_coupon.py:0
+#: code:addons/odoo_wp_sync/models/woo_coupon.py:0
+#, python-format
+msgid "This coupon has not been synced to WooCommerce yet."
+msgstr "Este cupón aún no ha sido sincronizado con WooCommerce."
+
+#. module: odoo_wp_sync
+#. odoo-python
+#: code:addons/odoo_wp_sync/models/woo_product.py:0
+#, python-format
+msgid "This product already exists in WooCommerce (ID: %s)."
+msgstr "Este producto ya existe en WooCommerce (ID: %s)."
+
+#. module: odoo_wp_sync
+#. odoo-python
+#: code:addons/odoo_wp_sync/models/woo_instance.py:0
+#, python-format
+msgid ""
+"This will import coupons from <b>%(instance)s</b>.<br/><br/><b>Mode:</b> "
+"%(mode)s<br/><b>Status filter:</b> %(status)s<br/><b>Expiry filter:</b> "
+"%(expiry)s<br/><br/>Existing coupons (matched by WooCommerce ID) will be "
+"updated."
+msgstr "Esto importará cupones de <b>%(instance)s</b>.<br/><br/><b>Modo:</b> %(mode)s<br/><b>Filtro de estado:</b> %(status)s<br/><b>Filtro de vencimiento:</b> %(expiry)s<br/><br/>Los cupones existentes (identificados por ID de WooCommerce) se actualizarán."
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_confirmation_wizard__title
+msgid "Title"
+msgstr "Título"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_odoo_wp_sync_search
+msgid "Today"
+msgstr "Hoy"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_order_line__total
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_odoo_wp_sync_form
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_odoo_wp_sync_tree
+msgid "Total"
+msgstr "Total"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_odoo_wp_sync__total
+msgid "Total Amount"
+msgstr "Importe total"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_instance__total_synced_orders
+msgid "Total Synced Orders"
+msgstr "Total de pedidos sincronizados"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,help:odoo_wp_sync.field_woo_instance__total_synced_orders
+msgid "Total orders synchronized from this instance"
+msgstr "Total de pedidos sincronizados de esta instancia"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,help:odoo_wp_sync.field_woo_coupon__woo_delete_status
+msgid ""
+"Tracks whether this coupon has been sent to WooCommerce trash or permanently"
+" deleted."
+msgstr "Registra si este cupón ha sido enviado a la papelera de WooCommerce o eliminado permanentemente."
+
+#. module: odoo_wp_sync
+#: model:ir.model,name:odoo_wp_sync.model_stock_picking
+msgid "Transfer"
+msgstr "Transferir "
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,help:odoo_wp_sync.field_product_product__woo_allow_publish
+#: model:ir.model.fields,help:odoo_wp_sync.field_product_template__woo_allow_publish
+msgid ""
+"True if at least one WooCommerce instance has 'Allow product creation' "
+"active."
+msgstr "Verdadero si al menos una instancia de WooCommerce tiene 'Permitir creación de productos' activa."
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_order_line__line_type
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_coupon_tree
+msgid "Type"
+msgstr "Tipo"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,help:odoo_wp_sync.field_woo_instance__activity_exception_decoration
+msgid "Type of the exception activity on record."
+msgstr "Tipo de actividad de excepción en el registro."
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_instance_tree
+msgid "URL"
+msgstr "URL"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,help:odoo_wp_sync.field_woo_brand__slug
+msgid "URL identifier of the brand in WooCommerce."
+msgstr "Identificador URL de la marca en WooCommerce."
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,help:odoo_wp_sync.field_woo_category__slug
+msgid "URL identifier of the category in WooCommerce."
+msgstr "Identificador URL de la categoría en WooCommerce."
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_product__woo_permalink
+msgid "URL in WC"
+msgstr "URL en WC"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,help:odoo_wp_sync.field_woo_product__woo_image_src
+msgid "URL of the image currently published in WooCommerce."
+msgstr "URL de la imagen publicada actualmente en WooCommerce."
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,help:odoo_wp_sync.field_woo_coupon__active
+msgid ""
+"Uncheck to archive this coupon (soft delete). Archived coupons are hidden by"
+" default."
+msgstr "Desmarque para archivar este cupón (eliminación lógica). Los cupones archivados están ocultos por defecto."
+
+#. module: odoo_wp_sync
+#. odoo-python
+#: code:addons/odoo_wp_sync/models/woo_instance.py:0
+#, python-format
+msgid "Unexpected Error"
+msgstr "Error inesperado"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,help:odoo_wp_sync.field_woo_instance__name
+msgid "Unique name to identify this WooCommerce instance"
+msgstr "Nombre único para identificar esta instancia de WooCommerce"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_order_line__price
+msgid "Unit Price"
+msgstr "Precio unitario"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_product_form
+msgid "Unlink from Odoo"
+msgstr "Desvincular de Odoo"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields.selection,name:odoo_wp_sync.selection__woo_product__link_state__unlinked
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_product_search
+msgid "Unlinked"
+msgstr "No vinculado"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_instance__update_order_status_wc
+msgid "Update order status in WooCommerce"
+msgstr "Actualizar estado del pedido en WooCommerce"
+
+#. module: odoo_wp_sync
+#. odoo-python
+#: code:addons/odoo_wp_sync/models/woo_order_actions.py:0
+#, python-format
+msgid "Updated with warnings"
+msgstr "Actualizado con advertencias"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_coupon__usage_count
+msgid "Usage Count"
+msgstr "Contador de uso"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_coupon__usage_limit
+msgid "Usage Limit"
+msgstr "Límite de uso"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_coupon__usage_limit_per_user
+msgid "Usage Limit Per User"
+msgstr "Límite de uso por usuario"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_coupon_form
+msgid "Usage Limits"
+msgstr "Límites de uso"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_coupon_form
+msgid "Usage Restrictions"
+msgstr "Restricciones de uso"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_instance__use_sequence
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_instance_form
+msgid "Use Sequence"
+msgstr "Usar secuencia"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,help:odoo_wp_sync.field_woo_instance__incremental_enabled
+msgid "Use modified_after to sync only changed orders since last sync"
+msgstr "Usar modified_after para sincronizar solo los pedidos modificados desde la última sincronización"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_coupon_tree
+msgid "Used"
+msgstr "Usado"
+
+#. module: odoo_wp_sync
+#: model:ir.model,name:odoo_wp_sync.model_res_users
+msgid "User"
+msgstr "Usuario"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,help:odoo_wp_sync.field_woo_instance__who_can_publish
+msgid "Users allowed to publish products in WooCommerce"
+msgstr "Usuarios con permiso para publicar productos en WooCommerce"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_coupon_form
+msgid "Validity Period"
+msgstr "Período de validez"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_product_form
+msgid "View in store"
+msgstr "Ver en la tienda"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_product_tree
+msgid "Visibility"
+msgstr "Visibilidad"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_product_form
+msgid "WC #"
+msgstr "WC #"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_coupon__woo_delete_status
+msgid "WC Delete Status"
+msgstr "Estado de eliminación WC"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_brand_tree
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_category_tree
+msgid "WC ID"
+msgstr "ID WC"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_product__woo_price
+msgid "WC Price"
+msgstr "Precio WC"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_product_tree
+msgid "WC Product"
+msgstr "Producto WC"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_instance__woo_product_count
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_instance_form
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_instance_tree
+msgid "WC Products"
+msgstr "Productos WC"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_product__woo_status
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_coupon_tree
+msgid "WC Status"
+msgstr "Estado WC"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_product__woo_type
+msgid "WC Type"
+msgstr "Tipo WC"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_product_product__woo_allow_publish
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_product_template__woo_allow_publish
+msgid "WC publishing enabled"
+msgstr "Publicación WC habilitada"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_instance__warehouse_id
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_instance_form
+msgid "Warehouse"
+msgstr "Almacén"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_instance_form
+msgid "Warehouse Settings"
+msgstr "Configuración de almacén"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_instance__website_message_ids
+msgid "Website Messages"
+msgstr "Mensajes del sitio web"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,help:odoo_wp_sync.field_woo_instance__website_message_ids
+msgid "Website communication history"
+msgstr "Historial de comunicación del sitio web"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields.selection,name:odoo_wp_sync.selection__woo_instance__picking_policy__one
+msgid "When all products are ready"
+msgstr "Cuando todos los productos estén listos"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,help:odoo_wp_sync.field_woo_coupon__availability_ids
+msgid "Where customers can apply this coupon"
+msgstr "Dónde los clientes pueden aplicar este cupón"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,help:odoo_wp_sync.field_woo_instance__coupon_sync_status
+msgid "Which coupon statuses to import from WooCommerce"
+msgstr "Qué estados de cupón importar de WooCommerce"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,help:odoo_wp_sync.field_woo_instance__sync_order_status
+msgid "Which order statuses to sync from WooCommerce"
+msgstr "Qué estados de pedido sincronizar de WooCommerce"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_sale_order__x_woo_id
+msgid "Woo ID"
+msgstr "ID Woo"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_product_template_inherit_woo
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_brand_form
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_category_form
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_coupon_form
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_product_form
+msgid "WooCommerce"
+msgstr "WooCommerce"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,help:odoo_wp_sync.field_woo_instance__consumer_key
+msgid "WooCommerce API Consumer Key"
+msgstr "Clave del consumidor API WooCommerce"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,help:odoo_wp_sync.field_woo_instance__consumer_secret
+msgid "WooCommerce API Consumer Secret"
+msgstr "Secreto del consumidor API WooCommerce"
+
+#. module: odoo_wp_sync
+#: model:ir.model,name:odoo_wp_sync.model_woo_brand
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_brand_form
+msgid "WooCommerce Brand"
+msgstr "Marca WooCommerce"
+
+#. module: odoo_wp_sync
+#: model:ir.actions.act_window,name:odoo_wp_sync.action_woo_brand
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_brand_tree
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_product_form
+msgid "WooCommerce Brands"
+msgstr "Marcas WooCommerce"
+
+#. module: odoo_wp_sync
+#: model:ir.actions.act_window,name:odoo_wp_sync.action_woo_category
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_product__woo_category_ids
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_category_tree
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_product_form
+msgid "WooCommerce Categories"
+msgstr "Categorías WooCommerce"
+
+#. module: odoo_wp_sync
+#: model:ir.model,name:odoo_wp_sync.model_woo_category
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_category_form
+msgid "WooCommerce Category"
+msgstr "Categoría WooCommerce"
+
+#. module: odoo_wp_sync
+#: model:ir.model,name:odoo_wp_sync.model_woo_coupon
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_coupon_form
+msgid "WooCommerce Coupon"
+msgstr "Cupón WooCommerce"
+
+#. module: odoo_wp_sync
+#: model:ir.model,name:odoo_wp_sync.model_woo_coupon_location
+msgid "WooCommerce Coupon Availability Location"
+msgstr "Ubicación de disponibilidad de cupón WooCommerce"
+
+#. module: odoo_wp_sync
+#: model:ir.actions.act_window,name:odoo_wp_sync.action_woo_coupon
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_coupon_tree
+msgid "WooCommerce Coupons"
+msgstr "Cupones WooCommerce"
+
+#. module: odoo_wp_sync
+#. odoo-python
+#: code:addons/odoo_wp_sync/models/woo_instance.py:0
+#, python-format
+msgid "WooCommerce Coupons — %s"
+msgstr "Cupones WooCommerce — %s"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_instance_form
+msgid "WooCommerce Credentials"
+msgstr "Credenciales WooCommerce"
+
+#. module: odoo_wp_sync
+#: model:ir.model,name:odoo_wp_sync.model_woo_service
+msgid "WooCommerce HTTP Integration Service"
+msgstr "Servicio de integración HTTP de WooCommerce"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_brand__woo_id
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_category__woo_id
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_coupon__woo_id
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_product__woo_id
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_brand_form
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_category_form
+msgid "WooCommerce ID"
+msgstr "ID WooCommerce"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_odoo_wp_sync__instance_id
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_publish_wizard__instance_id
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_instance_form
+msgid "WooCommerce Instance"
+msgstr "Instancia WooCommerce"
+
+#. module: odoo_wp_sync
+#: model:ir.model,name:odoo_wp_sync.model_woo_instance
+msgid "WooCommerce Instance - Warehouse Settings"
+msgstr "Instancia WooCommerce - Configuración de almacén"
+
+#. module: odoo_wp_sync
+#: model:ir.actions.act_window,name:odoo_wp_sync.action_woo_instance
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_instance_search
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_instance_tree
+msgid "WooCommerce Instances"
+msgstr "Instancias WooCommerce"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_odoo_wp_sync_form
+msgid "WooCommerce Order"
+msgstr "Pedido WooCommerce"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_odoo_wp_sync__wc_order_id
+msgid "WooCommerce Order ID"
+msgstr "ID de pedido WooCommerce"
+
+#. module: odoo_wp_sync
+#: model:ir.model.constraint,message:odoo_wp_sync.constraint_odoo_wp_sync_wc_order_id_instance_unique
+msgid "WooCommerce Order ID must be unique per instance!"
+msgstr "¡El ID de pedido WooCommerce debe ser único por instancia!"
+
+#. module: odoo_wp_sync
+#: model:ir.model,name:odoo_wp_sync.model_woo_order_line
+msgid "WooCommerce Order Line"
+msgstr "Línea de pedido WooCommerce"
+
+#. module: odoo_wp_sync
+#: model:ir.actions.act_window,name:odoo_wp_sync.action_odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_odoo_wp_sync_tree
+msgid "WooCommerce Orders"
+msgstr "Pedidos WooCommerce"
+
+#. module: odoo_wp_sync
+#: model:ir.model,name:odoo_wp_sync.model_odoo_wp_sync
+msgid "WooCommerce Orders Sync"
+msgstr "Sincronización de pedidos WooCommerce"
+
+#. module: odoo_wp_sync
+#. odoo-python
+#: code:addons/odoo_wp_sync/models/woo_instance.py:0
+#, python-format
+msgid "WooCommerce Orders — %s"
+msgstr "Pedidos WooCommerce — %s"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_link_wizard__woo_product_id
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_link_wizard_form
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_product_form
+msgid "WooCommerce Product"
+msgstr "Producto WooCommerce"
+
+#. module: odoo_wp_sync
+#: model:ir.model,name:odoo_wp_sync.model_woo_product
+msgid "WooCommerce Product Mapping"
+msgstr "Mapeo de producto WooCommerce"
+
+#. module: odoo_wp_sync
+#: model:ir.model,name:odoo_wp_sync.model_woo_product_sync
+msgid "WooCommerce Product Sync Service"
+msgstr "Servicio de sincronización de productos WooCommerce"
+
+#. module: odoo_wp_sync
+#: model:ir.actions.act_window,name:odoo_wp_sync.action_woo_product
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_product_tree
+msgid "WooCommerce Products"
+msgstr "Productos WooCommerce"
+
+#. module: odoo_wp_sync
+#. odoo-python
+#: code:addons/odoo_wp_sync/models/woo_instance.py:0
+#, python-format
+msgid "WooCommerce Products — %s"
+msgstr "Productos WooCommerce — %s"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_product_product__woo_mapping_ids
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_product_template__woo_mapping_ids
+msgid "WooCommerce Publications"
+msgstr "Publicaciones WooCommerce"
+
+#. module: odoo_wp_sync
+#: model:ir.model,name:odoo_wp_sync.model_woo_sale_order_helper
+msgid "WooCommerce Sale Order Creation Helper"
+msgstr "Asistente de creación de pedidos de venta WooCommerce"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_publish_wizard__wc_status
+msgid "WooCommerce Status"
+msgstr "Estado WooCommerce"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,help:odoo_wp_sync.field_woo_coupon__excluded_category_ids
+msgid "WooCommerce categories excluded from this coupon"
+msgstr "Categorías WooCommerce excluidas de este cupón"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,help:odoo_wp_sync.field_woo_coupon__product_category_ids
+msgid ""
+"WooCommerce categories this coupon applies to (leave empty = all categories)"
+msgstr "Categorías WooCommerce a las que aplica este cupón (dejar vacío = todas las categorías)"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,help:odoo_wp_sync.field_odoo_wp_sync__instance_id
+msgid "WooCommerce instance from which this order was imported"
+msgstr "Instancia WooCommerce desde la que se importó este pedido"
+
+#. module: odoo_wp_sync
+#. odoo-python
+#: code:addons/odoo_wp_sync/models/woo_product.py:0
+#, python-format
+msgid "WooCommerce product (ID=%s) already exists for instance '%s'."
+msgstr "El producto WooCommerce (ID=%s) ya existe para la instancia '%s'."
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,help:odoo_wp_sync.field_woo_product__woo_category_ids
+msgid ""
+"WooCommerce product categories. Respects parent/child hierarchy. Only those "
+"from the instance are listed."
+msgstr "Categorías de producto WooCommerce. Respeta la jerarquía padre/hijo. Solo se listan las de la instancia."
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,help:odoo_wp_sync.field_woo_product__woo_type
+msgid "WooCommerce product type: simple, variable, grouped, external"
+msgstr "Tipo de producto WooCommerce: simple, variable, agrupado, externo"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,help:odoo_wp_sync.field_woo_coupon__excluded_product_ids
+msgid "WooCommerce products excluded from this coupon"
+msgstr "Productos WooCommerce excluidos de este cupón"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,help:odoo_wp_sync.field_woo_instance__woo_product_linked_count
+msgid "WooCommerce products linked to an Odoo product"
+msgstr "Productos WooCommerce vinculados a un producto de Odoo"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,help:odoo_wp_sync.field_woo_coupon__product_ids
+msgid ""
+"WooCommerce products this coupon applies to (leave empty = all products)"
+msgstr "Productos WooCommerce a los que aplica este cupón (dejar vacío = todos los productos)"
+
+#. module: odoo_wp_sync
+#. odoo-python
+#: code:addons/odoo_wp_sync/models/woo_product.py:0
+#: code:addons/odoo_wp_sync/models/woo_product.py:0
+#: code:addons/odoo_wp_sync/models/woo_product.py:0
+#, python-format
+msgid "WooCommerce sync"
+msgstr "Sincronización WooCommerce"
+
+#. module: odoo_wp_sync
+#. odoo-python
+#: code:addons/odoo_wp_sync/models/woo_product.py:0
+#, python-format
+msgid "WooCommerce sync in progress…"
+msgstr "Sincronización WooCommerce en progreso…"
+
+#. module: odoo_wp_sync
+#. odoo-python
+#: code:addons/odoo_wp_sync/models/woo_product.py:0
+#, python-format
+msgid "WooCommerce sync — done ✓"
+msgstr "Sincronización WooCommerce — lista ✓"
+
+#. module: odoo_wp_sync
+#. odoo-python
+#: code:addons/odoo_wp_sync/models/woo_product.py:0
+#, python-format
+msgid "WooCommerce sync — error"
+msgstr "Sincronización WooCommerce — error"
+
+#. module: odoo_wp_sync
+#. odoo-python
+#: code:addons/odoo_wp_sync/models/woo_product.py:0
+#, python-format
+msgid "WooCommerce sync — incomplete"
+msgstr "Sincronización WooCommerce — incompleta"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_product_form
+msgid "WooCommerce will download the image from this URL. Not stored in Odoo."
+msgstr "WooCommerce descargará la imagen desde esta URL. No se almacena en Odoo."
+
+#. module: odoo_wp_sync
+#: model:ir.actions.server,name:odoo_wp_sync.ir_cron_woo_auto_sync_ir_actions_server
+msgid "WooCommerce: Auto Sync Instances"
+msgstr "WooCommerce: sincronización automática de instancias"
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_instance__wp_url
+msgid "WordPress URL"
+msgstr "URL de WordPress"
+
+#. module: odoo_wp_sync
+#. odoo-python
+#: code:addons/odoo_wp_sync/models/woo_instance.py:0
+#, python-format
+msgid "WordPress URL must start with http:// or https://"
+msgstr "La URL de WordPress debe comenzar con http:// o https://"
+
+#. module: odoo_wp_sync
+#. odoo-python
+#: code:addons/odoo_wp_sync/models/woo_product.py:0
+#, python-format
+msgid "You must enter the product name."
+msgstr "Debe ingresar el nombre del producto."
+
+#. module: odoo_wp_sync
+#. odoo-python
+#: code:addons/odoo_wp_sync/models/woo_product.py:0
+#, python-format
+msgid "You must select a WooCommerce instance."
+msgstr "Debe seleccionar una instancia de WooCommerce."
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_coupon_kanban
+msgid "cart"
+msgstr "carrito"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_instance_form
+msgid "ck_xxxxxxxxxxxxx"
+msgstr "ck_xxxxxxxxxxxxx"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_instance_form
+msgid "cs_xxxxxxxxxxxxx"
+msgstr "cs_xxxxxxxxxxxxx"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_coupon_form
+msgid "e.g. SUMMER20"
+msgstr "ej. VERANO20"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_product_form
+msgid "https://example.com/image.jpg"
+msgstr "https://example.com/image.jpg"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_instance_form
+msgid "https://mystore.com"
+msgstr "https://mitienda.com"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_instance_form
+msgid "pending,processing,completed"
+msgstr "pending,processing,completed"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_instance_form
+msgid "processing,completed"
+msgstr "processing,completed"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_coupon_kanban
+msgid "product"
+msgstr "producto"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_coupon_kanban
+msgid "uses"
+msgstr "usos"
+
+#. module: odoo_wp_sync
+#: model:ir.model,name:odoo_wp_sync.model_woo_partner
+msgid "woo.partner"
+msgstr "woo.partner"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_odoo_wp_sync_tree
+msgid "→ Cancelar en WC"
+msgstr "→ Cancelar en WC"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_odoo_wp_sync_tree
+msgid "→ Completado"
+msgstr "→ Completado"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_odoo_wp_sync_tree
+msgid "→ En Espera"
+msgstr "→ En Espera"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_odoo_wp_sync_tree
+msgid "→ En Proceso"
+msgstr "→ En Proceso"

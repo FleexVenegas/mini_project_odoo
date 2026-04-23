@@ -103,6 +103,7 @@
         font-weight: 600;
         letter-spacing: 0.2px;
         text-transform: uppercase;
+        border-radius: 5px !important;
     }
 
     .woo_card_info {
@@ -242,7 +243,7 @@
         padding: 12px 14px 10px;
     }
 
-    // Header: código + badge sync
+    // Header: code + sync badge
     .woo_coupon_card__header {
         display: flex;
         align-items: center;
@@ -333,9 +334,14 @@
             background: #fee2e2;
             color: #dc2626;
         }
+
+        &.woo_coupon_pill--warning {
+            background: #fef3c7;
+            color: #d97706;
+        }
     }
 
-    // Footer: usos + expiración
+    // Footer: uses + expiration
     .woo_coupon_card__footer {
         display: flex;
         justify-content: space-between;

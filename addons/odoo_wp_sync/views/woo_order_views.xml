@@ -8,10 +8,10 @@
             <tree string="WooCommerce Orders" default_order="date_created desc" multi_edit="1">
                 <header>
                     <button name="action_open_create_sale_order_wizard" type="object" string="Create Orders" class="btn-secondary" icon="fa-plus"/>
-                    <button name="action_wc_mark_processing" type="object" string="→ En Proceso"/>
-                    <button name="action_wc_mark_completed" type="object" string="→ Completado"/>
-                    <button name="action_wc_mark_on_hold" type="object" string="→ En Espera"/>
-                    <button name="action_wc_mark_cancelled" type="object" string="→ Cancelar en WC"/>
+                    <button name="action_wc_mark_processing" type="object" string="→ Processing"/>
+                    <button name="action_wc_mark_completed" type="object" string="→ Completed"/>
+                    <button name="action_wc_mark_on_hold" type="object" string="→ On Hold"/>
+                    <button name="action_wc_mark_cancelled" type="object" string="→ Cancel in WC"/>
                 </header>
                 <field name="instance_id" string="Instance" optional="show"/>
                 <field name="name" string="Order"/>
@@ -99,12 +99,12 @@
                             <field name="line_ids" nolabel="1" readonly="1">
                                 <tree string="Order Lines" create="false" delete="false" edit="false" no_open="true" decoration-info="line_type == 'shipping'">
                                     <field name="line_type" column_invisible="1"/>
-                                    <field name="name" string="Producto"/>
+                                    <field name="name" string="Product"/>
                                     <field name="sku" string="SKU"/>
-                                    <field name="quantity" string="Cantidad"/>
-                                    <field name="price" string="Precio Unit." widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                    <field name="quantity" string="Quantity"/>
+                                    <field name="price" string="Unit Price" widget="monetary" options="{'currency_field': 'currency_id'}"/>
                                     <field name="subtotal" string="Subtotal" widget="monetary" options="{'currency_field': 'currency_id'}"/>
-                                    <field name="total_tax" string="Impuesto" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                    <field name="total_tax" string="Tax" widget="monetary" options="{'currency_field': 'currency_id'}"/>
                                     <field name="total" string="Total" widget="monetary" options="{'currency_field': 'currency_id'}"/>
                                     <field name="currency_id" column_invisible="1"/>
                                 </tree>
@@ -123,8 +123,8 @@
                             <group>
                                 <field name="synced_date" string="Last Sync" readonly="1"/>
                             </group>
-                            <separator string="JSON Completo de WooCommerce"/>
-                            <field name="raw_data" nolabel="1" readonly="1" widget="ace" options="{'language': 'json'}" placeholder="Datos en formato JSON..."/>
+                            <separator string="Full WooCommerce JSON"/>
+                            <field name="raw_data" nolabel="1" readonly="1" widget="ace" options="{'language': 'json'}" placeholder="Data in JSON format..."/>
                         </page>
                     </notebook>
                 </sheet>

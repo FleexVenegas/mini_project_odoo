@@ -1149,3 +1149,14 @@ class WooInstance(models.Model):
         action["domain"] = [("instance_id", "=", self.id)]
         action["context"] = {"default_instance_id": self.id}
         return action
+
+    def action_view_woo_coupons(self):
+        """Abre los cupones WooCommerce de esta instancia."""
+        self.ensure_one()
+        action = self.env["ir.actions.act_window"]._for_xml_id(
+            "odoo_wp_sync.action_woo_coupon"
+        )
+        action["name"] = _("Cupones WooCommerce — %s") % self.name
+        action["domain"] = [("instance_id", "=", self.id)]
+        action["context"] = {"default_instance_id": self.id}
+        return action

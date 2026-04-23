@@ -175,9 +175,9 @@ class WooProduct(models.Model):
     )
     woo_brand_ids = fields.Many2many(
         "woo.brand",
-        string="Marcas WooCommerce",
+        string="WooCommerce Brands",
         domain="[('instance_id', '=', instance_id)]",
-        help="Marcas del producto en WooCommerce (requiere plugin de marcas en WC).",
+        help="Product brands in WooCommerce (requires brands plugin in WC).",
     )
 
     # ── Audit ────────────────────────────────────────────────────────────────
@@ -282,7 +282,7 @@ class WooProduct(models.Model):
                 self.woo_name = self.product_tmpl_id.name
             if not self.woo_sku:
                 self.woo_sku = self.product_tmpl_id.default_code or ""
-            # Calcular precio desde la lista de la instancia
+            # Calculate price from the instance pricelist
             if self.instance_id and self.instance_id.pricelist_id:
                 product = self.product_tmpl_id.product_variant_id
                 self.woo_price_input = (

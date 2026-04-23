@@ -44,6 +44,8 @@
                 <filter name="filter_free_shipping" string="Free Shipping" domain="[('free_shipping', '=', True)]"/>
                 <separator/>
                 <filter name="filter_archived" string="Archived" domain="[('active', '=', False)]"/>
+                <filter name="filter_in_trash" string="In Trash" domain="[('woo_delete_status', '=', 'trash'), ('active', '=', False)]"/>
+                <filter name="filter_perm_deleted" string="Permanently Deleted" domain="[('woo_delete_status', '=', 'deleted'), ('active', '=', False)]"/>
                 <group expand="0" string="Group By">
                     <filter name="group_instance" string="Instance" context="{'group_by': 'instance_id'}"/>
                     <filter name="group_status" string="Status" context="{'group_by': 'status'}"/>
@@ -75,13 +77,14 @@
                 <field name="individual_use"/>
                 <field name="woo_id"/>
                 <field name="pending_sync"/>
+                <field name="woo_delete_status"/>
                 <templates>
                     <t t-name="kanban-box">
                         <div t-attf-class="woo_coupon_card oe_kanban_global_click
                             #{record.is_expired.raw_value ? ' woo_coupon_card--expired' : ''}
                             #{record.pending_sync.raw_value ? ' woo_coupon_card--pending' : ''}">
 
-                            <!-- Barra de color superior según tipo de descuento -->
+                            <!-- Top color bar by discount type -->
                             <div t-attf-class="woo_coupon_card__bar
                                 #{record.discount_type.raw_value == 'percent' ? ' bar--percent' : ''}
                                 #{record.discount_type.raw_value == 'fixed_cart' ? ' bar--fixed-cart' : ''}
@@ -89,7 +92,7 @@
 
                             <div class="woo_coupon_card__body">
 
-                                <!-- Código + icono de sync -->
+                                <!-- Code + sync icon -->
                                 <div class="woo_coupon_card__header">
                                     <span class="woo_coupon_card__code">
                                         <field name="code"/>
@@ -117,6 +120,14 @@
 
                                 <!-- Pills de propiedades activas -->
                                 <div class="woo_coupon_card__pills">
+                                    <span t-if="record.woo_delete_status.raw_value == 'trash'" class="woo_coupon_pill woo_coupon_pill--warning" title="In WooCommerce Trash">
+                                        <i class="fa fa-trash-o"/>
+ In Trash
+                                    </span>
+                                    <span t-if="record.woo_delete_status.raw_value == 'deleted'" class="woo_coupon_pill woo_coupon_pill--danger" title="Permanently Deleted from WooCommerce">
+                                        <i class="fa fa-times-circle"/>
+ Permanently Deleted
+                                    </span>
                                     <span t-if="record.is_expired.raw_value" class="woo_coupon_pill woo_coupon_pill--danger" title="Expired">
                                         <i class="fa fa-clock-o" title="Expired"/>
  Expired
@@ -132,7 +143,7 @@
                                     </span>
                                 </div>
 
-                                <!-- Footer: usos + expiración -->
+                                <!-- Footer: uses + expiration -->
                                 <div class="woo_coupon_card__footer">
                                     <span t-if="record.usage_limit.raw_value" class="woo_coupon_card__usage">
                                         <i class="fa fa-bar-chart me-1" title="Usage"/>
@@ -180,6 +191,7 @@
                 <field name="free_shipping" string="Free Ship" widget="boolean" optional="hide"/>
                 <field name="individual_use" string="Individual" widget="boolean" optional="hide"/>
                 <field name="last_sync_date" string="Last Sync" optional="hide"/>
+                <field name="woo_delete_status" string="WC Status" optional="hide" widget="badge" decoration-warning="woo_delete_status == 'trash'" decoration-danger="woo_delete_status == 'deleted'"/>
                 <field name="is_expired" column_invisible="True"/>
                 <field name="woo_id" optional="hide"/>
             </tree>
@@ -195,10 +207,18 @@
         <field name="arch" type="xml">
             <form string="WooCommerce Coupon">
                 <field name="pending_sync" invisible="1"/>
+                <field name="woo_delete_status" invisible="1"/>
+                <field name="woo_id" invisible="1"/>
                 <header>
-                    <button name="action_sync_to_woocommerce" string="Sync to WooCommerce" type="object" class="btn-primary" icon="fa-cloud-upload"/>
-                    <button name="action_confirm_delete_from_woocommerce" string="Delete from WooCommerce" type="object" class="btn-secondary" icon="fa-trash" invisible="not woo_id"/>
-                    <field name="status" widget="statusbar" statusbar_visible="draft,pending,publish,private" options="{'clickable': '1'}"/>
+                    <!-- Sync: only when active and not trashed/deleted in WC -->
+                    <button name="action_sync_to_woocommerce" string="Sync to WooCommerce" type="object" class="btn-primary" icon="fa-cloud-upload" invisible="not active or woo_delete_status != 'none'"/>
+                    <!-- Send to Trash: coupon exists in WC and is currently active -->
+                    <button name="action_confirm_trash_in_woocommerce" string="Send to Trash" type="object" class="btn-secondary" icon="fa-trash-o" invisible="not woo_id or woo_delete_status != 'none'"/>
+                    <!-- Restore from Trash: coupon is in WC trash -->
+                    <button name="action_restore_from_woocommerce" string="Restore from Trash" type="object" class="btn-secondary" icon="fa-undo" invisible="woo_delete_status != 'trash'"/>
+                    <!-- Delete Permanently: hide once already permanently deleted -->
+                    <button name="action_confirm_delete_from_woocommerce" string="Delete Permanently" type="object" class="btn-link" icon="fa-times-circle" invisible="not woo_id or woo_delete_status == 'deleted'"/>
+                    <field name="status" widget="statusbar" statusbar_visible="draft,pending,publish,private" options="{'clickable': '1'}" readonly="woo_delete_status == 'deleted'"/>
                 </header>
                 <sheet>
                     <div class="oe_button_box" name="button_box">
@@ -210,18 +230,20 @@
                         </button>
                     </div>
 
-                    <widget name="web_ribbon" title="Archived" bg_color="text-bg-secondary" invisible="active"/>
+                    <widget name="web_ribbon" title="In Trash" bg_color="text-bg-warning" invisible="woo_delete_status != 'trash'"/>
+                    <widget name="web_ribbon" title="Permanently Deleted" bg_color="text-bg-danger" invisible="woo_delete_status != 'deleted'"/>
+                    <widget name="web_ribbon" title="Archived" bg_color="text-bg-secondary" invisible="active or woo_delete_status != 'none'"/>
                     <widget name="web_ribbon" title="Expired" bg_color="text-bg-danger" invisible="not is_expired"/>
                     <widget name="web_ribbon" title="Pending Sync" bg_color="text-bg-warning" invisible="not pending_sync"/>
 
                     <div class="oe_title">
                         <label for="code"/>
                         <h1>
-                            <field name="code" placeholder="e.g. SUMMER20" required="1"/>
+                            <field name="code" placeholder="e.g. SUMMER20" required="1" readonly="woo_delete_status == 'deleted'"/>
                         </h1>
                     </div>
 
-                    <group>
+                    <group readonly="woo_delete_status == 'deleted'">
                         <group string="Discount">
                             <field name="discount_type"/>
                             <field name="amount"/>
@@ -230,12 +252,13 @@
                         <group string="WooCommerce">
                             <field name="instance_id" required="1"/>
                             <field name="woo_id" readonly="1" invisible="not woo_id"/>
+                            <field name="woo_delete_status" readonly="1" invisible="woo_delete_status == 'none'"/>
                             <field name="last_sync_date" readonly="1"/>
                             <field name="active" widget="boolean_toggle" string="Active (not archived)"/>
                         </group>
                     </group>
 
-                    <notebook>
+                    <notebook readonly="woo_delete_status == 'deleted'">
                         <page string="Usage Restrictions" name="restrictions">
                             <group>
                                 <group string="Order Requirements">

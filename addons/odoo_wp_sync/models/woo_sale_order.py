@@ -22,32 +22,32 @@ class WooSaleOrderHelper(models.AbstractModel):
 
     def create_sale_order_from_woo(self, woo_order_record):
         """
-        Crea un pedido de venta en Odoo desde una orden de WooCommerce.
+        Creates a sale order in Odoo from a WooCommerce order.
 
         Args:
-            woo_order_record: Registro de odoo.wp.sync
+            woo_order_record: odoo.wp.sync record
 
         Returns:
             dict: {
-                'order': sale.order - El pedido creado o existente,
+                'order': sale.order - The created or existing order,
                 'created': bool - True if created, False if it already existed
             }
 
         Raises:
-            Exception: If there is an error in creation
+            Exception: If there is an error during creation
         """
 
         SaleOrder = self.env["sale.order"]
         instance = woo_order_record.instance_id
 
-        # Verificar duplicados por referencia
+        # Check for duplicates by reference
         existing = SaleOrder.search(
             [("client_order_ref", "=", woo_order_record.order_number)], limit=1
         )
 
         if existing:
             _logger.info(
-                "Pedido existente encontrado: %s para WooCommerce Order #%s",
+                "Existing order found: %s for WooCommerce Order #%s",
                 existing.name,
                 woo_order_record.order_number,
             )
@@ -56,10 +56,10 @@ class WooSaleOrderHelper(models.AbstractModel):
                 woo_order_record.sale_order_id = existing.id
             return {"order": existing, "created": False}
 
-        # Buscar o crear cliente
+        # Find or create customer
         partner = self.env["woo.partner"].create_partner_from_woo_data(woo_order_record)
 
-        # Crear pedido de venta.
+        # Create sale order.
         # _prepare_sale_order_vals also returns whether there were products without SKU in Odoo.
         order_vals, has_missing_products = self._prepare_sale_order_vals(
             woo_order_record, partner
@@ -67,7 +67,7 @@ class WooSaleOrderHelper(models.AbstractModel):
 
         order = SaleOrder.create(order_vals)
 
-        # Vincular el pedido de vuelta al registro de WooCommerce
+        # Link the order back to the WooCommerce record
         woo_order_record.sale_order_id = order.id
 
         # use sequence if configured
@@ -75,17 +75,17 @@ class WooSaleOrderHelper(models.AbstractModel):
             prefix = instance.prefix_sequence or "WC-"
             order.name = f"{prefix}{order.name}"
 
-        # Confirmar pedido SOLO si:
-        #   1. La instancia tiene confirm_orders = True
-        #   2. Todos los productos se resolvieron por SKU (ninguno faltante)
+        # Confirm order ONLY if:
+        #   1. The instance has confirm_orders = True
+        #   2. All products were resolved by SKU (none missing)
         # If any SKU was not found, the order stays as a quotation (draft)
         # for manual review.
         if instance.confirm_orders and order.state == "draft":
             if has_missing_products:
                 _logger.info(
                     "Order %s created as QUOTATION (draft): one or more products "
-                    "no se encontraron por SKU en WooCommerce Order #%s. "
-                    "Revisa las notas del pedido.",
+                    "were not found by SKU in WooCommerce Order #%s. "
+                    "Check the order notes.",
                     order.name,
                     woo_order_record.order_number,
                 )
@@ -94,14 +94,14 @@ class WooSaleOrderHelper(models.AbstractModel):
                     order.action_confirm()
                 except Exception:
                     _logger.exception(
-                        "No se pudo confirmar el pedido %s para WooCommerce Order #%s. "
+                        "Could not confirm order %s for WooCommerce Order #%s. "
                         "The order remained as a quotation (draft).",
                         order.name,
                         woo_order_record.order_number,
                     )
 
         _logger.info(
-            "Pedido creado exitosamente: %s para WooCommerce Order #%s",
+            "Order created successfully: %s for WooCommerce Order #%s",
             order.name,
             woo_order_record.order_number,
         )
@@ -110,14 +110,14 @@ class WooSaleOrderHelper(models.AbstractModel):
 
     def _prepare_sale_order_vals(self, woo_order_record, partner):
         """
-        Prepara los valores para crear un pedido de venta.
+        Prepares the values for creating a sale order.
 
         Args:
-            woo_order_record: Registro de odoo.wp.sync
-            partner: res.partner (cliente)
+            woo_order_record: odoo.wp.sync record
+            partner: res.partner (customer)
 
         Returns:
-            dict: Valores para crear el sale.order
+            dict: Values for creating the sale.order
         """
 
         instance = woo_order_record.instance_id
@@ -150,11 +150,11 @@ class WooSaleOrderHelper(models.AbstractModel):
 
             if not product:
                 missing_msg = (
-                    f"⚠️ SKU '{sku}' no encontrado en Odoo — "
-                    f"verifica el campo 'Referencia Interna' del producto."
+                    f"⚠️ SKU '{sku}' not found in Odoo — "
+                    f"check the product's 'Internal Reference' field."
                 )
                 _logger.warning(
-                    "Producto con SKU '%s' no encontrado para WooCommerce Order #%s",
+                    "Product with SKU '%s' not found for WooCommerce Order #%s",
                     sku,
                     woo_order_record.order_number,
                 )
@@ -235,6 +235,7 @@ class WooSaleOrderHelper(models.AbstractModel):
             "pricelist_id": instance.pricelist_id.id or False,
             "warehouse_id": instance.warehouse_id.id or False,
             "payment_term_id": instance.payment_term_id.id or False,
+            "picking_policy": instance.picking_policy or False,
             "order_line": order_lines,
         }
 

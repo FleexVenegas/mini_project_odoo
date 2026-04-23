@@ -2,7 +2,7 @@
 <odoo>
 
     <!-- Root Menu -->
-    <menuitem id="odoo_wp_sync_menu_root" name="Odoo WordPress Sync"/>
+    <menuitem id="odoo_wp_sync_menu_root" name="Odoo WordPress Sync" web_icon="odoo_wp_sync,static/description/icon.png"/>
 
     <!-- Instances -->
     <menuitem id="odoo_wp_sync__menu_instances" name="Instances" parent="odoo_wp_sync_menu_root" action="action_woo_instance" sequence="1"/>

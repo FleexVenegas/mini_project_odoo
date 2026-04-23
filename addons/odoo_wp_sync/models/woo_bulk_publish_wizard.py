@@ -30,7 +30,7 @@ class WooBulkPublishWizardLine(models.TransientModel):
     )
     name = fields.Char(
         related="product_tmpl_id.name",
-        string="Producto",
+        string="Product",
         readonly=True,
     )
     default_code = fields.Char(
@@ -40,17 +40,17 @@ class WooBulkPublishWizardLine(models.TransientModel):
     )
     base_price = fields.Float(
         related="product_tmpl_id.list_price",
-        string="Precio base",
+        string="Base Price",
         digits=(16, 2),
         readonly=True,
     )
     pricelist_price = fields.Float(
-        string="Precio lista",
+        string="List Price",
         digits=(16, 2),
         readonly=True,
     )
     woo_price = fields.Float(
-        string="Precio WC (c/IVA)",
+        string="WC Price (incl. VAT)",
         digits=(16, 2),
         readonly=True,
     )

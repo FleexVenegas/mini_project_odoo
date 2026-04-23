@@ -28,20 +28,27 @@
 
                                     <a role="menuitem" type="object" name="action_view_woo_products" class="dropdown-item">
                                         <i class="fa fa-cube me-2"/>
-WC Products
+                                        Products
                                     </a>
+
+                                    <a role="menuitem" type="object" name="action_view_woo_coupons" class="dropdown-item">
+                                        <i class="fa fa-ticket me-2"/>
+                                        Coupons
+                                    </a>
+
+                                    <div class="dropdown-divider"/>
                                     <a role="menuitem" type="object" name="action_sync_orders" class="dropdown-item">
                                         <i class="fa fa-refresh me-2"/>
-Sync orders
+                                        Sync orders
                                     </a>
                                     <a role="menuitem" type="object" name="action_sync_products" class="dropdown-item">
-                                        <i class="fa fa-download me-2"/>
-Sync products
+                                        <i class="fa fa-refresh me-2"/>
+                                        Sync products
                                     </a>
                                     <div class="dropdown-divider"/>
                                     <a role="menuitem" type="object" name="action_test_connection" class="dropdown-item">
                                         <i class="fa fa-plug me-2"/>
-Reconnect
+                                        Reconnect
                                     </a>
                                     <a role="menuitem" type="edit" class="dropdown-item" groups="base.group_no_one">
                                         <i class="fa fa-cog me-2"/>
@@ -81,14 +88,14 @@ Reconnect
                                             <span class="woo_stat_value">
                                                 <t t-esc="record.order_count.value"/>
                                             </span>
-                                            <span class="woo_stat_label">Pedidos</span>
+                                            <span class="woo_stat_label">Orders</span>
                                         </div>
                                         <div class="woo_stat_divider"/>
                                         <div class="woo_stat_item">
                                             <span class="woo_stat_value">
                                                 <t t-esc="record.woo_product_count.value"/>
                                             </span>
-                                            <span class="woo_stat_label">Productos</span>
+                                            <span class="woo_stat_label">Products</span>
                                         </div>
                                     </div>
                                 </div>

@@ -360,18 +360,18 @@ class OdooWpSync(models.Model):
             if sync_type == "incremental" and instance.last_sync_date:
                 time_diff = datetime.now() - instance.last_sync_date
                 if time_diff.days > 0:
-                    filter_info.append(f"desde hace {time_diff.days}d")
+                    filter_info.append(f"{time_diff.days}d ago")
                 else:
                     hours = time_diff.seconds // 3600
-                    filter_info.append(f"desde hace {hours}h")
+                    filter_info.append(f"{hours}h ago")
             elif instance.sync_from_date and sync_type == "full":
-                filter_info.append(f"desde {instance.sync_from_date}")
+                filter_info.append(f"from {instance.sync_from_date}")
 
             if instance.sync_order_status and instance.sync_order_status != "all":
                 status_label = dict(
                     instance._fields["sync_order_status"].selection
                 ).get(instance.sync_order_status, instance.sync_order_status)
-                filter_info.append(f"estado: {status_label}")
+                filter_info.append(f"status: {status_label}")
 
             filter_msg = f" ({', '.join(filter_info)})"
 
@@ -379,10 +379,10 @@ class OdooWpSync(models.Model):
             sale_order_line = ""
             if instance.auto_create_sale_order:
                 sale_order_line = (
-                    f"\n🛒 Pedidos auto-creados: {auto_create_stats['created']} | "
-                    f"Omitidos: {auto_create_stats['skipped']} | "
-                    f"Errores: {auto_create_stats['errors']} "
-                    f"({len(all_candidates)} candidatos)"
+                    f"\n🛒 Auto-created orders: {auto_create_stats['created']} | "
+                    f"Skipped: {auto_create_stats['skipped']} | "
+                    f"Errors: {auto_create_stats['errors']} "
+                    f"({len(all_candidates)} candidates)"
                 )
             else:
                 sale_order_line = (

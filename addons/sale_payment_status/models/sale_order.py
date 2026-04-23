@@ -9,6 +9,7 @@ class SaleOrder(models.Model):
             ("paid", "Paid"),
             ("pending", "Pending"),
             ("not_paid", "Not Paid"),
+            ("overdue", "Overdue"),
         ],
         string="Payment Status",
         store=True,
