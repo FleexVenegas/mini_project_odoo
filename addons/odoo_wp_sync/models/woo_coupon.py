@@ -203,9 +203,9 @@ class WooCoupon(models.Model):
         help="Automatically apply this coupon when conditions are met",
     )
     enable_category_restriction = fields.Boolean(
-        string="Enable Category Restriction",
-        default=False,
-        help="Enable product category restriction for this coupon",
+        string="Product Restriction",
+        default=True,
+        help="Enable to apply the coupon only when the cart meets the specified product restrictions.",
     )
     # ── Archive / Active ────────────────────────────────────────────────────
 

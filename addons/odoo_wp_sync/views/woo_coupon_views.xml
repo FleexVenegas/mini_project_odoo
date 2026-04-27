@@ -217,7 +217,7 @@
                     <!-- Restore from Trash: coupon is in WC trash -->
                     <button name="action_restore_from_woocommerce" string="Restore from Trash" type="object" class="btn-secondary" icon="fa-undo" invisible="woo_delete_status != 'trash'"/>
                     <!-- Delete Permanently: hide once already permanently deleted -->
-                    <button name="action_confirm_delete_from_woocommerce" string="Delete Permanently" type="object" class="btn-link" icon="fa-times-circle" invisible="not woo_id or woo_delete_status == 'deleted'"/>
+                    <button name="action_confirm_delete_from_woocommerce" string="Delete Permanently" type="object" class="btn-link text-danger" icon="fa-times-circle" invisible="not woo_id or woo_delete_status == 'deleted'"/>
                     <field name="status" widget="statusbar" statusbar_visible="draft,pending,publish,private" options="{'clickable': '1'}" readonly="woo_delete_status == 'deleted'"/>
                 </header>
                 <sheet>
@@ -254,7 +254,7 @@
                             <field name="woo_id" readonly="1" invisible="not woo_id"/>
                             <field name="woo_delete_status" readonly="1" invisible="woo_delete_status == 'none'"/>
                             <field name="last_sync_date" readonly="1"/>
-                            <field name="active" widget="boolean_toggle" string="Active (not archived)"/>
+                            <field name="active" widget="boolean_toggle" string="Active (not archived)" invisible="1"/>
                         </group>
                     </group>
 

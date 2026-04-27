@@ -658,8 +658,8 @@ msgstr "Cancelar"
 
 #. module: odoo_wp_sync
 #: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_odoo_wp_sync_form
-msgid "Cancel in WC"
-msgstr "Cancelar en WC"
+msgid "Cancel"
+msgstr "Cancelar"
 
 #. module: odoo_wp_sync
 #: model:ir.model.fields.selection,name:odoo_wp_sync.selection__odoo_wp_sync__status__cancelled
@@ -1165,6 +1165,8 @@ msgstr "Política de entrega"
 
 #. module: odoo_wp_sync
 #: model:ir.model.fields,field_description:odoo_wp_sync.field_confirmation_wizard__description
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_brand__description
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_category__description
 #: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_coupon__description
 #: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_publish_wizard__description
 #: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_coupon_form
@@ -1255,8 +1257,8 @@ msgstr "Correo electrónico"
 
 #. module: odoo_wp_sync
 #: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_coupon__enable_category_restriction
-msgid "Enable Category Restriction"
-msgstr "Habilitar restricción por categoría"
+msgid "Product Restriction"
+msgstr "Restricción de producto"
 
 #. module: odoo_wp_sync
 #: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_instance__incremental_enabled
@@ -1270,8 +1272,8 @@ msgstr "Habilitar sincronización automática mediante el trabajo programado"
 
 #. module: odoo_wp_sync
 #: model:ir.model.fields,help:odoo_wp_sync.field_woo_coupon__enable_category_restriction
-msgid "Enable product category restriction for this coupon"
-msgstr "Habilitar restricción de categoría de producto para este cupón"
+msgid "Enable to apply the coupon only when the cart meets the specified product restrictions."
+msgstr "Habilitar para aplicar el cupón solo cuando el carrito cumpla con las restricciones de producto especificadas."
 
 #. module: odoo_wp_sync
 #: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_instance_search
@@ -1899,8 +1901,12 @@ msgid "Last Full Sync Date"
 msgstr "Fecha de última sincronización completa"
 
 #. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_brand__last_sync_date
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_category__last_sync_date
 #: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_coupon__last_sync_date
 #: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_odoo_wp_sync_form
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_brand_tree
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_category_tree
 #: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_coupon_tree
 msgid "Last Sync"
 msgstr "Última sincronización"
@@ -2705,7 +2711,13 @@ msgid "Pending Review"
 msgstr "Pendiente de revisión"
 
 #. module: odoo_wp_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_brand__pending_sync
+#: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_category__pending_sync
 #: model:ir.model.fields,field_description:odoo_wp_sync.field_woo_coupon__pending_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_brand_search
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_brand_tree
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_category_search
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_category_tree
 #: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_coupon_form
 msgid "Pending Sync"
 msgstr "Sincronización pendiente"
@@ -3473,6 +3485,8 @@ msgid "Sync products from WooCommerce?"
 msgstr "¿Sincronizar productos de WooCommerce?"
 
 #. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_brand_form
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_category_form
 #: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_coupon_form
 msgid "Sync to WooCommerce"
 msgstr "Sincronizar con WooCommerce"
@@ -4408,3 +4422,56 @@ msgstr "Esta acción sincronizará las órdenes de <b>%s</b> desde WooCommerce a
 #, python-format
 msgid "This action will download all products from <b>%s</b> from WooCommerce and automatically link them to Odoo products that match by SKU.<br/><br/>Products already linked manually will not be overwritten."
 msgstr "Esta acción descargará todos los productos de <b>%s</b> desde WooCommerce y los vinculará automáticamente a los productos de Odoo que coincidan por SKU.<br/><br/>Los productos ya vinculados manualmente no serán sobreescritos."
+
+#. module: odoo_wp_sync
+#. odoo-python
+#: code:addons/odoo_wp_sync/models/woo_category.py:0
+#, python-format
+msgid "Category '%s' synced to WooCommerce."
+msgstr "Categoría '%s' sincronizada con WooCommerce."
+
+#. module: odoo_wp_sync
+#. odoo-python
+#: code:addons/odoo_wp_sync/models/woo_brand.py:0
+#, python-format
+msgid "Brand '%s' synced to WooCommerce."
+msgstr "Marca '%s' sincronizada con WooCommerce."
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,help:odoo_wp_sync.field_woo_category__description
+msgid "Category description shown in WooCommerce."
+msgstr "Descripción de la categoría mostrada en WooCommerce."
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,help:odoo_wp_sync.field_woo_brand__description
+msgid "Brand description shown in WooCommerce."
+msgstr "Descripción de la marca mostrada en WooCommerce."
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,help:odoo_wp_sync.field_woo_category__last_sync_date
+msgid "Last time this category was synced with WooCommerce."
+msgstr "Última vez que esta categoría fue sincronizada con WooCommerce."
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,help:odoo_wp_sync.field_woo_brand__last_sync_date
+msgid "Last time this brand was synced with WooCommerce."
+msgstr "Última vez que esta marca fue sincronizada con WooCommerce."
+
+#. module: odoo_wp_sync
+#: model:ir.model.fields,help:odoo_wp_sync.field_woo_brand__pending_sync
+#: model:ir.model.fields,help:odoo_wp_sync.field_woo_category__pending_sync
+msgid "A change was made in Odoo and has not been synced to WooCommerce yet."
+msgstr "Se realizó un cambio en Odoo que aún no se ha sincronizado con WooCommerce."
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_brand_form
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_category_form
+msgid "Sync Info"
+msgstr "Info de sincronización"
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_brand_form
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_woo_category_form
+msgid "⚠ Pending sync"
+msgstr "⚠ Sincronización pendiente"
+

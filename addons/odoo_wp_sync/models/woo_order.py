@@ -68,7 +68,8 @@ class OdooWpSync(models.Model):
 
     # Items and Details
     items_info = fields.Text(string="Order Items")
-    shipping_address = fields.Text(string="Shipping Address")
+    shipping_address = fields.Text(string="Shipping Address JSON", readonly=True)
+    shipping_address_formatted = fields.Text(string="Shipping Address")
     payment_method = fields.Char(string="Payment Method")
     created_via = fields.Char(
         string="Origin", help="Order source (checkout, admin, etc.)"
@@ -510,15 +511,13 @@ class OdooWpSync(models.Model):
 
         # Shipping address
         shipping = order_data.get("shipping", {})
-        shipping_address = ""
+        shipping_address_formatted = ""
         if shipping:
-            shipping_address = (
+            shipping_address_formatted = (
                 f"{shipping.get('address_1', '')} {shipping.get('address_2', '')}\n"
                 f"{shipping.get('city', '')}, {shipping.get('state', '')} {shipping.get('postcode', '')}\n"
                 f"{shipping.get('country', '')}"
             )
-
-        # shipping_adress_json = order_data.get("shipping") or {}
 
         # Order items
         order_lines = []
@@ -602,7 +601,7 @@ class OdooWpSync(models.Model):
             "discount_total": float(order_data.get("discount_total", 0)),
             "total": float(order_data.get("total", 0)),
             "currency": order_data.get("currency", "USD"),
-            # "shipping_address": shipping_address.strip(),
+            "shipping_address_formatted": shipping_address_formatted.strip(),
             "payment_method": order_data.get("payment_method_title", ""),
             "created_via": order_data.get("created_via", ""),
             "order_lines": json.dumps(order_lines),

@@ -22,12 +22,15 @@
         <field name="name">woo.category.tree</field>
         <field name="model">woo.category</field>
         <field name="arch" type="xml">
-            <tree string="WooCommerce Categories" decoration-muted="not woo_id">
+            <tree string="WooCommerce Categories" decoration-muted="not woo_id" decoration-warning="pending_sync">
                 <field name="instance_id" string="Instance" optional="show"/>
                 <field name="complete_name" string="Category"/>
                 <field name="slug" string="Slug" optional="show"/>
                 <field name="parent_id" string="Parent" optional="show"/>
                 <field name="woo_id" string="WC ID" optional="show"/>
+                <field name="pending_sync" string="Pending" optional="show"/>
+                <field name="last_sync_date" string="Last Sync" optional="show"/>
+                <!-- <button name="action_sync_to_woocommerce" type="object" string="Sync" icon="fa-refresh" class="btn-sm btn-link"/> -->
             </tree>
         </field>
     </record>
@@ -38,6 +41,12 @@
         <field name="model">woo.category</field>
         <field name="arch" type="xml">
             <form string="WooCommerce Category">
+                <header>
+                    <button name="action_sync_to_woocommerce" type="object" string="Sync to WooCommerce" class="btn-primary" invisible="not instance_id"/>
+                    <span class="o_form_label text-warning fw-bold ms-2" invisible="not pending_sync">
+                        ⚠ Pending sync
+                    </span>
+                </header>
                 <sheet>
                     <div class="oe_title">
                         <h1>
@@ -52,11 +61,17 @@
                         </group>
                         <group string="Hierarchy">
                             <field name="parent_id" options="{'no_create': True}"/>
-                            <field name="child_ids" string="Subcategories" readonly="1"/>
+                            <!-- <field name="child_ids" string="Subcategories" readonly="1"/> -->
                         </group>
                     </group>
-                    <group string="Full path">
-                        <field name="complete_name" readonly="1" nolabel="1"/>
+                    <group >
+                        <group>
+                            <field name="description"/>
+                        </group>
+                    </group>
+                    <group string="Sync Info" invisible="not last_sync_date">
+                        <field name="last_sync_date" readonly="1"/>
+                        <field name="pending_sync" readonly="1"/>
                     </group>
                 </sheet>
             </form>
@@ -75,6 +90,7 @@
                 <separator/>
                 <filter name="root_only" string="Root only" domain="[('parent_id', '=', False)]"/>
                 <filter name="with_woo_id" string="Synced" domain="[('woo_id', '!=', 0)]"/>
+                <filter name="pending_sync" string="Pending Sync" domain="[('pending_sync', '=', True)]"/>
                 <group expand="0" string="Group By">
                     <filter name="group_instance" string="Instance" context="{'group_by': 'instance_id'}"/>
                     <filter name="group_parent" string="Parent" context="{'group_by': 'parent_id'}"/>

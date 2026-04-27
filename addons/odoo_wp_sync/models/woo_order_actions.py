@@ -112,7 +112,7 @@ class WooOrderActions(models.Model):
 
         return {
             "type": "ir.actions.client",
-            "tag": "display_notification",
+            "tag": "delayed_view_reload",
             "params": params,
         }
 

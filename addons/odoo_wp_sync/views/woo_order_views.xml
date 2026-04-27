@@ -37,7 +37,7 @@
                     <button name="action_wc_mark_processing" type="object" string="Mark as Processing" class="btn-secondary" invisible="status == 'processing'"/>
                     <button name="action_wc_mark_completed" type="object" string="Mark as Completed" class="btn-secondary" invisible="status == 'completed'"/>
                     <button name="action_wc_mark_on_hold" type="object" string="Put On Hold" class="btn-secondary" invisible="status in ('on-hold', 'cancelled', 'refunded', 'failed')"/>
-                    <button name="action_wc_mark_cancelled" type="object" string="Cancel in WC" class="btn-secondary" invisible="status in ('cancelled', 'refunded', 'failed')"/>
+                    <button name="action_wc_mark_cancelled" type="object" string="Cancel" class="btn-secondary" invisible="status in ('cancelled', 'refunded', 'failed')"/>
                     <button name="action_wc_mark_refunded" type="object" string="Mark as Refunded" class="btn-secondary" invisible="status in ('refunded', 'cancelled', 'failed')"/>
 
                     <field name="status" widget="statusbar" options="{'clickable': '0'}" statusbar_visible="pending,processing,completed"/>
@@ -114,7 +114,7 @@
                         <!-- Shipping Information -->
                         <page string="Shipping Address" name="shipping">
 
-                            <field name="shipping_address" nolabel="1" readonly="1" placeholder="The shipping address will appear here..." options="{'resizable': False}"/>
+                            <field name="shipping_address_formatted" nolabel="1" readonly="1" placeholder="The shipping address will appear here..." options="{'resizable': False}"/>
 
                         </page>
 
