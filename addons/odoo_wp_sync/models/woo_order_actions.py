@@ -177,8 +177,10 @@ class StockPickingWooSync(models.Model):
         )
 
         for picking in outgoing_done:
-            woo_order = self.env["odoo.wp.sync"].search(
-                [("sale_order_id", "=", picking.sale_id.id)], limit=1
+            woo_order = (
+                self.env["odoo.wp.sync"]
+                .sudo()
+                .search([("sale_order_id", "=", picking.sale_id.id)], limit=1)
             )
             if not woo_order:
                 continue

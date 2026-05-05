@@ -70,7 +70,7 @@ class PricelistItemWooListener(models.Model):
         if not self:
             return
 
-        WooProduct = self.env["woo.product"]
+        WooProduct = self.env["woo.product"].sudo()
 
         for item in self:
             pricelist = item.pricelist_id
@@ -78,8 +78,12 @@ class PricelistItemWooListener(models.Model):
                 continue
 
             # Find instances using this pricelist
-            instances = self.env["woo.instance"].search(
-                [("pricelist_id", "=", pricelist.id), ("state", "=", "connected")]
+            instances = (
+                self.env["woo.instance"]
+                .sudo()
+                .search(
+                    [("pricelist_id", "=", pricelist.id), ("state", "=", "connected")]
+                )
             )
             if not instances:
                 continue

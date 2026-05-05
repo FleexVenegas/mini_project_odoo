@@ -1,0 +1,32 @@
+<odoo>
+
+    <!-- Acción primero (evita ParseError) -->
+    <record id="action_sale_credit_management" model="ir.actions.act_window">
+        <field name="name">SaleCreditManagement</field>
+        <field name="res_model">sale.credit.management</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- Vista Tree -->
+    <record id="view_sale_credit_management_tree" model="ir.ui.view">
+        <field name="name">sale_credit_management.tree</field>
+        <field name="model">sale.credit.management</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Menú raíz -->
+    <menuitem id="sale_credit_management_menu_root" name="SaleCreditManagement"/>
+
+    <!-- Submenú -->
+    <menuitem 
+        id="sale_credit_management_menu_modelo" 
+        name="Registros"
+        parent="sale_credit_management_menu_root"
+        action="action_sale_credit_management"
+    />
+
+</odoo>

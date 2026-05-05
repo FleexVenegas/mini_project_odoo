@@ -15,11 +15,15 @@ class ProductTemplateWooMixin(models.Model):
 
     # ── Inverse relation with WooCommerce mappings ──────────────────────────────
 
+    # groups= ensures Odoo returns an empty recordset (no AccessError) for users
+    # that don't belong to the WooCommerce groups, instead of querying woo.product
+    # with their restricted context and raising an access error.
     woo_mapping_ids = fields.One2many(
         "woo.product",
         "product_tmpl_id",
         string="WooCommerce Publications",
         readonly=True,
+        groups="odoo_wp_sync.group_woo_user",
     )
     woo_published_count = fields.Integer(
         string="# WC Instances",
@@ -34,10 +38,13 @@ class ProductTemplateWooMixin(models.Model):
 
     # ── Computed ───────────────────────────────────────────────────────────────
 
-    @api.depends("woo_mapping_ids")
     def _compute_woo_published_count(self):
+        # Use sudo() so this count works for any user regardless of WC group.
+        WooProduct = self.env["woo.product"].sudo()
         for tmpl in self:
-            tmpl.woo_published_count = len(tmpl.woo_mapping_ids)
+            tmpl.woo_published_count = WooProduct.search_count(
+                [("product_tmpl_id", "=", tmpl.id)]
+            )
 
     def _compute_woo_allow_publish(self):
         """
@@ -48,7 +55,9 @@ class ProductTemplateWooMixin(models.Model):
         """
         user = self.env.user
         has_access = bool(
-            self.env["woo.instance"].search(
+            self.env["woo.instance"]
+            .sudo()
+            .search(
                 [
                     ("allow_create_products", "=", True),
                     ("who_can_publish", "in", user.ids),

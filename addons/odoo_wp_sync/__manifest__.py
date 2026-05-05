@@ -1,10 +1,9 @@
 {
-    "name": "Odoo WordPress Sync",
+    "name": "WordPress Sync",
     "version": "17.0.2.0.0",
     "summary": "Sync products and orders between Odoo and WordPress (WooCommerce) - Multi-Instance Support",
     "description": """
-Odoo WordPress Sync
-
+WordPress Sync
 - Multi-instance support: Connect multiple WooCommerce stores
 - Sync products from Odoo to WordPress
 - Receive orders from WordPress and create quotations in Odoo
