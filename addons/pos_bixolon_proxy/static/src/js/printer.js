@@ -66,6 +66,17 @@ patch(PosPrinterService.prototype, {
         total = data.amount_total || 0;
       }
 
+      // ── Fecha ──────────────────────────────────────────────────────────────
+      const now = new Date();
+      const fecha = now.toLocaleDateString("es-MX", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: true,
+      });
+
       // ── Pago ──────────────────────────────────────────────────────────────
       // data.paymentlines → [{ amount: float, name: "Efectivo", ticket: "..." }]
       const firstPayment = data.paymentlines?.[0];
@@ -84,6 +95,7 @@ patch(PosPrinterService.prototype, {
         payment_method: firstPayment?.name || "",
         payment_amount: data.total_paid || 0, // float
         change: data.change || 0, // float
+        date: fecha,
       };
 
       // Eliminar slash final para evitar doble slash: "http://x:8000//print"

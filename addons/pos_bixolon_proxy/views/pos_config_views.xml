@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_pos_config_form_bixolon" model="ir.ui.view">
+        <field name="name">pos.config.form.bixolon</field>
+        <field name="model">pos.config</field>
+        <field name="inherit_id" ref="point_of_sale.pos_config_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//setting[@id='other_devices']" position="after">
+                <setting string="Bixolon Printer" help="Connect a Bixolon printer via proxy URL">
+                    <field name="use_bixolon_proxy"/>
+                    <div class="content-group" invisible="not use_bixolon_proxy">
+                        <div class="row">
+                            <label for="bixolon_proxy_url" class="col-lg-4 o_light_label"/>
+                            <field name="bixolon_proxy_url" class="col-lg-8"/>
+                        </div>
+                    </div>
+                </setting>
+            </xpath>
+        </field>
+    </record>
+</odoo>
