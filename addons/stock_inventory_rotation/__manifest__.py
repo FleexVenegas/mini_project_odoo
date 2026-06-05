@@ -1,11 +1,11 @@
 {
     'name': 'stock_inventory_rotation',
-    'version': '1.0',
+    'version': '1.1',
     'author': 'Ing. Diego Venegas', 
     'category': 'Custom',
     "license": "LGPL-3",
-    'summary': 'Módulo generado automáticamente',
-    'depends': ['base'],
+    'summary': 'Columnas de rotacion de venta en existencias',
+    'depends': ['stock', 'sale_stock'],
     'data': [
         # 'security/ir.model.access.csv',
         'views/stock_inventory_rotation_views.xml'
