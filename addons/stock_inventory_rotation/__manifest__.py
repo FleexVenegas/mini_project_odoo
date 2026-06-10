@@ -7,6 +7,7 @@
     'summary': 'Columnas de rotacion de venta en existencias',
     'depends': ['stock', 'sale_stock'],
     'data': [
+        'security/security.xml',
         # 'security/ir.model.access.csv',
         'views/stock_inventory_rotation_views.xml'
     ],

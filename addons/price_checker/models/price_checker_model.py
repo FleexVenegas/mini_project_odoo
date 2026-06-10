@@ -111,10 +111,15 @@ class PriceChecker(models.Model):
         }
 
     def _get_product_image(self, product):
-        """Obtener la imagen del producto en formato base64."""
-        image = product.image_1920
+        import base64
+        
+        tmpl = product.product_tmpl_id
+        image = tmpl.image_1920 or tmpl.image_512 or tmpl.image_256 or tmpl.image_128
+        
+        if not image:
+            return None
         if isinstance(image, bytes):
-            image = image.decode()
+            return base64.b64encode(image).decode("utf-8")
         return image
 
     def _get_product_prices(self, product, pricelists, warehouse):
@@ -179,3 +184,42 @@ class PriceChecker(models.Model):
                 prices[display_name] = {"value": 0.0, "label": None}
 
         return prices
+
+
+    def get_all_products(self):
+        Product = self.env["product.product"].sudo()
+        products = Product.search([
+            ("active", "=", True),
+            ("sale_ok", "=", True),  # solo productos vendibles
+        ], order="name asc")
+
+        result = []
+        for p in products:
+            result.append({
+                "id": p.id,
+                "name": p.name,
+                "sku": p.default_code or "",
+                "barcode": p.barcode or "",
+            })
+
+        _logger.info(f"Total productos sincronizados: {len(result)}")
+        return result
+    
+
+    def get_all_products_with_prices(self, warehouse_id):
+        warehouse = self.env["stock.warehouse"].sudo().browse(warehouse_id)
+        pricelists = warehouse.price_checker_pricelist_id
+        Product = self.env["product.product"].sudo()
+        products = Product.search([("active", "=", True), ("sale_ok", "=", True)])
+
+        result = []
+        for p in products:
+            prices = self._get_product_prices(p, pricelists, warehouse) if pricelists else {
+                "Precio de lista": {"value": p.lst_price * 1.16, "label": None}
+            }
+            result.append({
+                "id": p.id,
+                "prices": prices,
+            })
+
+        return result

@@ -1,0 +1,7 @@
+<odoo>
+    <record id="group_stock_rotation_visibility" model="res.groups">
+        <field name="name">Ver columnas de rotación en existencias</field>
+        <field name="category_id" ref="base.module_category_inventory"/>
+        <field name="comment">Permite ver métricas de rotación y venta en el reporte de existencias.</field>
+    </record>
+</odoo>

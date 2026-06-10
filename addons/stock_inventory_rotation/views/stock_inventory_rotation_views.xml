@@ -1,15 +1,39 @@
-<odoo>
-    <record id="view_stock_quant_tree_inherit_custom" model="ir.ui.view">
-        <field name="name">stock.quant.tree.inherit.custom</field>
-        <field name="model">stock.quant</field>
-        <field name="inherit_id" ref="stock.view_stock_quant_tree_inventory_editable"/>
+<!-- <odoo>
+    <record id="view_product_product_stock_tree_inherit_custom" model="ir.ui.view">
+        <field name="name">product.product.stock.tree.inherit.custom</field>
+        <field name="model">product.product</field>
+        <field name="inherit_id" ref="stock.product_product_stock_tree"/>
         <field name="arch" type="xml">
-            <!-- Inyecta la columna después del campo 'product_id' -->
-            <xpath expr="//field[@name='product_id']" position="after">
-                <field name="is_sold" optional="show"/>
+            <xpath expr="//field[@name='qty_available']" position="after">
+                <field name="is_sold" optional="hide"/>
                 <field name="last_sale_date" optional="hide"/>
                 <field name="months_without_sale" optional="hide"/>
                 <field name="rotation_status" optional="hide"/>
+            </xpath>
+        </field>
+    </record>
+</odoo> -->
+
+<odoo>
+    <record id="view_product_product_stock_tree_inherit_custom" model="ir.ui.view">
+        <field name="name">product.product.stock.tree.inherit.custom</field>
+        <field name="model">product.product</field>
+        <field name="inherit_id" ref="stock.product_product_stock_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='free_qty']" position="after">
+
+                <!-- Columnas de rotación: visibles por defecto las más accionables -->
+                <field name="rotation_status" optional="show" groups="stock_inventory_rotation.group_stock_rotation_visibility" widget="badge" decoration-success="rotation_status == 'fast'" decoration-info="rotation_status == 'stable'" decoration-warning="rotation_status == 'slow'" decoration-danger="rotation_status == 'dead'"/>
+
+                <field name="rotation_score" optional="show" groups="stock_inventory_rotation.group_stock_rotation_visibility" string="Score" digits="[5,1]"/>
+
+                <!-- Columnas de detalle: ocultas por defecto, activables desde la vista -->
+                <field name="last_sale_date" optional="hide" groups="stock_inventory_rotation.group_stock_rotation_visibility"/>
+                <field name="last_sale_days" optional="hide" groups="stock_inventory_rotation.group_stock_rotation_visibility" string="Días sin venta"/>
+                <field name="sales_count_90d" optional="hide" groups="stock_inventory_rotation.group_stock_rotation_visibility" string="Órdenes (90d)"/>
+                <field name="sales_qty_90d" optional="hide" groups="stock_inventory_rotation.group_stock_rotation_visibility" string="Cantidad (90d)" digits="[10,2]"/>
+                <field name="sales_count_total" optional="hide" groups="stock_inventory_rotation.group_stock_rotation_visibility" string="Órdenes totales"/>
+
             </xpath>
         </field>
     </record>

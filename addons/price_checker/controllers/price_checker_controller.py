@@ -1,5 +1,6 @@
 from odoo import http
 from odoo.http import request
+import json
 
 import logging
 
@@ -7,7 +8,6 @@ _logger = logging.getLogger(__name__)
 
 
 class PriceCheckerController(http.Controller):
-
     @http.route("/price-checker", type="http", auth="public", website=True)
     def price_checker_landing(self, **kw):
         """
