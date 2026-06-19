@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+   <menuitem
+        id="menu_hr_payroll_incentives_root"
+        name="Payroll Incentives"
+    />
+
+    <menuitem
+        id="menu_incentive_sales_run"
+        name="Sales Incentives"
+        parent="menu_hr_payroll_incentives_root"
+        action="action_incentive_sales_run"
+    />
+
+    <menuitem 
+        id="menu_incentive_sales_run_line"
+        name="Sales Incentive Lines"
+        parent="menu_hr_payroll_incentives_root"
+        action="action_incentive_sales_run_line"
+    />
+
+    <menuitem 
+        id="menu_incentive_sales_rules"
+        name="Sales Incentive Rules"
+        parent="menu_hr_payroll_incentives_root"
+        action="action_incentive_sales_rules"
+    />
+
+</odoo>

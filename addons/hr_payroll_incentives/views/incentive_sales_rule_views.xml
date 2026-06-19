@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- VIEW TREE -->
+    <record id="view_incentive_sales_rule_tree" model="ir.ui.view">
+        <field name="name">incentive.sales.rule.tree</field>
+        <field name="model">incentive.sales.rule</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="team_id"/>
+                <field name="pricelist_id"/>
+                <field name="commission"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- VIEW FORM -->
+    <record id="view_incentive_sales_rule_form" model="ir.ui.view">
+        <field name="name">incentive.sales.rule.form</field>
+        <field name="model">incentive.sales.rule</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="team_id"/>
+                        <field name="pricelist_id"/>
+                        <field name="commission"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- ACTION -->
+    <record id="action_incentive_sales_rules" model="ir.actions.act_window">
+        <field name="name">Incentive Sales Rules</field>
+        <field name="res_model">incentive.sales.rule</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+</odoo>

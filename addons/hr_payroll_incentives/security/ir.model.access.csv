@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_incentive_sales_run,incentive.sales.run,model_incentive_sales_run,base.group_user,1,1,1,1
+access_incentive_sales_run_line,incentive.sales.run.line,model_incentive_sales_run_line,base.group_user,1,1,1,1
+access_incentive_sales_rule,incentive.sales.rule,model_incentive_sales_rule,base.group_user,1,1,1,1

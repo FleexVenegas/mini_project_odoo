@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!--
+        Hereda la vista de lista de productos en el contexto de stock.
+        Agrega columnas de Sell-Through a 6 y 9 meses.
+
+        Vista base: stock.product_product_stock_tree
+        Modelo    : product.product
+    -->
+    <record id="product_product_stock_tree_sell_through" model="ir.ui.view">
+        <field name="name">product.product.stock.tree.sell_through</field>
+        <field name="model">product.product</field>
+        <field name="inherit_id" ref="stock.product_product_stock_tree"/>
+        <field name="arch" type="xml">
+
+            <!--
+                Insertamos DESPUÉS de la última columna existente (free_qty
+                = "Stock Libre"), que es la columna más a la derecha en la vista
+                base de Odoo 17. Si en tu instalación la última columna es otra,
+                ajusta el xpath.
+            -->
+            <xpath expr="//field[@name='free_qty']" position="after">
+
+                <!-- ── Separador visual ─────────────────────────────── -->
+                <field name="sell_through_6m_initial_stock"
+                       string="Stock Ini. 6m"
+                       optional="hide"
+                       readonly="1"
+                       decoration-muted="sell_through_6m_initial_stock == 0"/>
+
+                <field name="sell_through_6m_sold"
+                       string="Vendido 6m"
+                       optional="hide"
+                       readonly="1"/>
+
+                <field name="sell_through_6m"
+                       string="6 meses %"
+                       optional="show"
+                       readonly="1"
+                       widget="percentage"
+                       decoration-success="sell_through_6m >= 0.8"
+                        decoration-warning="sell_through_6m >= 0.4 and sell_through_6m &lt; 0.8"
+                        decoration-danger="sell_through_6m &lt; 0.4 and sell_through_6m_initial_stock &gt; 0"
+                        decoration-muted="sell_through_6m_initial_stock == 0"/>
+
+                <!-- ── 9 meses ──────────────────────────────────────── -->
+                <field name="sell_through_9m_initial_stock"
+                       string="Stock Ini. 9m"
+                       optional="hide"
+                       readonly="1"
+                       decoration-muted="sell_through_9m_initial_stock == 0"/>
+
+                <field name="sell_through_9m_sold"
+                       string="Vendido 9m"
+                       optional="hide"
+                       readonly="1"/>
+
+                <field name="sell_through_9m"
+                       string="12 meses %"
+                       optional="show"
+                       readonly="1"
+                       widget="percentage"
+                       decoration-success="sell_through_9m >= 0.8"
+                       decoration-warning="sell_through_9m >= 0.4 and sell_through_9m &lt; 0.8"
+                       decoration-danger="sell_through_9m &lt; 0.4 and sell_through_9m_initial_stock &gt; 0"
+                       decoration-muted="sell_through_9m_initial_stock == 0"/>
+
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

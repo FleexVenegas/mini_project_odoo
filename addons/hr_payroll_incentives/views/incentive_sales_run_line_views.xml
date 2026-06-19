@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- VISTA TREE -->
+    <record id="view_incentive_sales_run_line_tree" model="ir.ui.view">
+        <field name="name">incentive.sales.run.line.tree</field>
+        <field name="model">incentive.sales.run.line</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="user_id"/>
+                <field name="sale_order_id"/>
+                <field name="amount_untaxed"/>
+            </tree>
+        </field>
+    </record>
+
+
+    <!-- ACTION -->
+    <record id="action_incentive_sales_run_line" model="ir.actions.act_window">
+        <field name="name">Incentive Sales Run Lines</field>
+        <field name="res_model">incentive.sales.run.line</field>
+        <field name="view_mode">tree</field>
+    </record>
+
+</odoo>
