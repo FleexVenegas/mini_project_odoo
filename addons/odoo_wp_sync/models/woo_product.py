@@ -114,6 +114,19 @@ class WooProduct(models.Model):
         string="Quantity in stock", digits=(16, 0), help="Available stock quantity."
     )
 
+    # ── Description ───────────────────────────────────────────────────────
+    woo_description = fields.Text(
+        string="Description in WC",
+        help="Full description of the product in WooCommerce. "
+        "If not set, the description from the linked Odoo product is used.",
+    )
+
+    woo_short_description = fields.Text(
+        string="Short description in WC",
+        help="Short description of the product in WooCommerce. "
+        "If not set, the description from the linked Odoo product is used.",
+    )
+
     # ── Link with Odoo ───────────────────────────────────────────────────────
 
     product_tmpl_id = fields.Many2one(
@@ -467,9 +480,9 @@ class WooProduct(models.Model):
                 )
                 price = taxes_res["total_included"]
 
-        description = ""
-        if self.product_tmpl_id:
-            description = self.product_tmpl_id.description_sale or ""
+        # description = ""
+        # if self.product_tmpl_id:
+        #     description = self.product_tmpl_id.description_sale or ""
 
         payload = {
             "name": self.woo_name,
@@ -477,7 +490,8 @@ class WooProduct(models.Model):
             "regular_price": str(round(price, 4)),
             "sku": self.woo_sku or "",
             "type": self.woo_type or "simple",
-            "description": description,
+            "description": f"<p>{self.woo_description}</p>" if self.woo_description else "",
+            "short_description": f"<p>{self.woo_short_description}</p>" if self.woo_short_description else "",
         }
 
         # Send image by URL if provided (without saving binary in Odoo)
@@ -707,9 +721,7 @@ class WooProduct(models.Model):
         Real-time bus notifications are sent so the user receives feedback
         even if the connection drops before the action returns.
         """
-        to_sync = self.filtered(
-            lambda r: r.woo_id and r.instance_id and r.woo_pending_sync
-        )
+        to_sync = self.filtered(lambda r: r.woo_id and r.instance_id)
         total = len(to_sync)
 
         if not total:
@@ -743,6 +755,7 @@ class WooProduct(models.Model):
             }
 
             # Price: manual > pricelist > list_price
+            price_is_manual = bool(rec.woo_price_input)
             price = rec.woo_price_input
             if not price and rec.product_tmpl_id:
                 if rec.instance_id.pricelist_id:
@@ -753,6 +766,28 @@ class WooProduct(models.Model):
                     )
                 else:
                     price = rec.product_tmpl_id.list_price
+
+            # Apply instance taxes only when price comes from the pricelist (not manual)
+            if (
+                not price_is_manual
+                and rec.instance_id.include_taxes_wc_product_sync
+                and price
+            ):
+                tax = rec.instance_id.taxes_product
+                if tax:
+                    taxes_res = tax.compute_all(
+                        price,
+                        currency=rec.currency_id,
+                        quantity=1.0,
+                        product=(
+                            rec.product_tmpl_id.product_variant_id
+                            if rec.product_tmpl_id
+                            else None
+                        ),
+                        partner=None,
+                    )
+                    price = taxes_res["total_included"]
+
             if price:
                 payload["regular_price"] = str(round(price, 4))
 

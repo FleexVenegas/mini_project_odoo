@@ -65,8 +65,6 @@ class ProductProduct(models.Model):
             or ctx.get('default_warehouse_id')
         )
 
-        _logger.info("_get_warehouse_internal_location_ids : warehouse_id=%s", warehouse_id)
-
         if not warehouse_id and ctx.get('active_model') == 'stock.warehouse':
             warehouse_id = ctx.get('active_id')
         
@@ -171,7 +169,6 @@ class ProductProduct(models.Model):
 
         self.env.cr.execute(query, params)
         rows = self.env.cr.fetchall()
-        _logger.info("_get_current_stock result=%s", rows)
         return {row[0]: row[1] or 0.0 for row in rows}
 
     def _compute_sell_through(self, months):
@@ -179,10 +176,6 @@ class ProductProduct(models.Model):
         date_to = fields.Datetime.now()
         date_from = date_to - relativedelta(months=months)
         location_ids = self._get_warehouse_internal_location_ids()
-
-
-        _logger.info("_compute_sell_through location_ids=%s", location_ids)
-
 
         product_ids = self.ids
         if not product_ids:
@@ -218,9 +211,6 @@ class ProductProduct(models.Model):
 
     @api.depends_context('company', 'allowed_company_ids', 'warehouse', 'warehouse_id', 'active_model', 'active_id')
     def _compute_sell_through_6m(self):
-
-        _logger.info("wareouse=: %s", self.env.context.get('warehouse'),)
-
 
         data = self._compute_sell_through(months=6)
 

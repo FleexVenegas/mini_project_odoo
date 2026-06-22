@@ -52,6 +52,8 @@ class WooProductSync(models.AbstractModel):
             "woo_permalink": wc_product.get("permalink", ""),
             "woo_image_id": first_image.get("id", 0),
             "woo_image_src": first_image.get("src", ""),
+            "woo_description": wc_product.get("description", ""),
+            "woo_short_description": wc_product.get("short_description", ""),
             "last_sync_date": fields.Datetime.now(),
             "stock_status": wc_product.get("stock_status", "unknown"),
             "stock_quantity": wc_product.get("stock_quantity") or 0,

@@ -83,6 +83,12 @@
                                     WC #<field name="woo_id" readonly="1" class="d-inline"/>
                                 </span>
                             </div>
+                            <div class="flex-shrink-0 ms-auto mt-2">
+                                <label for="woo_description"></label>
+                                <field name="woo_description" string="Description"/>
+                                <label class="mt-2" for="woo_short_description"></label>
+                                <field name="woo_short_description" string="Short Description"/>
+                            </div>
                         </div>
                     </div>
 
@@ -130,10 +136,10 @@
                     <!-- ── Section 4: Categories and Brands ──────────────────── -->
                     <group>
                         <group string="WooCommerce Categories">
-                            <field name="woo_category_ids" widget="many2many_tags" options="{'no_create': True}" domain="[('instance_id', '=', instance_id)]" string="Categories" help="Respects the parent/child hierarchy of WooCommerce." required="1"/>
+                            <field name="woo_category_ids" widget="many2many_tags" options="{'no_create': True}" domain="[('instance_id', '=', instance_id)]" string="Categories" help="Respects the parent/child hierarchy of WooCommerce." />
                         </group>
                         <group string="WooCommerce Brands">
-                            <field name="woo_brand_ids" widget="many2many_tags" options="{'no_create': True}" domain="[('instance_id', '=', instance_id)]" string="Brands" help="Requires the brands plugin installed in WooCommerce." required="1"/>
+                            <field name="woo_brand_ids" widget="many2many_tags" options="{'no_create': True}" domain="[('instance_id', '=', instance_id)]" string="Brands" help="Requires the brands plugin installed in WooCommerce."/>
                         </group>
                     </group>
 

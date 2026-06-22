@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <data>
+        <!-- Grupo para controlar quién puede ver sell-through en la vista de existencias de productos -->
+        <record id="group_product_rotation_sellthrough_user" model="res.groups">
+            <field name="name">Product Rotation Sell-Through User</field>
+            <field name="comment">Usuarios que pueden ver sell-through en la vista de existencias de productos</field>
+        </record>
+    </data>
+
+</odoo>
