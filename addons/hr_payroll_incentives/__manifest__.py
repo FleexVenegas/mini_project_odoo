@@ -16,6 +16,8 @@
         'views/incentive_sales_run_views.xml',
         'views/incentive_sales_run_line_views.xml',
         'views/incentive_sales_rule_views.xml',
+        'views/incentive_sales_rule_goal_line_views.xml',
+        'views/incentive_sales_rules_pricelist_line_views.xml',
         'views/menu.xml',
     ],
   

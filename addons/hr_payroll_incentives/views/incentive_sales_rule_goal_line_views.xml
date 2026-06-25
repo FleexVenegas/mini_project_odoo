@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- VIEW TREE -->
+    <record id="view_incentive_sales_rule_goal_line_tree" model="ir.ui.view">
+        <field name="name">incentive.sales.rule.goal.line.tree</field>
+        <field name="model">incentive.sales.rule.goal.line</field>
+        <field name="arch" type="xml">
+            <tree string="Sales Goal">
+                <field name="rule_id"/>
+                <field name="user_id"/>
+                <field name="fixed_amount"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- VIEW FORM -->
+    <record id="view_incentive_sales_rule_goal_line_form" model="ir.ui.view">
+        <field name="name">incentive.sales.rule.goal.line.form</field>
+        <field name="model">incentive.sales.rule.goal.line</field>
+        <field name="arch" type="xml">
+            <form string="Sales Goal">
+                <sheet>
+                    <group>
+                        <field name="rule_id"/>
+                        <field name="user_id"/>
+                        <field name="fixed_amount"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- ACTIONS -->
+    <record id="action_incentive_sales_rule_goal_line" model="ir.actions.act_window">
+        <field name="name">Sales Goal</field>
+        <field name="res_model">incentive.sales.rule.goal.line</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="view_incentive_sales_rule_goal_line_tree"/>
+    </record>
+
+</odoo>

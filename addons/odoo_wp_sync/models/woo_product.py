@@ -490,8 +490,8 @@ class WooProduct(models.Model):
             "regular_price": str(round(price, 4)),
             "sku": self.woo_sku or "",
             "type": self.woo_type or "simple",
-            "description": f"<p>{self.woo_description}</p>" if self.woo_description else "",
-            "short_description": f"<p>{self.woo_short_description}</p>" if self.woo_short_description else "",
+            "description": self.woo_description if self.woo_description else "",
+            "short_description": self.woo_short_description if self.woo_short_description else "",
         }
 
         # Send image by URL if provided (without saving binary in Odoo)
@@ -563,6 +563,8 @@ class WooProduct(models.Model):
         payload = {
             "name": self.woo_name,
             "stock_status": self.stock_status or "instock",
+            "description": self.woo_description if self.woo_description else "",
+            "short_description": self.woo_short_description if self.woo_short_description else "",
         }
 
         if (

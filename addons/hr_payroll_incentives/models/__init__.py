@@ -5,3 +5,5 @@ from . import incentive_rule
 from . import incentive_bonus_rule
 from . import incentive_sales_run_line
 from . import incentive_sales_rule
+from . import incentive_sales_rule_goal_line
+from . import incentive_sales_rules_pricelist_line

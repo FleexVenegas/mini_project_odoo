@@ -8,29 +8,43 @@ class IncentiveSalesRunLine(models.Model):
     _description = 'Incentive Sales Run Line'
 
     run_id = fields.Many2one(
-        'incentive.sales.run', 
-        string='Incentive Sales Run', 
-        required=True, 
+        'incentive.sales.run',
+        string='Incentive Sales Run',
+        required=True,
         ondelete='cascade'
     )
 
-    user_id = fields.Many2one(
-        'res.users', 
-        string='Salesperson', 
-        required=True
+    rule_id = fields.Many2one(
+        'incentive.sales.rule',
+        string='Rule',
     )
 
-    sale_order_id = fields.Many2one(
-        'sale.order', 
-        string='Sale Order', 
-        required=True
+    pricelist_id = fields.Many2one(
+        'product.pricelist',
+        string='Pricelist'
+    )
+
+    user_id = fields.Many2one('res.users', string='Seller')
+
+    # Guarda el total de la ventas de la lista de precios en
+    # el período de tiempo especificado por el Incentive Sales Run.
+    amount_untaxed = fields.Monetary(
+        string='Amount Untaxed',
+        currency_id='currency_id',
     )
 
     currency_id = fields.Many2one(
         'res.currency',
-        default=lambda self: self.env.company.currency_id
+        string='Currency',
+        related='run_id.company_id.currency_id',
+        readonly=True,
     )
 
-    amount_untaxed = fields.Monetary(
-        currency_field='currency_id'
+    commission_amount = fields.Monetary(
+        string='Commission Amount',
+        currency_id='currency_id',
+    )
+
+    commission_rate = fields.Float(
+        string='Commission Rate',
     )

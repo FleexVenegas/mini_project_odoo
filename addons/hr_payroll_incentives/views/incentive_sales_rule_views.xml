@@ -6,11 +6,11 @@
         <field name="name">incentive.sales.rule.tree</field>
         <field name="model">incentive.sales.rule</field>
         <field name="arch" type="xml">
-            <tree>
+            <tree string="Sales Incentive Rules">
                 <field name="name"/>
                 <field name="team_id"/>
-                <field name="pricelist_id"/>
-                <field name="commission"/>
+                <field name="commission_type"/>
+                <field name="goal_amount" invisible="commission_type != 'goal'"/>
             </tree>
         </field>
     </record>
@@ -20,16 +20,141 @@
         <field name="name">incentive.sales.rule.form</field>
         <field name="model">incentive.sales.rule</field>
         <field name="arch" type="xml">
-            <form>
+            <form string="Sales Incentive Rule">
+
                 <sheet>
+
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" placeholder="Rule Name"/>
+                        </h1>
+                    </div>
+
                     <group>
-                        <field name="name"/>
-                        <field name="team_id"/>
-                        <field name="pricelist_id"/>
-                        <field name="commission"/>
+                        <group>
+                            <field name="team_id"/>
+                        </group>
+
+                        <group>
+                            <field name="commission_type" widget="radio"/>
+                        </group>
+
+                        <group string="Sale or PDV">
+                            <field name="sale_type" />
+                            <field name="pdv_type" />
+                        </group>
                     </group>
+
+                    <notebook>
+
+                        <page string="Pricelist Configuration" invisible="commission_type != 'pricelist'">
+                            <field name="pricelist_line_ids" nolabel="1">
+                                <tree editable="bottom">
+                                    <field name="pricelist_id"/>
+                                    <field name="commission"/>
+                                </tree>
+                            </field>
+                        </page>
+
+                        <page string="Goal Configuration" invisible="commission_type != 'goal'">
+
+                            <group>
+                                <field name="goal_amount"/>
+                            </group>
+
+                            <separator string="Salesperson Commissions"/>
+
+                            <field name="goal_line_ids" nolabel="1">
+
+                                <tree editable="bottom">
+                                    <field name="user_id"/>
+                                    <field name="fixed_amount"/>
+                                </tree>
+
+                            </field>
+
+                        </page>
+
+                        <page string="For Sale" invisible="commission_type != 'collected'">
+
+                            <group>
+                                <field name="commission_sale"/>
+                            </group>
+
+                        </page>
+
+                    </notebook>
+
                 </sheet>
+
+                <chatter/>
+
             </form>
+        </field>
+    </record>
+
+
+    <!-- VIEW KANBAN -->
+    <record id="view_incentive_sales_rule_kanban" model="ir.ui.view">
+        <field name="name">incentive.sales.rule.kanban</field>
+        <field name="model">incentive.sales.rule</field>
+        <field name="arch" type="xml">
+            <kanban>
+                <field name="name"/>
+                <field name="team_id"/>
+                <field name="commission_type"/>
+                <field name="pricelist_line_ids"/>
+                <field name="goal_amount"/>
+                <field name="active"/>
+
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_global_click p-3">
+
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <strong class="fs-5">
+                                    <field name="name"/>
+                                </strong>
+                                <span class="badge rounded-pill" t-attf-class="#{record.commission_type.raw_value == 'pricelist' and 'text-bg-info' or record.commission_type.raw_value == 'goal' and 'text-bg-success' or record.commission_type.raw_value == 'collected' and 'text-bg-warning' or 'text-bg-secondary'}">
+                                    <field name="commission_type"/>
+                                </span>
+                            </div>
+
+                            <div class="d-flex align-items-center text-muted small mb-1">
+                                <i class="fa fa-users me-1"/>
+                                <field name="team_id"/>
+                            </div>
+
+                            <hr class="my-2"/>
+
+                            <div t-if="record.commission_type.raw_value == 'pricelist'" class="text-muted small">
+                                <field name="pricelist_line_ids"/>
+ listas de precios configuradas
+                            </div>
+
+                            <div t-if="record.commission_type.raw_value == 'collected'" class="d-flex justify-content-between">
+                                <span class="text-muted small">Comisión por venta</span>
+                                <strong>
+                                    <field name="commission_sale" widget="monetary"/>
+                                </strong>
+
+                            </div>
+
+                            <div t-if="record.commission_type.raw_value == 'goal'" class="d-flex justify-content-between">
+                                <span class="text-muted small">Meta del equipo</span>
+                                <strong>
+                                    <field name="goal_amount" widget="monetary"/>
+                                </strong>
+                            </div>
+
+                            <div t-if="record.commission_type.raw_value in ['collected', 'points']" class="text-muted small">
+                            Configuración pendiente
+                            </div>
+
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
         </field>
     </record>
 
@@ -37,7 +162,7 @@
     <record id="action_incentive_sales_rules" model="ir.actions.act_window">
         <field name="name">Incentive Sales Rules</field>
         <field name="res_model">incentive.sales.rule</field>
-        <field name="view_mode">tree,form</field>
+        <field name="view_mode">kanban,tree,form</field>
     </record>
 
 </odoo>

@@ -7,9 +7,12 @@
         <field name="model">incentive.sales.run.line</field>
         <field name="arch" type="xml">
             <tree>
-                <field name="user_id"/>
-                <field name="sale_order_id"/>
-                <field name="amount_untaxed"/>
+                <field name="currency_id" column_invisible="1"/>
+                <field name="run_id"/>
+                <field name="pricelist_id"/>
+                <field name="amount_untaxed" sum="Total"/>
+                <field name="commission_rate" sum="Average" column_invisible="1"/>
+                <field name="commission_amount" sum="Total"/>
             </tree>
         </field>
     </record>
@@ -20,6 +23,9 @@
         <field name="name">Incentive Sales Run Lines</field>
         <field name="res_model">incentive.sales.run.line</field>
         <field name="view_mode">tree</field>
+        <field name="domain">[('run_id', '=', active_id)]</field>
+        <field name="context">{'default_run_id': active_id}</field>
+
     </record>
 
 </odoo>

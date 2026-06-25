@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- VIEW TREE -->
+    <record id="view_incentive_sales_rule_pricelist_line_tree" model="ir.ui.view">
+        <field name="name">incentive.sales.rule.pricelist.line.tree</field>
+        <field name="model">incentive.sales.rule.pricelist.line</field>
+        <field name="arch" type="xml">
+            <tree string="Sales Pricelist">
+                <field name="rule_id"/>
+                <field name="pricelist_id"/>
+                <field name="commission"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- VIEW FORM -->
+    <record id="view_incentive_sales_rule_pricelist_line_form" model="ir.ui.view">
+        <field name="name">incentive.sales.rule.pricelist.line.form</field>
+        <field name="model">incentive.sales.rule.pricelist.line</field>
+        <field name="arch" type="xml">
+            <form string="Sales Pricelist">
+                <sheet>
+                    <group>
+                        <field name="rule_id"/>
+                        <field name="pricelist_id"/>
+                        <field name="commission"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- ACTIONS -->
+    <record id="action_incentive_sales_rule_pricelist_line" model="ir.actions.act_window">
+        <field name="name">Sales Pricelist</field>
+        <field name="res_model">incentive.sales.rule.pricelist.line</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="view_incentive_sales_rule_pricelist_line_tree"/>
+    </record>
+
+</odoo>

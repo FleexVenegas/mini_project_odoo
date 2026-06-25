@@ -14,17 +14,34 @@
     />
 
     <menuitem 
-        id="menu_incentive_sales_run_line"
-        name="Sales Incentive Lines"
+        id="menu_incentive_sales_config"
+        name="Configuration"
         parent="menu_hr_payroll_incentives_root"
-        action="action_incentive_sales_run_line"
+        sequence="10"
     />
 
     <menuitem 
         id="menu_incentive_sales_rules"
-        name="Sales Incentive Rules"
-        parent="menu_hr_payroll_incentives_root"
+        name="Sales Rules"
+        parent="menu_incentive_sales_config"
         action="action_incentive_sales_rules"
+        sequence="5"
+    />
+    <menuitem 
+        id="menu_incentive_sales_rule_goal_line"
+        name="Sales Goal"
+        parent="menu_incentive_sales_config"
+        action="action_incentive_sales_rule_goal_line"
+        groups="base.group_no_one"
+        sequence="15"
     />
 
+    <menuitem 
+        id="menu_incentive_sales_rule_pricelist_line"
+        name="Sales Pricelist"
+        parent="menu_incentive_sales_config"
+        action="action_incentive_sales_rule_pricelist_line"
+        groups="base.group_no_one"
+        sequence="20"
+    />
 </odoo>
