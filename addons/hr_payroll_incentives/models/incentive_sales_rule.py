@@ -1,5 +1,6 @@
 import logging
 from odoo import models, fields, api
+from odoo.exceptions import ValidationError
 
 _logger = logging.getLogger(__name__)
 
@@ -9,6 +10,19 @@ class IncentiveSalesRule(models.Model):
 
     name = fields.Char(string='Name', required=True)
     team_id = fields.Many2one('crm.team', string='Sales Team', required=True)
+    company_id = fields.Many2one(
+        'res.company',
+        string='Company',
+        related='team_id.company_id',
+        store=True,
+        readonly=True,
+    )
+    currency_id = fields.Many2one(
+        'res.currency',
+        string='Currency',
+        related='company_id.currency_id',
+        readonly=True,
+    )
     active = fields.Boolean(string='Active', default=True)
 
     commission_type = fields.Selection([
@@ -17,6 +31,17 @@ class IncentiveSalesRule(models.Model):
         ('goal', 'Goal'),
         ('points', 'Points'),
     ])
+
+    collected_line_ids = fields.One2many(
+        'incentive.sales.rule.collected.line',
+        'rule_id',
+        string='Comisión por Vendedor',
+    )
+
+    pos_config_ids = fields.Many2many(
+        'pos.config',
+        string='Sales Points',
+    )
 
     sale_type = fields.Boolean(
         string="That's what it was sold for", 
@@ -33,7 +58,10 @@ class IncentiveSalesRule(models.Model):
     )
 
     # --- Campos para tipo 'goal' ---
-    goal_amount = fields.Float(string='Meta de Venta (Equipo)')
+    goal_amount = fields.Monetary(
+        string='Meta de Venta (Equipo)',
+        currency_field='currency_id',
+    )
     goal_line_ids = fields.One2many(
         'incentive.sales.rule.goal.line',
         'rule_id',
@@ -47,13 +75,9 @@ class IncentiveSalesRule(models.Model):
 
     # --- Por lo vendido
     commission_sale = fields.Float(
-        string='Comisión por Venta',
-          digits=(16, 6),
+                string='Comisión por Venta (%)',
+            digits=(16, 3),
     )
-
-
-
-
 
 
     _sql_constraints = [
@@ -77,5 +101,11 @@ class IncentiveSalesRule(models.Model):
             vals['name'] = vals['name'].upper()
 
         return super().write(vals)
+
+    @api.constrains('goal_amount')
+    def _check_goal_amount(self):
+        for record in self:
+            if record.goal_amount and record.goal_amount < 0:
+                raise ValidationError('La meta de venta no puede ser negativa.')
 
 

@@ -1,6 +1,82 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-    
+    <!-- VIEW TREE -->
+    <record id="view_incentive_warehouse_run_tree" model="ir.ui.view">
+        <field name="name">incentive.warehouse.run.tree</field>
+        <field name="model">incentive.warehouse.run</field>
+        <field name="arch" type="xml">
+            <tree string="Warehouse Incentive Runs">
+                <field name="name"/>
+                <field name="date_from"/>
+                <field name="date_to"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
 
-</odoo>
+    <!-- VIEW FORM -->
+    <record id="view_incentive_warehouse_run_form" model="ir.ui.view">
+        <field name="name">incentive.warehouse.run.form</field>
+        <field name="model">incentive.warehouse.run</field>
+        <field name="arch" type="xml">
+            <form string="Warehouse Incentive Run">
+                <header>
+                    <button name="generate_incentives" string="Generar comisiones" type="object" class="btn-primary" invisible="state == 'completed'" confirm="Esto recalculará y reemplazará todas las líneas de comisión existentes para esta corrida. ¿Deseas continuar?"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,pending,completed"/>
+                </header>
+                <sheet>
+
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1>
+                            <field name="name" placeholder="e.g. COM-MOSTRADOR-2026-05" readonly="state == 'completed'"/>
+                        </h1>
+                    </div>
+
+                    <group>
+                        <group>
+                            <group string="Configuración">
+                                <!-- <field name="team_id" readonly="state == 'completed'"/> -->
+                                <field name="rules_ids" widget="many2many_tags" options="{'no_create': True}"/>
+                                <!-- <field name="team_id" readonly="1"/> -->
+                                <!-- <field name="company_id" groups="base.group_multi_company" readonly="state == 'completed'"/> --> -->
+                            </group>
+                            <group string="Periodo">
+                                <field name="date_from" readonly="state == 'completed'"/>
+                                <field name="date_to" readonly="state == 'completed'"/>
+                                <field name="generated_at" readonly="1" invisible="not generated_at"/>
+                            </group>
+                        </group>
+                        <!-- <group>
+                            <field name="total_commission_amount" widget="monetary" readonly="1"/>
+                        </group> -->
+                    </group>
+
+                    <notebook>
+                        <page string="Contributors" name="contributors">
+                            <!-- <field name="user_ids" widget="many2many_tags"/> -->
+
+                            <field name="line_ids">
+                                <tree editable="bottom">
+                                    <field name="user_id" string="Colaborator"/>
+                                    <field name="total_pieces" string="Total Pieces" readonly="1"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+
+    <!-- ACTIONS -->
+
+    <record id="action_incentive_warehouse_run" model="ir.actions.act_window">
+        <field name="name">Warehouse Incentive Run</field>
+        <field name="res_model">incentive.warehouse.run</field>
+        <field name="view_mode">tree,form,kanban</field>
+        <field name="view_id" ref="view_incentive_warehouse_run_tree"/>
+    </record>
+</odoo> 

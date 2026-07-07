@@ -1,5 +1,6 @@
 import logging
 from odoo import models, fields, api
+from odoo.exceptions import ValidationError
 
 _logger = logging.getLogger(__name__)
 
@@ -24,7 +25,7 @@ class IncentiveSalesRulePricelistLine(models.Model):
 
     commission = fields.Float(
         string='Commission %',
-        digits=(16, 6),
+        digits=(16, 3),
         required=True
     )
 
@@ -42,3 +43,9 @@ class IncentiveSalesRulePricelistLine(models.Model):
     def _compute_name(self):
         for record in self:
             record.name = f"{record.rule_id.name} - {record.pricelist_id.name}"
+
+    @api.constrains('commission')
+    def _check_commission(self):
+        for record in self:
+            if record.commission < 0 or record.commission > 100:
+                raise ValidationError('El porcentaje de comisión debe estar entre 0 y 100.')

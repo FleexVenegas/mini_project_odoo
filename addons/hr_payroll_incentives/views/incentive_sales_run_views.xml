@@ -58,11 +58,14 @@
                                 <field name="generated_at"/>
                             </div>
 
-                            <!-- <hr class="my-2" t-if="record.state.raw_value == 'completed'"/> -->
+                            <hr class="my-2" t-if="record.state.raw_value == 'completed'"/>
 
-                            <!-- <div t-if="record.state.raw_value == 'completed'" class="d-flex justify-content-end">
-                                <button type="action" name="%(action_incentive_sales_run_line)d" class="btn btn-sm btn-link p-0" string="Ver líneas →"/>
-                            </div> -->
+                            <div t-if="record.state.raw_value == 'completed'" class="d-flex justify-content-between">
+                                <span class="me-2 fw-bold text-muted">Commission:</span>
+                                <field name="currency_id" invisible="1"/>
+
+                                <field class="fw-bold text-muted" name="total_commission_amount" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                            </div>
 
                         </div>
                     </t>
@@ -92,7 +95,9 @@
                     <group>
                         <group>
                             <group string="Configuración">
-                                <field name="team_id" readonly="state == 'completed'"/>
+                                <!-- <field name="team_id" readonly="state == 'completed'"/> -->
+                                <field name="rule_ids" widget="many2many_tags" options="{'no_create': True}"/>
+                                <field name="team_id" readonly="1"/>
                                 <field name="company_id" groups="base.group_multi_company" readonly="state == 'completed'"/>
                             </group>
                             <group string="Periodo">
@@ -113,7 +118,9 @@
                                     <field name="rule_id"/>
                                     <field name="pricelist_id" optional="show"/>
                                     <field name="user_id" optional="show"/>
-                                    <field name="amount_untaxed" sum="Total"/>
+
+                                    <field name="amount_untaxed" sum="Total" />
+                                    <!-- <field name="amount_untaxed" /> -->
                                     <field name="commission_rate"/>
                                     <field name="commission_amount" sum="Total comisión"/>
                                 </tree>

@@ -1,47 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-   <menuitem
+    <!-- Root -->
+    <menuitem
         id="menu_hr_payroll_incentives_root"
         name="Payroll Incentives"
+        sequence="10"
     />
 
+    <!-- Main Menus -->
     <menuitem
-        id="menu_incentive_sales_run"
-        name="Sales Incentives"
-        parent="menu_hr_payroll_incentives_root"
-        action="action_incentive_sales_run"
-    />
-
-    <menuitem 
-        id="menu_incentive_sales_config"
-        name="Configuration"
+        id="menu_incentive_sales_label"
+        name="Incentives"
         parent="menu_hr_payroll_incentives_root"
         sequence="10"
     />
 
+    <!-- Incentives -->
+    <menuitem
+        id="menu_incentive_sales_run"
+        name="Sales Incentives"
+        parent="menu_incentive_sales_label"
+        action="action_incentive_sales_run"
+        sequence="10"
+    />
+
     <menuitem 
+        id="menu_incentive_warehouse_run"
+        name="Warehouse Incentives"
+        parent="menu_incentive_sales_label"
+        action="action_incentive_warehouse_run"
+        sequence="10"
+    />
+
+    <!-- Configuration -->
+
+     <menuitem
+        id="menu_incentive_sales_config"
+        name="Configuration"
+        parent="menu_hr_payroll_incentives_root"
+        sequence="20"
+    />
+
+    <menuitem
         id="menu_incentive_sales_rules"
         name="Sales Rules"
         parent="menu_incentive_sales_config"
         action="action_incentive_sales_rules"
-        sequence="5"
+        sequence="10"
     />
-    <menuitem 
+
+    <menuitem
         id="menu_incentive_sales_rule_goal_line"
         name="Sales Goal"
         parent="menu_incentive_sales_config"
         action="action_incentive_sales_rule_goal_line"
         groups="base.group_no_one"
-        sequence="15"
+        sequence="20"
     />
 
-    <menuitem 
+    <menuitem
         id="menu_incentive_sales_rule_pricelist_line"
         name="Sales Pricelist"
         parent="menu_incentive_sales_config"
         action="action_incentive_sales_rule_pricelist_line"
         groups="base.group_no_one"
-        sequence="20"
+        sequence="30"
     />
+
+    <menuitem
+        id="menu_incentive_warehouse_rules"
+        name="Warehouse Rules"
+        parent="menu_incentive_sales_config"
+        action="action_incentive_warehouse_rule"
+        sequence="40"
+    />
+
 </odoo>

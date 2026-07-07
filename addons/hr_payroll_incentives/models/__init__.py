@@ -7,3 +7,8 @@ from . import incentive_sales_run_line
 from . import incentive_sales_rule
 from . import incentive_sales_rule_goal_line
 from . import incentive_sales_rules_pricelist_line
+from . import incentive_sales_rule_collected_line
+
+# Warehouse
+from . import incentive_warehouse_rule
+from . import incentive_warehouse_run_line

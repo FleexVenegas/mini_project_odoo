@@ -43,6 +43,10 @@
                             <field name="sale_type" />
                             <field name="pdv_type" />
                         </group>
+
+                        <group string="Sales Points" invisible="not pdv_type">
+                            <field name="pos_config_ids" widget="many2many_tags" required="pdv_type"/>
+                        </group>
                     </group>
 
                     <notebook>
@@ -69,6 +73,7 @@
                                 <tree editable="bottom">
                                     <field name="user_id"/>
                                     <field name="fixed_amount"/>
+                                    <field name="commission_wth_goal"/>
                                 </tree>
 
                             </field>
@@ -77,10 +82,12 @@
 
                         <page string="For Sale" invisible="commission_type != 'collected'">
 
-                            <group>
-                                <field name="commission_sale"/>
-                            </group>
-
+                            <field name="collected_line_ids" nolabel="1">
+                                <tree editable="bottom">
+                                    <field name="user_id"/>
+                                    <field name="commission"/>
+                                </tree>
+                            </field>
                         </page>
 
                     </notebook>
@@ -105,6 +112,7 @@
                 <field name="commission_type"/>
                 <field name="pricelist_line_ids"/>
                 <field name="goal_amount"/>
+                <field name="currency_id"/>
                 <field name="active"/>
 
                 <templates>
@@ -135,7 +143,8 @@
                             <div t-if="record.commission_type.raw_value == 'collected'" class="d-flex justify-content-between">
                                 <span class="text-muted small">Comisión por venta</span>
                                 <strong>
-                                    <field name="commission_sale" widget="monetary"/>
+                                    <field name="commission_sale"/>
+                                    %
                                 </strong>
 
                             </div>

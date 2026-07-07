@@ -1,4 +1,5 @@
 from odoo import models, fields, api
+from odoo.exceptions import ValidationError
 import logging
 
 _logger = logging.getLogger(__name__)
@@ -23,7 +24,16 @@ class IncentiveSalesRuleGoalLine(models.Model):
         required=True,
     )
 
-    fixed_amount = fields.Float(string='Commission %', digits=(16, 6), required=True)
+    fixed_amount = fields.Float(
+        string='Commission',  required=True)
+
+
+    commission_wth_goal = fields.Float(
+        string='Commission without goal',
+        # currency_field='currency_id',
+        digits=(16, 3),
+    )
+
 
     _sql_constraints = [
         (
@@ -38,3 +48,9 @@ class IncentiveSalesRuleGoalLine(models.Model):
     def _compute_name(self):
         for record in self:
             record.name = f"{record.rule_id.name} - {record.user_id.name}"
+
+    @api.constrains('fixed_amount')
+    def _check_fixed_amount(self):
+        for record in self:
+            if record.fixed_amount < 0 or record.fixed_amount > 100:
+                raise ValidationError('El porcentaje de comisión debe estar entre 0 y 100.')

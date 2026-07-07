@@ -4,3 +4,7 @@ access_incentive_sales_run_line,incentive.sales.run.line,model_incentive_sales_r
 access_incentive_sales_rule,incentive.sales.rule,model_incentive_sales_rule,base.group_user,1,1,1,1
 access_incentive_sales_rule_goal_line,incentive.sales.rule.goal.line,model_incentive_sales_rule_goal_line,base.group_user,1,1,1,1
 access_incentive_sales_rule_pricelist_line,incentive.sales.rule.pricelist.line,model_incentive_sales_rule_pricelist_line,base.group_user,1,1,1,1
+access_incentive_sales_rule_collected_line,incentive.sales.rule.collected.line,model_incentive_sales_rule_collected_line,base.group_user,1,1,1,1
+access_incentive_warehouse_rule,incentive.warehouse.rule,model_incentive_warehouse_rule,base.group_user,1,1,1,1
+access_incentive_warehouse_run,incentive.warehouse.run,model_incentive_warehouse_run,base.group_user,1,1,1,1
+access_incentive_warehouse_run_line,incentive.warehouse.run.line,model_incentive_warehouse_run_line,base.group_user,1,1,1,1

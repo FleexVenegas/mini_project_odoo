@@ -1,4 +1,4 @@
-from odoo import models, fields
+from odoo import models, fields, api
 import logging
 
 _logger = logging.getLogger(__name__)
@@ -30,8 +30,15 @@ class IncentiveSalesRunLine(models.Model):
     # el período de tiempo especificado por el Incentive Sales Run.
     amount_untaxed = fields.Monetary(
         string='Amount Untaxed',
-        currency_id='currency_id',
+        currency_field='currency_id',
     )
+
+    # amount_untaxed_to_sum = fields.Monetary(
+    #     string='Amount Untaxed',
+    #     currency_field='currency_id',
+    #     compute='_compute_amount_untaxed_to_sum',
+    #     store=True,
+    # )
 
     currency_id = fields.Many2one(
         'res.currency',
@@ -42,9 +49,18 @@ class IncentiveSalesRunLine(models.Model):
 
     commission_amount = fields.Monetary(
         string='Commission Amount',
-        currency_id='currency_id',
+        currency_field='currency_id',
     )
 
     commission_rate = fields.Float(
         string='Commission Rate',
+        digits=(16, 3),
     )
+
+    # @api.depends('amount_untaxed', 'rule_id.goal_amount')
+    # def _compute_amount_untaxed_to_sum(self):
+    #     for line in self:
+    #         if line.rule_id and line.rule_id.goal_amount <= 0:
+    #             line.amount_untaxed_to_sum = 0
+    #         else:
+    #             line.amount_untaxed_to_sum = line.amount_untaxed
