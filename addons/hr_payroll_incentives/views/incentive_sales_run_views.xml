@@ -39,7 +39,12 @@
                                 <strong class="fs-5">
                                     <field name="name"/>
                                 </strong>
-                                <field name="state" widget="badge" decoration-muted="state == 'draft'" decoration-info="state == 'pending'" decoration-success="state == 'completed'"/>
+                                <!-- <field name="state" widget="badge" decoration-muted="state == 'draft'" decoration-info="state == 'pending'" decoration-success="state == 'completed'"/> -->
+                                <span t-attf-class="text-uppercase small fw-bold #{record.state.raw_value == 'draft' ? 'text-muted' : record.state.raw_value == 'pending' ? 'text-warning' : 'text-success'}">
+                                    <i t-attf-class="fa #{record.state.raw_value == 'draft' ? 'fa-pencil' : record.state.raw_value == 'pending' ? 'fa-clock-o' : 'fa-check-circle'} me-1"/>
+                                    <t t-esc="record.state.value"/>
+                                </span>
+
                             </div>
 
                             <div class="d-flex align-items-center text-muted small mb-1">
@@ -61,7 +66,7 @@
                             <hr class="my-2" t-if="record.state.raw_value == 'completed'"/>
 
                             <div t-if="record.state.raw_value == 'completed'" class="d-flex justify-content-between">
-                                <span class="me-2 fw-bold text-muted">Commission:</span>
+                                <span class="me-2 fw-bold text-muted">Comisión:</span>
                                 <field name="currency_id" invisible="1"/>
 
                                 <field class="fw-bold text-muted" name="total_commission_amount" widget="monetary" options="{'currency_field': 'currency_id'}"/>
@@ -133,7 +138,7 @@
     </record>
 
     <record id="action_incentive_sales_run" model="ir.actions.act_window">
-        <field name="name">Sales Incentive Runs</field>
+        <field name="name">Incentivos de Ventas</field>
         <field name="res_model">incentive.sales.run</field>
         <field name="view_mode">kanban,tree,form</field>
     </record>

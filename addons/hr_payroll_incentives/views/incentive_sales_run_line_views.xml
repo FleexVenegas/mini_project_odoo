@@ -20,7 +20,7 @@
 
     <!-- ACTION -->
     <record id="action_incentive_sales_run_line" model="ir.actions.act_window">
-        <field name="name">Incentive Sales Run Lines</field>
+        <field name="name">Líneas de Ejecución de Incentivos de Ventas</field>
         <field name="res_model">incentive.sales.run.line</field>
         <field name="view_mode">tree</field>
         <field name="domain">[('run_id', '=', active_id)]</field>

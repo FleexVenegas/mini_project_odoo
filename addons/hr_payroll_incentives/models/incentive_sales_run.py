@@ -8,43 +8,43 @@ _logger = logging.getLogger(__name__)
 
 class IncentiveSalesRun(models.Model):
     _name = 'incentive.sales.run'
-    _description = 'Incentive Sales Run'
+    _description = 'Ejecución de Ventas Incentivadas'
 
-    name = fields.Char(string='Name', required=True)
+    name = fields.Char(string='Nombre', required=True)
 
     rule_ids = fields.Many2many(
         'incentive.sales.rule',
-        string='Rules',
+        string='Reglas',
     )
 
     team_id = fields.Many2one(
         'crm.team',
-        string='Sales Team',
+        string='Equipo de Ventas',
         compute='_compute_team_id',
         store=True,
         readonly=True,
     )
 
-    date_from = fields.Date(string='Date From', required=True)
-    date_to = fields.Date(string='Date To', required=True)
-    generated_at = fields.Datetime(string='Generated At')
+    date_from = fields.Date(string='Fecha Desde', required=True)
+    date_to = fields.Date(string='Fecha Hasta', required=True)
+    generated_at = fields.Datetime(string='Generado En')
 
     state = fields.Selection([
-        ('draft', 'Draft'),
-        ('pending', 'Pending'),
-        ('completed', 'Completed'),
-    ], string='State', default='draft')
+        ('draft', 'Borrador'),
+        ('pending', 'Pendiente'),
+        ('completed', 'Completado'),
+    ], string='Estado', default='draft')
 
     company_id = fields.Many2one(
         'res.company',
-        string='Company',
+        string='Compañía',
         required=True,
         default=lambda self: self.env.company,
     )
 
     currency_id = fields.Many2one(
         'res.currency',
-        string='Currency',
+        string='Moneda',
         related='company_id.currency_id',
         readonly=True,
     )
@@ -55,7 +55,7 @@ class IncentiveSalesRun(models.Model):
     )
 
     total_commission_amount = fields.Monetary(
-        string='Total Commission',
+        string='Total Monto de Comisión',
         currency_field='currency_id',
         compute='_compute_total_commission_amount',
         store=True,
@@ -139,10 +139,6 @@ class IncentiveSalesRun(models.Model):
                     ('state', 'in', ['sale', 'done'])
                 ])
 
-            # 🔍 DEBUG
-            _logger.info(f'DEBUG - sale.order count: {len(orders)} - total: {sum(orders.mapped("amount_untaxed"))}')
-            for o in orders:
-                _logger.info(f'DEBUG ORDER - {o.name} | state: {o.state} | amount_untaxed: {o.amount_untaxed}')
 
             lines = []
             for rule in run.rule_ids:
@@ -161,11 +157,6 @@ class IncentiveSalesRun(models.Model):
                             ('state', 'in', ['paid', 'done', 'invoiced']),
                         ])
 
-                    # 🔍 DEBUG
-                    _logger.info(f'DEBUG - pos.order count para regla {rule.name}: {len(pos_orders)}')
-                    for po in pos_orders:
-                        _logger.info(f'DEBUG POS ORDER - {po.name} | state: {po.state} | total: {po.amount_total} | tax: {po.amount_tax}')
-
                 rule_orders = orders if rule.sale_type else self.env['sale.order']
 
                 if rule.commission_type == 'pricelist':
@@ -181,9 +172,7 @@ class IncentiveSalesRun(models.Model):
                     continue
 
                 lines += computed
-                _logger.info(
-                    f'Computed {len(computed)} commission lines for run {run.name} (rule={rule.name}, type={rule.commission_type}).'
-                )
+                
 
             run.write({'line_ids': lines})
             run.write({'state': 'completed', 'generated_at': fields.Datetime.now()})

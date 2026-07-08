@@ -7,35 +7,35 @@ _logger = logging.getLogger(__name__)
 
 class IncentiveWarehouseRule(models.Model):
     _name = 'incentive.warehouse.rule'
-    _description = 'Incentive Warehouse Rule'
+    _description = 'Regla de Incentivo de Almacén'
 
-    name = fields.Char(string='Name', required=True)
+    name = fields.Char(string='Nombre', required=True)
 
 
     assorted_pieces = fields.Float(
-        string='Assorted Pieces',
+        string='Piezas Surtidas',
         digits=(16, 3),
         required=True
 
     )
 
     assortment_errors = fields.Float(
-        string='Assortment Errors',
+        string='Errores de Surtido',
         digits=(16, 3),
     )
 
     individual_punctuality = fields.Float(
-        string='Individual Punctuality',
+        string='Puntualidad Individual',
         digits=(16, 3),
     )
 
     absenteeism = fields.Float(
-        string='Absenteeism',
+        string='Ausentismo',
         digits=(16, 3),
     )
 
     cleanliness_order = fields.Float(
-        string='Cleanliness Order',
+        string='Limpieza y Orden',
         digits=(16, 3),
     )
 

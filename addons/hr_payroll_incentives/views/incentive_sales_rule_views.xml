@@ -6,7 +6,7 @@
         <field name="name">incentive.sales.rule.tree</field>
         <field name="model">incentive.sales.rule</field>
         <field name="arch" type="xml">
-            <tree string="Sales Incentive Rules">
+            <tree string="Reglas de Incentivo de Ventas">
                 <field name="name"/>
                 <field name="team_id"/>
                 <field name="commission_type"/>
@@ -20,13 +20,13 @@
         <field name="name">incentive.sales.rule.form</field>
         <field name="model">incentive.sales.rule</field>
         <field name="arch" type="xml">
-            <form string="Sales Incentive Rule">
+            <form string="Regla de Incentivo de Ventas">
 
                 <sheet>
 
                     <div class="oe_title">
                         <h1>
-                            <field name="name" placeholder="Rule Name"/>
+                            <field name="name" placeholder="Nombre de la Regla"/>
                         </h1>
                     </div>
 
@@ -39,19 +39,19 @@
                             <field name="commission_type" widget="radio"/>
                         </group>
 
-                        <group string="Sale or PDV">
+                        <group string="Venta o PDV">
                             <field name="sale_type" />
                             <field name="pdv_type" />
                         </group>
 
-                        <group string="Sales Points" invisible="not pdv_type">
+                        <group string="Puntos de Venta" invisible="not pdv_type">
                             <field name="pos_config_ids" widget="many2many_tags" required="pdv_type"/>
                         </group>
                     </group>
 
                     <notebook>
 
-                        <page string="Pricelist Configuration" invisible="commission_type != 'pricelist'">
+                        <page string="Configuración de Lista de Precios" invisible="commission_type != 'pricelist'">
                             <field name="pricelist_line_ids" nolabel="1">
                                 <tree editable="bottom">
                                     <field name="pricelist_id"/>
@@ -60,13 +60,13 @@
                             </field>
                         </page>
 
-                        <page string="Goal Configuration" invisible="commission_type != 'goal'">
+                        <page string="Configuración de Metas" invisible="commission_type != 'goal'">
 
                             <group>
                                 <field name="goal_amount"/>
                             </group>
 
-                            <separator string="Salesperson Commissions"/>
+                            <separator string="Comisiones de Vendedores"/>
 
                             <field name="goal_line_ids" nolabel="1">
 
@@ -80,7 +80,7 @@
 
                         </page>
 
-                        <page string="For Sale" invisible="commission_type != 'collected'">
+                        <page string="Por Cobrar" invisible="commission_type != 'collected'">
 
                             <field name="collected_line_ids" nolabel="1">
                                 <tree editable="bottom">
@@ -169,7 +169,7 @@
 
     <!-- ACTION -->
     <record id="action_incentive_sales_rules" model="ir.actions.act_window">
-        <field name="name">Incentive Sales Rules</field>
+        <field name="name">Reglas de Incentivo de Ventas</field>
         <field name="res_model">incentive.sales.rule</field>
         <field name="view_mode">kanban,tree,form</field>
     </record>

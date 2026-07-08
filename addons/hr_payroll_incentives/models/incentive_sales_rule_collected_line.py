@@ -22,7 +22,7 @@ class IncentiveSalesRuleCollectedLine(models.Model):
     )
 
     commission = fields.Float(
-        string='Commission %',
+        string='Porcentaje de Comisión',
         digits=(16, 3),
         required=True,
     )

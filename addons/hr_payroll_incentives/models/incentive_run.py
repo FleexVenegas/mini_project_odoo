@@ -5,12 +5,12 @@ _logger = logging.getLogger(__name__)
 
 class IncentiveRun(models.Model):
     _name = 'incentive.run'
-    _description = 'Incentive Run'
+    _description = 'Ejecución de Incentivos'
 
-    name = fields.Char(string='Name', required=True)
-    date_from = fields.Date(string='Date From', required=True)
-    date_to = fields.Date(string='Date To', required=True)
+    name = fields.Char(string='Nombre', required=True)
+    date_from = fields.Date(string='Fecha Desde', required=True)
+    date_to = fields.Date(string='Fecha Hasta', required=True)
     state = fields.Selection([
-        ('draft', 'Draft'),
-        ('done', 'Done'),
-    ], string='Status', default='draft')
+        ('draft', 'Borrador'),
+        ('done', 'Hecho'),
+    ], string='Estado', default='draft')

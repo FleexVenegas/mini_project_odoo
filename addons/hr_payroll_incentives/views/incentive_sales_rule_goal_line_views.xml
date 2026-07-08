@@ -6,7 +6,7 @@
         <field name="name">incentive.sales.rule.goal.line.tree</field>
         <field name="model">incentive.sales.rule.goal.line</field>
         <field name="arch" type="xml">
-            <tree string="Sales Goal">
+            <tree string="Metas de Ventas">
                 <field name="rule_id"/>
                 <field name="user_id"/>
                 <field name="fixed_amount"/>
@@ -20,7 +20,7 @@
         <field name="name">incentive.sales.rule.goal.line.form</field>
         <field name="model">incentive.sales.rule.goal.line</field>
         <field name="arch" type="xml">
-            <form string="Sales Goal">
+            <form string="Metas de Ventas">
                 <sheet>
                     <group>
                         <field name="rule_id"/>
@@ -35,7 +35,7 @@
 
     <!-- ACTIONS -->
     <record id="action_incentive_sales_rule_goal_line" model="ir.actions.act_window">
-        <field name="name">Sales Goal</field>
+        <field name="name">Metas de Ventas</field>
         <field name="res_model">incentive.sales.rule.goal.line</field>
         <field name="view_mode">tree,form</field>
         <field name="view_id" ref="view_incentive_sales_rule_goal_line_tree"/>

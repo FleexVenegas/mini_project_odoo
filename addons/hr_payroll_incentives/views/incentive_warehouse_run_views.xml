@@ -20,9 +20,12 @@
         <field name="name">incentive.warehouse.run.form</field>
         <field name="model">incentive.warehouse.run</field>
         <field name="arch" type="xml">
-            <form string="Warehouse Incentive Run">
+            <form string="Incentivo de Almacén">
                 <header>
-                    <button name="generate_incentives" string="Generar comisiones" type="object" class="btn-primary" invisible="state == 'completed'" confirm="Esto recalculará y reemplazará todas las líneas de comisión existentes para esta corrida. ¿Deseas continuar?"/>
+                    <button name="action_load_users" type="object" string="Generar Comisiones" class="btn-primary" invisible="state != 'draft'"/>
+
+                    <button name="action_generate_incentives" type="object" string="Cerrar Comisiones" class="btn-primary" invisible="state != 'pending'" confirm="Una vez generadas, las comisiones no se podrán modificar. ¿Continuar?"/>
+
                     <field name="state" widget="statusbar" statusbar_visible="draft,pending,completed"/>
                 </header>
                 <sheet>
@@ -37,10 +40,7 @@
                     <group>
                         <group>
                             <group string="Configuración">
-                                <!-- <field name="team_id" readonly="state == 'completed'"/> -->
-                                <field name="rules_ids" widget="many2many_tags" options="{'no_create': True}"/>
-                                <!-- <field name="team_id" readonly="1"/> -->
-                                <!-- <field name="company_id" groups="base.group_multi_company" readonly="state == 'completed'"/> --> -->
+                                <field name="rules_ids" widget="many2many_tags" options="{'no_create': True}" readonly="state == 'completed'"/>
                             </group>
                             <group string="Periodo">
                                 <field name="date_from" readonly="state == 'completed'"/>
@@ -48,19 +48,30 @@
                                 <field name="generated_at" readonly="1" invisible="not generated_at"/>
                             </group>
                         </group>
-                        <!-- <group>
-                            <field name="total_commission_amount" widget="monetary" readonly="1"/>
-                        </group> -->
                     </group>
 
                     <notebook>
                         <page string="Contributors" name="contributors">
-                            <!-- <field name="user_ids" widget="many2many_tags"/> -->
-
                             <field name="line_ids">
-                                <tree editable="bottom">
-                                    <field name="user_id" string="Colaborator"/>
-                                    <field name="total_pieces" string="Total Pieces" readonly="1"/>
+                                <tree editable="bottom" create='0' delete="0">
+                                    <field name="currency_id" column_invisible="1"/>
+                                    <field name="user_id" string="Colaborador" readonly="1"/>
+                                    <field name="total_pieces" string="Pieces" readonly="1"/>
+                                    <field name="pieces_bonus" string="Bonus" readonly="1" sum="Total Pieces"/>
+
+                                    <field name="errors_bonus" string="Error" readonly="1" sum="Total Errores"/>
+                                    <field name="has_assortment_errors" string="bonus" readonly="parent.state == 'completed'"/>
+
+                                    <field name="punctuality_bonus" string="Punctuality" readonly="1" sum="Total Puntualidad"/>
+                                    <field name="has_punctuality_issue" string="bonus" readonly="parent.state == 'completed'"/>
+
+                                    <field name="absenteeism_bonus" string="Absence" readonly="1" sum="Total Ausentismo"/>
+                                    <field name="has_absenteeism" string="bonus" readonly="parent.state == 'completed'"/>
+
+                                    <field name="cleanliness_bonus" string="Cleanliness" readonly="1" sum="Total Limpieza"/>
+                                    <field name="has_cleanliness_issue" string="bonus" readonly="parent.state == 'completed'"/>
+
+                                    <field name="total_bonus" string="Total" readonly="1" sum="Gran Total"/>
                                 </tree>
                             </field>
                         </page>
@@ -70,13 +81,81 @@
         </field>
     </record>
 
+    <!-- VIEW KANBAN -->
+    <record id="view_incentive_warehouse_run_kanban" model="ir.ui.view">
+        <field name="name">incentive.warehouse.run.kanban</field>
+        <field name="model">incentive.warehouse.run</field>
+        <field name="arch" type="xml">
+            <kanban class="o_kanban_small_column">
+                <field name="name"/>
+                <field name="state"/>
+                <field name="date_from"/>
+                <field name="date_to"/>
+                <field name="total_pieces"/>
+                <field name="total_bonus"/>
+                <field name="currency_id"/>
+                <field name="user_ids"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_global_click o_kanban_card p-3" style="border-radius: 8px;">
+
+                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                <strong style="font-size: 15px;">
+                                    <!-- <i class="fa fa-archive me-1 text-muted"/> -->
+                                    <field name="name"/>
+                                </strong>
+                                <span t-attf-class="text-uppercase small fw-bold #{record.state.raw_value == 'draft' ? 'text-muted' : record.state.raw_value == 'pending' ? 'text-warning' : 'text-success'}">
+                                    <i t-attf-class="fa #{record.state.raw_value == 'draft' ? 'fa-pencil' : record.state.raw_value == 'pending' ? 'fa-clock-o' : 'fa-check-circle'} me-1"/>
+                                    <t t-esc="record.state.value"/>
+                                </span>
+                            </div>
+
+                            <div class="d-flex align-items-center text-muted small mb-1">
+                                <i class="fa fa-calendar me-1"/>
+                                <span>
+                                    <field name="date_from"/>
+                                        &#160;–&#160;<field name="date_to"/>
+                                </span>
+                            </div>
+
+                            <div class="d-flex align-items-center text-muted small mb-1">
+                                <i class="fa fa-users me-1"/>
+                                <span>
+                                    <t t-esc="record.user_ids.raw_value.length"/>
+                                </span>
+                            </div>
+
+                            <div class="d-flex align-items-center text-muted small mb-2">
+                                <i class="fa fa-cubes me-1"/>
+                                <span>
+                                    <field name="total_pieces"/>
+                                </span>
+                            </div>
+
+                            <hr class="my-2"/>
+
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="small text-muted">
+                                    <i class="fa fa-money me-1"/>
+Total Bono</span>
+                                <strong style="">
+                                    <field name="total_bonus" widget="monetary" class="fw-bold text-muted"/>
+                                </strong>
+                            </div>
+
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
 
     <!-- ACTIONS -->
 
     <record id="action_incentive_warehouse_run" model="ir.actions.act_window">
-        <field name="name">Warehouse Incentive Run</field>
+        <field name="name">Incentivo de Almacén</field>
         <field name="res_model">incentive.warehouse.run</field>
-        <field name="view_mode">tree,form,kanban</field>
-        <field name="view_id" ref="view_incentive_warehouse_run_tree"/>
+        <field name="view_mode">kanban,tree,form</field>
+        <field name="view_id" ref="view_incentive_warehouse_run_kanban"/>
     </record>
 </odoo> 

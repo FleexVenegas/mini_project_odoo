@@ -19,12 +19,12 @@ class IncentiveSalesRulePricelistLine(models.Model):
 
     pricelist_id = fields.Many2one(
         'product.pricelist',
-        string='Pricelist',
+        string='Lista de Precios',
         required=True
     )
 
     commission = fields.Float(
-        string='Commission %',
+        string='Porcentaje de Comisión',
         digits=(16, 3),
         required=True
     )
@@ -33,7 +33,7 @@ class IncentiveSalesRulePricelistLine(models.Model):
     (
         'rule_pricelist_unique',
         'unique(rule_id, pricelist_id)',
-        'This pricelist is already configured in this rule.'
+        'Esta lista de precios ya está configurada en esta regla.'
     )
 ]
     

@@ -6,30 +6,30 @@ _logger = logging.getLogger(__name__)
 
 class IncentiveSalesRule(models.Model):
     _name = 'incentive.sales.rule'
-    _description = 'Incentive Sales Rule'
+    _description = 'Regla de Ventas Incentivadas'
 
-    name = fields.Char(string='Name', required=True)
-    team_id = fields.Many2one('crm.team', string='Sales Team', required=True)
+    name = fields.Char(string='Nombre', required=True)
+    team_id = fields.Many2one('crm.team', string='Equipo de Ventas', required=True)
     company_id = fields.Many2one(
         'res.company',
-        string='Company',
+        string='Compañía',
         related='team_id.company_id',
         store=True,
         readonly=True,
     )
     currency_id = fields.Many2one(
         'res.currency',
-        string='Currency',
+        string='Moneda',
         related='company_id.currency_id',
         readonly=True,
     )
-    active = fields.Boolean(string='Active', default=True)
+    active = fields.Boolean(string='Activo', default=True)
 
     commission_type = fields.Selection([
-        ('pricelist', 'Pricelist'),
-        ('collected', 'Collected'),
-        ('goal', 'Goal'),
-        ('points', 'Points'),
+        ('pricelist', 'Lista de Precios'),
+        ('collected', 'Recogido'),
+        ('goal', 'Meta'),
+        ('points', 'Puntos'),
     ])
 
     collected_line_ids = fields.One2many(
@@ -40,21 +40,21 @@ class IncentiveSalesRule(models.Model):
 
     pos_config_ids = fields.Many2many(
         'pos.config',
-        string='Sales Points',
+        string='Puntos de Venta',
     )
 
     sale_type = fields.Boolean(
-        string="That's what it was sold for", 
+        string="Eso es lo que se vendió", 
         default=True)
     
     pdv_type = fields.Boolean(
-        string="By point of sale", 
+        string="Por punto de venta", 
         default=False)
 
     pricelist_line_ids = fields.One2many(
         'incentive.sales.rule.pricelist.line',
         'rule_id',
-        string='Pricelist Commissions'
+        string='Comisiones por Lista de Precios'
     )
 
     # --- Campos para tipo 'goal' ---

@@ -5,13 +5,13 @@ _logger = logging.getLogger(__name__)
 
 class IncentiveRule(models.Model):
     _name = 'incentive.rule'
-    _description = 'Incentive Rule'
+    _description = 'Regla de Incentivo'
 
-    name = fields.Char(string='Name', required=True)
-    code = fields.Char(string='Code', required=True)
-    description = fields.Text(string='Description')
+    name = fields.Char(string='Nombre', required=True)
+    code = fields.Char(string='Código', required=True)
+    description = fields.Text(string='Descripción')
     incentive_type = fields.Selection([
-        ('sales', 'Sales'),
-        ('warehouse', 'Warehouse'),
-        ('other', 'Other'),
-    ], string='Incentive Type', required=True)
+        ('sales', 'Ventas'),
+        ('warehouse', 'Almacén'),
+        ('other', 'Otro'),
+    ], string='Tipo de Incentivo', required=True)

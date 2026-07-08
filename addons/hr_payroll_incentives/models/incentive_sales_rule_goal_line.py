@@ -6,30 +6,30 @@ _logger = logging.getLogger(__name__)
 
 class IncentiveSalesRuleGoalLine(models.Model):
     _name = 'incentive.sales.rule.goal.line'
-    _description = 'Fixed amount per salesperson upon reaching the target.'
+    _description = 'Monto fijo por vendedor al alcanzar la meta.'
 
 
     name = fields.Char(compute='_compute_name', store=True)
 
     rule_id = fields.Many2one(
         'incentive.sales.rule',
-        string='Rule',
+        string='Regla',
         required=True,
         ondelete='cascade',
     )
 
     user_id = fields.Many2one(
         'res.users',
-        string='Salesperson',
+        string='Vendedor',
         required=True,
     )
 
     fixed_amount = fields.Float(
-        string='Commission',  required=True)
+        string='Monto Fijo',  required=True)
 
 
     commission_wth_goal = fields.Float(
-        string='Commission without goal',
+        string='Comisión sin Meta',
         # currency_field='currency_id',
         digits=(16, 3),
     )
@@ -39,7 +39,7 @@ class IncentiveSalesRuleGoalLine(models.Model):
         (
             'rule_user_unique',
             'unique(rule_id, user_id)',
-            'This salesperson already has an amount assigned in this rule.'
+            'Este vendedor ya tiene un monto asignado en esta regla.'
         )
     ]
 

@@ -4,14 +4,14 @@
     <!-- Root -->
     <menuitem
         id="menu_hr_payroll_incentives_root"
-        name="Payroll Incentives"
+        name="Incentivos"
         sequence="10"
     />
 
     <!-- Main Menus -->
     <menuitem
         id="menu_incentive_sales_label"
-        name="Incentives"
+        name="Incentivos"
         parent="menu_hr_payroll_incentives_root"
         sequence="10"
     />
@@ -19,7 +19,7 @@
     <!-- Incentives -->
     <menuitem
         id="menu_incentive_sales_run"
-        name="Sales Incentives"
+        name="Incentivos de Ventas"
         parent="menu_incentive_sales_label"
         action="action_incentive_sales_run"
         sequence="10"
@@ -27,7 +27,7 @@
 
     <menuitem 
         id="menu_incentive_warehouse_run"
-        name="Warehouse Incentives"
+        name="Incentivos de Almacén"
         parent="menu_incentive_sales_label"
         action="action_incentive_warehouse_run"
         sequence="10"
@@ -37,14 +37,14 @@
 
      <menuitem
         id="menu_incentive_sales_config"
-        name="Configuration"
+        name="Configuración"
         parent="menu_hr_payroll_incentives_root"
         sequence="20"
     />
 
     <menuitem
         id="menu_incentive_sales_rules"
-        name="Sales Rules"
+        name="Reglas de Ventas"
         parent="menu_incentive_sales_config"
         action="action_incentive_sales_rules"
         sequence="10"
@@ -52,7 +52,7 @@
 
     <menuitem
         id="menu_incentive_sales_rule_goal_line"
-        name="Sales Goal"
+        name="Objetivo de Ventas"
         parent="menu_incentive_sales_config"
         action="action_incentive_sales_rule_goal_line"
         groups="base.group_no_one"
@@ -61,7 +61,7 @@
 
     <menuitem
         id="menu_incentive_sales_rule_pricelist_line"
-        name="Sales Pricelist"
+        name="Lista de Precios de Ventas"
         parent="menu_incentive_sales_config"
         action="action_incentive_sales_rule_pricelist_line"
         groups="base.group_no_one"
@@ -70,7 +70,7 @@
 
     <menuitem
         id="menu_incentive_warehouse_rules"
-        name="Warehouse Rules"
+        name="Reglas de Almacén"
         parent="menu_incentive_sales_config"
         action="action_incentive_warehouse_rule"
         sequence="40"
