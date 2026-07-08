@@ -22,7 +22,6 @@
         'views/incentive_sales_rules_pricelist_line_views.xml',
         'views/incentive_warehouse_run_views.xml',
         'views/incentive_warehouse_rule_views.xml',
-        'views/incentive_warehouse_run_line_views.xml',
         'views/menu.xml',
     ],
   
