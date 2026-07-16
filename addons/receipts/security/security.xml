@@ -8,21 +8,53 @@
             <field name="sequence">10</field>
         </record>
 
-        <!-- User: Can view receipts -->
-        <record id="group_receipts_user" model="res.groups">
-            <field name="name">User</field>
+        <!-- Nivel 1: Solo puede ver sus propios recibos -->
+        <record id="group_receipts_own" model="res.groups">
+            <field name="name">Propios recibos</field>
             <field name="category_id" ref="module_category_receipts"/>
             <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
-            <field name="comment">Users in this group can view payment receipts.</field>
+            <field name="comment">Los usuarios de este grupo solo pueden ver sus propios recibos de pago.</field>
         </record>
 
-        <!-- Manager: Can create, edit and delete receipts -->
-        <record id="group_receipts_manager" model="res.groups">
-            <field name="name">Manager</field>
+        <!-- Nivel 2: Puede ver todos los recibos -->
+        <record id="group_receipts_all" model="res.groups">
+            <field name="name">Ver todos los recibos</field>
             <field name="category_id" ref="module_category_receipts"/>
-            <field name="implied_ids" eval="[(4, ref('group_receipts_user'))]"/>
+            <field name="implied_ids" eval="[(4, ref('group_receipts_own'))]"/>
+            <field name="comment">Los usuarios de este grupo pueden ver todos los recibos de pago, no solo los propios.</field>
+        </record>
+
+        <!-- Nivel 3: Administrador, puede crear, editar y eliminar -->
+        <record id="group_receipts_manager" model="res.groups">
+            <field name="name">Administrador</field>
+            <field name="category_id" ref="module_category_receipts"/>
+            <field name="implied_ids" eval="[(4, ref('group_receipts_all'))]"/>
             <field name="users" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
-            <field name="comment">Users in this group can create, edit and delete payment receipts.</field>
+            <field name="comment">Los usuarios de este grupo pueden crear, editar y eliminar recibos de pago.</field>
+        </record>
+
+        <!-- Regla: usuarios de nivel 1 solo pueden leer sus propios recibos -->
+        <record id="rule_receipts_own_read" model="ir.rule">
+            <field name="name">Recibos: leer propios</field>
+            <field name="model_id" ref="model_receipts"/>
+            <field name="domain_force">[('user_id', '=', user.id)]</field>
+            <field name="groups" eval="[(4, ref('group_receipts_own'))]"/>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_write" eval="0"/>
+            <field name="perm_create" eval="0"/>
+            <field name="perm_unlink" eval="0"/>
+        </record>
+
+        <!-- Regla: usuarios de nivel 2 pueden leer todos los recibos -->
+        <record id="rule_receipts_all_read" model="ir.rule">
+            <field name="name">Recibos: leer todos</field>
+            <field name="model_id" ref="model_receipts"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="groups" eval="[(4, ref('group_receipts_all'))]"/>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_write" eval="0"/>
+            <field name="perm_create" eval="0"/>
+            <field name="perm_unlink" eval="0"/>
         </record>
     </data>
 </odoo>

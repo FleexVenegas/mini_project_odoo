@@ -1,18 +1,41 @@
 {
     'name': 'Human Resources Payroll Incentives',
-    'version': '1.0',
-    'author': 'Ing. Diego Venegas', 
-    'category': 'Custom',
-    "license": "LGPL-3",
-    'summary': 'Módulo generado automáticamente',
+    'version': '17.0.1.0.0',
+     'author': 'Venco Integrations',
+    'website': 'https://venco-integrations.vcxn.tech/', 
+    'category': 'Human Resources/Payroll',
+    'license': 'LGPL-3',
+
+    'summary': 'Employee incentive management based on Sales and Warehouse performance.',
+
+    'description': """
+Human Resources Payroll Incentives
+==================================
+
+This module provides a flexible incentive management system that allows
+companies to define, execute, and track employee incentive programs.
+
+Main Features
+-------------
+* Create incentive rules for Sales and Warehouse employees.
+* Configure incentive goals and performance targets.
+* Support incentive calculation based on sales price lists.
+* Generate incentive execution runs.
+* Track employee performance and awarded incentives.
+* Seamless integration with Sales, CRM, Point of Sale, and Human Resources.
+
+The module is designed to simplify the administration of payroll incentives
+while providing a configurable framework for different business rules.
+""",
+
     'depends': [
         'base',
         'crm',
         'hr',
         'sale_management',
         'point_of_sale',
-        'hr'
     ],
+
     'data': [
         'security/ir.model.access.csv',
         'views/incentive_sales_run_views.xml',
@@ -24,7 +47,7 @@
         'views/incentive_warehouse_rule_views.xml',
         'views/menu.xml',
     ],
-  
+
     'installable': True,
-    'application': False
+    'application': True,
 }
