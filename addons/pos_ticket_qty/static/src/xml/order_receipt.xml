@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+
+    <t t-name="pos_ticket_qty.OrderReceipt" t-inherit="point_of_sale.OrderReceipt" t-inherit-mode="extension">
+
+        <xpath expr="//div[hasclass('before-footer')]" position="after">
+
+            <div t-if="customerName" class="pos-receipt-client" style="font-size: 15px; margin-top:30px; text-align:left; font-weight:bold; display: flex; justify-content: space-between; align-items: center;">
+                <span style="color: #000; font-weight: normal; margin-right: 5px;">
+                    CLIENTE
+                </span>
+                <span>
+                    <t t-esc="customerName"/>
+                </span>
+            </div>
+
+            <t t-set="total_qty" t-value="totalQty"/>
+            <div class="pos-receipt-total-pieces" style="font-size: 15px; margin-top:10px; text-align:left; font-weight:bold; display: flex; justify-content: space-between; align-items: center;">
+                <span style="color: #000; font-weight: normal; margin-right: 5px;">
+                    TOTAL DE PIEZAS
+                </span>
+                <span>
+                    <t t-esc="Math.round(total_qty)"/>
+                </span>
+            </div>
+        </xpath>
+
+    </t>
+</templates>
