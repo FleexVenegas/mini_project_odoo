@@ -54,5 +54,6 @@ class StockPicking(models.Model):
 
         # Recalculate the supplier's fill rate
         if self.partner_id:
-            self.partner_id._compute_fill_rate()
-            self.partner_id._compute_supplier_class()
+            commercial_partner = self.partner_id.commercial_partner_id
+            commercial_partner._compute_fill_rate()
+            commercial_partner._compute_supplier_class()

@@ -14,13 +14,17 @@
 # Recalculate all received quantities from stock.move
 fill_rate_lines = env['fill.rate.line'].search([])
 for line in fill_rate_lines:
+    commercial_partner = line.partner_id.commercial_partner_id
+    if line.partner_id.id != commercial_partner.id:
+        line.write({'partner_id': commercial_partner.id})
     line.update_received_quantity()
 
 # Recalculate Fill Rate for all suppliers
-partners = env['res.partner'].search([('fill_rate_history_ids', '!=', False)])
+partners = env['res.partner'].search([('fill_rate_history_ids', '!=', False), ('is_company', '=', True)])
 for partner in partners:
     partner._compute_fill_rate()
     partner._compute_supplier_class()
+    partner._compute_fill_rate_stats()
 
 # Show success message
 action = {
@@ -48,11 +52,13 @@ action = {
 if records:
     for partner in records:
         # Update received quantities for all supplier lines
-        partner.fill_rate_history_ids.update_received_quantity()
+        partner._get_fill_rate_group_lines().update_received_quantity()
         
         # Recalculate fill rate and classification
-        partner._compute_fill_rate()
-        partner._compute_supplier_class()
+        commercial_partner = partner.commercial_partner_id
+        commercial_partner._compute_fill_rate()
+        commercial_partner._compute_supplier_class()
+        commercial_partner._compute_fill_rate_stats()
     
     action = {
         'type': 'ir.actions.client',
@@ -142,10 +148,11 @@ lines = records.mapped('fill_rate_line_ids')
 for line in lines:
     line.update_received_quantity()
 
-partners = records.mapped('partner_id')
+partners = records.mapped('partner_id').mapped('commercial_partner_id')
 for partner in partners:
     partner._compute_fill_rate()
     partner._compute_supplier_class()
+    partner._compute_fill_rate_stats()
 
 action = {
     'type': 'ir.actions.client',

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- VISTA TREE -->
+    <record id="view_transfer_time_tree" model="ir.ui.view">
+        <field name="name">transfer.time.tree</field>
+        <field name="model">stock.picking</field>
+        <field name="priority">21</field>
+        <field name="inherit_id" ref="stock.vpicktree"/>
+        <field name="arch" type="xml">
+            <tree position="attributes">
+                <attribute name="multi_edit">1</attribute>
+            </tree>
+            <xpath expr="//tree/header" position="inside">
+                <button name="action_show_transfer_time_report" type="object" string="Reporte de tiempos de transferencia" class="btn-secondary" icon="fa-hourglass-half" />
+            </xpath>
+        </field>
+    </record>
+
+    <!-- VISTA FORM - Añadir botón en formulario -->
+    <record id="view_transfer_time_form" model="ir.ui.view">
+        <field name="name">transfer.time.form</field>
+        <field name="model">stock.picking</field>
+        <field name="priority">21</field>
+        <field name="inherit_id" ref="stock.view_picking_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form/header" position="inside">
+                <button name="action_show_transfer_time_report" type="object" string="Reporte de tiempos de transferencia" class="btn-secondary" icon="fa-hourglass-half" />
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

@@ -42,6 +42,21 @@ class ResPartner(models.Model):
         "fill.rate.line", "partner_id", string="Fill Rate History"
     )
 
+    def _get_fill_rate_group_partners(self):
+        """Returns the commercial partner and all related contacts in the same group."""
+        self.ensure_one()
+        commercial_partner = self.commercial_partner_id
+        return self.env["res.partner"].search(
+            [("id", "child_of", commercial_partner.id)]
+        )
+
+    def _get_fill_rate_group_lines(self):
+        """Returns all Fill Rate history lines for the commercial partner group."""
+        self.ensure_one()
+        return self.env["fill.rate.line"].search(
+            [("partner_id", "child_of", self.commercial_partner_id.id)]
+        )
+
     # Statistics
     fill_rate_count = fields.Integer(
         string="Total Orders",
@@ -76,8 +91,16 @@ class ResPartner(models.Model):
         Computes the supplier's average Fill Rate based on their history.
         Only considers orders in 'purchase' or 'done' state.
         """
+        processed_commercial_ids = set()
+
         for partner in self:
-            valid_lines = partner.fill_rate_history_ids.filtered(
+            commercial_partner = partner.commercial_partner_id
+            if commercial_partner.id in processed_commercial_ids:
+                continue
+
+            processed_commercial_ids.add(commercial_partner.id)
+            group_partners = partner._get_fill_rate_group_partners()
+            valid_lines = partner._get_fill_rate_group_lines().filtered(
                 lambda l: l.state in ["purchase", "done"] and l.qty_ordered > 0
             )
 
@@ -85,13 +108,17 @@ class ResPartner(models.Model):
                 total_ordered = sum(valid_lines.mapped("qty_ordered"))
                 total_received = sum(valid_lines.mapped("qty_received"))
 
-                partner.fill_rate = (
+                fill_rate_value = (
                     total_received / total_ordered if total_ordered > 0 else 0.0
                 )
-                partner.fill_rate_last_update = fields.Datetime.now()
+                last_update = fields.Datetime.now()
             else:
-                partner.fill_rate = 0.0
-                partner.fill_rate_last_update = False
+                fill_rate_value = 0.0
+                last_update = False
+
+            for group_partner in group_partners:
+                group_partner.fill_rate = fill_rate_value
+                group_partner.fill_rate_last_update = last_update
 
     @api.depends("fill_rate", "fill_rate_history_ids")
     def _compute_supplier_class(self):
@@ -112,22 +139,34 @@ class ResPartner(models.Model):
             float(ICP.get_param("fill_rate.threshold_b", default=85.0)) / 100.0
         )
 
+        processed_commercial_ids = set()
+
         for partner in self:
+            commercial_partner = partner.commercial_partner_id
+            if commercial_partner.id in processed_commercial_ids:
+                continue
+
+            processed_commercial_ids.add(commercial_partner.id)
+            group_partners = partner._get_fill_rate_group_partners()
+
             # Check whether there is sufficient data (at least 1 confirmed order with receipt)
-            valid_orders = partner.fill_rate_history_ids.filtered(
+            valid_orders = partner._get_fill_rate_group_lines().filtered(
                 lambda l: l.state in ["purchase", "done"]
                 and l.qty_ordered > 0
                 and l.qty_received > 0
             )
 
             if not valid_orders:
-                partner.supplier_class = "new"
+                class_value = "new"
             elif partner.fill_rate >= threshold_a:
-                partner.supplier_class = "A"
+                class_value = "A"
             elif partner.fill_rate >= threshold_b:
-                partner.supplier_class = "B"
+                class_value = "B"
             else:
-                partner.supplier_class = "C"
+                class_value = "C"
+
+            for group_partner in group_partners:
+                group_partner.supplier_class = class_value
 
     @api.depends("supplier_class")
     def _compute_supplier_class_display(self):
@@ -156,29 +195,42 @@ class ResPartner(models.Model):
     )
     def _compute_fill_rate_stats(self):
         """Computes statistics from the supplier's history."""
+        processed_commercial_ids = set()
+
         for partner in self:
-            history = partner.fill_rate_history_ids.filtered(
+            commercial_partner = partner.commercial_partner_id
+            if commercial_partner.id in processed_commercial_ids:
+                continue
+
+            processed_commercial_ids.add(commercial_partner.id)
+            group_partners = partner._get_fill_rate_group_partners()
+            history = partner._get_fill_rate_group_lines().filtered(
                 lambda l: l.state in ["purchase", "done"]
             )
 
-            partner.fill_rate_count = len(history)
-            partner.fill_rate_complete_count = len(
+            fill_rate_count = len(history)
+            fill_rate_complete_count = len(
                 history.filtered(lambda l: l.fill_rate_status == "complete")
             )
-            partner.fill_rate_partial_count = len(
+            fill_rate_partial_count = len(
                 history.filtered(lambda l: l.fill_rate_status == "partial")
             )
+
+            for group_partner in group_partners:
+                group_partner.fill_rate_count = fill_rate_count
+                group_partner.fill_rate_complete_count = fill_rate_complete_count
+                group_partner.fill_rate_partial_count = fill_rate_partial_count
 
     def action_view_fill_rate_history(self):
         """Opens the Fill Rate history view for this supplier."""
         self.ensure_one()
         return {
-            "name": f"Fill Rate History - {self.name}",
+            "name": f"Fill Rate History - {self.commercial_partner_id.name}",
             "type": "ir.actions.act_window",
             "res_model": "fill.rate.line",
             "view_mode": "tree,form",
-            "domain": [("partner_id", "=", self.id)],
-            "context": {"default_partner_id": self.id},
+            "domain": [("partner_id", "child_of", self.commercial_partner_id.id)],
+            "context": {"default_partner_id": self.commercial_partner_id.id},
         }
 
     def recalculate_fill_rate(self):
@@ -187,7 +239,7 @@ class ResPartner(models.Model):
         Useful for corrections or bulk updates.
         """
         for partner in self:
-            partner.fill_rate_history_ids.update_received_quantity()
+            partner._get_fill_rate_group_lines().update_received_quantity()
 
         # Force recomputation of stored computed fields
         self._compute_fill_rate()

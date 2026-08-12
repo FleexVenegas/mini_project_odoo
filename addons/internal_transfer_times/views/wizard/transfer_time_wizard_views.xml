@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_transfer_time_wizard_form" model="ir.ui.view">
+        <field name="name">transfer.time.wizard.form</field>
+        <field name="model">transfer.time.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Reporte de Tiempos de Transferencia">
+                <group>
+                    <group>
+                        <field name="picking_ids" widget="many2many_tags" readonly="1" string="Transferencias Seleccionadas"/>
+                    </group>
+                </group>
+                <notebook>
+                    <page string="Reporte" invisible="not report_html">
+                        <field name="report_html" nolabel="1" widget="html"/>
+                    </page>
+                </notebook>
+                <footer>
+                    <button name="action_generate_report" string="Generar Reporte" type="object" class="btn-primary" icon="fa-hourglass-half"/>
+                    <button name="action_export_excel" string="Exportar a Excel" type="object" class="btn-success" icon="fa-download"/>
+                    <button string="Cerrar" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

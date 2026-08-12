@@ -35,6 +35,9 @@ print("\nActualizando cantidades recibidas...")
 fill_rate_lines = env["fill.rate.line"].search([])
 total = len(fill_rate_lines)
 for idx, line in enumerate(fill_rate_lines, 1):
+    commercial_partner = line.partner_id.commercial_partner_id
+    if line.partner_id.id != commercial_partner.id:
+        line.partner_id = commercial_partner.id
     line.update_received_quantity()
     if idx % 50 == 0:
         print(f"Procesadas {idx}/{total} líneas...")
@@ -43,7 +46,9 @@ print(f"✅ {total} líneas actualizadas correctamente")
 
 # 2. Recalcular Fill Rate de todos los proveedores
 print("\nRecalculando Fill Rate de proveedores...")
-partners = env["res.partner"].search([("fill_rate_history_ids", "!=", False)])
+partners = env["res.partner"].search(
+    [("fill_rate_history_ids", "!=", False), ("is_company", "=", True)]
+)
 total_partners = len(partners)
 for idx, partner in enumerate(partners, 1):
     partner._compute_fill_rate()

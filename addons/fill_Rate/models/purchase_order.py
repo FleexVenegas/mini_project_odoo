@@ -60,7 +60,7 @@ class PurchaseOrder(models.Model):
                 # Create history record
                 FillRateLine.create(
                     {
-                        "partner_id": self.partner_id.id,
+                        "partner_id": self.partner_id.commercial_partner_id.id,
                         "purchase_order_id": self.id,
                         "purchase_order_line_id": line.id,
                         "product_id": line.product_id.id,
