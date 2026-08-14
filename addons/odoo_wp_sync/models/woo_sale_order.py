@@ -41,21 +41,15 @@ class WooSaleOrderHelper(models.AbstractModel):
         SaleOrder = self.env["sale.order"]
         instance = woo_order_record.instance_id
 
-        # Check for duplicates by reference
-        existing = SaleOrder.search(
-            [("client_order_ref", "=", woo_order_record.order_number)], limit=1
-        )
-
-        if existing:
+        # The explicit WooCommerce link is the source of truth. A generic
+        # client_order_ref can be reused by another store or historical order.
+        if woo_order_record.sale_order_id:
             _logger.info(
                 "Existing order found: %s for WooCommerce Order #%s",
-                existing.name,
+                woo_order_record.sale_order_id.name,
                 woo_order_record.order_number,
             )
-            # Ensure the link is updated even though the order already existed
-            if not woo_order_record.sale_order_id:
-                woo_order_record.sale_order_id = existing.id
-            return {"order": existing, "created": False}
+            return {"order": woo_order_record.sale_order_id, "created": False}
 
         # Validate warehouse is configured on the instance
         if not instance.warehouse_id:

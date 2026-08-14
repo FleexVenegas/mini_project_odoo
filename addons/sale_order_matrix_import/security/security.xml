@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+    <record id="group_sale_order_matrix_import" model="res.groups">
+        <field name="name">Importación de Pedidos de Venta</field>
+    </record>
+
+</odoo>

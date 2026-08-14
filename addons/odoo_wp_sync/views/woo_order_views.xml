@@ -8,6 +8,7 @@
             <tree string="WooCommerce Orders" default_order="date_created desc" multi_edit="1">
                 <header>
                     <button name="action_open_create_sale_order_wizard" type="object" string="Create Orders" class="btn-secondary" icon="fa-plus"/>
+                    <button name="action_confirm_unlink_sale_order" type="object" string="Unlink Sale Order" />
                     <button name="action_wc_mark_processing" type="object" string="→ Processing"/>
                     <button name="action_wc_mark_completed" type="object" string="→ Completed"/>
                     <button name="action_wc_mark_on_hold" type="object" string="→ On Hold"/>
@@ -32,6 +33,7 @@
             <form string="WooCommerce Order">
                 <header>
                     <button name="action_open_create_sale_order_wizard" type="object" string="Create Odoo Order" class="btn-primary" invisible="sale_order_id or status in ('failed', 'refunded', 'cancelled')" />
+                    <button name="action_confirm_unlink_sale_order" type="object" string="Unlink Sale Order" class="btn-secondary" invisible="not sale_order_id"/>
 
                     <!-- Change status in WooCommerce -->
                     <button name="action_wc_mark_processing" type="object" string="Mark as Processing" class="btn-secondary" invisible="status == 'processing'"/>

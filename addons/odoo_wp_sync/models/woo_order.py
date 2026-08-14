@@ -726,6 +726,15 @@ class OdooWpSync(models.Model):
                 order = result["order"]
                 was_created = result["created"]
 
+                _logger.error(
+                    "Processed Woo Order (created=%s)",
+                    was_created,
+                )
+
+                _logger.info(
+                    f"Resultado {result}"
+                )
+
                 # Save the sale order link
                 woo_order.sale_order_id = order.id
 
@@ -861,3 +870,51 @@ class OdooWpSync(models.Model):
             "views": [[False, "form"]],
             "target": "current",
         }
+
+    def action_confirm_unlink_sale_order(self):
+        """Opens a confirmation dialog before unlinking the associated sale order"""
+        self.ensure_one()
+
+        if not self.sale_order_id:
+            return UserError(_("This WooCommerce order does not have an associated sale order to unlink."))
+
+        confirmation_wizard = self.env["confirmation.wizard"]
+        description = _(
+            "Are you sure you want to unlink the associated sale order '%s' from this WooCommerce order? "
+            "This action will not delete the sale order, but it will remove the association."
+        ) % self.sale_order_id.name
+
+        return confirmation_wizard.create_confirmation(
+            model_name="odoo.wp.sync",
+            method_name="action_unlink_sale_order",
+            record_ids=self.ids,
+            title=_("Confirm Unlink Sale Order"),
+            description=description,
+            dialog_size="small",
+        )
+
+    def action_unlink_sale_order(self):
+        """Desvincula el pedido de venta asociado, sin eliminarlo."""
+        for record in self:
+            if not record.sale_order_id:
+                continue
+            unlinked_order_name = record.sale_order_id.name
+            record.sale_order_id = False
+            _logger.info(
+                "Sale order %s unlinked from WooCommerce Order #%s",
+                unlinked_order_name,
+                record.order_number,
+            )
+
+        return {
+            "type": "ir.actions.client",
+            "tag": "delayed_view_reload",
+            "params": {
+                "title": _("Unlink Successful"),
+                "message": _("The sales order was unlinked. This WooCommerce order is no longer associated with any order."),
+                "type": "success",
+                "sticky": False,
+                "delay": 1500
+            }, 
+        }
+

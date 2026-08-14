@@ -16,8 +16,12 @@ fi
 MODULE=$1
 CONTAINER_NAME="odoo"  
 DB_NAME="odoo_development"
+ODOO_IMAGE="odoo-custom:17.0"
 
 echo "🔄 Actualizando módulo: $MODULE ..."
+
+echo "🔨 Verificando imagen Odoo con dependencias..."
+docker compose build web
 
 # Detener el contenedor principal
 echo "⏸️  Deteniendo contenedor Odoo..."
@@ -34,7 +38,7 @@ docker run --rm \
     -e DB_PORT=5432 \
     -e DB_USER=admin \
     -e DB_PASSWORD=adminpass \
-    odoo:17.0 \
+    $ODOO_IMAGE \
     odoo -c /etc/odoo/odoo.conf \
     -d $DB_NAME \
     -u $MODULE \

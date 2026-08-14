@@ -3450,6 +3450,43 @@ msgid "Sync Settings"
 msgstr "Configuración de sincronización"
 
 #. module: odoo_wp_sync
+#. odoo-python
+#: code:addons/odoo_wp_sync/models/woo_order.py:0
+#, python-format
+msgid "Are you sure you want to unlink the associated sale order '%s' from this WooCommerce order? This action will not delete the sale order, but it will remove the association."
+msgstr "¿Está seguro de que desea desvincular el pedido de venta asociado '%s' de esta orden de WooCommerce? Esta acción no eliminará el pedido de venta, pero quitará la asociación."
+
+#. module: odoo_wp_sync
+#. odoo-python
+#: code:addons/odoo_wp_sync/models/woo_order.py:0
+msgid "Confirm Unlink Sale Order"
+msgstr "Confirmar desvinculación del pedido de venta"
+
+#. module: odoo_wp_sync
+#. odoo-python
+#: code:addons/odoo_wp_sync/models/woo_order.py:0
+msgid "This WooCommerce order does not have an associated sale order to unlink."
+msgstr "Esta orden de WooCommerce no tiene un pedido de venta asociado para desvincular."
+
+#. module: odoo_wp_sync
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_odoo_wp_sync_form
+#: model_terms:ir.ui.view,arch_db:odoo_wp_sync.view_odoo_wp_sync_tree
+msgid "Unlink Sale Order"
+msgstr "Desvincular pedido de venta"
+
+#. module: odoo_wp_sync
+#. odoo-python
+#: code:addons/odoo_wp_sync/models/woo_order.py:0
+msgid "Unlink Successful"
+msgstr "Desvinculación exitosa"
+
+#. module: odoo_wp_sync
+#. odoo-python
+#: code:addons/odoo_wp_sync/models/woo_order.py:0
+msgid "The sales order was unlinked. This WooCommerce order is no longer associated with any order."
+msgstr "El pedido de venta fue desvinculado. Esta orden de WooCommerce ya no está asociada a ningún pedido."
+
+#. module: odoo_wp_sync
 #: model:ir.actions.server,name:odoo_wp_sync.action_server_woo_sync_wizard
 msgid "Sync WooCommerce"
 msgstr "Sincronizar WooCommerce"

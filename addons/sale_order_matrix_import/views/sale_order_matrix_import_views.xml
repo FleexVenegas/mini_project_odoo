@@ -1,0 +1,32 @@
+<odoo>
+
+    <!-- Acción primero (evita ParseError) -->
+    <record id="action_sale_order_matrix_import" model="ir.actions.act_window">
+        <field name="name">SaleOrderMatrixImport</field>
+        <field name="res_model">sale.order.matrix.import</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- Vista Tree -->
+    <record id="view_sale_order_matrix_import_tree" model="ir.ui.view">
+        <field name="name">sale_order_matrix_import.tree</field>
+        <field name="model">sale.order.matrix.import</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Menú raíz -->
+    <menuitem id="sale_order_matrix_import_menu_root" name="SaleOrderMatrixImport"/>
+
+    <!-- Submenú -->
+    <menuitem 
+        id="sale_order_matrix_import_menu_modelo" 
+        name="Registros"
+        parent="sale_order_matrix_import_menu_root"
+        action="action_sale_order_matrix_import"
+    />
+
+</odoo>
