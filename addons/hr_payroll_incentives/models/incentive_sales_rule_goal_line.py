@@ -25,7 +25,7 @@ class IncentiveSalesRuleGoalLine(models.Model):
     )
 
     fixed_amount = fields.Float(
-        string='Monto Fijo',  required=True)
+        string='Comisión fija',  required=True)
 
 
     commission_wth_goal = fields.Float(
@@ -54,3 +54,13 @@ class IncentiveSalesRuleGoalLine(models.Model):
         for record in self:
             if record.fixed_amount < 0 or record.fixed_amount > 100:
                 raise ValidationError('El porcentaje de comisión debe estar entre 0 y 100.')
+
+
+
+
+class IncentivePlataform(models.Model):
+    _name = 'incentive.sales.plataform'
+    _description = 'Plataforma de Incentivos por Ventas'
+
+    name = fields.Char(string='Plataforma', required=True)
+    commission_percentage = fields.Float(string='Porcentaje de Comisión', required=True)

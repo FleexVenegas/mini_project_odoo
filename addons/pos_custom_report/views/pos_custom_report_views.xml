@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_pos_details_wizard_form" model="ir.ui.view">
+        <field name="name">pos.details.wizard.form.inherit.custom.report</field>
+        <field name="model">pos.details.wizard</field>
+        <field name="inherit_id" ref="point_of_sale.view_pos_details_wizard"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='end_date']" position="after">
+                <field name="option_custom_report"/>
+                <field name="show_results" invisible="1"/>
+            </xpath>
+
+            <xpath expr="//footer/button[@name='generate_report']" position="replace">
+                <button name="generate_report"
+                        string="Generar"
+                        type="object"
+                        class="btn-primary"
+                        data-hotkey="q"/>
+            </xpath>
+
+            <xpath expr="//footer" position="before">
+                <separator string="Resultados generales" invisible="not show_results"/>
+
+                <group invisible="not show_results" col="4">
+                    <field name="orders_count"/>
+                    <field name="sales_total"/>
+                    <field name="refunds_total"/>
+                    <field name="opening_total"/>
+                </group>
+
+                <separator string="Detalle por caja" invisible="not show_results"/>
+                <div class="text-muted" invisible="not show_results">
+                    Abre cada caja para ver sus órdenes, pagos y apertura.
+                </div>
+
+                <field name="caja_line_ids"
+                        nolabel="1"
+                        readonly="1"
+                        invisible="not show_results"
+                        context="{'form_view_ref': False}">
+                    <tree create="0" delete="0" edit="0">
+                        <field name="config_name"/>
+                        <field name="orders_count"/>
+                        <field name="sales_total" sum="Ventas"/>
+                        <field name="refunds_total" sum="Devoluciones"/>
+                        <field name="opening_total" sum="Apertura"/>
+                        <field name="net_total" sum="Neto"/>
+                    </tree>
+                    <form string="Caja">
+                        <group>
+                            <group>
+                                <field name="config_name"/>
+                                <field name="orders_count"/>
+                            </group>
+                            <group>
+                                <field name="sales_total"/>
+                                <field name="refunds_total"/>
+                                <field name="net_total"/>
+                                <field name="opening_total"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Órdenes" name="orders">
+                                <field name="order_line_ids" nolabel="1" readonly="1">
+                                    <tree create="0" delete="0" edit="0">
+                                        <field name="date_order"/>
+                                        <field name="order_name"/>
+                                        <field name="pos_reference"/>
+                                        <field name="session_name"/>
+                                        <field name="total" sum="Total"/>
+                                        <field name="refund_total" sum="Devoluciones"/>
+                                        <field name="net_total" sum="Neto"/>
+                                        <field name="refunded_orders"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Métodos de pago" name="payments">
+                                <field name="payment_line_ids" nolabel="1" readonly="1">
+                                    <tree create="0" delete="0" edit="0">
+                                        <field name="method_name"/>
+                                        <field name="amount" sum="Total"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Apertura" name="opening">
+                                <field name="opening_line_ids" nolabel="1" readonly="1">
+                                    <tree create="0" delete="0" edit="0">
+                                        <field name="session_name"/>
+                                        <field name="opening" sum="Total"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </form>
+                </field>
+            </xpath>
+        </field>
+    </record>
+</odoo>

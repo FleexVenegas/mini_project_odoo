@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<odoo>
+
+    <record id="view_export_quote_pdf_wizard_form" model="ir.ui.view">
+        <field name="name">export.quote.pdf.wizard.form</field>
+
+        <field name="model">export.quote.pdf.wizard</field>
+
+        <field name="arch" type="xml">
+
+            <form string="Importar cotización desde PDF">
+
+                <sheet>
+
+                    <field name="state" invisible="1" />
+
+                    <!-- ================================================= -->
+                    <!-- ETAPA 1: SUBIR PDF -->
+                    <!-- ================================================= -->
+
+                    <div invisible="state != 'upload'">
+
+                        <group>
+
+                            <group>
+
+                                <field name="source_format" required="1" />
+
+                                <field name="pdf_file" filename="pdf_filename" required="1" />
+
+                                <field name="pdf_filename" invisible="1" />
+
+                            </group>
+
+                        </group>
+
+                    </div>
+
+
+                    <!-- ================================================= -->
+                    <!-- ETAPA 2: PREVIEW -->
+                    <!-- ================================================= -->
+
+                    <div invisible="state != 'preview'">
+
+                        <group>
+
+                            <group>
+                                <field name="source_format" readonly="1" />
+                            </group>
+
+                        </group>
+
+
+                        <separator string="Productos detectados" />
+
+                        <field name="line_ids" nolabel="1" readonly="1">
+
+                            <tree create="0" delete="0" edit="0">
+
+                                <field name="quantity" />
+
+                                <field name="uom" />
+
+                                <field name="supplier_sku" />
+
+                                <field name="adventa_sku" />
+
+                                <field name="description" />
+
+                                <field name="unit_price" />
+
+                                <field name="amount" />
+
+                            </tree>
+
+                        </field>
+
+
+                        <separator string="Totales" />
+
+                        <group>
+
+                            <group>
+                                <field name="subtotal" readonly="1" />
+
+                                <field name="discount" readonly="1" />
+
+                                <field name="other" readonly="1" />
+                            </group>
+
+                            <group>
+                                <field name="tax" readonly="1" />
+
+                                <field name="total" readonly="1" />
+                            </group>
+
+                        </group>
+
+                    </div>
+
+                </sheet>
+
+
+                <!-- ===================================================== -->
+                <!-- FOOTER -->
+                <!-- ===================================================== -->
+
+                <footer>
+
+                    <button name="action_process_pdf" string="Procesar PDF" type="object" class="btn-primary" invisible="state != 'upload'" />
+
+                    <button name="action_back" string="Regresar" type="object" invisible="state != 'preview'" />
+
+                    <button string="Cerrar" class="btn-secondary" special="cancel" />
+
+                </footer>
+
+            </form>
+
+        </field>
+    </record>
+
+
+    <record id="action_export_quote_pdf_wizard" model="ir.actions.act_window">
+
+        <field name="name">Importar cotización PDF</field>
+
+        <field name="res_model">export.quote.pdf.wizard</field>
+
+        <field name="view_mode">form</field>
+
+        <field name="target">new</field>
+
+    </record>
+</odoo>

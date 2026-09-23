@@ -11,6 +11,7 @@ import base64
 import logging
 
 import requests
+import time
 
 from odoo import models, _
 from odoo.exceptions import UserError
@@ -64,7 +65,15 @@ class WooService(models.AbstractModel):
 
     # ── Generic HTTP (WooCommerce REST v3) ────────────────────────────────────────
 
-    def _request(self, endpoint, method="GET", data=None, instance=None, timeout=15):
+    def _request(
+        self,
+        endpoint,
+        method="GET",
+        data=None,
+        instance=None,
+        timeout=15,
+        max_retries=5,
+    ):
         """
         Executes an HTTP request against the WC REST API v3.
 
@@ -74,6 +83,7 @@ class WooService(models.AbstractModel):
             data: payload dict (for POST/PUT)
             instance: ``woo.instance`` record (uses default if not provided)
             timeout: timeout in seconds (default 15)
+            max_retries: máximo de reintentos ante 429 (default 5)
 
         Returns:
             dict | list: response JSON
@@ -84,29 +94,54 @@ class WooService(models.AbstractModel):
         config = self._get_config(instance)
         url = f"{config['url']}/wp-json/wc/v3/{endpoint}"
 
-        try:
-            response = requests.request(
-                method,
-                url,
-                auth=(config["consumer_key"], config["consumer_secret"]),
-                json=data,
-                timeout=timeout,
-            )
-
-            if response.status_code in (200, 201):
-                return response.json()
-
-            # Parsear error
+        retries = 0
+        while True:
             try:
-                error = response.json()
-                message = error.get("message", "Unknown error")
-            except Exception:
-                message = response.text
+                response = requests.request(
+                    method,
+                    url,
+                    auth=(config["consumer_key"], config["consumer_secret"]),
+                    json=data,
+                    timeout=timeout,
+                )
 
-            raise Exception(f"[{response.status_code}] {message}")
+                if response.status_code in (200, 201):
+                    return response.json()
 
-        except requests.exceptions.RequestException as e:
-            raise Exception(f"Connection error: {str(e)}")
+                # Rate limit — retry con backoff
+                if response.status_code == 429:
+                    if retries >= max_retries:
+                        raise Exception(
+                            f"[429] Rate limit persistente tras {max_retries} reintentos en {endpoint}"
+                        )
+                    retry_after = response.headers.get("Retry-After")
+                    if retry_after and retry_after.isdigit():
+                        wait_time = int(retry_after)
+                    else:
+                        wait_time = (2**retries) * 5  # 5, 10, 20, 40, 80s
+
+                    _logger.warning(
+                        "WooCommerce 429 en %s — reintento %d/%d, esperando %ds",
+                        endpoint,
+                        retries + 1,
+                        max_retries,
+                        wait_time,
+                    )
+                    time.sleep(wait_time)
+                    retries += 1
+                    continue
+
+                # Parsear error (no-429)
+                try:
+                    error = response.json()
+                    message = error.get("message", "Unknown error")
+                except Exception:
+                    message = response.text
+
+                raise Exception(f"[{response.status_code}] {message}")
+
+            except requests.exceptions.RequestException as e:
+                raise Exception(f"Connection error: {str(e)}")
 
     # ── Connection ───────────────────────────────────────────────────────────────
 

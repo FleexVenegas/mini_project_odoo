@@ -18,3 +18,4 @@ __pycache__/
 addons/pos_bixolon_proxy/proxy.py
 
 addons/product_rotation_sellthrough/readme.md
+.odoo_image_build.hash

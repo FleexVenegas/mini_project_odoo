@@ -90,6 +90,18 @@
                             </field>
                         </page>
 
+                        <page string="Mas ajustes">
+                            <field name="plataform_ids" nolabel="1">
+                                <tree editable="bottom">
+                                    <field name="name"/>
+                                    <field name="commission_percentage"/>
+                                </tree>
+                            </field>
+
+
+                        
+                        </page>
+
                     </notebook>
 
                 </sheet>
