@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_birthday_reminder_config_tree" model="ir.ui.view">
+        <field name="name">birthday.reminder.config.tree</field>
+        <field name="model">birthday.reminder.config</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="user_id" />
+                <field name="days_before" />
+                <field name="category_ids" widget="many2many_tags" />
+                <field name="active" />
+                <field name="company_id" groups="base.group_multi_company" />
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_birthday_reminder_config_form" model="ir.ui.view">
+        <field name="name">birthday.reminder.config.form</field>
+        <field name="model">birthday.reminder.config</field>
+        <field name="arch" type="xml">
+            <form string="Configuración de recordatorio">
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="user_id" placeholder="Usuario"
+                                options="{'no_create': True}" />
+                        </h1>
+                    </div>
+                    <group>
+                        <group string="Notificación a usuario Odoo">
+                            <field name="active" />
+                            <field name="days_before" />
+                            <field name="category_ids" widget="many2many_tags"
+                                options="{'color_field': 'color'}" />
+                        </group>
+                        <group string="Compañía" groups="base.group_multi_company">
+                            <field name="company_id" />
+                        </group>
+                    </group>
+                    <div class="alert alert-info" role="alert"> Este menú configura solo las <b>notificaciones
+                        internas</b> a usuarios de Odoo. El correo al cliente se controla en cada
+                        contacto con "Enviar correo de felicitaciones" (cron diario a las 9:00,
+                        Ciudad de México). </div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_birthday_reminder_config" model="ir.actions.act_window">
+        <field name="name">Recordatorio de cumpleaños</field>
+        <field name="res_model">birthday.reminder.config</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Configura qué usuarios de Odoo reciben aviso cuando un cliente cumple años.
+            </p>
+        </field>
+    </record>
+
+    <menuitem
+        id="birthday_configuration_menu"
+        name="Recordatorio de cumpleaños"
+        parent="contacts.res_partner_menu_config"
+        action="action_birthday_reminder_config"
+        sequence="20"
+        groups="base.group_system" />
+</odoo>

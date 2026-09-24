@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_partner_form_inherit_page" model="ir.ui.view">
+        <field name="name">res.partner.page.configuration</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='internal_notes']" position="after">
+                <page name="birthday_reminder_config" string="Recordatorio de cumpleaños">
+                    <group>
+                        <group string="Correo al contacto">
+                            <field name="send_congrats_email" widget="boolean_toggle"/>
+                            <field name="birthday_congrats_last_date"/>
+                        </group>
+                        <group string="Notificación interna">
+                            <field name="take_contact_into_account" widget="boolean_toggle"/>
+                        </group>
+                    </group>
+                    <div class="text-muted">
+                        El correo se envía el día del cumpleaños a las 9:00
+                        (hora Ciudad de México), si el contacto tiene email y
+                        "Enviar correo de felicitaciones" está activo.
+                    </div>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_partner_form_inherit" model="ir.ui.view">
+        <field name="name">res.partner.form.birthday.reminder</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='website'][@widget='url']" position="before">
+                <field name="birthday"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

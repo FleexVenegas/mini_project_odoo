@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="mail_template_birthday_congrats" model="mail.template">
+        <field name="name">Felicitación de cumpleaños</field>
+        <field name="model_id" ref="base.model_res_partner" />
+        <field name="subject">¡Feliz cumpleaños, {{ object.name }}!</field>
+        <field name="email_from">{{ (object.company_id or user.company_id).email_formatted or
+            user.email_formatted }}</field>
+        <field name="email_to">{{ object.email or '' }}</field>
+        <field name="use_default_to" eval="False" />
+        <field name="lang">{{ object.lang }}</field>
+        <field name="description">Correo automático de felicitación en el día del cumpleaños</field>
+        <field name="body_html" type="html">
+            <div style="margin:0; padding:0; background-color:#E8E4DC;">
+                <t t-set="company" t-value="object.company_id or user.company_id" />
+                <div
+                    style="display:none; font-size:1px; line-height:1px; max-height:0; max-width:0; opacity:0; overflow:hidden; color:#E8E4DC;">
+                    <t t-out="company.name or ''">Tu compañía</t> te desea un feliz cumpleaños. </div>
+                <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"
+                    style="border-collapse:collapse; background-color:#E8E4DC;">
+                    <tr>
+                        <td align="center" style="padding:32px 12px;">
+                            <table role="presentation" width="600" cellpadding="0" cellspacing="0"
+                                border="0"
+                                style="border-collapse:collapse; width:100%; max-width:600px; background-color:#FFFFFF;">
+                                <tr>
+                                    <td
+                                        style="height:4px; background-color:#A6843D; font-size:0; line-height:0;">
+                                        &#160;</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding:20px 40px 0 40px;">
+                                        <table role="presentation" width="100%" cellpadding="0"
+                                            cellspacing="0" border="0">
+                                            <tr>
+                                                <td
+                                                    style="font-size:0; line-height:0;">
+                                                    &#160;</td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="center"
+                                        style="padding:28px 40px 0 40px; font-family:Georgia, 'Times New Roman', serif;">
+                                        <h1
+                                            style="margin:0; font-size:32px; line-height:1.25; font-weight:normal; color:#1A2332;">¡Feliz
+                                            cumpleaños!</h1>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td
+                                        style="padding:28px 40px 8px 40px; font-family:Arial, Helvetica, sans-serif; font-size:16px; line-height:1.7; color:#2A3140;">
+                                        <p style="margin:0 0 16px 0;">Hola <strong
+                                                style="color:#1A2332;">
+                                                <t t-out="object.name or ''">María López</t>
+                                            </strong>
+                                            ,</p>
+                                        <p style="margin:0 0 16px 0;">Hoy queremos acompañarte en un
+                                            día que merece celebrarse.</p>
+                                        <p style="margin:0;"> En nombre de todo el equipo <t
+                                                t-if="company">de <strong style="color:#1A2332;">
+                                            Solofragancias</strong>
+                                            </t>
+                                            te deseamos un muy feliz cumpleaños. Gracias por la
+                                            confianza que depositas en nosotros. </p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding:8px 40px 8px 40px;">
+                                        <table role="presentation" width="100%" cellpadding="0"
+                                            cellspacing="0" border="0"
+                                            style="background-color:#F7F4EC;">
+                                            <tr>
+                                                <td
+                                                    style="padding:18px 22px; font-family:Georgia, 'Times New Roman', serif; font-size:16px; line-height:1.6; color:#1A2332;">
+                                                    Que este nuevo año te traiga salud, proyectos
+                                                    que te entusiasmen y tiempo para disfrutarlos.
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td
+                                        style="padding:24px 40px 36px 40px; font-family:Arial, Helvetica, sans-serif; font-size:16px; line-height:1.7; color:#2A3140;">
+                                        <p style="margin:0;">Con aprecio,</p>
+                                        <p
+                                            style="margin:4px 0 0 0; color:#1A2332; font-weight:bold;">
+                                            <t t-if="company">El equipo de Solofragancias</t>
+                                            <t t-else="">El equipo</t>
+                                        </p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </field>
+    </record>
+</odoo>
