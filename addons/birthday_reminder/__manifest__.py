@@ -1,10 +1,11 @@
 {
     "name": "Recordatorio de cumpleaños",
-    "version": "17.0.1.11.0",
+    "version": "17.0.1.13.0",
     "category": "Productivity",
     "summary": "Notifica cumpleaños a usuarios Odoo y envía felicitaciones por correo a contactos",
     "description": """
 Recordatorio de cumpleaños
+
 ==========================
 
 * Configuración por usuario (etiquetas y días de anticipación).

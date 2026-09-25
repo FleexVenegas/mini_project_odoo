@@ -32,17 +32,15 @@ class BirthdayReminderPartner(models.Model):
     @api.model
     def fields_get(self, allfields=None, attributes=None):
         res = super().fields_get(allfields, attributes)
-        if (
-            "birthday_congrats_last_date" in res
-            and not self.env.user.has_group("base.group_system")
+        if "birthday_congrats_last_date" in res and not self.env.user.has_group(
+            "base.group_system"
         ):
             res["birthday_congrats_last_date"]["readonly"] = True
         return res
 
     def write(self, vals):
-        if (
-            "birthday_congrats_last_date" in vals
-            and not self.env.user.has_group("base.group_system")
+        if "birthday_congrats_last_date" in vals and not self.env.user.has_group(
+            "base.group_system"
         ):
             vals = dict(vals)
             vals.pop("birthday_congrats_last_date")

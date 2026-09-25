@@ -36,4 +36,36 @@
             </xpath>
         </field>
     </record>
+
+    <record id="view_partner_search_birthday_reminder" model="ir.ui.view">
+        <field name="name">res.partner.search.birthday.reminder</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_res_partner_filter"/>
+        <field name="arch" type="xml">
+            <field name="email" position="after">
+                <field name="birthday"/>
+            </field>
+            <filter name="inactive" position="after">
+                <separator/>
+                <filter
+                    string="Fecha de cumpleaños"
+                    name="birthday"
+                    date="birthday"/>
+                <filter
+                    string="Recordatorio de notificaciones activo"
+                    name="take_contact_into_account"
+                    domain="[('take_contact_into_account', '=', True)]"/>
+                <filter
+                    string="Envío de correos activo"
+                    name="send_congrats_email"
+                    domain="[('send_congrats_email', '=', True)]"/>
+            </filter>
+            <filter name="salesperson" position="after">
+                <filter
+                    string="Fecha de cumpleaños"
+                    name="group_birthday"
+                    context="{'group_by': 'birthday'}"/>
+            </filter>
+        </field>
+    </record>
 </odoo>

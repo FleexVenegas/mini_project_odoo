@@ -68,7 +68,9 @@ class PosDetailsWizard(models.TransientModel):
             order_vals = []
             for order in caja["orders"]:
                 refunded_text = (
-                    ", ".join(order["refunded_orders"]) if order["refunded_orders"] else ""
+                    ", ".join(order["refunded_orders"])
+                    if order["refunded_orders"]
+                    else ""
                 )
                 order_vals.append(
                     (
@@ -126,11 +128,34 @@ class PosDetailsWizard(models.TransientModel):
             }
         )
 
+    def _is_refund_order(self, order):
+        return order.amount_total < 0 or bool(order.refunded_order_ids)
+
+    def _allocate_refund_to_originals(self, order):
+        """Reparte el monto de un reembolso entre las órdenes que devuelve."""
+        shares = defaultdict(float)
+        for line in order.lines:
+            original_line = line.refunded_orderline_id
+            if not original_line:
+                continue
+            shares[original_line.order_id.id] += abs(line.price_subtotal_incl)
+
+        if sum(shares.values()) > 0.0001:
+            return shares
+
+        originals = order.refunded_order_ids
+        shares = defaultdict(float)
+        if len(originals) == 1:
+            shares[originals.id] = abs(order.amount_total)
+        return shares
+
     def _payment_method_label(self, payment_method):
         name = payment_method.name
         if isinstance(name, dict):
             lang = self.env.lang or "en_US"
-            return name.get(lang) or name.get("en_US") or next(iter(name.values()), "N/D")
+            return (
+                name.get(lang) or name.get("en_US") or next(iter(name.values()), "N/D")
+            )
         return name or "N/D"
 
     def _prepare_custom_report_data(self):
@@ -148,6 +173,18 @@ class PosDetailsWizard(models.TransientModel):
         sales_total = 0.0
         refunds_total = 0.0
         opening_total = 0.0
+        report_order_ids = set(orders.ids)
+        # Monto y documentos de reembolso que corresponden a cada orden de origen
+        refunds_on_order = defaultdict(lambda: {"amount": 0.0, "names": []})
+
+        for order in orders:
+            if not self._is_refund_order(order):
+                continue
+            for original_id, amount in self._allocate_refund_to_originals(order).items():
+                if original_id not in report_order_ids or original_id == order.id:
+                    continue
+                refunds_on_order[original_id]["amount"] += amount
+                refunds_on_order[original_id]["names"].append(order.name)
 
         for config in self.pos_config_ids:
             config_orders = orders.filtered(lambda o: o.config_id == config)
@@ -157,7 +194,7 @@ class PosDetailsWizard(models.TransientModel):
             order_lines = []
 
             for order in config_orders:
-                is_refund = order.amount_total < 0 or bool(order.refunded_order_ids)
+                is_refund = self._is_refund_order(order)
                 payments = []
                 for payment in order.payment_ids.filtered(lambda p: not p.is_change):
                     method_name = self._payment_method_label(payment.payment_method_id)
@@ -167,8 +204,20 @@ class PosDetailsWizard(models.TransientModel):
 
                 if is_refund:
                     caja_refunds += abs(order.amount_total)
+                    # El movimiento de reembolso se conserva como fila propia.
+                    # El monto queda aplicado en la orden de origen; aquí el neto es 0
+                    # para no restarlo otra vez.
+                    line_total = 0.0
+                    line_refund = abs(order.amount_total)
+                    line_net = 0.0
+                    related_orders = order.refunded_order_ids.mapped("name")
                 else:
                     caja_sales += order.amount_total
+                    applied = refunds_on_order.get(order.id)
+                    line_total = order.amount_total
+                    line_refund = applied["amount"] if applied else 0.0
+                    line_net = line_total - line_refund
+                    related_orders = applied["names"] if applied else []
 
                 order_lines.append(
                     {
@@ -176,11 +225,10 @@ class PosDetailsWizard(models.TransientModel):
                         "pos_reference": order.pos_reference,
                         "date_order": order.date_order,
                         "session": order.session_id.name,
-                        "total": 0.0 if is_refund else order.amount_total,
-                        "refund_total": abs(order.amount_total) if is_refund else 0.0,
-                        # En devoluciones el impacto va en refund_total; el neto de la línea es 0
-                        "net_total": 0.0 if is_refund else order.amount_total,
-                        "refunded_orders": order.refunded_order_ids.mapped("name"),
+                        "total": line_total,
+                        "refund_total": line_refund,
+                        "net_total": line_net,
+                        "refunded_orders": related_orders,
                         "payments": payments,
                     }
                 )
@@ -268,7 +316,7 @@ class PosCustomReportOrderLine(models.TransientModel):
     total = fields.Float(string="Total orden", readonly=True)
     refund_total = fields.Float(string="Devolución", readonly=True)
     net_total = fields.Float(string="Total neto", readonly=True)
-    refunded_orders = fields.Char(string="Órdenes devueltas", readonly=True)
+    refunded_orders = fields.Char(string="Relación de devolución", readonly=True)
 
 
 class PosCustomReportPaymentLine(models.TransientModel):

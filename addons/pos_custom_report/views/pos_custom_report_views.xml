@@ -68,7 +68,7 @@
                                         <field name="pos_reference"/>
                                         <field name="session_name"/>
                                         <field name="total" sum="Total"/>
-                                        <field name="refund_total" sum="Devoluciones"/>
+                                        <field name="refund_total"/>
                                         <field name="net_total" sum="Neto"/>
                                         <field name="refunded_orders"/>
                                     </tree>
