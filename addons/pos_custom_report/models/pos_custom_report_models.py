@@ -1,6 +1,6 @@
 from collections import defaultdict
 
-from odoo import models, fields
+from odoo import api, models, fields
 
 import logging
 
@@ -23,6 +23,19 @@ class PosDetailsWizard(models.TransientModel):
         required=True,
     )
     show_results = fields.Boolean(default=False)
+    warehouse_ids = fields.Many2many(
+        "stock.warehouse",
+        "pos_custom_report_wizard_warehouse_rel",
+        "wizard_id",
+        "warehouse_id",
+        string="Tiendas",
+        default=lambda self: self._warehouses_with_pos(),
+    )
+    allowed_warehouse_ids = fields.Many2many(
+        "stock.warehouse",
+        compute="_compute_allowed_warehouse_ids",
+        string="Tiendas con caja",
+    )
     sales_total = fields.Float(string="Total ventas", readonly=True)
     refunds_total = fields.Float(string="Total devoluciones", readonly=True)
     opening_total = fields.Float(string="Total apertura", readonly=True)
@@ -33,6 +46,34 @@ class PosDetailsWizard(models.TransientModel):
         "wizard_id",
         string="Cajas",
     )
+    store_payment_line_ids = fields.One2many(
+        "pos.custom.report.store.payment",
+        "wizard_id",
+        string="Métodos de pago por tienda",
+    )
+
+    @api.depends_context("uid")
+    def _compute_allowed_warehouse_ids(self):
+        warehouses = self._warehouses_with_pos()
+        for wizard in self:
+            wizard.allowed_warehouse_ids = warehouses
+
+    def _warehouses_with_pos(self):
+        """Almacenes que tienen al menos una caja (pos.config) asignada."""
+        return (
+            self.env["pos.config"]
+            .search([])
+            .mapped("picking_type_id.warehouse_id")
+        )
+
+    def _pos_configs_for_warehouses(self):
+        """Cajas cuyo tipo de operación pertenece a las tiendas seleccionadas."""
+        self.ensure_one()
+        if not self.warehouse_ids:
+            return self.env["pos.config"]
+        return self.env["pos.config"].search([]).filtered(
+            lambda pos: pos.picking_type_id.warehouse_id in self.warehouse_ids
+        )
 
     def generate_report(self):
         self.ensure_one()
@@ -51,7 +92,7 @@ class PosDetailsWizard(models.TransientModel):
         )
         return {
             "type": "ir.actions.act_window",
-            "name": "Reporte personalizado POS",
+            "name": "Póliza de venta",
             "res_model": "pos.details.wizard",
             "res_id": self.id,
             "view_mode": "form",
@@ -60,8 +101,15 @@ class PosDetailsWizard(models.TransientModel):
             "context": dict(self.env.context, dialog_size="extra-large"),
         }
 
+    def action_print_policy_pdf(self):
+        self.ensure_one()
+        return self.env.ref(
+            "pos_custom_report.action_report_pos_policy"
+        ).report_action(self)
+
     def _load_custom_report_into_wizard(self, report_data):
         self.caja_line_ids.unlink()
+        self.store_payment_line_ids.unlink()
 
         caja_vals = []
         for caja in report_data["cajas"]:
@@ -105,6 +153,7 @@ class PosDetailsWizard(models.TransientModel):
                     {
                         "config_id": caja["config_id"],
                         "config_name": caja["config_name"],
+                        "warehouse_name": caja["warehouse_name"],
                         "orders_count": len(caja["orders"]),
                         "sales_total": caja["sales_total"],
                         "refunds_total": caja["refunds_total"],
@@ -125,6 +174,18 @@ class PosDetailsWizard(models.TransientModel):
                 "opening_total": report_data["opening_total"],
                 "orders_count": report_data["orders_count"],
                 "caja_line_ids": caja_vals,
+                "store_payment_line_ids": [
+                    (
+                        0,
+                        0,
+                        {
+                            "warehouse_name": row["warehouse_name"],
+                            "method_name": row["method_name"],
+                            "amount": row["amount"],
+                        },
+                    )
+                    for row in report_data["store_payments"]
+                ],
             }
         )
 
@@ -159,12 +220,13 @@ class PosDetailsWizard(models.TransientModel):
         return name or "N/D"
 
     def _prepare_custom_report_data(self):
+        pos_configs = self._pos_configs_for_warehouses()
         orders = self.env["pos.order"].search(
             [
                 ("state", "in", ["paid", "invoiced", "done"]),
                 ("date_order", ">=", self.start_date),
                 ("date_order", "<=", self.end_date),
-                ("config_id", "in", self.pos_config_ids.ids),
+                ("config_id", "in", pos_configs.ids),
             ],
             order="date_order asc, name asc",
         )
@@ -173,6 +235,7 @@ class PosDetailsWizard(models.TransientModel):
         sales_total = 0.0
         refunds_total = 0.0
         opening_total = 0.0
+        payments_by_store = defaultdict(lambda: {"name": "", "methods": defaultdict(float)})
         report_order_ids = set(orders.ids)
         # Monto y documentos de reembolso que corresponden a cada orden de origen
         refunds_on_order = defaultdict(lambda: {"amount": 0.0, "names": []})
@@ -180,13 +243,15 @@ class PosDetailsWizard(models.TransientModel):
         for order in orders:
             if not self._is_refund_order(order):
                 continue
-            for original_id, amount in self._allocate_refund_to_originals(order).items():
+            for original_id, amount in self._allocate_refund_to_originals(
+                order
+            ).items():
                 if original_id not in report_order_ids or original_id == order.id:
                     continue
                 refunds_on_order[original_id]["amount"] += amount
                 refunds_on_order[original_id]["names"].append(order.name)
 
-        for config in self.pos_config_ids:
+        for config in pos_configs:
             config_orders = orders.filtered(lambda o: o.config_id == config)
             caja_sales = 0.0
             caja_refunds = 0.0
@@ -243,10 +308,17 @@ class PosDetailsWizard(models.TransientModel):
             ]
             caja_opening = sum(sessions.mapped("cash_register_balance_start"))
 
+            warehouse = config.picking_type_id.warehouse_id
+            store_key = warehouse.id or 0
+            payments_by_store[store_key]["name"] = warehouse.name or ""
+            for method_name, amount in payments_by_method.items():
+                payments_by_store[store_key]["methods"][method_name] += amount
+
             cajas.append(
                 {
                     "config_id": config.id,
                     "config_name": config.name,
+                    "warehouse_name": warehouse.name or "",
                     "orders": order_lines,
                     "sales_total": caja_sales,
                     "refunds_total": caja_refunds,
@@ -260,13 +332,36 @@ class PosDetailsWizard(models.TransientModel):
             refunds_total += caja_refunds
             opening_total += caja_opening
 
+        store_payments = []
+        for store in sorted(payments_by_store.values(), key=lambda row: row["name"]):
+            for method_name in sorted(store["methods"]):
+                store_payments.append(
+                    {
+                        "warehouse_name": store["name"],
+                        "method_name": method_name,
+                        "amount": store["methods"][method_name],
+                    }
+                )
+
         return {
             "cajas": cajas,
             "sales_total": sales_total,
             "refunds_total": refunds_total,
             "opening_total": opening_total,
             "orders_count": len(orders),
+            "store_payments": store_payments,
         }
+
+
+class PosCustomReportStorePayment(models.TransientModel):
+    _name = "pos.custom.report.store.payment"
+    _description = "Métodos de pago por tienda - reporte personalizado POS"
+    _order = "warehouse_name, method_name"
+
+    wizard_id = fields.Many2one("pos.details.wizard", required=True, ondelete="cascade")
+    warehouse_name = fields.Char(string="Tienda", readonly=True)
+    method_name = fields.Char(string="Método de pago", readonly=True)
+    amount = fields.Float(string="Total", readonly=True)
 
 
 class PosCustomReportCajaLine(models.TransientModel):
@@ -277,6 +372,7 @@ class PosCustomReportCajaLine(models.TransientModel):
     wizard_id = fields.Many2one("pos.details.wizard", required=True, ondelete="cascade")
     config_id = fields.Many2one("pos.config", string="Caja", readonly=True)
     config_name = fields.Char(string="Caja", readonly=True)
+    warehouse_name = fields.Char(string="Tienda", readonly=True)
     orders_count = fields.Integer(string="Órdenes", readonly=True)
     sales_total = fields.Float(string="Total ventas", readonly=True)
     refunds_total = fields.Float(string="Total devoluciones", readonly=True)
@@ -343,3 +439,5 @@ class PosCustomReportOpeningLine(models.TransientModel):
     )
     session_name = fields.Char(string="Sesión", readonly=True)
     opening = fields.Float(string="Apertura", readonly=True)
+
+

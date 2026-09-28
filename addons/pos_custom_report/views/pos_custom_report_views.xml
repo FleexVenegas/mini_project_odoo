@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
+    <record id="point_of_sale.action_report_pos_details" model="ir.actions.act_window">
+        <field name="name">Póliza de venta</field>
+    </record>
+
     <record id="view_pos_details_wizard_form" model="ir.ui.view">
         <field name="name">pos.details.wizard.form.inherit.custom.report</field>
         <field name="model">pos.details.wizard</field>
@@ -8,6 +12,23 @@
             <xpath expr="//field[@name='end_date']" position="after">
                 <field name="option_custom_report"/>
                 <field name="show_results" invisible="1"/>
+                <field name="allowed_warehouse_ids" invisible="1"/>
+            </xpath>
+
+            <xpath expr="//field[@name='pos_config_ids']" position="attributes">
+                <attribute name="invisible">option_custom_report == 'custom'</attribute>
+            </xpath>
+            <xpath expr="//field[@name='pos_config_ids']" position="after">
+                <field name="warehouse_ids"
+                       mode="tree"
+                       colspan="2"
+                       nolabel="1"
+                       invisible="option_custom_report != 'custom'"
+                       domain="[('id', 'in', allowed_warehouse_ids)]">
+                    <tree create="0" edit="0">
+                        <field name="name" string="Tienda"/>
+                    </tree>
+                </field>
             </xpath>
 
             <xpath expr="//footer/button[@name='generate_report']" position="replace">
@@ -16,6 +37,11 @@
                         type="object"
                         class="btn-primary"
                         data-hotkey="q"/>
+                <button name="action_print_policy_pdf"
+                        string="Descargar PDF"
+                        type="object"
+                        class="btn-secondary"
+                        invisible="not show_results or option_custom_report != 'custom'"/>
             </xpath>
 
             <xpath expr="//footer" position="before">
@@ -28,6 +54,18 @@
                     <field name="opening_total"/>
                 </group>
 
+                <separator string="Métodos de pago" invisible="not show_results"/>
+                <field name="store_payment_line_ids"
+                       nolabel="1"
+                       readonly="1"
+                       invisible="not show_results">
+                    <tree create="0" delete="0" edit="0">
+                        <field name="warehouse_name"/>
+                        <field name="method_name"/>
+                        <field name="amount" sum="Total"/>
+                    </tree>
+                </field>
+
                 <separator string="Detalle por caja" invisible="not show_results"/>
                 <div class="text-muted" invisible="not show_results">
                     Abre cada caja para ver sus órdenes, pagos y apertura.
@@ -39,6 +77,7 @@
                         invisible="not show_results"
                         context="{'form_view_ref': False}">
                     <tree create="0" delete="0" edit="0">
+                        <field name="warehouse_name"/>
                         <field name="config_name"/>
                         <field name="orders_count"/>
                         <field name="sales_total" sum="Ventas"/>
@@ -49,6 +88,7 @@
                     <form string="Caja">
                         <group>
                             <group>
+                                <field name="warehouse_name"/>
                                 <field name="config_name"/>
                                 <field name="orders_count"/>
                             </group>

@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="paperformat_pos_policy" model="report.paperformat">
+        <field name="name">Póliza de venta</field>
+        <field name="default" eval="False"/>
+        <field name="format">Letter</field>
+        <field name="orientation">Portrait</field>
+        <field name="margin_top">40</field>
+        <field name="margin_bottom">18</field>
+        <field name="margin_left">7</field>
+        <field name="margin_right">7</field>
+        <field name="header_line" eval="False"/>
+        <field name="header_spacing">35</field>
+        <field name="dpi">90</field>
+    </record>
+
+    <record id="action_report_pos_policy" model="ir.actions.report">
+        <field name="name">Póliza de venta</field>
+        <field name="model">pos.details.wizard</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">pos_custom_report.report_pos_policy_document</field>
+        <field name="report_file">pos_custom_report.report_pos_policy_document</field>
+        <field name="print_report_name">'Poliza de venta'</field>
+        <field name="paperformat_id" ref="paperformat_pos_policy"/>
+    </record>
+
+    <template id="report_pos_policy_document">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-set="company" t-value="doc.env.company"/>
+                <t t-call="web.external_layout">
+                    <div class="page" style="font-size: 12px; color: #1a1a1a;">
+                        <h2 style="margin: 0 0 8px 0;">Póliza de venta</h2>
+                        <p style="margin: 0 0 16px 0;">
+                            Del
+                            <span t-field="doc.start_date"/>
+                            al
+                            <span t-field="doc.end_date"/>
+                            ·
+                            Tiendas:
+                            <span t-esc="', '.join(doc.warehouse_ids.mapped('name')) or '—'"/>
+                        </p>
+
+                        <h3 style="font-size: 14px; border-bottom: 1px solid #ccc; padding-bottom: 4px;">Resultados generales</h3>
+                        <table style="width: 100%; border-collapse: collapse; margin-bottom: 18px;">
+                            <thead>
+                                <tr style="background: #f3f3f3;">
+                                    <th style="text-align: left; padding: 6px; border: 1px solid #ddd;">Órdenes</th>
+                                    <th style="text-align: right; padding: 6px; border: 1px solid #ddd;">Total ventas</th>
+                                    <th style="text-align: right; padding: 6px; border: 1px solid #ddd;">Total devoluciones</th>
+                                    <th style="text-align: right; padding: 6px; border: 1px solid #ddd;">Total neto</th>
+                                    <th style="text-align: right; padding: 6px; border: 1px solid #ddd;">Total apertura</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td style="padding: 6px; border: 1px solid #ddd;" t-esc="doc.orders_count"/>
+                                    <td style="text-align: right; padding: 6px; border: 1px solid #ddd;">
+                                        <span t-out="doc.sales_total" t-options="{'widget': 'monetary', 'display_currency': company.currency_id}"/>
+                                    </td>
+                                    <td style="text-align: right; padding: 6px; border: 1px solid #ddd;">
+                                        <span t-out="doc.refunds_total" t-options="{'widget': 'monetary', 'display_currency': company.currency_id}"/>
+                                    </td>
+                                    <td style="text-align: right; padding: 6px; border: 1px solid #ddd;">
+                                        <span t-out="doc.sales_total - doc.refunds_total" t-options="{'widget': 'monetary', 'display_currency': company.currency_id}"/>
+                                    </td>
+                                    <td style="text-align: right; padding: 6px; border: 1px solid #ddd;">
+                                        <span t-out="doc.opening_total" t-options="{'widget': 'monetary', 'display_currency': company.currency_id}"/>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <h3 style="font-size: 14px; border-bottom: 1px solid #ccc; padding-bottom: 4px;">Métodos de pago</h3>
+                        <table style="width: 100%; border-collapse: collapse; margin-bottom: 18px;">
+                            <thead>
+                                <tr style="background: #f3f3f3;">
+                                    <th style="text-align: left; padding: 6px; border: 1px solid #ddd;">Tienda</th>
+                                    <th style="text-align: left; padding: 6px; border: 1px solid #ddd;">Método de pago</th>
+                                    <th style="text-align: right; padding: 6px; border: 1px solid #ddd;">Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr t-foreach="doc.store_payment_line_ids" t-as="payment">
+                                    <td style="padding: 6px; border: 1px solid #ddd;" t-esc="payment.warehouse_name"/>
+                                    <td style="padding: 6px; border: 1px solid #ddd;" t-esc="payment.method_name"/>
+                                    <td style="text-align: right; padding: 6px; border: 1px solid #ddd;">
+                                        <span t-out="payment.amount" t-options="{'widget': 'monetary', 'display_currency': company.currency_id}"/>
+                                    </td>
+                                </tr>
+                                <tr t-if="not doc.store_payment_line_ids">
+                                    <td colspan="3" style="padding: 6px; border: 1px solid #ddd;">Sin pagos en el periodo.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <h3 style="font-size: 14px; border-bottom: 1px solid #ccc; padding-bottom: 4px;">Detalle por caja</h3>
+                        <table style="width: 100%; border-collapse: collapse; margin-bottom: 22px;">
+                            <thead>
+                                <tr style="background: #f3f3f3;">
+                                    <th style="text-align: left; padding: 6px; border: 1px solid #ddd;">Tienda</th>
+                                    <th style="text-align: left; padding: 6px; border: 1px solid #ddd;">Caja</th>
+                                    <th style="text-align: right; padding: 6px; border: 1px solid #ddd;">Órdenes</th>
+                                    <th style="text-align: right; padding: 6px; border: 1px solid #ddd;">Ventas</th>
+                                    <th style="text-align: right; padding: 6px; border: 1px solid #ddd;">Devoluciones</th>
+                                    <th style="text-align: right; padding: 6px; border: 1px solid #ddd;">Apertura</th>
+                                    <th style="text-align: right; padding: 6px; border: 1px solid #ddd;">Neto</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr t-foreach="doc.caja_line_ids" t-as="caja">
+                                    <td style="padding: 6px; border: 1px solid #ddd;" t-esc="caja.warehouse_name"/>
+                                    <td style="padding: 6px; border: 1px solid #ddd;" t-esc="caja.config_name"/>
+                                    <td style="text-align: right; padding: 6px; border: 1px solid #ddd;" t-esc="caja.orders_count"/>
+                                    <td style="text-align: right; padding: 6px; border: 1px solid #ddd;">
+                                        <span t-out="caja.sales_total" t-options="{'widget': 'monetary', 'display_currency': company.currency_id}"/>
+                                    </td>
+                                    <td style="text-align: right; padding: 6px; border: 1px solid #ddd;">
+                                        <span t-out="caja.refunds_total" t-options="{'widget': 'monetary', 'display_currency': company.currency_id}"/>
+                                    </td>
+                                    <td style="text-align: right; padding: 6px; border: 1px solid #ddd;">
+                                        <span t-out="caja.opening_total" t-options="{'widget': 'monetary', 'display_currency': company.currency_id}"/>
+                                    </td>
+                                    <td style="text-align: right; padding: 6px; border: 1px solid #ddd;">
+                                        <span t-out="caja.net_total" t-options="{'widget': 'monetary', 'display_currency': company.currency_id}"/>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>
