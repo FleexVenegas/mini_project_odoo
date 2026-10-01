@@ -1,0 +1,32 @@
+<odoo>
+
+    <!-- Acción primero (evita ParseError) -->
+    <record id="action_warehouse_operations" model="ir.actions.act_window">
+        <field name="name">WarehouseOperations</field>
+        <field name="res_model">warehouse.operations</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- Vista Tree -->
+    <record id="view_warehouse_operations_tree" model="ir.ui.view">
+        <field name="name">warehouse_operations.tree</field>
+        <field name="model">warehouse.operations</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Menú raíz -->
+    <menuitem id="warehouse_operations_menu_root" name="WarehouseOperations"/>
+
+    <!-- Submenú -->
+    <menuitem 
+        id="warehouse_operations_menu_modelo" 
+        name="Registros"
+        parent="warehouse_operations_menu_root"
+        action="action_warehouse_operations"
+    />
+
+</odoo>

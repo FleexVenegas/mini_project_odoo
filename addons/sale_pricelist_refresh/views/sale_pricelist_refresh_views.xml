@@ -1,0 +1,15 @@
+<odoo>
+    <record id="view_order_form_pricelist_refresh" model="ir.ui.view">
+        <field name="name">sale.order.form.pricelist.refresh</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="inside">
+                <button name="action_update_prices" type="object" string="Actualizar Precios"
+                    class="btn-secondary" icon="fa-refresh"
+                    invisible="state not in ('draft', 'sent')"
+                    confirm="Se actualizarán los precios de los productos según la lista de precios actual."/>
+            </xpath>
+        </field>
+    </record>
+</odoo>
