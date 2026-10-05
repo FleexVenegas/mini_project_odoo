@@ -5,15 +5,17 @@
         <field name="model">pos.config</field>
         <field name="inherit_id" ref="point_of_sale.view_pos_config_kanban"/>
         <field name="arch" type="xml">
-            <xpath expr="//div[contains(@class, 'o_kanban_card_manage_settings')]" position="inside">
-                <div role="menuitem" class="col-12">
-                    <a
-                        name="action_delete_draft_orders"
-                        type="object"
-                        confirm="¿Eliminar todas las órdenes en borrador de esta caja?"
-                    >
-                        Eliminar ordenes en estado borrador
-                    </a>
+            <xpath expr="//div[contains(@class, 'dropdown-pos-config')]" position="inside">
+                <div class="o_kanban_card_manage_settings row" groups="delete_draft_orders.group_delete_draft_orders">
+                    <div role="menuitem" class="col-12">
+                        <a
+                            name="action_delete_draft_orders"
+                            type="object"
+                            confirm="¿Eliminar todas las órdenes en borrador de esta caja?"
+                        >
+                            Eliminar órdenes en borrador
+                        </a>
+                    </div>
                 </div>
             </xpath>
         </field>

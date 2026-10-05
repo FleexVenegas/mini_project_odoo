@@ -8,6 +8,7 @@
     "summary": "Elimina órdenes POS en borrador desde el tablero de cajas",
     "depends": ["point_of_sale"],
     "data": [
+        "security/groups.xml",
         "views/delete_draft_orders_views.xml",
     ],
     "installable": True,

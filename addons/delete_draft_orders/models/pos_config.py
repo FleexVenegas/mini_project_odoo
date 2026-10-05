@@ -1,4 +1,5 @@
 from odoo import _, models
+from odoo.exceptions import AccessError
 
 
 class PosConfig(models.Model):
@@ -6,6 +7,9 @@ class PosConfig(models.Model):
 
     def action_delete_draft_orders(self):
         self.ensure_one()
+        if not self.env.user.has_group("delete_draft_orders.group_delete_draft_orders"):
+            raise AccessError(_("No tienes permiso para eliminar órdenes en borrador."))
+
         draft_orders = self.env["pos.order"].search(
             [
                 ("config_id", "=", self.id),
@@ -13,6 +17,18 @@ class PosConfig(models.Model):
             ]
         )
         count = len(draft_orders)
+        if not count:
+            return {
+                "type": "ir.actions.client",
+                "tag": "display_notification",
+                "params": {
+                    "title": _("Sin órdenes"),
+                    "message": _("No hay órdenes en borrador que borrar."),
+                    "type": "warning",
+                    "sticky": False,
+                },
+            }
+
         draft_orders.unlink()
         return {
             "type": "ir.actions.client",
