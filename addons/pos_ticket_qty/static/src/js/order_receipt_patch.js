@@ -15,6 +15,10 @@ patch(OrderReceipt.prototype, {
   get customerName() {
     return this.props.data.partner || "Sin especificar";
   },
+
+  get pricelistName() {
+    return this.props.data.pricelist || "Sin especificar";
+  },
 });
 
 patch(Order.prototype, {
@@ -22,6 +26,9 @@ patch(Order.prototype, {
     const result = super.export_for_printing(...arguments);
     const partner = this.get_partner();
     result.partner = partner ? partner.name : "Sin especificar";
+    result.pricelist = this.pricelist
+      ? this.pricelist.display_name || this.pricelist.name
+      : "Sin especificar";
     return result;
   },
 });

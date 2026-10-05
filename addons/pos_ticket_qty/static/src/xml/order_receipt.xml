@@ -5,12 +5,21 @@
 
         <xpath expr="//div[hasclass('before-footer')]" position="after">
 
-            <div t-if="customerName" class="pos-receipt-client" style="font-size: 15px; margin-top:30px; text-align:left; font-weight:bold; display: flex; justify-content: space-between; align-items: center;">
-                <span style="color: #000; font-weight: normal; margin-right: 5px;">
+            <div t-if="customerName" class="pos-receipt-client" style="font-size: 15px; margin-top:30px; text-align:left; font-weight:bold; display: flex; justify-content: space-between; align-items: flex-start; gap: 8px;">
+                <span style="color: #000; font-weight: normal; flex-shrink: 0;">
                     CLIENTE
                 </span>
-                <span>
+                <span style="text-align: right; word-break: break-word; overflow-wrap: anywhere; white-space: normal; max-width: 65%;">
                     <t t-esc="customerName"/>
+                </span>
+            </div>
+
+            <div t-if="pricelistName" class="pos-receipt-pricelist" style="font-size: 15px; margin-top:10px; text-align:left; font-weight:bold; display: flex; justify-content: space-between; align-items: flex-start; gap: 8px;">
+                <span style="color: #000; font-weight: normal; flex-shrink: 0;">
+                    LISTA DE PRECIOS
+                </span>
+                <span style="text-align: right; word-break: break-word; overflow-wrap: anywhere; white-space: normal; max-width: 65%;">
+                    <t t-esc="pricelistName"/>
                 </span>
             </div>
 

@@ -20,7 +20,6 @@
         "sale",
     ],
     "data": [
-        "security/ir.model.access.csv",
         "views/sale_pricelist_refresh_views.xml",
     ],
     "installable": True,

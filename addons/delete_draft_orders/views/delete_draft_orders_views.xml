@@ -1,0 +1,22 @@
+<odoo>
+
+    <record id="view_pos_config_kanban_delete_drafts" model="ir.ui.view">
+        <field name="name">pos.config.kanban.delete.drafts</field>
+        <field name="model">pos.config</field>
+        <field name="inherit_id" ref="point_of_sale.view_pos_config_kanban"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[contains(@class, 'o_kanban_card_manage_settings')]" position="inside">
+                <div role="menuitem" class="col-12">
+                    <a
+                        name="action_delete_draft_orders"
+                        type="object"
+                        confirm="¿Eliminar todas las órdenes en borrador de esta caja?"
+                    >
+                        Eliminar ordenes en estado borrador
+                    </a>
+                </div>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>
